@@ -1,0 +1,167 @@
+/**@name Introduction
+ * The experiment data of the A1-collaboration (Mainz) is archived
+ * in a special format. This format is organized in a tree structure
+ * and therefore reflects structure of spectrometers, detectors, ...
+ * Moreover this format can be used to suppress zeros and to reduce
+ * the amount of data that has to be archived. But this requires a
+ * little effort to make the data accessible for any analysis
+ * program. The cindy library serves to achive this goal.
+ */
+
+/**@name Why C++ ?
+ * There are several reasons to use OOP or {\em object oriented
+ * programing} for this kind of software development. OOP offers
+ * the methods to analyse the problem, to design the software and
+ * for the coding. The phase of analysis and of design can be much
+ * shorter. Teamwork is made easy. The Code will be readable, can
+ * be reused and maintenance is made easy. Although C++ is only
+ * one of several OOP languages (among {\it smalltalk} and {\it
+ * eiffel} it has some specific advantages. C++ compilers produce
+ * very efficient code. Programers, who are used to the C
+ * language, can slowly adapt to OOP, because C++ is only a better
+ * C in some respect. Finally the GNU C++ compiler is free
+ * available and makes the porting of the software to different
+ * platforms a minor problem:
+ * \URL{ftp://ftp.th-darmstadt.de/pub/gnu/gcc-2.7.2.tar.gz} or
+ * \URL{ftp://prep.ai.mit.edu/pub/gnu/gcc-2.7.2.tar.gz}
+ */
+
+/**@name How it works
+ * how it works
+ */
+
+/**@name The Cindy++ compiler
+ * the cindy++ compiler
+ */
+
+/**@name Analysis programs
+ * analysis programs - options
+ */
+
+/**@name Using the library
+ */
+//@{
+/**@name Basic concepts
+ */
+/**@name automatic configuration - configure.in
+ * \begin{verbatim}
+dnl
+dnl configure.in: Input fuer GNU autoconf
+dnl
+AC_INIT()
+AC_SUBST(OPTS)
+AC_ARG_ENABLE(gdb,
+  [  --enable-gdb            compile and link with debug option],
+  [OPTS="$OPTS -g"],[OPTS="$OPTS -O"])
+CC=gcc
+CCC=g++
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_CXX
+AC_CHECK_PROG(CINDY,Cindy++,[Cindy++],[:])
+AC_CHECK_LIB(bsd,main)
+AC_CHECK_LIB(elf,main)
+AC_CHECK_LIB(socket,accept)
+AC_CHECK_LIB(nsl,gethostname)
+AC_CHECK_LIB(ucb,main)
+AC_OUTPUT(Makefile)
+   \end{verbatim}
+ */
+/**@name A Makefile for cindy++ programs
+ * \begin{verbatim}
+#
+# Makefile.in: Makefile fuer die Cindy++ Analyse
+#
+
+srcdir     = @srcdir@
+VPATH      = @srcdir@
+
+SHELL      = /bin/sh
+CC         = @CC@
+CXX        = @CXX@
+CPP        = @CPP@
+CINDY      = @CINDY@
+PWD       := $(shell pwd)
+
+EXPERIMENT = ab940223
+PASSONE    = pass1
+
+A1         = /usr/local/a1
+KPH        = /usr/local/mecdas
+
+DEFS       = @DEFS@
+OPTS       = @OPTS@
+LIBS       = -lcindy -lio -lgen @LIBS@
+CPPFLAGS   = $(DEFS) -I$(srcdir) \
+             -I$(srcdir)/$(EXPERIMENT) -I$(srcdir)/$(PASSONE) \
+             -I$(A1)/include -I$(KPH)/include
+CXXFLAGS   = $(OPTS) -Wall -O2
+LDFLAGS    = $(OPTS) $(static) -L$(A1)/lib -L$(KPH)/lib
+BINARY     = Analyse Decode ECSdecode Filter PassOne
+CXXSRC     = Analyse.cc Decode.cc ECSdecode.cc Filter.cc PassOne.cc
+
+ .PHONY:     all clean veryclean
+
+all:         $(BINARY)
+
+Analyse:     Analyse.o $(EXPERIMENT).o
+        $(CXX) $(LDFLAGS) -o $@ $^ -lch++ $(LIBS) -lm
+
+Decode:      Decode.o
+        $(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+ECSdecode:   ECSdecode.o
+        $(CXX) $(LDFLAGS) -o $@ $^ -lopcT $(LIBS)
+
+Filter:      Filter.o $(EXPERIMENT).o
+        $(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+PassOne:     PassOne.o $(EXPERIMENT).o $(PASSONE).o
+        $(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(EXPERIMENT).o:  $(EXPERIMENT).cc
+$(EXPERIMENT).cc: $(srcdir)/$(EXPERIMENT)/$(EXPERIMENT).h
+        (cd $(srcdir)/$(EXPERIMENT); \
+        $(CINDY) -i $*.h -e $* -s $(PWD)/$@ -p $(PWD)/$*.list)
+
+$(PASSONE).o:  $(PASSONE).cc
+$(PASSONE).cc: $(srcdir)/$(PASSONE)/$(PASSONE).h
+        (cd $(srcdir)/$(PASSONE); \
+        $(CINDY) -x -i $*.h -e $* -s $(PWD)/$@ -p $(PWD)/$*.list)
+
+clean:
+        rm -f *~ *.o core
+        rm -f $(EXPERIMENT).list $(EXPERIMENT).cc
+        rm -f $(PASSONE).list $(PASSONE).cc
+
+veryclean: clean
+        rm -rf $(BINARY) `hfind` tmp
+        -test -f shm &ero;&ero; hfree shm
+        
+ .depend:   $(CXXSRC) $(EXPERIMENT).cc $(PASSONE).cc
+        $(CXX) -M $(CPPFLAGS) $^ > $@
+
+include .depend
+   \end{verbatim}
+ */
+/**@name Decode - a debugging tool
+ * \begin{verbatim}
+   \end{verbatim}
+ */
+/**@name An analysis program (template)
+ * \begin{verbatim}
+   \end{verbatim}
+ */
+/**@name ECSdecode
+ * \begin{verbatim}
+   \end{verbatim}
+ */
+/**@name Data reduction by using a filter
+ * \begin{verbatim}
+   \end{verbatim}
+ */
+/**@name Data reduction by creating a new structure
+ * \begin{verbatim}
+   \end{verbatim}
+ */
+//@}

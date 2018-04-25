@@ -1,0 +1,185 @@
+#define PI      3.141592653589793
+#define radiant (PI/180)
+#define degree  (180/PI)
+
+#define useB
+//-----------------------------------------------------------------------------
+// Include rawdata histograms
+//-----------------------------------------------------------------------------
+#define Spectrometer A
+#define sp "Spec. A/"
+#define adcrange "ADC Counts",0,1500,150
+#define adcrangeA "ADC Counts",0,1500,150
+#define drifttimerange "t","ns",1,512,511
+#include "rawdefs.col"
+Histogram "A/Target/[F]_0!"         A.phi0  ("[F]_0!","^o!",-7,7,200)
+Histogram "A/Target/[Q]_0!"         A.theta0("[Q]_0!","^o!",-7,7,200)
+Histogram "A/Target/[F]_0!-[Q]_0!"  A.phi0  ("[F]_0!","^o!",-7,7,100)\
+				    A.theta0("[Q]_0!","^o!",-7,7,100)
+Histogram "A/Target/[D]p"           A.deltap("[D]p","%",-10,30,300)
+Histogram "A/Target/[D]p-[F]_0!"    A.deltap("[D]p","%",-10,30,100)\
+                                    A.phi0  ("[F]_0!","^o!",-7,7,100)
+
+#ifdef useB
+//-----------------------------------------------------------------------------
+#define Spectrometer B
+#define adcrange "ADC Counts",0,3750,100
+#define drifttimerange "t","ns",1,512,511
+#define sp "Spec. B/"
+#include "rawdefs.col"
+Histogram "B/Target/[F]_0!"         B.phi0  ("[F]_0!","^o!",-7,7,200)
+Histogram "B/Target/[Q]_0!"         B.theta0("[Q]_0!","^o!",-7,7,200)
+Histogram "B/Target/[F]_0!-[Q]_0!"  B.phi0  ("[F]_0!","^o!",-7,7,100)\
+				    B.theta0("[Q]_0!","^o!",-7,7,100)
+Histogram "B/Target/[D]p"           B.deltap("[D]p","%",-10,30,300)
+Histogram "B/Target/[D]p-[F]_0!"    B.deltap("[D]p","%",-10,30,100)\
+                                    B.phi0  ("[F]_0!","^o!",-7,7,100)
+
+#else
+//-----------------------------------------------------------------------------
+#define Spectrometer C
+#define sp             "Spec. C/"
+#define adcrange       "ADC Counts", 0, 3750, 100
+#define drifttimerange "t", "ns", 1, 4096, 4095
+#include               "rawdefs.col"
+#endif
+//-----------------------------------------------------------------------------
+// Access to Particles and Setup:
+//-----------------------------------------------------------------------------
+
+#define mass_proton   0.93827231
+#define mass_pi0      0.1349764
+#define mass_electron 0.00051199
+
+Fourvector Electron_in  = Beam		              // predefined function
+Fourvector Proton       = SpectrometerA(mass_proton)  // predefined function
+Fourvector Target       = {mass_proton}               // That's Liquid Hydrogen
+#ifdef useB
+  Fourvector Electron_out = SpectrometerB(mass_electron)
+#else
+  Fourvector Electron_out = SpectrometerC(mass_electron)
+#endif
+//-----------------------------------------------------------------------------
+// Now the interesting stuff
+//-----------------------------------------------------------------------------
+// description of virtual photon:
+
+Fourvector Photon       = Electron_in - Electron_out
+Fourvector CMS          = Photon + Target
+
+Scalar E                = energy (Electron_in)
+Scalar Eprime           = energy (Electron_out)
+Scalar energytransfer   = energy (Photon)
+Scalar momentumtransfer = momentum (Photon)
+Scalar theta_e          = theta (Electron_out);
+Scalar theta_deg        = theta_e  * degree
+Scalar q2               = energytransfer^2 - momentumtransfer^2 
+Scalar Q2               = -q2
+Scalar epsilon          = (1-2*(energytransfer^2-q2)/q2 * tan(theta_e/2)^2)^-1
+//-----------------------------------------------------------------------------
+// Pionproduction
+//-----------------------------------------------------------------------------
+Fourvector missing = CMS - Proton
+Fourvector pioncms = Rotate(Lorentz(missing, -CMS), Photon)
+
+Scalar pPionCMS      = momentum(pioncms) *1000
+Scalar pProton       = momentum(Proton)
+Scalar thetaproton   = theta(Proton) * degree
+Scalar phiproton     = phi(Proton) * degree
+Scalar varphiproton  = varphi(Proton) * degree
+Scalar ThetaProtonPhoton    = theta(Rotate(Proton,Photon)) * degree
+Scalar deltathetap   = (theta(Proton)-theta(Photon)) * degree
+Scalar omega	     = energy(Photon) *1000.0
+Scalar TProton       = energy (Proton) - mass_proton
+Scalar Emiss         = energy(missing) * 1000                      // MeV
+Scalar Pmiss         = momentum(missing) * 1000                    // MeV/c
+Scalar MissingMassSq = Emiss^2 - Pmiss^2
+Scalar MissingMass   = sqrt(MissingMassSq) 
+Scalar CMSangle      = theta(pioncms) * degree                     // degree
+Scalar coscms        = cos(theta(pioncms))
+Scalar phicms        = phi(pioncms) * degree
+Scalar W             = sqrt(energy(CMS)^2 - momentum(CMS)^2) * 1e3 // MeV 
+Scalar DeltaW        = W - (mass_proton + mass_pi0) *1e3           // MeV
+
+#define missMass   MissingMass    ("m_miss!", "MeV/c^2!",  5.0, 200.0, 390)
+#define missMassSq MissingMassSq  ("m_miss!^2!", "MeV^2!/c^4!", -1000,1000,200)
+#define missE      Emiss          ("E_miss!", "MeV",      50.0, 200.0, 75)
+#define missP      Pmiss          ("p_miss!", "MeV/c",     0.0, 150.0, 75)
+//-----------------------------------------------------------------------------
+
+Cut 1
+{
+  Scalar targetx = @online.Target.x
+  Scalar targety = @online.Target.y
+  Scalar targetz = @online.Target.z
+  Histogram "Target/Target x"   targetx("x","mm",-7.0, 7.0, 70)
+  Histogram "Target/Target y"   targety("y","mm",-7.0, 7.0, 70)
+  Histogram "Target/Target z"   targetz("z","mm",-50.0, 50.0, 100)
+  Histogram "Target/Target x-y" targetx("x","mm",-7.0, 7.0, 70)\
+	                        targety("y","mm",-7.0, 7.0, 70)
+  Histogram "Target/Target x-z" targetx("x","mm",-7.0, 7.0, 70)\
+	                        targetz("z","mm",-50.0, 50.0, 70)
+  Histogram "Target/Target x-z2" targetx("x","mm",-7.0, 7.0, 70)\
+	                        targetz("z","mm",15.0, 30.0, 70)
+  Histogram "Target/Target y-z" targety("y","mm",-7.0, 7.0, 70)\
+	                        targetz("z","mm",-50.0, 50.0, 70)
+
+Histogram "Electron" theta_deg("[Q]_e!","^o!",20,23,100)\
+		     Eprime("p_e!","GeV/c",0.650,0.700,100)
+Histogram "Proton [q]"   thetaproton("[Q]_p!","^o!",40,55,200)
+Histogram "Proton [q][f]"   thetaproton("[Q]_p!","^o!",40,55,200)\
+		            varphiproton( "[F]_p!","^o!",-10.0,10.0,100)
+Histogram "Proton [q]p"   thetaproton("[Q]_p!","^o!",40,55,200)\
+		            pProton("p_e!","GeV/c",0.250,0.350,100)
+Histogram "Scattering Angle [Q]_e!"   theta_deg("[Q]_e!","^o!",20,80,360)
+Histogram "4-Momentum Transfer q^2!"  q2("q^2!","(GeV/c)^2!",-0.1,0,200)
+Histogram "Photon polarization [e]"   epsilon ("[e]","",0.0,1.0,400)
+Histogram "CMS Energy W"              W ("W", "MeV", 1000, 1200 ,100) 
+Histogram "CMS Energy [D]W"           DeltaW("[D]W", "MeV",-10,200,210) 
+Histogram "Missing Mass"                    missMass  
+Histogram "Missing Mass Squared"            missMassSq
+Histogram "Missing Energy-Missing Momentum" missE       missP 
+Histogram "Missing Mass-Missing Momentum"   missMass    missP
+Histogram "[p] CMS angle"             CMSangle ("[q]_[p]!^*!","^o!",0,180,18)
+Histogram "[p] cosine CMS angle"      coscms ("[q]_[p]!^*!","",-1,1,10)
+
+Histogram DeltaW>0&&DeltaW<1 	"0MeV<[D]W<1MeV"  \
+				coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+
+Histogram DeltaW>1&&DeltaW<2 	"1MeV<[D]W<2MeV" \
+			 	coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+
+
+Histogram DeltaW>2&&DeltaW<3 	"2MeV<[D]W<3MeV"\
+				coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+
+Histogram DeltaW>3&&DeltaW<4 	"3MeV<[D]W<4MeV" \
+				coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+
+
+Histogram DeltaW>0&&DeltaW<1 	"[a]_[g]p!/0MeV<[D]W<1MeV" \
+			 	ThetaProtonPhoton("[a]_[g]p!","",0,9,80)\
+				pProton("p_p!","GeV/c",0.230,0.300,50)
+Histogram DeltaW>1&&DeltaW<2 	"[a]_[g]p!/1MeV<[D]W<2MeV" \
+			 	ThetaProtonPhoton("[a]_[g]p!","",0,9,80)\
+				pProton("p_p!","GeV/c",0.230,0.300,50)
+Histogram DeltaW>2&&DeltaW<3 	"[a]_[g]p!/2MeV<[D]W<3MeV" \
+			 	ThetaProtonPhoton("[a]_[g]p!","",0,9,80)\
+				pProton("p_p!","GeV/c",0.230,0.300,50)
+Histogram DeltaW>3&&DeltaW<4 	"[a]_[g]p!/3MeV<[D]W<4MeV" \
+			 	ThetaProtonPhoton("[a]_[g]p!","",0,9,80)\
+				pProton("p_p!","GeV/c",0.230,0.300,50)
+
+
+}
+
+
+
+
+
+
+

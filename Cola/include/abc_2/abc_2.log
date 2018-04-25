@@ -1,0 +1,15 @@
+/*
+ *
+ *	Copyright (c) 1994, 1995 by
+ *	Johannes Gutenberg-Universitaet Mainz,
+ *	Institut fuer Kernphysik, K.W. Krygier
+ *
+ *	All rights reserved.
+ *
+ *	%W% KPH (K.W. Krygier) %E% %D%
+ *
+ */
+
+#include "abc_2.h"
+
+struct abc_2	abc_2;

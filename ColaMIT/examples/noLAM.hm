@@ -1,0 +1,13 @@
+#
+zone 2 4 1
+Title "noLAM"
+SetFillRGB 0.5 1.0 0.5 
+Histogram "OOPS A/noLAM"
+SetFillRGB 0.5 0.5 1.0
+Histogram "OOPS B/noLAM"
+SetFillRGB 1.0 1.0 0.5
+Histogram "OOPS C/noLAM"
+SetFillRGB 1.0 0.5 0.5
+Histogram "OHIPS/noLAM"
+
+close

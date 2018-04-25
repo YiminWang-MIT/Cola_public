@@ -1,0 +1,35 @@
+#
+# This macro displays the status of the wirechambers in Spectrometer A
+# Created 4.1.1996 by Harald Merkel
+#
+zone 2 3 1
+SetFillRGB 1.0 0.5 0.5
+
+Title "Spectrometer A: X1 Layer"
+Histogram "Spec. A/x1-layer/Drift Time"
+Histogram "Spec. A/x1-layer/Nr of Wire"
+Histogram "Spec. A/x1-layer/Error"
+Histogram "Spec. A/x1-layer/Multiplicity"
+
+zone 2 3 1
+Title "Spectrometer A: S1 Layer"
+Histogram "Spec. A/s1-layer/Drift Time"
+Histogram "Spec. A/s1-layer/Nr of Wire"
+Histogram "Spec. A/s1-layer/Error"
+Histogram "Spec. A/s1-layer/Multiplicity"
+
+zone 2 3 1
+Title "Spectrometer A: X2 Layer"
+Histogram "Spec. A/x2-layer/Drift Time"
+Histogram "Spec. A/x2-layer/Nr of Wire"
+Histogram "Spec. A/x2-layer/Error"
+Histogram "Spec. A/x2-layer/Multiplicity"
+
+zone 2 3 1
+Title "Spectrometer A: S2 Layer"
+Histogram "Spec. A/s2-layer/Drift Time"
+Histogram "Spec. A/s2-layer/Nr of Wire"
+Histogram "Spec. A/s2-layer/Error"
+Histogram "Spec. A/s2-layer/Multiplicity"
+
+close

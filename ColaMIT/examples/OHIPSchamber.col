@@ -1,0 +1,40 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/OHIPSchamber.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for OHIPS drift chambers
+//
+
+// required definitions
+//
+// spec  :  name of the spectrometer in event configuration oops1
+// layer :  number of the chamber (1, 2, or 3)
+// title :  first part of the histogram title
+//
+
+Scalar spec.layer.time    = -1
+Scalar spec.layer.wire    = -1
+Scalar spec.layer.tag     = -1
+Scalar spec.layer.eff     = -1
+Scalar spec.layer.multi   = @online.spec.layer.multi
+Scalar spec.layer.error   = @online.spec.layer.error
+Scalar spec.layer.pattern = @online.spec.layer.pattern
+Scalar spec.layer.x       = @online.spec.layer.x
+Scalar spec.layer.slope   = @online.spec.layer.slope
+Scalar spec.layer.chisqr  = @online.spec.layer.chi_sqr
+
+Histogram title"Drift Time" spec.layer.time("t", "ns", 2.5, 510.5, 508) ;
+Histogram title"Nr of Wire" spec.layer.wire("# of wire", "", 0.5, 255.5, 255) ;
+Histogram title"Multiplicity" spec.layer.multi("n", "", -0.5, 31.5, 32) ;
+Histogram title"Error"      spec.layer.error("code", "", -0.5, 31.5, 32) ;
+Histogram title"Pattern"    spec.layer.pattern("code", "", -0.5, 127.5, 128) ;
+Histogram title"Coordinate" spec.layer.x("x", "mm", -400.0, 600.0, 500) ;
+Histogram title"Slope"      spec.layer.slope("atan([f])", "", -2.5, 2.5, 500) ;
+Histogram title"Chi-square" spec.layer.chisqr("[c]^2!", "", -0.01, 2.0, 202) ;
+Histogram title"Tagged Wire" spec.layer.tag("# of wire", "", 0.5, 255.5, 255) ;
+Histogram title"Efficiency" spec.layer.eff("# of wire", "", 0.5, 255.5, 255) ;

@@ -1,0 +1,457 @@
+-------------------------------------------------------------------------------
+Tue Dec  7 15:51:58 MET 1993
+
+To:  korn@a1
+Subject: tma
+CC: richter@a1, apl@a1, kuss@a1, kunde, distler@a1
+--text follows this line--
+
+An alle,  die es am Wochenende direkt betrifft:
+
+tracemachine changed:
+
+es wird nun auch die Bahnlaenge (in cm vgl. M.K.)  mitberechnet:
+
+	 struct target_ko enthaelt Komponente len. 
+
+Die Eingabematrizen wurden von Michael und Manfred entsprechend bestimmt 
+und neu aufbereitet. Damit die neuen Files ordentlich eingelesen werden,
+muessen bestehende Programme einmal neu uebersetzt werden.
+
+
+
+helmut
+
+Ueber Risiken und Nebenwirkungen fragen Sie Ihren Arzt oder Apoteker.
+
+-------------------------------------------------------------------------------
+
+running version: Mon Nov 15 18:50:52 MET 1993
+
+SCCS/s.TraceMachine.c: 1.2
+SCCS/s.TraceMachine.h: 1.3
+SCCS/s.TraceMachineF.c: 1.3
+SCCS/s.bundle.c: 1.3
+-------------------------------------------------------------------------------
+Wed Oct 27 18:41:01 MET 1993
+
+
+
+Fuer die tma gibt es zusaetzliche Interfacefunktionen, um die OFFSETS zu
+beruecksichtigen:
+
+siehe z.B. ~a1online/o16/cindy/Histo.cc
+
+  TracMachine tpA(qsdda, XA_OFFSET, THETAA_OFFSET, YA_OFFSET, PHIA_OFFSET);
+
+
+  resultA  = tpA.run(vdcA.x(), vdcA.theta(), vdcA.y(), vdcA.phi());
+
+  statt
+
+		TracMachine tpA(qsdda);
+
+		eventA.x_fp = (vdcA.x() - XA_OFFSET) * 0.1;
+		eventA.th_fp = vdcA.theta() - THETAA_OFFSET;
+		eventA.y_fp = (vdcA.y() - YA_OFFSET) * 0.1;
+		eventA.ph_fp = vdcA.phi() - PHIA_OFFSET;
+
+Die alte Funktion ist jedoch noch immer erlaubt, dabei werden die Offsets 
+jedoch nicht beruecksichtigt. 
+
+Der Faktor 0.1 zur Konversion (cm/mm) wird ebenfalls in der neuen Form 
+beruecksichtigt. Falls man eine andere Einheit bei x und y wuenscht gibt
+man diese als Parameter 6 und 7 an. 
+
+ok?
+helmut
+-------------------------------------------------------------------------------
+
+
+
+Format :
+
+xyz.mx Datei :
+xyz                    x_fp th_fp y_fp ph_fp
+-0.64860083D-02  T  4 0 1 0    Nr.60: <  x^ 4 * theta^ 0 * y^ 1 * phi^ 0 >
+
+.bt Datei
+
+number of terms   max_x_fp    max_th_fp  max_y_fp   max_ph_fp 
+4 0 1 0  delta phi theta y
+	 
+th_tg = 2 x th + 3 y ** 2 ph ** 3
+ph_tg = 4 x th + 4 y ** 2 ph ** 3 + x + ph
+
+
+4  1 1 2 3 
+1 1 0 0    0 2 0 4  // 2
+0 0 2 3    0 3 0 4  // 576
+1 0 0 0    0 0 0 1  // 1
+0 0 0 1    0 0 0 1  // 4
+
+(1 2 3 4) -> ( 0 1732 0 2317)
+
+
+4  1 2 1 3
+0 0 1 2     1 0 0 1
+0 1 1 0     0 1 0 0
+1 2 0 3     1 0 1 1
+1 0 0 1     0 0 0 1
+
+(1 2 3 4 ) -> (304.000000 6.000000 256.000000 308.000000)
+
+
+Both Machines checked (slight modification of Manfreds's (Scale))
+
+asterix>../tMachine
+3 4 5 6
+-5630.986816 1378.063843 92564.226563 -853389.250000
+1 0 0 0
+13.249821 0.115160 0.000000 0.000000
+0 1 0 0
+0.006604 -0.346007 0.000000 0.000000
+0 0 1 0
+-0.351532 -11.587500 272.281982 -110.983383
+0 0 0 1
+0.000000 -2.147140 0.010968 1.185790
+asterix>/users/edv/kramer/raytrace/mk/back
+1 0 0 0
+    13.24984      0.1151597      0.0000000E+00  0.0000000E+00
+0 1 0 0
+   6.6042994E-03 -0.3460071      0.0000000E+00  0.0000000E+00
+0 0 1 0
+  -0.3515323      -11.58751       272.2817      -110.9831    
+0 0 0 1
+   0.0000000E+00  -2.147136      1.0968700E-02   1.185794    
+asterix>
+
+
+------------------------------------------------------------------------------
+Profile listing generated Sat Apr 11 17:20:44 1992 with:
+   prof ../tMachine mon.out 
+
+blkclr and bzero (../bzero.s) synonymous: using latter
+----------------------------------------------------------------------------------
+*  -p[rocedures] using pc-sampling;                                        *
+*  sorted in descending order by total time spent in each procedure;       *
+*  unexecuted procedures excluded                                          *
+----------------------------------------------------------------------------------
+
+Each sample covers 8.00 byte(s) for 0.0054% of 186.7300 seconds
+
+%time     seconds  cum %   cum sec  procedure (file)
+
+ 70.3    131.2200   70.3    131.22 TMA_run (TraceMachine.c)
+ 10.0     18.7100   80.3    149.93 number (../doscan.c)
+  4.2      7.8300   84.5    157.76 _atod (../atod.s)
+  4.1      7.6700   88.6    165.43 _doscan (../doscan.c)
+  4.0      7.5400   92.6    172.97 atof (../atof.c)
+  3.0      5.5400   95.6    178.51 _dwmultu (../dwmultu.s)
+  1.8      3.3700   97.4    181.88 ungetc (../ungetc.c)
+  1.2      2.1900   98.6    184.07 _tenscale (../tenscale.s)
+  1.1      1.9800   99.6    186.05 read (../read.s)
+  0.1      0.2400   99.8    186.29 scanf (../scanf.c)
+  0.1      0.2100   99.9    186.50 bzero (../bzero.s)
+  0.1      0.2000  100.0    186.70 main (tMachine.c)
+  0.0      0.0300  100.0    186.73 _mcount (./mcount.s)
+
+
+ 9804 kramer    -1    0    92K   56K stop    0:00  0.00%  0.00% tMachine
+---------------------------------------------------------------------------
+ Lieber Manfred,
+
+habe meine Routine/Programm zur Rueckrechnung zumindest soweit fertig als
+ich die beiden Ausgabe der beiden Programme gegeneinander pruefen konnte.
+Soweit ich sehen konnte sind die Ergebnisse bis auf Rundungsfehler gleich.
+Der von mir verwendete Algorithmus ist tatsaechlich schneller.
+
+
+Hier die Daten:
+--------------
+
+
+Compilation:  gcc  -O  bzw. RiscFortran -O
+
+CPU : DECstation 5000/200 (unter Ultrix)
+
+Anzahl der Koordinatenpunkte : 100000
+
+Eingabematrix : 
+		/users/a1/korn/qsdda/delta.mx 
+	        /users/a1/korn/qsdda/theta0.mx
+		/users/a1/korn/qsdda/y0.mx
+		/users/a1/korn/qsdda/phi0.mx
+
+
+	    |  Brutto   Tara   Netto    Zeit pro Punkt
+	    |    in s   in s   in s     in ms
+------------+
+back.f          149.3    31.5  117.8    1.178 
+tMachineF.f      80.8    28.1   51.9    0.519
+tMachine.c       71.2    20.9   50.3    0.503 
+
+
+
+Wir haben also einen Faktor von 2.34 an Zeit gewonnen! Natuerlich kann man
+immer noch was rausschlagen, aber ich glaube man sollte es zunaechst  nicht
+uebertreiben.
+
+Vielleicht koennen wir Anfang der Woche nochmal die Dateiformate usw. 
+abklaeren. Ich melde mich dann, da ich am Montag moeglicherweise nicht da
+bin.
+
+Gruss
+Helmut
+
+
+----------------------------------------------------------------------------
+asterix>time ../tMachineF < xxxx.dat
+       83.8 real        79.0 user         2.5 sys  
+asterix>time ../tMachineF < xxxx.dat
+       81.5 real        78.7 user         1.5 sys  
+asterix>time ../tMachineF < xxxx.dat
+       30.8 real        26.9 user         1.9 sys  
+asterix>time ../tMachineF < xxxx.dat
+       28.8 real        26.7 user         1.3 sys  
+-----------------------------------------------------------------------------
+
+      program tMachineF
+      
+      implicit none
+
+      integer TMA_new
+      integer tm
+      real fp(4)
+      real tg(4)
+      integer i
+
+
+c     Bereitstellen der Koordinatenrueckrechnungsmachine tm. Die aufbereiteten
+c     Matrixelemente befinden sich in der Datei "data.txt".
+
+      tm = TMA_new("data.txt", 0)
+
+      if (tm .ne. 0) then
+         do while(1) 
+            read(5,*,end=10) (fp(i),i=1,4)
+
+c     Berechne fp -> tg
+            call TMA_run(tg, fp, tm)
+            write(6,*) (tg(i), i=1, 4)
+         end do
+ 10      continue
+
+c     Werfe die Maschine tm weg
+         call TMA_delete(tm)
+      end if
+
+      end
+      
+----------------------------------------------------------------------------
+
+Lieber Michael,
+(und Liebe CCs),
+
+ich habe die Rekonstruktion fertig. Natuerlich habe ich mich nicht auf
+die reine Fortran nach C  Uebersetzerei beschraenkt, sondern mir einen
+neuen Algorithmus ausgedacht.
+Mein Algorithmus hat einen "kraefigen" Schluck aus der Performance-Pulle 
+in sich. Die gewonnene Zeit ist ganz ordentlich und kann gut anderweitig
+eingesetzt werden. Die ganze Sache ist trotzdem flexibel geblieben.
+ 
+Ausserdem gibt es ein sauberes FORTRAN Interface (getested auf der DECstation),
+weil ich denke, da"s man dieser Kram auch von anderen Leuten benutzt werden
+sollte. Die Routinen sind n"amlich nicht als Wegwerf-Software nur fuer den
+                                   -----
+ersten Schuss gedacht.
+
+Die Routinen sind getestet und mit Ausgabedaten von Manfred Korn verglichen.
+Trotzdem will noch auf Nummer Sicher gehen und gemeinsam mit Manfred abchecken,
+ ob ich auch nichts uebersehen habe.
+
+Bis auf Orthographie ist sogar die Dokumentation mit Beispielen
+in C und FORTRAN fertig. Sie ist auf jeden Fall benutzbar.
+
+Im Grunde ist fuer den Frank Heinemann jetzt nur noch interessant wie 
+ich die Target bzw. Fokalebenkoordinaten erwarte. 
+Hier habe ich mich an die E.Offermann Konvention gehalten.
+
+Ich leite die mail auch mal an W.Boeglin und M.Korn weiter. 
+
+Viele Gruesse
+Helmut
+-------------------------------------------------------------------------------
+To: vkpmza::korn
+Subject: Antwort 22/4/92
+--text follows this line--
+
+Lieber Manfred,
+
+diese kleine Doku. liegt bei mir auf dem Terminal. Das ganze ist 
+ (prelimenary) benutzbar. Die Dokumentation kannst Du dir auch
+online anschauen. Einfach 
+	info -f /usr/local/willix/info/tma.info 
+tippen. 
+Die zugehoerige Software steht erstmal unter /usr/local/willix/tma, wo
+Du mehrere Ordner findest:
+
+/usr/local/willix/tma/lib:      libtma.a	(die Funktionsbibliothek)
+	
+/usr/local/willix/tma/bin:      bundle            
+
+/usr/local/willix/tma/doc:      tma.info
+
+/usr/local/willix/tma/examples: tMachine.c tMachineF.f Makefile
+	
+
+/usr/local/willix/tma/include:  TraceMachine.h
+
+Natuerlich kann sich noch das ein oder andere aedern, was bei Software
+ja leider nicht auszuschliessen ist. Ich wuerde mich freuen, wenn die
+Routinen allg. Verwendung finden. 
+Sag' mir Bescheid, wenn Du Probleme hast.
+
+Gruss
+Helmut
+
+-------------------------------------------------------------------------------
+Makefile in der Verteilung: |
+----------------------------
+
+SHELL = /bin/sh
+CC = gcc
+CFLAGS = -O  -Wall  -I../include -g
+FFLAGS = -O
+
+
+
+all : tMachine tMachineF
+
+tMachine : tMachine.c 
+	$(CC) $(CFLAGS)  tMachine.c -L../lib -ltma -o $@
+
+tMachineF : tMachineF.o
+	$(FC)  tMachineF.o  -L../lib -ltma  -o $@
+
+
+clean :
+	rm *~ *.o
+
+-------------------------------------------------------------------------------
+
+
+
+From distler@a1.kph.uni-mainz.de Thu May  7 20:48:07 1992
+Received: by a1.kph.uni-mainz.de (5.57/Ultrix3.0-C)
+	id AA13228; Thu, 7 May 92 20:48:04 +0200
+Date: Thu, 7 May 92 20:48:04 +0200
+From: distler@a1.kph.uni-mainz.de (Michael Otto Distler)
+Message-Id: <9205071848.AA13228@a1.kph.uni-mainz.de>
+To: kramer@asterix
+Cc: distler@a1.kph.uni-mainz.de
+Subject: delta tma
+Status: OR
+
+Lieber Helmut,
+
+	Eddy haelt es durchaus fuer sinnvoll, die Fehler in der
+	Koordinatenberechnung bis zum Target abzubilden.
+	Er moechte insbesondere den Fehler durch Vielfachstreuung
+	mit dem Fehler der Driftkammern vergleichen.
+	Ich bitte Dich, dasz Du diesen Teil ebenfalls programmierst,
+	sobald Du Zeit und/oder Lust hast.
+
+	Ich komme wegen der Definition der Strukturen in den
+	naechsten Tagen noch einmal auf Dich zu.
+
+	Gruss Michael
+-------------------------------------------------------------------------------
+To: distler@a1
+Subject: rueckrechnung zum zweiten
+CC:korn@a1
+--text follows this line--
+							Mon Aug 10 17:31:11
+
+Lieber Michael,
+
+falls Manfred noch mal neue Daten zur Rueckrechnung liefert, so kannst
+Du auf folgenden Weise aus seinen Dateien einen neuen Eingabefile fuer
+die "tracemachine" erzeugen:
+
+Manfreds Dateien lauten:
+
+	a1> ls *.mx
+
+	delta.mx phi0.mx theta0.mx y0.mx 
+
+	Mit dem Programm convert  in  /usr/local/kph/kits/WILLIX/tma/bin
+                         -------
+	produzierst Du 
+
+	a1> convert
+	a1> ls *.hmx
+
+	delta.hmx phi0.hmx theta0.hmx y0.hmx 
+
+
+	Dann wirfst Du bundle an und leitest die Ausgabe auf eine Datei um
+                       ------
+	bundle liegt auch in /usr/local/kph/kits/WILLIX/tma/bin.
+	Alles andere was noch interessieren koennte liegt ebenso in 
+	/usr/local/kph/kits/WILLIX/tma
+	
+	
+	a1> bundle > coeff.dat 
+
+Gruss
+helmut
+
+
+P.S.
+In meinem Ordner ~kramer/tma/a/k1 liegen die entsprechenden Daten fuer
+die jetzige Koeffizientenmatrix. Ich habe noch mal eine neue gemacht, wo
+ich expl. die y-Koord. rausgeworfen habe. (Dateiname: firstrun.dat) 
+Sollte die gleichen Ergebnisse liefern wie meine mail (snip snip)
+
+
+Hier noch die Struktur der Datei, falls mich meine Erinnerung nicht truegt:
+
+	                                   |dp_tg>  |theta_tg> 	|y_tg> |phi_tg>
+<x_fp**i theta_fp**j y_fp**k phi_fp**l|
+       -           -       -         -
+       1  1 0 0                             8.34247e-07  0.00109846  0.0  0.0 
+
+------------------------------------------------------------------------------
+						Wed Oct 21 10:23:57 MET 1992
+
+(2) Ich habe noch mal geprueft, ob im Algorithmus der TraceMachine ein
+    Fehler sein koennte. Habe aber keinen gefunden. Zumal ich die Daten
+    noch einmal auf andere sehr primitive Weise reproduziert habe.
+    Ausserdem hatte ich damals wie auch jetzt noch mal die Ausgabe
+    vom alten Korn'schen FORTRAN - Program und meiner Routine getestet
+    (siehe unten). Die Matrixelemente sind ein alter raytrace Datensatz 
+    von Manfred. Ich fuehre die kleinen Unterschiede auf Rundungsfehler
+    zurueck, die natuerlich in beiden Verfahren unterschiedlich beitragen.
+
+
+    (1 1 1 1)   ->   
+	11.62266      -7.327000       48.83338      -150.8518  (korn)
+	11.6226       -7.32692        48.8335       -150.852   (tma)
+	
+
+    (2 2 2 2)   ->    
+	-62.95576      -393.9395       1539.946      -11483.71
+	-62.9559       -393.937        1540.04       -11483.7
+
+    (0.02 0.03 0.15 0.3)   -> 
+	0.2529597     -1.8593429E-02 -7.0969155E-03  -1.059379
+	0.252959      -0.0185937     -0.00709676     -1.05938
+
+
+    Falls bei der Messung groessere Differenzen auftraten. Haette ich
+    gerne mal zwei bis drei Originalevents, bzw. wuerde mal die
+    Eingabedatei fuer die TraceMachine mit dem Kornschen Daten vergleichen.
+    Vielleicht wurden einfach die Matrixelemente falsch gefuettert.
+
+-------------------------------------------------------------------------------

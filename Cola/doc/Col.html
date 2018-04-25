@@ -1,0 +1,325 @@
+<head>
+<title> Cola: ".col" files </TITLE>
+<Style><!--
+pre {background-color: #f0f0A0; border: thin black; white-space: pre }
+pre {padding: 1ex 1ex 1ex 1ex ; width: 85ex; font-family: monospace }
+H2 {background-color: #a0a0FF; border: thin black; width:100%}
+H2 {padding: 1ex 1ex 1ex 1ex ; font-size: x-large}
+--></style>
+</head>
+<BODY BGCOLOR=WHITE>
+<hr>
+<table width=100%>
+<tr>
+<td align=center><h1 align=center>
+Cola object description file<br>"Online.col"</h1>
+<td align=right> <img src=ColaSourceDoc/Cola++.gif alt="Cola Logo" width=200>
+</table>
+<hr>
+Contents of this page:
+<ul>
+<li> <a href=#general    >General</a>
+<li> <a href=#objects    >Object Classes</a>
+<ul>
+<li> <a href=#scalar     >Scalar</a>
+<li> <a href=#fourvector >Fourvector</a>
+<li> <a href=#histogram  >Histogram</a>
+<li> <a href=#cut        >Cut</a>
+<li> <a href=#weight     >Weight</a>
+<li> <a href=#counter    >Counter</a>
+</ul>
+<li> <a href=#misc       >Miscellaneous Statements</a>
+<li> <a href=#expressions>Expression syntax</a>
+</ul>
+<a name=general>
+<H2>General</H2>
+Cola++ and Simul++ both read a definition file which contains the
+definitions of all physical quantities and histograms. The syntax
+for both programs is the same, they can even use exactly the same
+file. These files are named "Online.col" or "Simulation.col",
+if not specified different by the environment variables ONLINE_COL or
+SIMULATION_COL. Cola++/Simul++ tries to read from the current
+working directory (or the directory given by -C), and if the file
+is not found, from the subdirecory "./col". We recommend to use this
+subdirectory.
+
+First of all, keep in mind that Cola uses an object oriented approach!
+The lines in this file are not executed sequentially. The file
+consists only of object descriptions and the time of execution of each
+statement is not transparent to the user. E.g. all quantities are
+evaluated ONLY if a histogram is actually filled with this quantity
+and each quantity is evaluated only once for each event.
+<UL>
+<LI> The first step of Cola++ is to pipe the Online.col file through the
+     C++ preprocessor. You can use #define, #include, #ifdef, etc.
+
+<LI> Comments: Everything after "//" is ignored (C++ style). 
+<LI> Each line consists of one command! If you like to write
+     several commands in one line, separate them with ";", if
+     you need more than one line use "\" for continuation 
+     (shell style).
+<li> A parse error causes only a warning. Cola tries to recover and
+     continues with the rest of the definitions.
+<li> Lines containing only a string are printed to stdout during
+     parsing. You can use this for debuging purposes.
+</UL>
+<a name=objects>
+
+<H2>Object Classes</H2>
+
+Cola knows five basic object classes:
+<DL>
+<DT> <a name=fourvector><b>FourVector</b><DD>
+        A limited function set for relativistic four momenta is
+	available. Since the spectrometer information is given as
+	fourvector, this is the starting point for each series of
+        definitions. Examples:
+<pre>Fourvector electron_in  = Beam
+Fourvector electron_out = Spectrometer("B")
+Fourvector target       = {0.93827231} 
+Fourvector photon       = electron_in - electron_out
+Fourvector CMS          = photon + target
+</pre>
+
+<DT> <a name=scalar><b>Scalar</b> <DD>
+	A scalar is a quantity defined by a <a
+	href=#expressions>numerical 
+	expression</a>. Only
+	scalar quantities can be filled into histograms or can be
+	evaluated for cut conditions.
+
+	Some examples:
+<pre>Scalar E                = energy(electron_in)
+Scalar Eprime           = energy(electron_out)
+Scalar energytransfer   = energy(photon)
+Scalar momentumtransfer = momentum(photon)
+Scalar theta_e          = theta(electron_out)
+Scalar q2               = photon^2 
+Scalar epsilon = 1/(1-2*(energytransfer^2-q2)/q2*tan(theta_e/2)^2)
+</pre>
+
+<font color=red>******* NEW! *******</font><br> For short cut the
+label and the unit of a scalar can be stated in the declaration. Examples:
+<pre>
+Scalar E("E","GeV")            = energy(electron_in)
+Scalar Eprime("E'","GeV")      = energy(electron_out)
+Scalar theta_e("[Q]_e!","rad") = theta(electron_out)
+</pre>
+
+<DT> <a name=histogram><b>Histogram</b><DD>
+	Histograms can be defined in several ways:
+<ul>
+<li> Histogram "Title" <a href=#scalar>scalar</a>("Axis","Unit",minimum,maximum,bins)<br>
+	This books a one dimensional histogram, using the previous
+	defined scalar quantity "<A Href=#scalar>scalar</A>" for filling.
+<li> Histogram <a href=#expressions>logical</a> "Title" <A Href=#scalar>scalar</A>("Axis","Unit",minimum,maximum,bins)<br>
+	In this case, the histogram is only filled if the logical expression is true
+<li> Histogram "Title" <A Href=#scalar>scalar</A>("Axis","Unit",minimum,maximum,bins)
+	               <A Href=#scalar>scalar</A>("Axis","Unit",minimum,maximum,bins)<br>
+	This is a two dimensional histogram.
+<li> Histogram <a href=#expressions>logical</a> "Title" <A Href=#scalar>scalar</A>("Axis","Unit",minimum,maximum,bins)
+	               <A Href=#scalar>scalar</A>("Axis","Unit",minimum,maximum,bins)<br>
+	This is a two dimensional histogram with a cut condition.
+</ul>
+Please check the <A HREF=hmbook.html>HMBook</a> conventions for
+text representation in "Title","Axis", and "unit".
+Some examples:
+
+<pre>Histogram "q^2!" q2("q^2!","(GeV/c)^2!",-0.1, 0, 100)
+Histogram "[e]" epsilon("[e]","",0, 1, 200)
+Histogram "Scattering Angle" theta_e("[Q]_e!","^o!", 0,180,360)
+</pre>
+
+If unit and label are already defined for Scalar, e.g. by the Label
+command, they can be ommited:
+<ul>
+<li> Histogram "Title" <a href=#scalar>scalar</a>(min, max, bins)
+<li> Histogram "Title" <A Href=#scalar>scalar</A>(min, max, bins)
+	               <A Href=#scalar>scalar</A>(min, max, bins)
+<li> Histogram <a href=#expressions>logical</a> "Title" <A
+Href=#scalar>scalar</A>(min, max, bins)
+<li> Histogram <a href=#expr essions>logical</a> "Title" <A
+Href=#scalar>scalar</A>(min, max, bins)
+	               <A Href=#scalar>scalar</A>(min, max, bins)
+</ul>
+<a name=cut>
+<DT><b>Cut</b><DD>
+In addition to the cuts defined for each histograms there is
+the possibility to introduce global cuts.<br>
+A global cut is defined for a group of histograms by
+"{" and "}".
+<pre>Cut <a href=#expressions>logical</a> {
+  ...
+}
+</pre>
+All histograms defined inside of "{}" are only filled if the
+logical expression is evaluated and is true.
+<a name=weight>
+<DT><b>Weight</b><DD>
+<font color=red>******* NEW! *******</font><br>
+You can define a weight for a group of histograms by
+<pre>Weight <a href=#expressions>expression</a> {
+  ...
+}
+</pre>
+for abreviation you can combine weight and cut via ",":
+<pre>
+Cut ... , Weight ... {
+  ...
+}
+</pre>
+<a name=counter>
+<DT> <b>Counter</b><DD>
+A counter will be incremented by a certain amount if all cuts apply.
+The contents of the counters can be seen in the counter window of the
+GUI, or in the file "Online.cnt" (or file name given by environment variable 
+ONLINE_COUNTER) at the end of the analysis.
+<pre>Scalar triggerA = A.trigger > 0
+Counter CountsTriggerInA = triggerA
+</pre>
+    or with an additional C++ style format string:
+<pre>Counter CountsTriggerInA("Trigger A: %8.0f") = triggerA       
+</pre>
+</dl>
+
+<a name=misc>
+<h2>Miscellaneous Statements</h2>
+<DL>
+<DT><B> Weight "Histogramtitle" scalar</b><DD>
+     Fill Histogram with weight=scalar instead of weight=1
+<DT><B> Directory "dir"</B><DD>
+     Change to directory. "/" is the root directory.
+<dt><B> Label <a href=#scalar>scalar</a>("label","unit")</B><DD>
+     Define label and unit for a scalr. This information can be 
+     ommited now for the definition of the histograms.
+<dt><B>
+     Convert "old unit" = 
+     <a href=#expressions>expression</a> "new unit" </b><DD> 
+     Define a conversion between units for booking histograms. Scalars
+     with the unit "old unit" will be automatically converted to
+     "new unit" by using the conversion factor given by 'expression'.
+     The expression is evaluated only once during booking of the histogram.
+     For example
+<pre>
+Scalar theta_e("[q]'", "rad") = theta (Electron_out)
+Convert "rad"      = 180/PI "^o!"
+</pre>
+     Fills the Scalar "theta_e" in degrees instead of radiant 
+     into all histograms.
+<dt><B> WriteEvent</B><DD>
+     Write this event to output file (if the "-o filename" option is 
+     given on the commandline). 
+<dt><B> WriteEvent <a href=#expressions>logical</a> </B><DD>
+     Write this event if the logical expression is TRUE.
+<dt><B> Print <a href=#scalar>scalar</a></B><DD>
+     A print statement causes an output of an <A
+     Href=#scalar>scalar</A> 
+     to stdout if all cuts apply. An additional c-style format string 
+     is possible.
+<pre>
+Cut A.trigger &gt; 0 {
+  Scalar E = energy(electron_in)
+  Print E
+  Print E "Energy = %10.3f MeV\n"
+}
+</pre>
+
+<dt><B> File name("filename") </b><DD>
+     Define "name" as file and open it with "filename" for output.
+<dt><B> File name(ENVIRONMENTVARIABLE) </b><DD>
+     Define "name" as file and open it with the filename given by
+the environment variable "ENVIRONMENTVARIABLE" for output.
+<dt><B> Print(File) <a href=#scalar>scalar</a> [format]</B><DD>
+     Print to file "File".
+<pre>
+  File outputfile("/users/kpha1exp/a1online/energy.dat")
+  Scalar E = energy(electron_in)
+  Print(outputfile) E "Energy = %10.3f MeV\n"
+</pre>
+
+<dt><B> ScaleHistogram "title" <a href=#scalar>scalar</a>("new axis","new unit")</B><DD>
+     Scale a histogram. Use this e.g. for normalization to luminosity.
+<dt><B> Normalize "title1"("filename","title2")</B><DD>
+     Divide histogrma "title1" by histogram "title2" of file "filename".
+</dl>
+<a name=expressions>
+<h2>Syntax for expressions</h2>
+The expression syntax is similar to the arithmetic syntax C and C++. <br>
+Note: differences to C/C++:
+<ul>
+<li>"^" for exponential (exclusive or in C/C++) 
+<li>"NOT" for negation (the C/C++ "!" sign is used as comment)
+</ul>
+<PRE>expression : 
+  constant	                    // examples: 1, 10E23, 3.1415926
+  | <a href=#scalar>scalar</a>                          // Scalar object
+  | @abcn....                       // access to raw data. See <a 
+href=./abcn.list>abcn.list</a>
+  | @rundbvalue                     // access to <a 
+href=rundb.html>run.db</a>
+  | @online....                     // reconstructed data.  See <a 
+href=online.list>list</a> or 
+                                    // <a 
+href=ColaSourceDoc/Firstlevelreconstructeddata..html>detailed documentation</a>     
+  | ( exp )                         // usual floating point arithmetics 
+  | - exp 
+  | exp + exp
+  | exp - exp
+  | exp * exp
+  | exp / exp
+  | exp ^ exp	                    // exponential
+  | exp & exp                       // bitwise and
+  | exp | exp                       // bitwise or
+  | function(exp)
+  | function(fourvector)
+  | fourvector * fourvector
+  | fourvector ^ 2
+
+logical: 
+  | 1 | TRUE  | true
+  | 0 | FALSE | false
+  | exp < exp 
+  | exp > exp 
+  | exp <=  exp
+  | exp >=  exp
+  | exp == exp                      // Equal
+  | exp != exp                      // Not equal
+  | NOT logical                     // Note:  "!" is a comment sign !!!!
+  | logical && logical	            // Logical AND 
+  | logical || logical	            // Logical OR
+
+fourvector:
+  | { const }		            // new Fourvector with this mass
+  | { const, const, const, const }  // new four momentum
+  | Spectrometer("A")               // access to spectrometer information
+  | Beam                            // beam four momentum  ( fourvector )
+  | ClassFourvector
+  | fourvector + fourvector
+  | fourvector - fourvector
+  | - fourvector
+  | function(fourvector,fourvector) 
+
+Scalar function(Scalar):
+  sqrt   | exp                      // see C++ math library
+  | log  | log2 | log10 
+  | sin  | cos  | tan  | asin | acos | atan  
+  | sinh | cosh | tanh | ceil | abs  | floor
+
+Scalar function(FourVector):
+  momentum | energy | mass          // Unit GeV
+  | square | beta  | gamma          // beta=p/E, Lorentz gamma
+  | theta                           // angle to beam axis (z)
+  | phi                             // angle around z [pi, pi]
+  | varphi                          // angle around z [0, 2pi]
+
+FourVector function(FourVector, FourVector)
+  Lorentz                           // Lorentz transformation
+  | Rotate
+</pre>
+
+
+
+
+
+
+

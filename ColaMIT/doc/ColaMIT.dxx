@@ -1,0 +1,40 @@
+/**@name ColaMIT
+ *
+ * \begin{center}
+ *   {\Large {\bf Cindy Online Analysis - MIT/Bates version}}
+ * \end{center}
+ *
+ * 
+ * This is our first attempt to use the doc++ source code documentation
+ * system for the MIT/Bates version of Cola++. This is far from beeing
+ * complete, but we hope it already helps to find some documentation.
+ *
+ * @memo     Cindy Online Analysis - MIT/Bates version
+ * @version  1.0
+ * @author   Michael O. Distler and
+ *           Harald Merkel
+ */
+//@{
+/**@name Introduction
+ * The focal plane detector used in each of the three magnetic
+ * spectrometers of the A1 collaboration (Mainz, Germany) consists
+ * out of 4 planes of vertical drift chambers. Each plane has
+ * about 400 signal wires (channels). If a charged particle
+ * traverses the chambers, the gas (a mixture of argon, isobutane
+ * and alcohol) is ionized along the track. The ions start
+ * drifting to the cathodes, whereas the electrons drift to the
+ * wires. The drift time is measured with TDCs (time to digital
+ * converters). For a typical event, we get 20 wire/time
+ * informations. This library is able to reconstruct the track and
+ * to do some consistency checks.
+ */
+
+/**@name Programs
+ * @memo several programs
+ */
+
+//@{
+//@Include: ../../ColaMIT/Q2Cindy.cc
+//@}
+
+//@}

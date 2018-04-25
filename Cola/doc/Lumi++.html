@@ -1,0 +1,86 @@
+<TITLE> Lumi++, luminosity calculation with Cola++ </TITLE>
+<body bgcolor=white>
+<HR>
+<H1><center> Help for Lumi++ </center></H1>
+<HR>
+This help file describes the luminosity calculation with <B>Cola++/Lumi++</B>.
+<P>
+<HR>
+Usage: Lumi++ [options]<p>
+Command line options:
+<DL COMPACT>
+<Dt><B> -h     </B><dd>  Help
+<Dt><B> -f file</B><dd>  Input file name. Default: stdin
+<Dt><B> -o file</B><dd>  Output file name for statistics.
+<Dt><B> -z     </B><dd>  Decompress input and compress output with gzip.
+<Dt><B> -n n   </B><dd>  Terminate after <n> events.
+<Dt><B> -y     </B><dd>  Enable VDC trippoff control.
+</DL>
+<HR>
+<h3>Input Files</h3>
+<DL>
+<DT><B>run.db</B> (or environment variable RUN_DB)<DD>
+    This file contains the setup of the spectrometers, like momenta and
+    angles. It consists of time stamps which mark the time of changes and the
+    changes. The time of the first event will be used to determine the actual
+    experimental setup.
+    See <A HREF="rundb.html">this list</A> of valid statements.
+</DL>
+<HR>
+<h3>Output Files</h3>
+<DL>
+<DT><B>luminosity.out</B> (or environment variable LUMI_OUT)<DD>
+    This ascii-file is written after the last event. It contains all
+    information concerning the luminosity. If the environment variable
+    LUMI_OUT is set to '-', this output is redirected to <I>stdout</I>.
+    If LUMI_OUT is set to 'nooutput', no ouput will be done.
+<DT><B>luminosity.trip.out</B> (or environment variable LUMI_TRIP)<DD>
+    Same as luminosity.out calculated for runs with 'TrippOff' in one of the
+    VDC's. Will only be produced if commandline option <B>-y</B> is given.
+</DL>
+<HR>
+<H3>General Issues</H3>
+The experimental setup has to be set in the <B>run.db</B> file via the
+statements <B>Ebeam</B>, <B>Reaction</B>, <B>Target</B>, <B>Target.Angle</B>
+and <B>Target.Length</B>. The beam-energy is needed to correct the values
+from the foersterprobe. The target-values are needed to determine the thickness
+of the target. The targetmaterial and the used spectrometers are extracted
+out of the Reaction-statement. If you use a non-standard beam-energy (i.e.
+not 7.5 MeV/turn) you have to set the number of turns in MAMI-B with the
+<b>Turns</b> statement in the file <b>run.db</b>.<br>
+<br>
+The integrated luminosity is given in 1/pbarn and is meant per targetnucleus.
+<hr>
+<H3>Examples</H3>
+<dl>
+<dt><pre>
+Reaction = "O16(e,B:e'A:p)N15"
+Ebeam = 705.11
+Target = "Waterfall"
+Target.Angle = 30
+Target.Length = 35  // mg/cm^2
+</pre>
+<dd> --> targetmaterial = water, coincidence A + B, standard energy
+<dt><pre>
+Reaction = "H(e,B:e')p"
+Ebeam = 630
+Target = "Cryo"
+</pre>
+<dd> --> targetmaterial = hydrogen, single B, standard energy
+<dt><pre>
+Reaction = "C12(e,B:e'rho(A:pi+C:pi-))C12"
+Ebeam = 882
+Turns = 90
+Target = "Solidstate"
+Target.Angle = 52
+Target.Length = 45  // mg/cm^2
+</pre>
+<dd> --> targetmaterial = carbon, triple coincidence A + B + C,
+non-standard energy
+</dl>
+
+<HR>
+<i>Last modified: February 17th, 1998 <BR>
+Bug reports and comments to
+<A Href=mailto:cola@wwwa1.kph.uni-mainz.de>Cola@WWWA1.KPh.Uni-Mainz.De</a>
+</I>

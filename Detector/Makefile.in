@@ -1,0 +1,39 @@
+#								 -*-makefile-*-
+#
+# $Id: Makefile.in 2683 2016-12-09 14:00:15Z aesser $
+#
+
+.PHONY : all clean lib veryclean distclean
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../Makefile.inc
+
+CXXFLAGS= $(OPTS) $(WARN) -fno-strict-aliasing
+LDFLAGS	= $(OPTS)
+CPPFLAGS= -I.. -I$(srcdir) -I$(topdir) -I$(incdir)
+
+libobjs	= BaselNdet.o ScintD.o SiliconDetector.o FlashADC.o FibreDetector.o \
+	   KaosDetectors.o MWPCDetectors.o spline.o fitspline.o \
+	   simplex.o pdcD.o FibreEventDisplay.o NCube.o Ndet.o
+ 
+library	= libdetector.a
+
+all:	lib
+
+lib:	$(library)
+
+$(library) :	$(libobjs)
+	@ ar -crv $@ $^
+	$(RANLIB) $@
+
+clean :
+	rm -rf *~ *.o
+
+veryclean :	clean
+	rm $(library)
+
+distclean:	veryclean
+
+-include $(libobjs:%.o=.%.depend)

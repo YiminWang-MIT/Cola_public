@@ -1,0 +1,88 @@
+#! /bin/bash
+#
+# Use: LumiSum Setting Outputfile.tex Experimenttype Runlist.txt
+#
+[ -n "$2" ] && OUT=$2     || OUT=Lumisum.tex
+[ -n "$3" ] && EXPTYPE=$3 || EXPTYPE="auto"
+[ -n "$4" ] && RUNLIST=$4 || RUNLIST=runlist.txt
+export LC_ALL="en_US"
+export EXPTYPE
+cat <<EOF | sed 's/SETTING/'$1'/g' | sed 's/_/\\_/g'> $OUT
+\NeedsTeXFormat{LaTeX2e}
+\documentclass[12pt]{article}
+\usepackage{supertabular, a4}
+\setlength\textwidth{      18cm}
+\setlength\textheight{     26cm}
+\setlength\topmargin{     -25mm}
+\setlength\evensidemargin{ -5mm}
+\setlength\oddsidemargin{  -5mm}
+\pagestyle{empty}
+\begin{document}
+\centerline{\bf\Large Setting SETTING}
+\vspace{2mm}
+\tablehead{
+  \hline
+ Run&Events&$\int L\cdot dt$&$\int L_{eff}dt$&$\bar{I}$&$ Q_{eff}$&Dead&Time\\\\
+    &      &$ [pb^{-1}]    $&$ [pb^{-1}]    $&$ [\mu A]$& [mC]   &    &    \\\\
+  \hline
+  \hline
+}
+\tabletail{\hline}
+\begin{supertabular}{|l|r|r|r|r|r|r|r|}
+EOF
+
+SUMEVENTS=0 SUMLUMINO=0 SUMCHARGE=0 
+SUMLUMCOR=0 SUMCURRENT=0 SUMDEAD=0 SUMTIME=0 N=0
+( while read f rest
+do  
+  if (echo "$rest" | grep -q $1".*data") && [ -f "$1/luminosity/$f.lumi" ]
+  then 
+    LUMI=$1/luminosity/$f.lumi
+    [ "$EXPTYPE" = "auto" ] && \
+        EXPTYPE=`awk '/experiment/ {print $3" "$4;}' < $LUMI`
+    `awk '/total event/ { printf "eval EVENTS=%.0f ", $4;
+			  printf "SUMEVENTS=%f ", '$SUMEVENTS' +$4; } \
+            /'"$EXPTYPE "'/    { lumcor=$8; \
+			    chargecor=$5*(1-$4/100); \
+			    printf "LUMINO=%f CURRENT=%f ",$7,$6; \
+			    printf "CHARGE=%f "      ,chargecor; \
+			    printf "DEAD=%f TIME=%f ", $4,$3; \
+			    printf "LUMCOR=%f ",      lumcor; \
+			    printf "SUMLUMINO=%f ",  '$SUMLUMINO' +$7;\
+			    printf "SUMLUMCOR=%f ",  '$SUMLUMCOR' +lumcor;\
+			    printf "SUMCHARGE=%f ",  '$SUMCHARGE' +chargecor;\
+			    printf "SUMCURRENT=%f ", '$SUMCURRENT'+$6*$3;\
+			    printf "SUMDEAD=%f ",    '$SUMDEAD'   +$4*$3; \
+			    printf "SUMTIME=%.0f ",  '$SUMTIME'   +$3; \
+	    } '< $LUMI`
+    RUNNAME=`echo $f | sed 's/run_/Run /'`	    
+    printf "%s &%8.0f &%8.0f & %7.0f & %6.2f & %6.2f \
+& %4.1f\\\\,\\\\%% & %7.2f\\\\,s\\\\\\\\\n"\
+	"$RUNNAME" $EVENTS $LUMINO $LUMCOR $CURRENT $CHARGE $DEAD $TIME >> $OUT
+    printf "%s |%8.0f |%8.0f | %7.0f | %6.2f | %4.1f | %7.2f\\n" \
+	   "$RUNNAME" $EVENTS $LUMINO $LUMCOR $CURRENT $DEAD $TIME
+    N=$[N+1]
+  fi
+done
+
+SUMCURRENT=`echo $SUMCURRENT/$SUMTIME | bc -lq`
+SUMDEAD=`   echo $SUMDEAD   /$SUMTIME | bc -lq`
+( echo "\\hline \\hline" 
+  printf "$\\\\Sigma:$%d Runs & %.0f & %.0f & " $N $SUMEVENTS $SUMLUMINO
+  printf "%.0f & %.3f &%.2f & "        $SUMLUMCOR $SUMCURRENT $SUMCHARGE
+  printf "%.1f\\\\,\\\\%% & "      $SUMDEAD
+  printf "%dh %d' %d\"" $[SUMTIME/3600] $[SUMTIME/60%60] $[SUMTIME%60] 
+) >> $OUT
+cat <<EOF >> $OUT
+\\\\
+\hline
+\end{supertabular}
+\end{document}
+EOF
+) < $RUNLIST
+
+
+
+
+
+

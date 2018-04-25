@@ -1,0 +1,111 @@
+Hi, everybody,
+
+the first serious version of the path-length corrections of OOPS-OHIPS
+coincidence time, which originates in Tancredi's work with col files, is now
+available from the Cola repository.  The method involves a polynomial
+correction to raw tcoinc in target phi, dp, and theta of both spectrometers.
+Obviously, this necessitates that both OOPS and OHIPS have some kind of
+a track and, ideally, tcoinc is then given by
+
+tc_corr = tc_raw + (timeOOPS-offsetOOPS) - (timeOHIPS-offsetOHIPS) - offset (1)
+
+where
+
+timeOOPS  = path_difference_OOPS / beta_OOPS / c_light
+timeOHIPS = path_difference_OHIPS / beta_OHIPS / c_light
+
+and all path differences are measured with respect to the length of the
+central ray.  (All numbers are evaluated per-event.)  In a less ideal case,
+either OOPS or OHIPS, and possibly both, will have valid TDCs (and hence
+tc_raw), but will fail to have a track, so the path-length corrections
+are not always fully calculable.  In order not to overload excessively
+the online data structure, I have decided to provide the user with the
+following variables:
+
+	  online.oa_tc           raw O-A coinc time
+	  online.oa_tccorr       corrected O-A coinc time
+	  online.oa_tccorr_type  type of the correction applied
+
+(analogously for O-B, O-C, O-D coincs).  So if you want e.g. to see
+the full correction, use something like
+
+     Cut (@online.oa_tccorr_type==3) {
+       Histogram "OA tcoinccorr type 3" oa_tccorr("t?cc!", "ns", -50, 200, 500)
+     }
+
+in your col files.  The correction type is "3" if both OOPS and OHIPS
+had tracks, and (1) is applicable.  Type "2" means that only OOPS failed
+to produce a track, so only a part of (1) is done,
+
+     tc_corr = tc_raw - (timeOHIPS-offsetOHIPS) - offset
+
+and, vice-versa, if OHIPS failed, but OOPS has a track, we have type "1" and
+
+     tc_corr = tc_raw + (timeOOPS-offsetOOPS) - offset
+
+In the worst case, type is "0", and only
+
+     tc_corr = tc_raw - offset
+
+is done.  I think the usage of the correction "type" is a good diagnostic
+tool and gives a look at the tcoinc spectrum from interesting perspectives
+of background etc.
+
+The parameters necessary for the corrections are included in initfiles
+which are entered in the run.db similarly to the TMA initfiles, and are
+initialized in a similar way.  In the run.db you should put
+
+	OOPSA.tcc.initfile = "tccorr-OOPSshort.dat"
+	OOPSB.tcc.initfile = "tccorr-OOPSshort.dat"
+	OOPSC.tcc.initfile = "tccorr-OOPSshort.dat"
+	OOPSD.tcc.initfile = "tccorr-OOPSshort.dat"
+	OHIPS.tcc.initfile = "tccorr-OHIPSlong.dat"
+
+(or other combinations of short/long).  I attach the four files (OOPS short,
+OOPS long, OHIPS short, OHIPS long) we have so far.  You can put them
+anywhere you wish, but when they become stable, we should accomodate them
+somewhere into the /usr/local/oops/share directory.  The structure of the
+files is the following (example of OOPS short):
+
+ 25.9539 -- offsetOOPS in equation (1) above
+
+ 4191.81 -- length of central ray in mm
+
+ 4 4     -- max powers in non-disp (phi) and disp (dp and theta) target coords
+
+ 0.3722414e-02  0.7369984e-16  0.2088084e-01  0  -- coefficients of
+                                                    polynomial in phi
+
+-0.1897446e+00  0.7841966e+00  0.6169280e-02  0
+ 0.3443232e+00  0.1012570e-01  0             -0.9075518e-04
+ 0.8435547e-02 -0.3611125e-03  0.2543812e-05 -0.2033473e-07
+-0.3311019e-03  0.6901813e-05 -0.5609341e-07  0.1664401e-08
+
+                                                 -- coefficients of
+                                                    polynomial in dp, theta
+
+For order of multiplication, see ColaMIT/TCCC.cc and ColaMIT/TCCC.h.
+
+Attached also find sample histograms for N-D kinematics IIIa with OOPSA
+and OOPSB.  (Do not ask me for now where the second peaks are coming from --
+it could be that I accidentaly included some runs which are in a different
+kinematics, since I do not have a copy of the logbooks.)  Also, the old
+correction we used to apply to tcoinc in the "online days" became obsolete,
+so look for entries of the sort
+
+	COINC.O_tdc = { 127.49, 20.7899, 0, 0, 0 };
+	COINC.A_tdc = { 124.17, 20.8794, -0.07, 20.0 };
+	COINC.B_tdc = { 124.25, 20.9224, -0.07, 20.0 }; 
+	COINC.C_tdc = { 124.23, 21.0516, -0.07, 20.0 }; 
+	COINC.D_tdc = { 120.49, 21.0196, -0.07, 20.0 }; 
+
+in your run.db's.  Only the first two numbers of each entry remain valid
+(individual TDC's offset and slope), while the last three coefficients are
+redundant and will cause parse errors or Cola crashes, so get rid of them.
+I have also not bothered about any global offsets for now, e.g. "offset"
+in eq. (1).  You know how to shift Scalars around in col files if you need it.
+Please let me know in case you have problems of any kind.
+
+Best regards, and have fun,
+
+Simon

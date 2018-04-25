@@ -1,0 +1,53 @@
+#
+zone 1 2 1
+SetFillRGB 1.0 0.5 0.5
+Title "Leadglas"
+Histogram "OHIPS/leadglas/sum"
+
+zone 2 4 1
+SetFillRGB 1.0 0.5 0.5
+Title "Leadglas ADC/TDC"
+Histogram "OHIPS/leadglas/1/adc"
+Histogram "OHIPS/leadglas/1/tdc"
+Histogram "OHIPS/leadglas/2/adc"
+Histogram "OHIPS/leadglas/2/tdc"
+Histogram "OHIPS/leadglas/3/adc"
+Histogram "OHIPS/leadglas/3/tdc"
+Histogram "OHIPS/leadglas/4/adc"
+Histogram "OHIPS/leadglas/4/tdc"
+
+zone 2 4 1
+SetFillRGB 1.0 0.5 0.5
+Title "Leadglas ADC/TDC"
+Histogram "OHIPS/leadglas/5/adc"
+Histogram "OHIPS/leadglas/5/tdc"
+Histogram "OHIPS/leadglas/6/adc"
+Histogram "OHIPS/leadglas/6/tdc"
+Histogram "OHIPS/leadglas/7/adc"
+Histogram "OHIPS/leadglas/7/tdc"
+Histogram "OHIPS/leadglas/8/adc"
+Histogram "OHIPS/leadglas/8/tdc
+
+zone 2 4 1
+SetFillRGB 1.0 0.5 0.5
+Title "Leadglas ADC/TDC"
+Histogram "OHIPS/leadglas/9/adc"
+Histogram "OHIPS/leadglas/9/tdc"
+Histogram "OHIPS/leadglas/10/adc"
+Histogram "OHIPS/leadglas/10/tdc"
+Histogram "OHIPS/leadglas/11/adc"
+Histogram "OHIPS/leadglas/11/tdc"
+Histogram "OHIPS/leadglas/12/adc"
+Histogram "OHIPS/leadglas/12/tdc
+
+zone 2 4 1
+SetFillRGB 1.0 0.5 0.5
+Title "Leadglas ADC/TDC"
+Histogram "OHIPS/leadglas/13/adc"
+Histogram "OHIPS/leadglas/13/tdc"
+Histogram "OHIPS/leadglas/14/adc"
+Histogram "OHIPS/leadglas/14/tdc"
+
+
+
+close

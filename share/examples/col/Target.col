@@ -1,0 +1,9 @@
+Histogram dir"/Target x"   targetx("x","mm",-7.0, 7.0, 70)
+Histogram dir"/Target y"   targety("y","mm",-7.0, 7.0, 70)
+Histogram dir"/Target z"   targetz("z","mm",-50.0, 50.0, 100)
+Histogram dir"/Target x-y" targetx("x","mm",-7.0, 7.0, 70)\
+                           targety("y","mm",-7.0, 7.0, 70)
+Histogram dir"/Target x-z" targetx("x","mm",-7.0, 7.0, 70)\
+                           targetz("z","mm",-50.0, 50.0, 70)
+Histogram dir"/Target y-z" targety("y","mm",-7.0, 7.0, 70)\
+	                   targetz("z","mm",-50.0, 50.0, 70)

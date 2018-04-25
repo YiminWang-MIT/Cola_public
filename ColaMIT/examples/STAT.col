@@ -1,0 +1,19 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/STAT.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for statistics information
+//
+
+Scalar latch1 = @oops1.det.latch1
+Scalar latch2 = @oops1.det.misc.latch2
+Scalar datatype = @oops1.det.flag;
+
+Histogram "statistics/latch1" latch1("pattern", "", -10.5, 4489.5, 4500) ;
+Histogram "statistics/latch2" latch2("pattern", "", -100.5, 16899.5, 17000) ;
+Histogram "statistics/datatype" datatype("pattern", "", -2.5, 99.5, 102) ;

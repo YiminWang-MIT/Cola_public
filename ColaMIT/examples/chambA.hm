@@ -1,0 +1,112 @@
+#
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: chamber ADC"
+Histogram "OOPS A/chamber/1/x/adc"
+Histogram "OOPS A/chamber/1/y/adc"
+Histogram "OOPS A/chamber/2/x/adc"
+Histogram "OOPS A/chamber/2/y/adc"
+Histogram "OOPS A/chamber/3/x/adc"
+Histogram "OOPS A/chamber/3/y/adc"
+
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: x-top/bottom"
+Histogram "OOPS A/chamber/1/x/top"
+Histogram "OOPS A/chamber/1/x/bottom"
+Histogram "OOPS A/chamber/2/x/top"
+Histogram "OOPS A/chamber/2/x/bottom"
+Histogram "OOPS A/chamber/3/x/top"
+Histogram "OOPS A/chamber/3/x/bottom
+
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: y-left/right"
+Histogram "OOPS A/chamber/1/y/left"
+Histogram "OOPS A/chamber/1/y/right"
+Histogram "OOPS A/chamber/2/y/left"
+Histogram "OOPS A/chamber/2/y/right"
+Histogram "OOPS A/chamber/3/y/left"
+Histogram "OOPS A/chamber/3/y/right"
+
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: error codes"
+Histogram "OOPS A/chamber/1/x/error code"
+Histogram "OOPS A/chamber/1/y/error code"
+Histogram "OOPS A/chamber/2/x/error code"
+Histogram "OOPS A/chamber/2/y/error code"
+Histogram "OOPS A/chamber/3/x/error code"
+Histogram "OOPS A/chamber/3/y/error code"
+
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: drift"
+Histogram "OOPS A/chamber/1/x/drift"
+Histogram "OOPS A/chamber/1/y/drift"
+Histogram "OOPS A/chamber/2/x/drift"
+Histogram "OOPS A/chamber/2/y/drift"
+Histogram "OOPS A/chamber/3/x/drift"
+Histogram "OOPS A/chamber/3/y/drift"
+
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: top-bottom"
+Histogram "OOPS A/chamber/1/x/top-bottom (wire)"
+Histogram "OOPS A/chamber/1/x/top-bottom (time)"
+Histogram "OOPS A/chamber/2/x/top-bottom (wire)"
+Histogram "OOPS A/chamber/2/x/top-bottom (time)"
+Histogram "OOPS A/chamber/3/x/top-bottom (wire)"
+Histogram "OOPS A/chamber/3/x/top-bottom (time)"
+
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: right-left"
+Histogram "OOPS A/chamber/1/y/right-left (wire)"
+Histogram "OOPS A/chamber/1/y/right-left (time)"
+Histogram "OOPS A/chamber/2/y/right-left (wire)"
+Histogram "OOPS A/chamber/2/y/right-left (time)"
+Histogram "OOPS A/chamber/3/y/right-left (wire)"
+Histogram "OOPS A/chamber/3/y/right-left (time)"
+
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: coord"
+Histogram "OOPS A/chamber/1/x/coord"
+Histogram "OOPS A/chamber/1/y/coord"
+Histogram "OOPS A/chamber/2/x/coord"
+Histogram "OOPS A/chamber/2/y/coord"
+Histogram "OOPS A/chamber/3/x/coord"
+Histogram "OOPS A/chamber/3/y/coord"
+
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: distance"
+Histogram "OOPS A/chamber/1/x/distance"
+Histogram "OOPS A/chamber/1/y/distance"
+Histogram "OOPS A/chamber/2/x/distance"
+Histogram "OOPS A/chamber/2/y/distance"
+Histogram "OOPS A/chamber/3/x/distance"
+Histogram "OOPS A/chamber/3/y/distance"
+
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: goodness"
+Histogram "OOPS A/chamber/1/x/goodness"
+Histogram "OOPS A/chamber/1/y/goodness"
+Histogram "OOPS A/chamber/2/x/goodness"
+Histogram "OOPS A/chamber/2/y/goodness"
+Histogram "OOPS A/chamber/3/x/goodness"
+Histogram "OOPS A/chamber/3/y/goodness"
+
+zone 2 4 1
+SetFillRGB 0.5 1.0 0.5
+Title "OOPS A: coord (cut)"
+Histogram "OOPS A/chamber/1/x/coord (cut)"
+Histogram "OOPS A/chamber/1/y/coord (cut)"
+Histogram "OOPS A/chamber/2/x/coord (cut)"
+Histogram "OOPS A/chamber/2/y/coord (cut)"
+Histogram "OOPS A/chamber/3/x/coord (cut)"
+Histogram "OOPS A/chamber/3/y/coord (cut)"
+
+close

@@ -1,0 +1,25 @@
+To: krygier
+Subject: neue Zahlen
+CC: hake@automatix  geiges weindel
+
+--text follows this line--
+
+Fuer alle die am 386BSD Interesse haben, folgender Vergleich
+
+Benchmark  486/33 zu DECstation5000/200, /E6 (siehe tmanote h.k.)
+
+
+(C-Notation) double a,b,c; float f,g,h;  long i,j,k, *ip
+
+Operation & DECstation & DELL 486D/33 & E6 without FPU 
+          & in $\mu$s  & in $\mu$s  & in $\mu$s 
+
+  i = j + k   &     0.054  &   0.43 &    0.7  
+  a = b + c   &     0.289  &   0.99 &   32.3  
+  i = j * k   &     0.484  &   0.76 &    4.7   
+  f = g * h   &     0.303  &   1.04 &   47.5  
+  *ip         &     0.017  &   0.04 &   0.06 
+
+
+Gruss
+helmut

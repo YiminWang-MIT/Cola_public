@@ -1,0 +1,52 @@
+Ebeam                          = Beam energie
+Setup                          = Setup name, used for simulation
+Reaction                       = Reaction, e.g. "H(e,C:e'A:p)pi0"
+Simul.q2                       = q2 in GeV^2/c^2, used for simulation
+Simul.q2.Range                 = q2 range, used for simulation
+Simul.Wobbler.x                = wobbler amplitude in mm
+Simul.Wobbler.y                = wobbler amplitude in mm
+TDC_Resolution                 = tdc resolution, ns/count
+Target			       = target type string
+Target.Offset.x                = target position offset x (towards C) in [mm]
+Target.Offset.y                = target position offset y (downwards) in [mm]
+Target.Offset.z                = target position offset z (beamdump)  in [mm]
+Target.VertexResolution        = target vertex resolution in [mm]
+Target.Length                  = target length in [g/cm^3] (Solidstate/Waterfall) or in [mm] (Helium)
+Target.Angle		       = target angle in [degrees]	
+Target.Density                 = target density in [g/cm^3]
+Target.WallThickness           = target wall thickness in [mm]
+Target.SnowThickness           = target snow thickness in [mm]
+Target.SnowDensity             = snow desity in [g/cm^3] (Default: 0.4)
+A.tma.file                     = "/kits/A1/share/tma/qsdda495.mx4"
+B.tma.file                     = "/kits/A1/share/tma/new/bclam495.mxl6"
+C.tma.file                     = "/kits/A1/share/tma/qsddc360.mxl2b"
+use_AB_TDC                     = TDC channel for AB coincidences
+use_AC_TDC                     = AC
+use_BC_TDC                     = BC
+A.VDC.TDC                      = VDC A TDC offset
+B.VDC.TDC                      = VDC B TDC offset
+C.VDC.TDC                      = VDC C TDC offset
+A.VDC.Driftvelocity            = VDC A Driftvelocity
+B.VDC.Driftvelocity            = VDC B Driftvelocity
+C.VDC.Driftvelocity            = VDC C Driftvelocity
+A.Wobbler.dx                   = Wobbler x , mm/V
+A.Wobbler.x0                   = x origin in V
+A.Wobbler.dy                   = Wobbler y , mm/V
+A.Wobbler.y0                   = y origin in V
+A.angle                        = Angle in degree
+A.momentum                     = central momentum in MeV/c
+A.tma.x                        = TMA position offsets of wire chamber
+A.tma.y                        = TMA position offsets of wire chamber
+A.tma.theta                    = TMA position offsets of wire chamber
+A.tma.phi                      = TMA position offsets of wire chamber
+A.scint.use_dE                 = use dE scintillators for trigger
+ABTime                         = Timing peak, in ns
+BCTime                         = Timing peak, in ns
+ACTime                         = Timing peak, in ns
+
+
+
+
+
+
+

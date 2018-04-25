@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>A1 collaboration: TMA Library</title>
+</head>
+<body>
+<H1><HR><center>Trace Machine</center><hr></h1>
+
+<h2>
+Introduction
+</h2>
+This page describes the user-interface of the TMA-software.
+The transformation from focal plane to target coordinates is done
+ by a multidimensional polynomial. The parameters which characterize
+this polynomial (transfer coefficients and powers) must be stored in a
+a single file. This file can be build by hand or with the aid of a
+tool which is also part of the TMA-software. This tool called bundle 
+combines the parameter files obtained from analysis  programms.<p>
+
+The usage of the reconstruction functions within C is described in this
+section.
+ All prototypes and structures are defined in 
+TMA/TraceMachine.h. You can also safely include this file in 
+C++ programms without the extern "C" mechanism.<p>
+
+The reconstruction software is implemented in an object-based manner as
+far as the interface is concerned. Instead of function 
+which calculates the target coordinates from a certain focal plane vector,
+ we have  a machine (class) which has the ability to perform
+the described transformation (class-method).
+This is exactly the situation we encounter in real world: 
+The machine at hand is our spectrometer - with the only difference that it 
+does the transformation in the opposite direction. 
+Like in real life the first thing  you have to do is building a machine 
+with the desired transformation proberties.
+
+<p>
+For more information see
+<ul>
+<li> <A href=c.example>An example program in C</a>
+<li> <A href=f.example>An example program in Fortran</a>
+<li> The old TMA library documentation as <a href=tma.dvi> DVI file</a>
+<li> The description of the used algorithms as <a href=tmanote.ps>Postscript file</a>
+</ul>
+<H3><hr> Reference Section <hr></H3>
+<pre>
+TraceMachine *<A HREF="#TMA_new">TMA_new</a> (char *fname, int mode)
+struct target_ko *<A HREF="#TMA_run">TMA_run</a> (TraceMachine *tp, struct focalplane_ko *fp)
+void <A HREF="#TMA_del">TMA_del</a>(TraceMachine *tp)
+</pre>
+<hr>
+<B>
+<A name=TMA_new>
+TraceMachine *TMA_new</a> (char *fname, int mode)
+</B><BR><BR><I>
+The parameter fname is the name of a file which contains the 
+description of the transformation polynomial. 
+The mode parameter is not used so far. The return value is a
+pointer to the new machine and must be supplied in all other functions
+described below. NULL is returned if an error has occured.
+This function plays the role of a constructor  in C++-terminolgy. 
+Note that you can not access the components of a TraceMachine 
+structure. <p>
+</i>
+<hr>
+<B>
+<A name=TMA_run>
+struct target_ko *TMA_run</a> (TraceMachine * tp, 
+			       struct focalplane_ko *fp)
+</B><BR><BR><I>
+A target coordinate is calculated from  the focalplane coordinate
+supplied by fp. 
+The right TraceMachine is chosen by tp which 
+contains all intrinsic information.<p>
+<hr>
+<B><A name=TMA_del>void TMA_del </a>( TraceMachine *tp)
+</B><BR><BR><I>
+This function does all the necessary cleanup operations. On 
+return all further access on tp is undefined. It is our destructor.<p>
+<hr>

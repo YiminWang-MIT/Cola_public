@@ -1,0 +1,143 @@
+#								 -*-makefile-*-
+# $Id: Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+.PHONY : all lib install clean veryclean distclean
+
+include	../Makefile.inc
+
+srcdir	  = @srcdir@
+VPATH	  = @srcdir@
+incprefix = $(incdir)/HMBook
+BINARY	  = hm hmdir hmcat hmsub hmdiv hmview hmdiff
+ifdef CERNLIB
+  BINARY += hm2hbook
+endif
+
+ifeq ($(ROOTLIB),1)
+ BINARY += hm2root
+endif 
+
+VERSION   = 1.33
+library   = libhmbook.a
+libview   = libhmview.a
+shlib     = $(SHARED_LIB).$(VERSION)
+
+CXXSRC	  = hmdir.cc BitmapPanel.cc hmview.cc hmscan.parse.cc hmscan.lex.cc
+CCSRC	  = hmplot.c hmbook.c hmrandom.c hm.c HMFit.c fitting.c invert.c \
+	    pchisq.c simplex.c hminter.YACC.c
+DOCSRC    = $(srcdir)/doc/*.ps $(srcdir)/doc/*.gif $(srcdir)/doc/*.html \
+	    $(srcdir)/doc/example.c $(srcdir)/hmview.icon 
+HEADER    = $(srcdir)/hmbook.h $(srcdir)/hmplot.h \
+	    $(srcdir)/hmview.h $(srcdir)/hmcolor.h $(srcdir)/fitting.h
+libobjs   = hmplot.o hmbook.o hmdir.o hmrandom.o hmscan.lex.o hmscan.parse.o \
+	    HMFit.o fitting.o invert.o pchisq.o simplex.o
+
+CFLAGS    = $(OPTS)
+CXXFLAGS  = $(OPTS)
+LDFLAGS   = $(OPTS) -L.
+LDLIBS    = $(LDSHARE) $(LIBS) -lm
+CPPFLAGS  = $(WARN) -I. -I.. -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../HBook \
+	    @READLINE_INCL@ -I$(incdir) $(X_CFLAGS) $(WX_CFLAGS) $(DEFS)
+
+all :		$(BINARY)
+lib :		$(BUILD_LIBS)
+
+$(library) :	$(libobjs)
+		@ ar -crv $@ $^
+		$(RANLIB) $@
+		$(reportsuccess)
+
+$(libview) : 	hmview.o BitmapPanel.o
+		@ ar -crv $@ $^
+		$(RANLIB) $@
+		$(reportsuccess)
+
+$(shlib) $(SHARED_LIB) :	$(addprefix $(PICDIR)/,$(libobjs))
+		$(link_shlib)
+
+hm : 		hm.o hminter.YACC.o $(LIBHMBOOK)
+		$(CXX) $(LDFLAGS) $(TARGET_ARCH) $^ -o $@ \
+		@READLINE_LIBS@ -lreadline @NCURSES_LIBS@ $(LDLIBS)
+		$(reportsuccess)
+
+hm2hbook: 	hm2hbook.o $(LIBHMBOOK) $(LIBHBOOK)
+	     	- $(CXX) $(LDFLAGS) $(TARGET_ARCH) $^ -o $@ \
+		-L$(CERNLIB) -lpacklib -lkernlib $(FLIBS) $(LDLIBS)
+		$(reportsuccess)
+
+hm2root: 	hm2root.cc $(LIBHMBOOK)
+	     	- $(CXX) $(LDFLAGS) $(ROOT_CFLAGS)  $(TARGET_ARCH) $^ -o $@ \
+		$(ROOT_LIBS)
+		$(reportsuccess)
+
+
+hmcat:	hmcat.o $(LIBHMBOOK)
+hmcatw:	hmcatw.o $(LIBHMBOOK)
+hmdir:	hmdirmain.o $(LIBHMBOOK)
+hmdiv:	hmdiv.o $(LIBHMBOOK)
+hmsub:	hmsub.o $(LIBHMBOOK)
+hmdiff:	hmdiff.o $(LIBHMBOOK)
+hmview:	hmview.o $(LIBHMBOOK) $(libview)
+
+hmcat hmcatw hmdir hmdiv hmsub hmdiff:
+	$(CXX) $(LDFLAGS) $(TARGET_ARCH) $^ -o $@ $(LDLIBS)
+	$(reportsuccess)
+
+hmview : 
+	$(CXX) $(LDFLAGS) $(TARGET_ARCH) $^ -o $@ $(LDLIBS) -lhmview \
+	$(WX_LIBS) $(MOTIFLIBS)
+	$(reportsuccess)
+
+hmscan.lex.cc : hmscan.parse.cc
+
+$(LIBHBOOK) $(LIBHMBOOK) :
+	$(MAKE) -C $(dir $@) $(notdir $@)
+
+#
+# build and install pyhm
+#
+# pyhm should work for python2 and python3
+# you need system privileges to install the shared module
+
+pyhm_build:
+	-python2 setup.py build
+	-python3 setup.py build
+
+pyhm_install:	pyhm_build
+	@echo you need system privileges to install pyhm. run:
+	@echo sudo python2 setup.py install
+	@echo sudo python3 setup.py install
+
+install :	.install
+.install: $(libdir) $(bindir) $(docdir) $(incprefix) $(BINARY) $(BUILD_LIBS)
+		$(INSTALL_DATA) $(library) $(libdir)
+		$(INSTALL_DATA) $(libview) $(libdir)
+		$(install_shlib)
+		$(foreach file,$(HEADER),$(INSTALL_DATA) $(file) $(incprefix);)
+		$(foreach file,$(BINARY),$(INSTALL_PROGRAM) $(file) $(bindir);)
+		$(foreach file,$(DOCSRC),$(INSTALL_DATA)    $(file) $(docdir);)
+		date > $@
+
+$(libdir) $(bindir) $(docdir) $(incprefix) : ; test -d $@ || mkdir -p $@
+
+clean : 
+		rm -rf *~ *.o core $(PICDIR)
+		rm -f *.parse.c* *.parse.output *.parse.h *.lex.cc *.lex.h 
+		rm -f *.YACC.c* *.YACC.output *.YACC.h
+
+veryclean :	clean
+		rm -f $(BINARY) $(shlib) $(SHARED_LIB)
+		rm -f libhmbook.a libhmview.a .install .*.depend
+
+distclean :	veryclean
+		rm -f Makefile
+
+-include 	$(CCSRC:%.c=.%.depend) $(CXXSRC:%.cc=.%.depend)
+
+
+
+
+
+
+

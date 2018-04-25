@@ -1,0 +1,264 @@
+/**@name Introduction
+ * The focal plane detector used in each of the three magnetic
+ * spectrometers of the A1 collaboration (Mainz, Germany) consists
+ * out of 4 planes of vertical drift chambers. Each plane has
+ * about 400 signal wires (channels). If a charged particle
+ * traverses the chambers, the gas (a mixture of argon, isobutane
+ * and alcohol) is ionized along the track. The ions start
+ * drifting to the cathodes, whereas the electrons drift to the
+ * wires. The drift time is measured with TDCs (time to digital
+ * converters). For a typical event, we get 20 wire/time
+ * informations. This library is able to reconstruct the track and
+ * to do some consistency checks.
+ */
+
+/**@name Why C++ ?
+ * There are several reasons to use OOP or {\em object oriented
+ * programing} for this kind of software development. OOP offers
+ * the methods to analyse the problem, to design the software and
+ * for the coding. The phase of analysis and of design can be much
+ * shorter. Teamwork is made easy. The Code will be readable, can
+ * be reused and maintenance is made easy. Although C++ is only
+ * one of several OOP languages (among {\it smalltalk} and {\it
+ * eiffel} it has some specific advantages. C++ compilers produce
+ * very efficient code. Programers, who are used to the C
+ * language, can slowly adapt to OOP, because C++ is only a better
+ * C in some respect. Finally the GNU C++ compiler is free
+ * available and makes the porting of the software to different
+ * platforms a minor problem:
+ * \URL{ftp://ftp.th-darmstadt.de/pub/gnu/gcc-2.7.2.tar.gz} or
+ * \URL{ftp://prep.ai.mit.edu/pub/gnu/gcc-2.7.2.tar.gz}
+ */
+
+/**@name How it works
+ * The data aquisition system gathers the information from the
+ * focal plane detector event by event. The raw data consists out
+ * of wire numbers and drift times for each wire that has fired.
+ * During the analysis this data is fed into the library - one
+ * plane after the other. By the use of callback functions this is
+ * normally invisible for the user. The information in each plane
+ * is immediatly checked for consistency. The library searches
+ * large wire clusters and removes single wires which probably
+ * picked up some noise. Then the drift time pattern is checked to
+ * avoid the analysis of double hits and the sign of each drift
+ * path is determined. Finally the drift paths are corrected for
+ * the field geometry and a linear regression fit is done. That
+ * way one gets the intersection point of the particle track with
+ * each plane and the slope.
+ *
+ * If the user requests the track coordinates during the analysis,
+ * the information of the four planes is combined and coordinates
+ * and angles are calculated as needed. 
+ *
+ * The various objects correspond to the detector components. A
+ * (arbitrary) number of wires build a plane (\Ref{VdcPlane}).
+ * Four planes are combined to a packet (\Ref{VdcPacket}). A setup
+ * (\Ref{VdcSetup}) consists of up to three packets. All the
+ * definitions are combined in one header file {\tt chlib++.h}.
+ */
+
+/**@name Using the library
+ */
+//@{
+/**@name Basic concepts
+ */
+/**@name Standalone Version
+ * \begin{verbatim}
+#include <iostream.h>
+#include <std.h>
+#include <time.h>
+#include "chlib++.h"
+
+#define LEN_AX1 6
+chRawData cht_ax1[LEN_AX1] = {
+    { 157, 212 }, { 158, 315 }, { 159, 417 },
+    { 160, 385 }, { 161, 283 }, { 162, 179 }
+};
+
+#define LEN_AS1 5
+chRawData cht_as1[LEN_AS1] = {
+    { 138, 113 }, { 139, 250 }, { 140, 390 },
+    { 141, 371 }, { 142, 240 }
+};
+
+#define LEN_AX2 6
+chRawData cht_ax2[LEN_AX2] = {
+    { 160, 153 }, { 161, 252 }, { 162, 357 },
+    { 163, 406 }, { 164, 312 }, { 165, 216 }
+};
+
+#define LEN_AS2 5
+chRawData cht_as2[LEN_AS2] = {
+    { 142, 126 }, { 143, 261 }, { 144, 406 },
+    { 145, 416 }, { 146, 211 }
+};
+
+VdcPlane ax1(".a.det.vdc.x1", 400);
+VdcPlane as1(".a.det.vdc.s1", 320);
+VdcPlane ax2(".a.det.vdc.x2", 416);
+VdcPlane as2(".a.det.vdc.s2", 336);
+VdcApacket vdcA(&ax1, &as1, &ax2, &as2);
+
+int
+main()
+{
+    vdcA.InitTimeToLength(0.052 * 0.75);
+    vdcA.InitOffset(446, 442, 438, 433);
+
+    ax2.FillTime(cht_ax2, 2*LEN_AX2);
+    as2.FillTime(cht_as2, 2*LEN_AS2);
+    ax1.FillTime(cht_ax1, 2*LEN_AX1);
+    as1.FillTime(cht_as1, 2*LEN_AS1);
+
+    cout << "results of linear regression" << endl;
+
+    cout << "x: "   << vdcA.x()
+         << " +/- " << vdcA.dx()     << " mm\n";
+    cout << "y: "   << vdcA.y()
+         << " +/- " << vdcA.dy()     << " mm\n";
+    cout << "t: "   << vdcA.theta()
+         << " +/- " << vdcA.dtheta() << " mrad\n";
+    cout << "p: "   << vdcA.phi()
+         << " +/- " << vdcA.dphi()   << " mrad\n";
+
+    cout << ax1.NameOfPlane() << ": " << ax1.x()
+         << " +/- " << ax1.sigma_x() << " mm\n";
+    cout << as1.NameOfPlane() << ": " << as1.x()
+         << " +/- " << as1.sigma_x() << " mm\n";
+    cout << ax2.NameOfPlane() << ": " << ax2.x()
+         << " +/- " << ax2.sigma_x() << " mm\n";
+    cout << as2.NameOfPlane() << ": " << as2.x()
+         << " +/- " << as2.sigma_x() << " mm\n";
+
+    return 0;
+}
+   \end{verbatim}
+ */
+/**@name Interaction with CINDY
+ * \begin{verbatim}
+#include <fstream.h>
+#include <iomanip.h>
+#include <stdio.h>
+#include <math.h>
+#include "ana++/Cindy++.h"
+#include "chlib/chlib++.h"
+#include "tma/TraceMachine.h"
+#include "abc.h"
+
+extern struct abc abc;
+struct DataA& spekA = abc.a;
+
+CindyTree *ct = cindyTreeAlloc();
+
+VdcPlane ax1(ct,".a.det.vdc.x1",AX1SIZE);
+VdcPlane as1(ct,".a.det.vdc.s1",AS1SIZE);
+VdcPlane ax2(ct,".a.det.vdc.x2",AX2SIZE);
+VdcPlane as2(ct,".a.det.vdc.s2",AS2SIZE);
+VdcApacket vdcA(&ax1,&as1,&ax2,&as2);
+
+void
+vdcAinit(VdcApacket& vdcA,
+	 int ax1size, int as1size, int ax2size, int as2size)
+{
+  short *ax1offs, *as1offs, *ax2offs, *as2offs, index;
+
+  ax1offs = new short[ax1size];
+  for (index=0; index<ax1size; index++) ax1offs[index] = 446;
+  as1offs = new short[as1size];
+  for (index=0; index<as1size; index++) as1offs[index] = 442;
+  ax2offs = new short[ax2size];
+  for (index=0; index<ax2size; index++) ax2offs[index] = 438;
+  as2offs = new short[as2size];
+  for (index=0; index<320; index++) as2offs[index] = 433;
+  for (index=320; index<as2size; index++) as2offs[index] = 427;
+  vdcA.InitOffset(ax1offs,as1offs,ax2offs,as2offs);
+  vdcA.InitTimeToLength(0.052 * 0.75);	// driftvelocity 52 um/ns
+					// resolution   .75 ns/bit
+
+  vdcA.s2Plane()->disableWire(239);
+  vdcA.s2Plane()->InitPosition(238, 235.69);
+  vdcA.s2Plane()->InitPosition(237, 240.69);
+  vdcA.s2Plane()->InitPosition(236, 245.69);
+  vdcA.s2Plane()->InitPosition(235, 250.69);
+  vdcA.s2Plane()->InitPosition(234, 255.69);
+  vdcA.s2Plane()->InitPosition(233, 260.69);
+  vdcA.s2Plane()->InitPosition(232, 265.69);
+  vdcA.s2Plane()->InitPosition(231, 270.69);
+  vdcA.s2Plane()->InitPosition(230, 275.69);
+  vdcA.s2Plane()->InitPosition(229, 280.69);
+  vdcA.s2Plane()->InitPosition(228, 285.69);
+  vdcA.s2Plane()->InitPosition(227, 290.69);
+  vdcA.s2Plane()->InitPosition(226, 295.69);
+  vdcA.s2Plane()->InitPosition(225, 300.69);
+  vdcA.s2Plane()->InitPosition(224, 305.69);
+}
+
+//
+//	main
+//
+
+int
+main(int argc, char *argv[])
+{
+    if (ct->analyseGetOpt(argc,argv)) return -1;
+    
+    //
+    //	tdc offsets
+    //
+    
+    vdcAinit(vdcA,AX1SIZE,AS1SIZE,AX2SIZE,AS2SIZE);
+
+    int AtriggerOK;
+    int AlaserOK;
+
+    struct target_ko *resultA	= NULL;
+    TracMachine tpA(qsdda495l, XA_OFFSET, THETAA_OFFSET, 
+		    YA_OFFSET, PHIA_OFFSET);
+    
+    while (!ct->analyseNextEvent()) {
+	
+	AtriggerOK = AlaserOK = 0;
+	if (ct->itemOK(&spekA.det.sync_info)) {
+	    AtriggerOK = (spekA.det.sync_info & 0x2000);
+	    if (ct->itemOK(&spekA.det.trigger.info))
+		AlaserOK = (spekA.det.trigger.info & 0x1);
+	}
+
+	if (!AtriggerOK || AlaserOK) {
+	    vdcA.Reset();
+	    continue;
+	}
+	
+	double xA = 0.0;
+	double yA = 0.0;
+	double tA = 0.0;
+	double pA = 0.0;
+
+	resultA = NULL;
+
+	if (vdcA.ok1() == PACKET_STATUS_BOTH) {
+
+	    xA = vdcA.x();
+	    yA = vdcA.y();
+	    tA = vdcA.theta();
+	    pA = vdcA.phi();
+
+	    resultA = tpA.run(xA,tA,yA,pA);
+	}
+	
+	if (resultA) { 
+
+	    cout << resultA->dp_tg << ' '
+		 << resultA->th_tg << ' '
+		 << resultA->y_tg  << ' '
+		 << resultA->ph_tg << endl;
+	}
+
+	vdcA.Reset();
+    }
+
+    return 0;
+}
+   \end{verbatim}
+ */
+//@}

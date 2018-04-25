@@ -1,0 +1,3 @@
+The contents of this directory will be copied to
+the standard doc directory (e.g. /usr/local/a1/doc) by
+make. Don't use this as Documentation.

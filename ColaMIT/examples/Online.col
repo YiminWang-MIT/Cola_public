@@ -1,0 +1,73 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/Online.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for N->Delta run
+//
+
+//
+// define which spectrometers are used
+//
+
+#define UseOhips 1
+#define UseOopsA 1
+#define UseOopsB 1
+#define UseOopsC 1
+#define UseOopsD 0
+
+#if UseOhips
+#define spec ohips
+#define htitle "OHIPS/"
+#include "OHIPS.col"
+#undef htitle
+#undef spec
+#endif // UseOhips
+
+#if UseOopsA
+#define spec oopsA
+#define htitle "OOPS A/"
+#include "OOPS.col"
+#undef htitle
+#undef spec
+#endif // UseOopsA
+
+#if UseOopsB
+#define spec oopsB
+#define htitle "OOPS B/"
+#include "OOPS.col"
+#undef htitle
+#undef spec
+#endif // UseOopsB
+
+#if UseOopsC
+#define spec oopsC
+#define htitle "OOPS C/"
+#include "OOPS.col"
+#undef htitle
+#undef spec
+#endif // UseOopsC
+
+#if UseOopsD
+#define spec oopsD
+#define htitle "OOPS D/"
+#include "OOPS.col"
+#undef htitle
+#undef spec
+#endif // UseOopsD
+
+#include "BEAM.col"
+
+#include "STAT.col"
+
+#include "counter.col"
+
+#include "coinc.col"
+
+#include "kinematic.col"
+
+#include "user.col"

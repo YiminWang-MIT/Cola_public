@@ -1,0 +1,14 @@
+#
+zone 2 4 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS: Focal Plane"
+Gray "OHIPS/focal plane/[D]E1 vs. [D]E2"
+Gray "OHIPS/focal plane/[D]E1 vs. [D]E3"
+Gray "OHIPS/focal plane/[D]E2 vs. [D]E3"
+Histogram "OHIPS/focal plane/x (disp.)"
+Histogram "OHIPS/focal plane/[q] (disp.)"
+Histogram "OHIPS/focal plane/y (non-disp.)"
+Histogram "OHIPS/focal plane/[f] (non-disp.)"
+Gray "OHIPS/focal plane/[q] vs. [f]"
+
+close

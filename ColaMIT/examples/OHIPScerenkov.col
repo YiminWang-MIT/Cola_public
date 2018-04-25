@@ -1,0 +1,51 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/OHIPScerenkov.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for OHIPS cerenkov
+//
+
+// required definitions
+//
+// spec  :  name of the spectrometer in event configuration oops1
+// title :  first part of the histogram title
+//
+
+Scalar spec.cer.1.adc = @oops1.det.spec.cerenkov[1].adc
+Scalar spec.cer.2.adc = @oops1.det.spec.cerenkov[2].adc
+Scalar spec.cer.3.adc = @oops1.det.spec.cerenkov[3].adc
+Scalar spec.cer.1.tdc = @oops1.det.spec.cerenkov[1].tdc
+Scalar spec.cer.2.tdc = @oops1.det.spec.cerenkov[2].tdc
+Scalar spec.cer.3.tdc = @oops1.det.spec.cerenkov[3].tdc
+Scalar spec.cer.sum   = @oops1.det.spec.sum.cerenkov
+
+Histogram title"1/adc" \
+spec.cer.1.adc("pulse height", "a.u.", 2.5, 4095.5, 4093) ;
+Histogram title"2/adc" \
+spec.cer.2.adc("pulse height", "a.u.", 2.5, 4095.5, 4093) ;
+Histogram title"3/adc" \
+spec.cer.3.adc("pulse height", "a.u.", 2.5, 4095.5, 4093) ;
+
+Histogram title"sum" spec.cer.sum("pulse height", "a.u.", 1.5, 2047.5, 2046) ;
+
+Histogram title"1/tdc" spec.cer.1.tdc("timing", "a.u.", 0.5, 4094.5, 4094) ;
+Histogram title"2/tdc" spec.cer.2.tdc("timing", "a.u.", 0.5, 4094.5, 4094) ;
+Histogram title"3/tdc" spec.cer.3.tdc("timing", "a.u.", 0.5, 4094.5, 4094) ;
+
+Cut 1500<spec.cer.1.tdc && spec.cer.1.tdc<1650 {
+    Histogram title"1/tdc cut/adc" \
+	spec.cer.1.adc("pulse height", "a.u.", -0.5, 4095.5, 4096) ;
+}
+Cut 1500<spec.cer.2.tdc && spec.cer.2.tdc<1650 {
+    Histogram title"2/tdc cut/adc" \
+	spec.cer.2.adc("pulse height", "a.u.", -0.5, 4095.5, 4096) ;
+}
+Cut 1500<spec.cer.3.tdc && spec.cer.3.tdc<1650 {
+    Histogram title"3/tdc cut/adc" \
+	spec.cer.3.adc("pulse height", "a.u.", -0.5, 4095.5, 4096) ;
+}

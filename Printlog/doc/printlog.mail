@@ -1,0 +1,180 @@
+Liebe Kollegen,
+
+ich habe ein Programm namens 
+
+     Printlog++
+
+auf den Alphas und der a1ipiull1 installiert. Es dient dem Zweck, die 
+"opterm"-Files zu analysieren und darzustellen. Da ich denke, dass dieses 
+Programm waehrend der Strahlzeit nuetzlich ist, bitte ich alle, die
+Schichten uebernehmen, die folgende Kurzanleitung zu lesen.
+
+
+viele Gruesse
+
+Harald Merkel
+------------------------------------------------------------------------------
+
+
+Printlog++
+==========
+
+Das Programm liest die vom ECS geschriebenen Logfiles und bietet die
+graphische Darstellung mittels der wohlbekannten "HMView"-Oberflaeche
+an. Man kann also auch Zoomen, Makros fuer interessante 
+Histogramm-Kombinationen verwenden, ausdrucken, speichern, etc.
+
+Das Programm legt fuer jeden gefundenen Parameter ein Histogramm an,
+das als Linienzug dargestellt wird.
+
+Da nicht jeder etwas mit den ECS-Parameternamen anfangen kann (Wer 
+weiss z.B. auswendig, dass die Targetzellentemperatur als 
+"/target/cryo/tempctrl/temp subaddress:8" abgespeichert wird?) wurde 
+eine "Uebersetzungstabelle" eingefuert, die den ECS-Parametern Namen und 
+Einheiten zuweist.
+
+
+Fuer verschiedene Zwecke gibt's verschiedene Aufrufe:
+
+Printlog++ 
+
+	Ohne irgendwelche Parameter wird das File
+
+            "~dbman/LOGFILES/log/opterm.*.*.*-*:*:*"
+ 
+	Analysiert, d.h. das aktuelle ECS-Logfile. Dieses File
+        wird gelesen und dargestellt, nach File-Ende wird alle
+        10 Sekunden nochmal nachgeschaut, ob was dazugekommen ist und
+        ggf. nachgeladen. 
+
+	Dies ist der Standardaufruf waehrend der Strahlzeit, das Programm
+        kann permanent irgendwo laufen, der obengenannte Update bedeutet
+        keine nennenswerte Rechnerbelastung.
+
+Printlog++ -f filename
+
+	Hiermit koennen alte "opterm"-Files analysiert werden.
+	In der Regel wird man eher das Kommando
+
+Printlog++ -zf filename.gz
+
+	verwenden, dass einen komprimierten File liest. Fuer mehrere
+        alte Files mit dazwischenliegendem ECS-Absturz kann man natuerlich 
+        auch Konstruktionen wie
+
+[z]cat file1 file2 ... filen | Printlog++ -f -
+
+ 	als Pipe verwenden.
+
+export -n DISPLAY
+Printlog++ -f filename -o histogramfile
+
+	Dient der Verwendung als Batch-Programm zur Datenanalyse.
+
+
+Weitere Options
+===============
+
+-b yymmddhhmmss
+	
+	(b wie "begin") gibt eine Startzeit fuer die Darstellung an. Das 
+        Format ist das gleich wie bei den Run-Namen bzw. bei den 
+	"run.db"-Eintraegen.
+	Man kann die Zeit auch abkuerzen mit: 
+           yymmdd  	fuer yymmdd000000
+           yymmddhh  	fuer yymmddhh0000
+           yymmddhhmm  	fuer yymmddhhmm00
+	
+-b today
+
+	startet am gleichen Tag um Mitternacht
+
+-e yymmddhhmmss
+
+	(e wie "end") gibt die Endzeit an. Mit der Kombination von -b und -e
+        kann man offensichtlich eine Zuordnung zu einzelnen Runs oder Setups
+        bewerkstelligen, die noetigen Zeiten entnimmt man einfach der "run.db".
+
+-e today
+
+	macht keinen Sinn und gibt's deshalb auch nicht.
+
+-h 
+	hilft ein bisschen , wenn man den Rest vergessen hat.
+
+-o histogramfile
+
+	Schreibt am Ende ein Histogramfile
+
+Parameter - Files
+=================
+
+Printlog.alias
+
+	wird aus dem aktuellen Directory eingelesen um den Parametern 
+        einen vernuenftigen Namen zuzuweisen. Man kann den Ort der Datei 
+        auch als Environment-Variable
+        angeben. Der A1-Online Account enthaelt z.B. im ~/.profile die Zeile
+ 
+           export PRINTLOG_ALIAS=~/.Printlog.alias
+ 
+ 	dort kann man auch eine Beispieldatei sehen.
+	Nicht uebersetzte Parameter findet man im Histogramm-Ordner
+
+           [dbman]
+
+	unter ihrem ECS-Namen.
+
+	Jede Zeile des Alias-Files besteht aus vier Eintraegen:
+
+           ECS-name Subaddress Aliasname Einheit
+
+
+Histogramm Makros
+=================
+
+	Sind noch zu schreiben. Hierzu bitte ich um Beitraege,
+        was denn waehrend dem Run interessant sein koennte. Z.B.:
+        - VDC-Spannungen
+        - VDC-Stroeme
+        - VDC-Gasfluesse
+        - VDC-Schwellen
+        - Beam-Current
+        - Cryotarget-Parameter
+        - Magnetfelder
+        - Wasserfluesse, Wassertemperatur
+	etc.
+	Als Beispiel findet man im "online/collection/hm" - Ordner
+        das Makro "ECS-VDC.hm" zur Darstellung der Driftkammerparameter.
+  	
+BUGS
+====
+
+-	Die ECS-Logfiles koennen sehr gross werden, ich hab Files mit
+        mehr als 800000 Eintraegen. Wenn man stark Zoomed kann man
+        den Ghostscript-Interpreter ueberfordern, der nicht beliebig
+        ausserhalb des Clip-Bereiches malen kann. Dies fuehrt dann
+        zum Programm-Absturz. 
+	Ehe ich eine Beschraenkung fuer den Zoom-Faktor einfuehre hielt
+        ich einen Neustart des Programms fuer "zumutbarer".
+
+-	Man koennte das Program deutlich beschleunigen, wenn man nicht
+        sequentiell sonderen mit einer Hash-Liste die Parameterzuordnung
+        durchsuchen wuerde. Wer Lust hat, kann mal in den Quelltext schauen.
+	Zur Zeit analysiert das Programm mit ca. 10000 Eintraegen/Sekunde.
+
+-	Weitere Bugs und Anregungen bitte an mich!
+
+Quelltexte und Kompilierung
+===========================
+	
+	Teil des "online" - Ordners, aktuelle Kopie z.Z. auf
+        protonix:/users/kpha1/merkel/online
+	
+
+
+
+
+
+
+

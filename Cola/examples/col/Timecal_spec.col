@@ -1,0 +1,185 @@
+//
+// This is an include .col file for Pulsheight correction
+//
+
+#define spc(var)  Spectrometer.var
+#define spec @online.Spectrometer
+
+
+Scalar spc(de_tof_raw)  = spec.raw_dE_ToF
+Scalar spc(de_tof)      = spec.dE_ToF
+Scalar spc(dEright)     = spec.dE.Energy.right
+Scalar spc(ToFright)    = spec.ToF.Energy.right
+Scalar spc(dEright_05)  = spec.dE.Energy.right ^ -0.5
+Scalar spc(ToFright_05) = spec.ToF.Energy.right^ -0.5
+Scalar spc(dELeft)      = spec.raw_Time_Left
+Scalar spc(yscint)      = spec.y_scint
+Scalar spc(dELeftcorr)  = spec.Time_Left
+
+Scalar spc(scintcorr)   = spec.ScintCorr
+Scalar spc(extended)    = spec.Extended
+Scalar spc(scintdist)   = spec.ScintDist
+Scalar spc(lencorr)     = spec.TimeAtTarget - spec.ScintCorr - spec.Extended\
+                          - spec.ScintDist
+Scalar spc(xtheta)      = spc(fp.x) * spc(fp.theta)
+Scalar spc(x_2)         = spc(fp.x) * spc(fp.x)
+Scalar spc(x_3)         = spc(fp.x) * spc(x_2)
+Scalar spc(x_4)         = spc(fp.x) * spc(x_3)
+Scalar spc(theta_2)     = spc(fp.theta) * spc(fp.theta)
+Scalar spc(theta_3)     = spc(fp.theta) * spc(theta_2)
+Scalar spc(theta_4)     = spc(fp.theta) * spc(theta_3)
+Scalar spc(x_2theta)    = spc(x_2) * spc(fp.theta)
+Scalar spc(xtheta_2)    = spc(fp.x) * spc(theta_2)
+
+#define book(nr,nrs) Histogram spec.dE.paddle == nr \
+                               sp"t_R! - t_L! (corrected)/"nrs \
+                               spc(dELeftcorr) ("t_R! - t_L!","ns",-10,10,201) 
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+
+#define book(nr,nrs) Histogram spec.dE.paddle==nr \
+                               && spec.ToF.paddle==nr \
+                               sp"paddle dE=ToF/"nrs \
+                               spc(de_tof) ("dE - ToF", "ns", -10,10, 101) 
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+
+#define book(nr,nrs) Histogram spec.dE.paddle==nr \
+                               && spec.ToF.paddle==nr \
+                               sp"paddle dE=ToF/[D]t - ADCdE/"nrs \
+                               spc(de_tof)("dE - ToF", "ns", -10,10, 50) \
+                               spc(dEright)("ADC dE_R!",  "",  0.0, 500, 50)
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+#define book(nr,nrs) Histogram spec.dE.paddle==nr \
+                               && spec.ToF.paddle==nr \
+                               sp"paddle dE=ToF/[D]t - ADCToF/"nrs \
+                               spc(de_tof)("dE - ToF", "ns", -10,10, 50) \
+                               spc(ToFright)("ADC ToF_R!",  "",  0.0, 500, 50)
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+#define book(nr,nrs) Histogram spec.dE.paddle==nr \
+                    && spec.ToF.paddle==nr \
+                    sp"paddle dE=ToF/[D]t - sqrt(ADC dE_r!)^-1!/"nrs \
+          	    spc(dEright_05)("ADC dE_R!^-0.5!",  "",    0.0, 0.25, 50)\
+          	    spc(de_tof) ("dE - ToF", "ns", -10,10, 50)
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+#define book(nr,nrs) Histogram spec.dE.paddle==nr \
+                    && spec.ToF.paddle==nr \
+                    sp"paddle dE=ToF/[D]t - sqrt(ADC ToF_r!)^-1!/"nrs \
+          	    spc(ToFright_05)("ADC ToF_R!^-0.5!",  "",  0.0, 0.25, 50) \
+                    spc(de_tof) ("dE - ToF", "ns", -10,10, 50)
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+
+#define book(nr,nrs) Histogram spec.dE.paddle == nr \
+                               && spec.ToF.paddle == nr-1 \
+                               sp"paddle dE=ToF-1/"nrs \
+                               spc(de_tof) ("dE - ToF", "ns", -10,10, 101) 
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+#define book(nr,nrs) Histogram spec.dE.paddle==nr \
+                               && spec.ToF.paddle==nr \
+                               sp"paddle dE=ToF-1/[D]t - ADCdE/"nrs \
+                               spc(de_tof)("dE - ToF", "ns", -10,10, 50) \
+                               spc(dEright)("ADC dE_R!",  "",  0.0, 500, 50)
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+#define book(nr,nrs) Histogram spec.dE.paddle==nr \
+                               && spec.ToF.paddle==nr \
+                               sp"paddle dE=ToF-1/[D]t - ADCToF/"nrs \
+                               spc(de_tof)("dE - ToF", "ns", -10,10, 50) \
+                               spc(ToFright)("ADC ToF_R!",  "",  0.0, 500, 50)
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+#define book(nr,nrs) Histogram spec.dE.paddle==nr \
+                    && spec.ToF.paddle==nr \
+                    sp"paddle dE=ToF-1/[D]t - sqrt(ADC dE_r!)^-1!/"nrs \
+          	    spc(dEright_05)("ADC dE_R!^-0.5!",  "",    0.0, 0.25, 50)\
+          	    spc(de_tof) ("dE - ToF", "ns", -10,10, 50)
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+#define book(nr,nrs) Histogram spec.dE.paddle==nr \
+                    && spec.ToF.paddle==nr \
+                    sp"paddle dE=ToF-1/[D]t - sqrt(ADC ToF_r!)^-1!/"nrs \
+          	    spc(ToFright_05)("ADC ToF_R!^-0.5!",  "",  0.0, 0.25, 50) \
+                    spc(de_tof) ("dE - ToF", "ns", -10,10, 50)
+book( 1, "1"); book( 2, "2"); book( 3, "3"); book( 4, "4"); book( 5, "5");
+book( 6, "6"); book( 7, "7"); book( 8, "8"); book( 9, "9"); book(10,"10");
+book(11,"11"); book(12,"12"); book(13,"13"); book(14,"14"); book(15,"15")
+#undef book
+
+Histogram sp"ScintCorr" spc(scintcorr)("ScintCorr", "ns", -10,10, 201) 
+Histogram sp"Extended" spc(extended)("Extended", "ns", -10,10, 201) 
+Histogram sp"ScintDist" spc(scintdist)("ScintDist", "ns", -10,10, 201) 
+
+Histogram sp"Paddle vs. dE-ToF dE" \
+          		spc(de_tof)("dE - ToF", "ns", -10,10, 100) \
+                        spc(dE.paddle)("Paddle dE", "", -0.5, 16.5, 17)
+Histogram sp"Paddle vs. dE-ToF ToF" \
+          		spc(de_tof)("dE - ToF", "ns", -10,10, 100) \
+			spc(ToF.paddle)("Paddle ToF", "", -0.5, 16.5, 17)
+
+Histogram sp"dE_R!"    spc(dEright)("ADC dE_R!", "", 0, 4096, 400)
+Histogram sp"ToF_R!"   spc(ToFright)("ADC dE_R!", "", 0, 4096, 400)
+Histogram sp"dE - ToF" spc(de_tof)("dE - ToF", "ns", -10,10, 201) 
+Histogram sp"dE - ToF (wide)" spc(de_tof)("dE - ToF_l!", "ns", -400,400, 201) 
+Histogram sp"[D]t - ADCdE"  spc(de_tof)("dE - ToF", "ns", -10,10, 50) \
+                            spc(dEright)("ADC dE_R!",  "",  0.0, 3000, 50)
+Histogram sp"[D]t - ADCToF" spc(de_tof)("dE - ToF", "ns", -10,10, 50) \
+                            spc(ToFright)("ADC ToF_R!",  "",    0.0, 1500, 50)
+Histogram sp"[D]t_raw! - sqrt(ADC dE_r!)^-1!" \
+          	spc(dEright_05)("ADC dE_R!^-0.5!",  "",    0.0, 0.25, 50) \
+         	spc(de_tof_raw)("dE - ToF", "ns", -10,10, 50)
+Histogram sp"[D]t_raw! - sqrt(ADC ToF_r!)^-1!" \
+          	spc(ToFright_05)("ADC ToF_R!^-0.5!",  "",    0.0, 0.25, 50) \
+          	spc(de_tof_raw)("dE - ToF", "ns", -10,10, 50) 
+
+Histogram sp"[D]t - sqrt(ADC dE_r!)^-1!" \
+          	spc(dEright_05)("ADC dE_R!^-0.5!",  "",    0.0, 0.25, 50) \
+          	spc(de_tof) ("dE - ToF", "ns", -10,10, 50)
+Histogram sp"[D]t - sqrt(ADC ToF_r!)^-1!" \
+          	spc(ToFright_05)("ADC ToF_R!^-0.5!",  "",    0.0, 0.25, 50) \
+          	spc(de_tof)("dE - ToF", "ns", -10,10, 50) 
+
+Histogram sp"dE_L![\\253]dE_R!" \
+		        spc(dELeft)("dE_L![\\253]dE_R!","ns",-10,10,100)
+Histogram sp"dE_L![\\253]dE_R! (corrected)" \
+	                spc(dELeftcorr)("dE_Left!","ns",-10,10,200)
+Histogram sp"dE_L![\\253]dE_R! vs. y " \
+			spc(dELeft)("dE_L![\\253]dE_R!","ns",  -10,  10, 50) \
+                        spc(yscint)("y_scint!","mm",-150, 150, 50) 
+Histogram sp"dE_L![\\253]dE_R! (corrected) vs. y " \
+			spc(dELeftcorr)("dE_L![\\253]dE_R!","ns", -10,10, 50) \
+                        spc(yscint)("y_scint!","mm",-150, 150, 50) 
+
+#undef sp
+
+
+
+
+
+
+
+

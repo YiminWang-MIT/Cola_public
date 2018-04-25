@@ -1,0 +1,72 @@
+Each statement is either a time stamp like 
+<pre>
+   [960822123045]
+</pre>
+i.e. year/month/day/hour/minutes/seconds
+or 
+<pre>
+   variable = ....
+</pre>
+The folloing table shows the list of valid variables:
+<center>
+<table>
+<tr> <th align=left>Ebeam <td> Beam energy in GeV
+<tr> <th align=left>Setup <td> The name of the setup. Only for simulation!
+<tr> <th align=left>q2 <td> The q^2 value, also only for simulation 
+<tr> <th align=left>TDC_Resolution <td> The TDC resolution in ns/bin
+<tr> <th align=left>A.tma.file <td> The TMA file (reconstruction matrices)
+<tr> <th align=left>B.tma.file <td> 
+<tr> <th align=left>C.tma.file <td> 
+<tr> <th align=left>use_AB_TDC <td> The TDC channel for the coincidences
+<tr> <th align=left>use_AC_TDC <td> 
+<tr> <th align=left>use_BC_TDC <td> 
+<tr> <th align=left>A.VDC.TDC <td> TDC offset
+<tr> <th align=left>B.VDC.TDC <td> 
+<tr> <th align=left>C.VDC.TDC <td> 
+<tr> <th align=left>A.VDC.Driftvelocity <td> Driftvelocity
+<tr> <th align=left>B.VDC.Driftvelocity <td> 
+<tr> <th align=left>C.VDC.Driftvelocity <td> 
+<tr> <th align=left>A.Wobbler.dx <td> Wobbler calibration
+<tr> <th align=left>A.Wobbler.x0 <td> 
+<tr> <th align=left>A.Wobbler.dy <td> 
+<tr> <th align=left>A.Wobbler.y0 <td> 
+<tr> <th align=left>B.Wobbler.dx <td> 
+<tr> <th align=left>B.Wobbler.x0 <td> 
+<tr> <th align=left>B.Wobbler.dy <td> 
+<tr> <th align=left>B.Wobbler.y0 <td> 
+<tr> <th align=left>C.Wobbler.dx <td> 
+<tr> <th align=left>C.Wobbler.x0 <td> 
+<tr> <th align=left>C.Wobbler.dy <td> 
+<tr> <th align=left>C.Wobbler.y0 <td> 
+<tr> <th align=left>A.angle <td> Angle in degree
+<tr> <th align=left>A.momentum <td> central momentum in Mev/c
+<tr> <th align=left>A.tma.x <td> Position of the wire chambers
+<tr> <th align=left>A.tma.y <td> 
+<tr> <th align=left>A.tma.theta <td> 
+<tr> <th align=left>A.tma.phi <td> 
+<tr> <th align=left>A.scint.dE <td> Time offsets for the dE-paddles
+<tr> <th align=left>A.scint.ToF <td> ToF-paddles
+<tr> <th align=left>A.scint.use_dE <td> Which layer is the trigger?
+<tr> <th align=left>B.angle <td> 
+<tr> <th align=left>B.momentum<td> 
+<tr> <th align=left>B.tma.x<td>
+<tr> <th align=left>B.tma.y<td> 
+<tr> <th align=left>B.tma.theta<td> 
+<tr> <th align=left>B.tma.phi<td> 
+<tr> <th align=left>B.scint.dE<td> 
+<tr> <th align=left>B.scint.ToF<td> 
+<tr> <th align=left>B.scint.use_dE<td> 
+<tr> <th align=left>C.angle<td> 
+<tr> <th align=left>C.momentum<td> 
+<tr> <th align=left>C.tma.x<td> 
+<tr> <th align=left>C.tma.y<td> 
+<tr> <th align=left>C.tma.theta<td> 
+<tr> <th align=left>C.tma.phi<td> 
+<tr> <th align=left>C.scint.dE<td> 
+<tr> <th align=left>C.scint.ToF<td> 
+<tr> <th align=left>C.scint.use_dE<td> 
+<tr> <th align=left>CoincidenceTime<td> for double coincidences
+<tr> <th align=left>ABTime<td> Three times for triple coincidences
+<tr> <th align=left>BCTime<td> 
+<tr> <th align=left>ACTime <td> 
+</table>

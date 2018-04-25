@@ -1,0 +1,35 @@
+<HEAD>
+<TITLE> Compiling and Linking</TITLE>
+</HEAD>
+<BODY>
+<HR><center><H1>Compiling and Linking </center></H1>
+<HR>
+Nearly all my programs use HMBook for pictures. You find the
+necessary include files at
+<pre>
+  /users/kpha1/merkel/hmbook
+</pre>
+and the library in
+<pre>
+  /users/kpha1/merkel/decmips/lib          (Ultrix)
+  /users/kpha1/merkel/alphaOSF1/lib        (Alpha's)
+</pre>
+I suggest the following environment variables
+<pre>
+  export CC=gcc
+  export CFLAGS=-Wall -ansi -pedantic -I/users/kpha1/merkel/hmbook
+  export LDFLAGS=-L/users/kpha1/merkel/$ARCH/lib
+  export LDLIBS=-lhmbook -lm
+</pre>
+With these settings you should be able to create every program
+just by typing
+<pre>
+  make <i>program</i>
+</pre>
+even if there is no <i>Makefile</i> available.
+<HR>
+Last Modified: Oct. 2nd, 1995<br>
+<A HREF=merkel.html> 
+<ADDRESS>Harald Merkel <BR> MERKEL@MITLNS.MIT.EDU</ADDRESS>
+</A>
+</BODY>

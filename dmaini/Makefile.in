@@ -1,0 +1,93 @@
+#								 -*-makefile-*-
+# Created 1998 by
+#
+# Michael O. Distler				mailto:distler@mit.edu
+# MIT, Lab for Nuclear Science, 26-402B		tel.   (617) 253-6997
+# Cambridge, MA 02139				fax    (617) 258-5440
+#
+# $Id: Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../Makefile.inc
+
+BINARY	= dmaini50 dmaini25 dmaini10 dmaini5 dmaini1 dmaini01 \
+	  gridfinder bundle combine
+
+#FFLAGS	 = $(OPTS) -O2 $(WARN)
+LDFLAGS	 = $(OPTS) -L$(libdir)
+LDLIBS   = $(WX_LIBS) $(MOTIFLIBS) $(LIBS)
+CPPFLAGS = -I$(incdir) -I$(srcdir) -I$(srcdir)/.. $(OPTS) $(WARN)
+
+libobjs	= calcmean.o calcsigm.o dcl.o define_p.o exchange.o fitko.o    \
+	  fix_koi.o fixpart.o get_koor.o househ.o imagepla.o imagepoi.o \
+	  interpre.o io_tools.o outkoi.o outmean.o outsigma.o p_legend.o \
+	  pltres.o printkoi.o read_koi.o save_pow.o scandata.o searchch.o \
+	  select.o setactpo.o setup_ma.o setup_re.o slashpos.o small_le.o  \
+	  throwawa.o trimlen.o weights.o
+library	= libdmain.a
+
+VERSION	= 1.13
+shlib	= $(SHARED_LIB).$(VERSION)
+
+all :	  $(BINARY)
+lib :	  $(BUILD_LIBS)
+
+bundle   : thtrees.o bundle.o
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+gridfinder :	gridfinder.o $(LIBHMBOOK)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $^ $(LDLIBS)
+
+combine :	combine.o
+	$(CXX) $(LDFLAGS) -o $@ $^
+
+dmaini50 : f_test50.o dmaini.o $(LIBDMAIN)
+dmaini25 : f_test25.o dmaini.o $(LIBDMAIN)
+dmaini10 : f_test10.o dmaini.o $(LIBDMAIN)
+dmaini5  : f_test5.o  dmaini.o $(LIBDMAIN)
+dmaini1  : f_test1.o  dmaini.o $(LIBDMAIN)
+dmaini01 : f_test01.o dmaini.o $(LIBDMAIN)
+
+dmaini50 dmaini25 dmaini10 dmaini5 dmaini1 dmaini01 :
+	$(F77) $(LDFLAGS) $(LDSHARE) -o $@ $^
+
+f_test%.o :	f_test.f
+	$(F77) $(FFLAGS) -I$(srcdir)/prob_$*.0 -c -o $@ $<
+
+f_test01.o :	f_test.f
+	$(F77) $(FFLAGS) -I$(srcdir)/prob_0.1 -c -o $@ $<
+
+$(library) :	$(libobjs)
+	ar -cr $@ $^
+	$(RANLIB) $@
+
+$(PICDIR)/%.o	: %.f
+	@test -d $(PICDIR) || mkdir $(PICDIR)
+	@$(F77) $(FFLAGS) $(FPIC) -c $< -o $@
+
+$(shlib) $(SHARED_LIB) :	$(addprefix $(PICDIR)/,$(libobjs))
+	$(link_shlib)
+
+$(LIBDMAIN) $(LIBHMBOOK) :
+	$(MAKE) -C $(dir $@) $(notdir $@)
+
+install :	.install
+.install :	$(BUILD_LIBS) $(BINARY)
+	-@$(foreach dir,$(exec_prefix) $(bindir),\
+		test -d $(dir) || mkdir $(dir);)
+	$(INSTALL_DATA) $(library) $(libdir)/$(library)
+	$(install_shlib)
+	$(foreach file,$(BINARY),$(INSTALL_PROGRAM) $(file) $(bindir)/$(file);)
+	date > $@
+
+clean :
+	rm -rf *~ core  *.o $(PICDIR)
+
+veryclean :	clean
+	rm -f $(BUILD_LIBS) $(BINARY) $(SHARED_LIB) .install
+
+distclean :	veryclean
+	rm -f Makefile

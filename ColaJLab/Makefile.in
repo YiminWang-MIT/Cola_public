@@ -1,0 +1,174 @@
+#								 -*-makefile-*-
+# Created 1999 by	Michael O. Distler 
+#	                Harald Merkel
+#
+#		 	A1 Collaboration
+#			Institut für Kernphysik
+#			Johannes Gutenberg-Universität Mainz
+#
+# $Header: https://wwwa1.kph.uni-mainz.de/svn/Cola/trunk/ColaJLab/Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@:@srcdir@/doc
+
+include	../Makefile.inc
+
+EXP	= hrs
+OUT     = online
+
+shlib	= $(EXP).$(SHARED_EXT).1
+expso	= $(basename $(shlib))
+expobj := $(shell if [ -f $(libdir)/$(expso) -a $(ISSHARED) -eq 1 ];\
+		  then echo $(libdir)/$(expso);else echo $(EXP).o;fi)
+
+INCDIR	= $(srcdir)/include
+EXPDIR	= $(INCDIR)/$(EXP)
+OUTDIR	= $(INCDIR)/$(OUT)
+
+CPPFLAGS= -I. -I.. -I$(srcdir) -I$(srcdir)/.. -I$(incdir) -I$(EXPDIR) \
+	  -I$(OUTDIR) $(WX_CFLAGS) $(DEFS) -D__ColaJLab__
+
+CFLAGS	= $(OPTS) $(WARN)
+CXXFLAGS= $(OPTS) $(WARN)
+LDFLAGS	= $(OPTS) -L$(libdir)
+
+BINARY	= ColaJLab
+TOOLS	= Decode.$(EXP) Coda2Cindy codatest HallAtest rund
+TESTBIN	=
+
+CSRC	= 
+CXXSRC	= Coda2Cindy.cc Digitizer.cc HallAfile.cc HallAtest.cc \
+	  codafile.cc codatest.cc
+FSRC	= 
+CXXGEN	= ExpressionParser.parse.cc RunParser.parse.cc \
+	  ReactionParser.parse.cc ReactionParser.lex.cc
+DOCSRC	= ColaJLab.dxx \
+	  bottom.html classHeader.inc indexHeader.inc hierHeader.inc \
+	  codatest.cc \
+	  codafile.h
+AUXOBJ	= StatPage.o Masses.o Parsermain.o ReactionParser.parse.o \
+	  ReactionParser.lex.o Reactions.o ReadRundb.o VDCraw.o
+
+all :	$(BINARY) $(TOOLS) $(TESTBIN)
+
+ColaJLab :	Cola.o $(AUXOBJ) $(expobj) $(OUT).o $(LIBCINDY) \
+		$(LIBCH) $(LIB4VEC) $(LIBHMVIEW) $(LIBHMBOOK) $(LIBTMA) 
+	$(CXX) $(LDFLAGS) $^ $(LDSHARE) \
+	$(WX_LIBS) $(MOTIFLIBS) $(LIBS) -lm -o $@
+	$(reportsuccess)
+
+Decode.$(EXP) :	Decode.o $(expobj) $(LIBCINDY)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $^ $(LIBS)
+	$(reportsuccess)
+
+Coda2Cindy :	Coda2Cindy.o $(expobj) \
+		Digitizer.o HallAfile.o codafile.o $(LIBCINDY)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $^ $(LIBS)
+	$(reportsuccess)
+
+rund :		rund.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+	$(reportsuccess)
+
+codatest :	codatest.o codafile.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+HallAtest :	HallAtest.o $(expobj) \
+		Digitizer.o HallAfile.o codafile.o $(LIBCINDY)
+	$(CXX) $(LDFLAGS) -o $@ $^ -lcindy $(LIBS)
+
+$(EXP).o  :		$(EXP).cc
+$(EXP).cc $(EXP).list :	$(EXPDIR)/$(EXP).h $(CINDY)
+	$(CINDY) -C $(EXPDIR) -e $* -s $@ -p $*.list -n cindy
+$(expso)  :	$(PICDIR)/$(EXP).o
+		$(CXX) -shared $(SHFLAGS) -o $@ $^
+
+$(OUT).o  :		$(OUT).cc
+$(OUT).cc $(OUT).list :	$(OUTDIR)/$(OUT).h $(CINDY)
+	$(CINDY) -C $(OUTDIR) -e $* -s $@ -p $*.list -x
+
+$(LIB4VEC) $(LIBCH) $(LIBCINDY) $(LIBHMBOOK) $(LIBTMA) $(CINDY) :
+	$(MAKE) -C $(dir $@) $(notdir $@)
+
+Parsermain.o :	../Cola/Parsermain.cc ExpressionParser.parse.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+Reactions.o :	../Cola/Reactions.cc  ReactionParser.parse.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+Masses.o :	../Cola/Masses.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+ExpressionParser.parse.cc ExpressionParser.parse.h : ../Cola/ExpressionParser.y
+	$(reportaction)
+	@ $(BISONXX) -dvy $(BISONFLAGS) $^ -o $*.cc -h $*.h
+
+RunParser.parse.cc RunParser.parse.h : ../Cola/RunParser.y
+	$(reportaction)
+	@ $(BISONXX) -dvy $(BISONFLAGS) $^ -o $*.cc -h $*.h
+
+ReactionParser.parse.cc ReactionParser.parse.h : ../Cola/ReactionParser.y
+	$(reportaction)
+	@ $(BISONXX) -dvy $(BISONFLAGS) $^ -o $*.cc -h $*.h
+
+ReactionParser.lex.cc ReactionParser.lex.h : ../Cola/ReactionParser.l
+	$(reportaction)
+	@ $(FLEXXX) -8 $(FLEXFLAGS) -o$*.cc -h$*.h $<
+
+doc :	$(htmldir)/index.html $(texdir)/ColaJLab.ps
+
+$(htmldir)/index.html:	$(DOCSRC)
+	@test -d $(htmldir) || mkdir $(htmldir)
+	(cd $(dir $<); cp *.gif $(shell pwd)/$(htmldir);\
+	 $(DOCXX) -B bottom.html -d $(shell pwd)/$(htmldir) $(notdir $<))
+
+$(texdir)/ColaJLab.tex:	$(DOCSRC)
+	@test -d $(texdir) || mkdir $(texdir)
+	(cd $(dir $<); $(DOCXX) -t -o $(shell pwd)/$@ $(notdir $<))
+
+$(texdir)/ColaJLab.dvi:	$(texdir)/ColaJLab.tex
+	@test -f $(texdir)/$(DOCXXSTY) || \
+	    ln -s $(shell cd $(srcdir)/../Doc/src;pwd)/$(DOCXXSTY) $(texdir)
+	(cd $(texdir);$(LATEX) $(notdir $<);$(LATEX) $(notdir $<))
+
+$(texdir)/ColaJLab.ps:	$(texdir)/ColaJLab.dvi
+	$(DVIPS) -o $@ $^
+
+install :	.install
+.install:	$(BINARY) $(TOOLS) $(EXP).list $(OUT).list
+	-@$(foreach dir,$(exec_prefix) $(bindir) $(libdir) $(sharedir) \
+		$(exampledir) $(exampledir)/ColaJLab $(docdir) \
+		$(docdir)/ColaJLab,test -d $(dir) || mkdir $(dir);)
+	$(foreach file,$(BINARY) $(TOOLS),\
+		$(INSTALL_PROGRAM) $(file) $(bindir)/$(file);)
+	if test -f $(expso);then \
+		$(INSTALL_PROGRAM) $(expso) $(libdir)/$(expso);fi
+	$(foreach file,$(wildcard $(srcdir)/examples/*.col \
+		$(srcdir)/examples/*.db $(srcdir)/examples/*.hm),\
+		$(INSTALL_DATA) $(file) \
+		$(exampledir)/ColaJLab/$(notdir $(file));)
+	$(foreach file,$(wildcard $(srcdir)/doc/*.qal $(htmldir)/* \
+		$(texdir)/*.ps $(texdir)/*.tex $(EXP).list $(OUT).list),\
+		$(INSTALL_DATA) $(file) $(docdir)/ColaJLab/$(notdir $(file));)
+	date > $@
+
+clean :
+	rm -f *~ *.o core
+	rm -rf tmp $(PICDIR)
+
+veryclean :	clean
+	rm -f $(EXP).list $(EXP).cc $(expso) $(OUT).list $(OUT).cc
+	rm -f $(BINARY) $(TOOLS) $(TESTBIN) nohup.out .install
+	rm -f *.parse.cc *.parse.h *.parse.output *.lex.cc *.lex.h
+
+distclean:	veryclean
+	rm -f Makefile .depend
+
+.depend :	$(CSRC) $(CXXSRC) $(CXXGEN) $(EXP).cc $(OUT).cc
+	$(CC) -M $(CPPFLAGS) $^ > $@
+
+-include .depend

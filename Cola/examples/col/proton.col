@@ -1,0 +1,25 @@
+Cut ((A.dE.Energy/200)^2+(A.ToF.Energy/300)^2) > 1
+{
+! .time / .wire spectren machen keinen Sinn! Die werden naemlich speziell 
+!               behandelt..... Harald.
+!
+! Histogram "proton/x1-layer/Drift Time"   A.vdc.x1.time("t","ns",1,512,511)
+! Histogram "proton/x1-layer/Nr of Wire"   A.vdc.x1.wire("# of wire","",1,512,511)
+Histogram "proton/x1-layer/Error"        A.vdc.x1.error("","",0,32,32)
+Histogram "proton/x1-layer/Multiplicity" A.vdc.x1.multi("n","",-0.5,20.5,21)
+
+! Histogram "proton/s1-layer/Drift Time"   A.vdc.s1.time("t","ns",1,512,511)
+! Histogram "proton/s1-layer/Nr of Wire"   A.vdc.s1.wire("# of wire","",1,512,511)
+Histogram "proton/s1-layer/Error"        A.vdc.s1.error("","",0,32,32)
+Histogram "proton/s1-layer/Multiplicity" A.vdc.s1.multi("n","",-0.5,20.5,21)
+
+! Histogram "proton/x2-layer/Drift Time"   A.vdc.x2.time("t","ns",1,512,511)
+! Histogram "proton/x2-layer/Nr of Wire"   A.vdc.x2.wire("# of wire","",1,512,511)
+Histogram "proton/x2-layer/Error"        A.vdc.x2.error("","",0,32,32)
+Histogram "proton/x2-layer/Multiplicity" A.vdc.x2.multi("n","",-0.5,20.5,21)
+
+! Histogram "proton/s2-layer/Drift Time"   A.vdc.s2.time("t","ns",1,512,511)
+! Histogram "proton/s2-layer/Nr of Wire"   A.vdc.s2.wire("# of wire","",1,512,511)
+Histogram "proton/s2-layer/Error"        A.vdc.s2.error("","",0,32,32)
+Histogram "proton/s2-layer/Multiplicity" A.vdc.s2.multi("n","",-0.5,20.5,21)
+}

@@ -1,0 +1,7 @@
+run dmaini in the example directory
+
+dmaini10 < dmaini.inp
+
+compare the output with the saved example
+
+diff delta.mx6 delta.mx

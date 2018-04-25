@@ -1,0 +1,68 @@
+Histogram "Momentumbite1" A.deltap("","",-10,30,100)
+
+//    A.dE.Energy > 1000  && \
+//    B.Cerenkov != 0     && \
+
+Cut @online.A.trigger   &&\
+	 abs((A.deltap+100) / 1.0476203 - 100) < 10 &&  \
+	Electron_Trigger    &&  \
+	abs(Q2-setq2)<0.005
+{ 
+  Histogram "Momentumbite" A.deltap("","",-10,30,100)
+  Cut abs(coincidenceTime) < 1.5
+  { Histogram "Missing Mass"     missMass
+    Cut abs(MissingMass - mass_pi0 * 1000.0) < 2 
+    { Histogram DeltaW>0&&DeltaW<1 "Diff. Cross Section 0MeV<[D]W<1MeV"  \
+				 coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	 phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+      Histogram DeltaW>1&&DeltaW<2 "Diff. Cross Section 1MeV<[D]W<2MeV"  \
+				coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12)
+ 
+      Histogram DeltaW>2&&DeltaW<3 "Diff. Cross Section 2MeV<[D]W<3MeV"  \
+				coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+      Histogram DeltaW>3&&DeltaW<4 "Diff. Cross Section 3MeV<[D]W<4MeV"  \
+				coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+
+Histogram DeltaW>0&&DeltaW<1 	"[a]_[g]p!/0MeV<[D]W<1MeV" \
+			 	ThetaProtonPhoton("[a]_[g]p!","",0,9,80)\
+				pProton("p_p!","GeV/c",0.230,0.300,50)
+
+Histogram DeltaW>1&&DeltaW<2 	"[a]_[g]p!/1MeV<[D]W<2MeV" \
+			 	ThetaProtonPhoton("[a]_[g]p!","",0,9,80)\
+				pProton("p_p!","GeV/c",0.230,0.300,50)
+
+Histogram DeltaW>2&&DeltaW<3 	"[a]_[g]p!/2MeV<[D]W<3MeV" \
+			 	ThetaProtonPhoton("[a]_[g]p!","",0,9,80)\
+				pProton("p_p!","GeV/c",0.230,0.300,50)
+
+Histogram DeltaW>3&&DeltaW<4 	"[a]_[g]p!/3MeV<[D]W<4MeV" \
+			 	ThetaProtonPhoton("[a]_[g]p!","",0,9,80)\
+				pProton("p_p!","GeV/c",0.230,0.300,50)
+
+   }
+  }
+
+  Histogram "s/Missing Mass"     missMass
+  Cut abs(MissingMass - mass_pi0 * 1000.0) < 2
+  { Histogram DeltaW>0&&DeltaW<1 "s/Diff. Cross Section 0MeV<[D]W<1MeV"  \
+				coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+    Histogram DeltaW>1&&DeltaW<2 "s/Diff. Cross Section 1MeV<[D]W<2MeV"  \
+				coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+    Histogram DeltaW>2&&DeltaW<3 "s/Diff. Cross Section 2MeV<[D]W<3MeV"  \
+				coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+    Histogram DeltaW>3&&DeltaW<4 "s/Diff. Cross Section 3MeV<[D]W<4MeV"  \
+				coscms ("cos[q]_[p]!^*!","",-1,1,10)\
+	                    	phicms ("[f]_[p]!^*!","^o!",-180,180,12) 
+}
+
+
+
+
+
+

@@ -1,0 +1,26 @@
+#
+zone 2 2 1
+SetFillRGB 1.0 1.0 0.5
+Title "OOPS C: Focal Plane"
+Gray "OOPS C/focal plane/[D]E1 vs. [D]E2"
+Gray "OOPS C/focal plane/[D]E1 vs. [D]E3"
+Gray "OOPS C/focal plane/[D]E2 vs. [D]E3"
+
+zone 2 3 1
+SetFillRGB 1.0 1.0 0.5
+Title "OOPS C: Focal Plane"
+Histogram "OOPS C/focal plane/x (disp.)"
+Histogram "OOPS C/focal plane/[q] (disp.)"
+Histogram "OOPS C/focal plane/y (non-disp.)"
+Histogram "OOPS C/focal plane/[f] (non-disp.)"
+Gray "OOPS C/focal plane/[q] vs. [f]"
+
+zone 2 2 1
+SetFillRGB 1.0 1.0 0.5
+Title "OOPS C: Focal Plane"
+Histogram "OOPS C/focal plane/x chamber 1 (disp.)"
+Histogram "OOPS C/focal plane/y chamber 1 (non-disp.)"
+Histogram "OOPS C/focal plane/2 - (1+3)\0572 (x)"
+Histogram "OOPS C/focal plane/2 - (1+3)\0572 (y)"
+
+close

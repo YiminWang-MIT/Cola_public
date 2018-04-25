@@ -1,0 +1,48 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/BEAM.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for beam information
+//
+
+Scalar beam.helicity      = @oops1.beam.helicity
+Scalar beam.timeslot	  = @oops1.beam.timeslot
+Scalar beam.toroid.bt1	  = @oops1.beam.toroid.bt1
+Scalar beam.toroid.bt2	  = @oops1.beam.toroid.bt2
+Scalar beam.position.molx = @oops1.beam.position.molx
+Scalar beam.position.moly = @oops1.beam.position.moly
+Scalar beam.position.tgtx = @oops1.beam.position.tgtx
+Scalar beam.position.tgty = @oops1.beam.position.tgty
+Scalar beam.halo.halo1	  = @oops1.beam.halo.halo1
+Scalar beam.halo.halo2	  = @oops1.beam.halo.halo2
+
+Histogram "beam/helicity"      \
+	beam.helicity("helicity pattern", "", -0.5, 15.5, 16) ;
+Histogram "beam/timeslot"      \
+	beam.timeslot("time slot", "", -0.5, 15.5, 16) ;
+Histogram "beam/toroid/bt1"    \
+	beam.toroid.bt1("beam toroid 1", "", -10.5,  31989.5, 1000) ;
+Histogram "beam/toroid/bt2"    \
+	beam.toroid.bt2("beam toroid 2", "", -10.5,  31989.5, 1000) ;
+Histogram "beam/position/molx" \
+	beam.position.molx("beam pos. x - Moller", "", -10.5,  31989.5, 2000) ;
+Histogram "beam/position/moly" \
+	beam.position.moly("beam pos. y - Moller", "", -10.5,  31989.5, 2000) ;
+Histogram "beam/position/tgtx" \
+	beam.position.tgtx("beam pos. x - target", "", -10.5,  31989.5, 2000) ;
+Histogram "beam/position/tgty" \
+	beam.position.tgty("beam pos. y - target", "", -10.5,  31989.5, 2000) ;
+Histogram "beam/halo/halo1"    \
+	beam.halo.halo1("beam halo - Moller", "", -10.5, 2089.5, 210) ;
+Histogram "beam/halo/halo2"    \
+	beam.halo.halo2("beam halo - target", "", -10.5, 2089.5, 210) ;
+
+Histogram (@online.beam.gunFlag == 0) "beam/halo/halo2 (empty puls)" \
+	beam.halo.halo2("beam halo - target", "", -10.5, 2089.5, 210) ;
+Histogram (@online.beam.gunFlag != 0) "beam/halo/halo2 (beam puls)" \
+	beam.halo.halo2("beam halo - target", "", -10.5, 2089.5, 210) ;

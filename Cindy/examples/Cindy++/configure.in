@@ -1,0 +1,23 @@
+dnl
+dnl configure.in: Input fuer GNU autoconf
+dnl
+AC_INIT()
+AC_SUBST(OPTS)
+AC_ENABLE(gdb,[OPTS="$OPTS -g"],[OPTS="$OPTS -O"])
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROGRAM_CHECK(CXX,g++,[g++],[$(CC) -x c++])
+AC_PROGRAM_CHECK(CINDY,Cindy++,[Cindy++],[:])
+AC_HAVE_LIBRARY(bsd)
+AC_HAVE_LIBRARY(elf)
+AC_HAVE_LIBRARY(nsl)
+AC_HAVE_LIBRARY(socket)
+define(MOD_HAVE_LIB, [dnl
+LIBS_save="${LIBS}"
+LIBS="${LIBS} -l[$1]"
+AC_COMPILE_CHECK([-l[$1]], , [main();],dnl
+        [AC_DEFINE([HAVE_LIB]translit($1, [a-z], [A-Z]))],dnl
+        [LIBS="${LIBS_save}"])dnl
+])dnl
+MOD_HAVE_LIB(ucb)
+AC_OUTPUT(Makefile)

@@ -1,0 +1,36 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/OHIPStarget.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for target coordinates
+//
+
+// required definitions
+//
+// spec  :  name of the spectrometer in event configuration oops1
+// title :  first part of the histogram title
+//
+
+Scalar spec.target.dp  = @online.spec.target.dp
+Scalar spec.target.th  = @online.spec.target.th
+Scalar spec.target.y0  = @online.spec.target.y0
+Scalar spec.target.ph  = @online.spec.target.ph
+
+Histogram title"[D]p"  spec.target.dp("momentum", "%", -6.0, 6.0, 600) ;
+Histogram title"[q]"   spec.target.th("out-of-plane angle", "mrad", \
+				      -100.0, 100.0, 500) ;
+Histogram title"y0"    spec.target.y0("vertex", "cm", \
+				      -4.0, 4.0, 80) ;
+Histogram title"[f]"   spec.target.ph("scattering angle", "mrad", \
+				      -50.0, 50.0, 500) ;
+Histogram title"[f] vs. [D]p" \
+	spec.target.dp("momentum", "%", -6.0, 6.0, 100) \
+	spec.target.ph("scattering angle", "mrad", -50.0, 50.0, 100) ;
+Histogram title"[q] vs. [f]" \
+	spec.target.ph("scattering angle", "mrad", -50.0, 50.0, 100) \
+	spec.target.th("out-of-plane angle", "mrad", -100.0, 100.0, 100) ;

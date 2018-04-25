@@ -1,0 +1,338 @@
+This is Info file tma.info, produced by Makeinfo-1.43 from the input
+file tma.texinfo.
+
+
+File: tma.info,  Node: top,  Next: TraceMachine,  Prev: (dir),  Up: (dir)
+
+TMA
+***
+
+* Menu:
+
+* TraceMachine::                TraceMachine
+
+ -- The Detailed Node Listing --
+
+TMA package
+
+
+TraceMachine
+
+* Intro::                       Introduction
+* C::                           Programming in C
+* Fortran::                     Programming in Fortran
+* bundle::                      Invocing bundle
+
+Programming in C
+
+* C-Interface::                 C-Interface description
+* C-Example::                   Programming Example
+
+Programming in Fortran
+
+* F-Interface::                 FORTRAN-Interface description
+* F-Example::                   Programming Example
+
+ -- The Detailed Node Listing --
+
+TMA package
+
+
+TraceMachine
+
+* Intro::                       Introduction
+* C::                           Programming in C
+* Fortran::                     Programming in Fortran
+* bundle::                      Invocing bundle
+
+Programming in C
+
+* C-Interface::                 C-Interface description
+* C-Example::                   Programming Example
+
+Programming in Fortran
+
+* F-Interface::                 FORTRAN-Interface description
+* F-Example::                   Programming Example
+
+
+File: tma.info,  Node: TraceMachine,  Prev: top,  Up: top
+
+TraceMachine
+============
+
+* Menu:
+
+* Intro::                       Introduction
+* C::                           Programming in C
+* Fortran::                     Programming in Fortran
+* bundle::                      Invocing bundle
+
+
+File: tma.info,  Node: Intro,  Next: C,  Up: TraceMachine
+
+Introduction
+------------
+
+   This section describes the user-interface of the TMA-software. The
+software is split into two parts. The first part provides the
+functions needed to reconstruct target coordinates from focal plane
+vectors. This part is useful for on- and offline analysis programms.
+Since lot of the analysis software is traditionally written in FORTRAN
+both  a C and a FORTRAN interface is provided, which are described
+below. The transformation from focal plane to target coordinates is
+done  by a multidimensional polynomial. The parameters which
+characterize this polynomial (transfer coefficients and powers) must
+be stored in a a single file. This file can be build by hand or whith
+the aid of a tool which is also part of the TMA-software. This tool
+called bundle combines the parameter files obtained from analysis 
+programms.
+
+
+File: tma.info,  Node: C,  Next: Fortran,  Prev: Intro,  Up: TraceMachine
+
+Programming in C
+----------------
+
+* Menu:
+
+* C-Interface::                 C-Interface description
+* C-Example::                   Programming Example
+
+   The usage of the reconstruction functions within C is described in
+this section. All prototypes and structures are defined in
+`tma/TraceMachine.c'. You can also safely include this file in C++
+programms without the `extern "C" ' mechanism. However a C++-interface
+  will also be available soon.
+
+
+File: tma.info,  Node: C-Interface,  Next: C-Example,  Up: C
+
+C-Interface description
+.......................
+
+   The reconstruction software is implemented in an object-based
+manner as far as the interface is concerned. Instead of function which
+calculates the target coordinates from a certain focal plane vector, 
+we have  a machine (class) which has the ability to perform the
+described transformation (class-method).  This is exactly the
+situation we encounter in real world: The machine at hand is our
+spectrometer - with the only difference that it does the
+transformation in the opposite direction.  Like in real life the first
+thing  you have to do is building a machine with the desired
+transformation proberties.
+
+ -- Function: TraceMachine * TMA_new ( char * FNAME, int MODE)
+     The parameter FNAME is the name of a file which contains the
+     description of the transformation polynomial.  The MODE parameter
+     is not used so far. The return value is a pointer to the new
+     machine and must be supplied in all other functions described
+     below.  `NULL' is returned if an error has occured.  This
+     function plays the role of a constructor  in C++-terminolgy. 
+     Note that you can not access the components of a `TraceMachine'
+     structure.
+   After successful  creation of a `TraceMachine' you are ready for
+reconstruction.
+
+ -- Function: struct target_ko * TMA_run ( TraceMachine * TP, struct
+          focalplane_ko * FP)
+     A target coordinate is calculated from  the focalplane coordinate
+     supplied by FP.  The right `TraceMachine' is chosen by TP which
+     contains all intrinsic information.
+   Like in real life you might loose interest in your machine. In that
+case the machine is do not just thrown away but all valuable parts are
+recycled.
+
+ -- Function: void TMA_del ( TraceMachine *tp)
+     This function does all the necessary cleanup operations. On
+     return all further access on tp is undefined. It is our
+     destructor.
+
+
+File: tma.info,  Node: C-Example,  Prev: C-Interface,  Up: C
+
+Programming Example
+...................
+
+   In this section a small example in C is presented. The programm
+below works as a filter. Focal plane coordinates are read from
+standard input and the calculated target coordinates are printed on
+standard output. This example is also part of the distribution
+(`tMachine.c').
+
+     #include <stdio.h>
+     #include <stdlib.h>
+     #include "tma/TraceMachine.h"
+     
+     int main(int argc, char *argv[])
+     {
+       TraceMachine *tp;
+       struct target_ko     *result;
+       struct focalplane_ko   fp;
+     
+       if (argc != 2) {
+         fprintf(stderr, "usage: %s filename\n", argv[0]);
+         exit(1);
+       }
+     
+       if (tp = TMA_new(argv[1], 0)) {
+         while (scanf("%f %f %f %f",&fp.x_fp,&fp.th_fp,&fp.y_fp,&fp.ph_fp) == 4) {
+           result = TMA_run(&fp, tp);
+           printf("%g %g %g %g\n", result -> dp_tg, result -> th_tg,
+                  result -> y_tg, result -> ph_tg);
+         }
+           return 0;
+       }
+       fprintf(stderr, "%s :: TMA_new failed\n", argv[0]);
+       return 1;
+     }
+
+
+File: tma.info,  Node: Fortran,  Next: bundle,  Prev: C,  Up: TraceMachine
+
+Programming in Fortran
+----------------------
+
+* Menu:
+
+* F-Interface::                 FORTRAN-Interface description
+* F-Example::                   Programming Example
+
+   In this section the FORTRAN -- interface is explained. There is of
+course no difference in the functionality provided for C or FORTRAN. 
+The FORTRAN -- interface  was developed on a DECstation with Digitals
+FORTRAN for RISC compiler.
+
+
+File: tma.info,  Node: F-Interface,  Next: F-Example,  Up: Fortran
+
+FORTRAN-Interface description
+.............................
+
+ -- Function: integer TMA_new ( character *(*) FNAME, integer MODE)
+     `TMA_new' creates a machine which you can use for coordinate
+     reconstruction. FNAME is the file which contains the description
+     of the transformation polynomial. The MODE parameter is not used
+     so far. This function returns the intrinsic number of the
+     machine.  You must supply this number to all other functions
+     described below.  If the return value is 0 an error has occured.
+     This function is similar to `open'.
+
+ -- Function: subroutine TMA_run (real*4 (4) TP, real*4 (4) FP,
+          integer TM )
+     `TMA_run' calculates the target coordinates TP from the focal
+     plane coordinates FP. The machine TM is used.
+
+ -- Function: subroutine TMA_del ( integer tm)
+     This function does all the necessary cleanup operations. On
+     return all usage of TM is undefined. This function is similar to
+     `close'.
+
+
+File: tma.info,  Node: F-Example,  Prev: F-Interface,  Up: Fortran
+
+Programming Example
+...................
+
+   Like our C example we present a filter programm which reads focal
+plane data from the keyboard and displays the results on the screen.
+It terminates when an error or an `EOF' occurs.
+
+           program tMachineF
+     
+           character *32 datafile
+           character *16 progname
+     
+           integer TMA_new, tm
+           real fp(4)
+           real tg(4)
+     
+     c get the command line arguments
+           call getarg(0, progname)
+     
+           if (iargc() .ne. 1) then
+              write(0, 10) progname
+      10      format (' usage ', A, ' filename')
+              stop
+           endif
+     
+           call getarg(1, datafile)
+     
+     c     Bereitstellen der Koordinatenrueckrechnungsmachine tm. Die aufbereiteten
+     c     Matrixelemente befinden sich in der Datei  datafile
+     
+           tm = TMA_new(datafile , 0)
+     
+           if (tm .ne. 0) then
+              do while(1)
+                 read(5,*,end=100) (fp(i),i=1,4)
+     
+     c     Berechne fp -> tg
+                 call TMA_run(tg, fp, tm)
+                 write(6,*) (tg(i), i=1, 4)
+              end do
+      100     continue
+     
+     c     Wirf die Maschine tm weg
+              call TMA_delete(tm)
+              stop
+           end if
+     
+           write (0,1000) progname, " :: TMA_new failed ", datafile
+      1000 format(' ', 3A)
+           end
+
+
+File: tma.info,  Node: bundle,  Prev: Fortran,  Up: TraceMachine
+
+Invocing bundle
+---------------
+
+   The `bundle' Syntax is
+     bundle [OPTIONS]
+   `bundle' produces an input file for the reconstruction routines. 
+Since the transfer coefficients and the corrosponding powers are
+provided for each focal plane coordinate seperatly this programm is
+needed to order them and to produce a single description file.
+`-d FILENAME'
+     This option is used to specify a file which contains the
+     coefficients and powers for the delta target coordinate. 
+     default: delta.hmx
+
+`-t FILENAME'
+     This option is used to specify a file which contains the
+     coefficients and powers for the theta target coordinate. 
+     default: theta0.hmx
+
+`-p FILENAME'
+     This option is used to specify a file which contains the
+     coefficients and powers for the phi target coordinate.  default:
+     phi0.hmx
+
+`-y FILENAME'
+     This option is used to specify a file which contains the
+     coefficients and powers for the y target coordinate.  default:
+     y0.hmx
+
+`-o FILENAME'
+     This option specifies an output file otherwise the result is
+     printed on standard output.
+
+`-v'
+     This option causes `bundle' to print its current version.
+
+
+
+Tag Table:
+Node: top89
+Node: TraceMachine1282
+Node: Intro1577
+Node: C2487
+Node: C-Interface3016
+Node: C-Example5000
+Node: Fortran6142
+Node: F-Interface6629
+Node: F-Example7678
+Node: bundle9149
+
+End Tag Table

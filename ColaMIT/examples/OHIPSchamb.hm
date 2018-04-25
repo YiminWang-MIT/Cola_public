@@ -1,0 +1,120 @@
+#
+
+zone 2 2 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber Drift Time"
+Histogram "OHIPS/chamber/u1/Drift Time"
+Histogram "OHIPS/chamber/v1/Drift Time"
+Histogram "OHIPS/chamber/u2/Drift Time"
+Histogram "OHIPS/chamber/v2/Drift Time"
+
+zone 2 2 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber Nr of Wire"
+Histogram "OHIPS/chamber/u1/Nr of Wire"
+Histogram "OHIPS/chamber/v1/Nr of Wire"
+Histogram "OHIPS/chamber/u2/Nr of Wire"
+Histogram "OHIPS/chamber/v2/Nr of Wire"
+
+zone 2 2 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber Multiplicity"
+Histogram "OHIPS/chamber/u1/Multiplicity"
+Histogram "OHIPS/chamber/v1/Multiplicity"
+Histogram "OHIPS/chamber/u2/Multiplicity"
+Histogram "OHIPS/chamber/v2/Multiplicity"
+
+zone 2 2 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber Error"
+Histogram "OHIPS/chamber/u1/Error"
+Histogram "OHIPS/chamber/v1/Error"
+Histogram "OHIPS/chamber/u2/Error"
+Histogram "OHIPS/chamber/v2/Error"
+
+zone 2 2 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber Pattern"
+Histogram "OHIPS/chamber/u1/Pattern"
+Histogram "OHIPS/chamber/v1/Pattern"
+Histogram "OHIPS/chamber/u2/Pattern"
+Histogram "OHIPS/chamber/v2/Pattern"
+
+zone 2 2 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber Efficiency"
+Histogram "OHIPS/chamber/u1/Efficiency"
+Histogram "OHIPS/chamber/v1/Efficiency"
+Histogram "OHIPS/chamber/u2/Efficiency"
+Histogram "OHIPS/chamber/v2/Efficiency"
+
+zone 2 5 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber u1"
+Histogram "OHIPS/chamber/u1/Drift Time"
+Histogram "OHIPS/chamber/u1/Nr of Wire"
+Histogram "OHIPS/chamber/u1/Multiplicity"
+Histogram "OHIPS/chamber/u1/Error"
+Histogram "OHIPS/chamber/u1/Pattern"
+Histogram "OHIPS/chamber/u1/Coordinate"
+Histogram "OHIPS/chamber/u1/Slope"
+Histogram "OHIPS/chamber/u1/Chi-square"
+Histogram "OHIPS/chamber/u1/Tagged Wire"
+Histogram "OHIPS/chamber/u1/Efficiency"
+
+zone 2 5 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber v1"
+Histogram "OHIPS/chamber/v1/Drift Time"
+Histogram "OHIPS/chamber/v1/Nr of Wire"
+Histogram "OHIPS/chamber/v1/Multiplicity"
+Histogram "OHIPS/chamber/v1/Error"
+Histogram "OHIPS/chamber/v1/Pattern"
+Histogram "OHIPS/chamber/v1/Coordinate"
+Histogram "OHIPS/chamber/v1/Slope"
+Histogram "OHIPS/chamber/v1/Chi-square"
+Histogram "OHIPS/chamber/v1/Tagged Wire"
+Histogram "OHIPS/chamber/v1/Efficiency"
+
+zone 2 5 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber u2"
+Histogram "OHIPS/chamber/u2/Drift Time"
+Histogram "OHIPS/chamber/u2/Nr of Wire"
+Histogram "OHIPS/chamber/u2/Multiplicity"
+Histogram "OHIPS/chamber/u2/Error"
+Histogram "OHIPS/chamber/u2/Pattern"
+Histogram "OHIPS/chamber/u2/Coordinate"
+Histogram "OHIPS/chamber/u2/Slope"
+Histogram "OHIPS/chamber/u2/Chi-square"
+Histogram "OHIPS/chamber/u2/Tagged Wire"
+Histogram "OHIPS/chamber/u2/Efficiency"
+
+zone 2 5 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber v2"
+Histogram "OHIPS/chamber/v2/Drift Time"
+Histogram "OHIPS/chamber/v2/Nr of Wire"
+Histogram "OHIPS/chamber/v2/Multiplicity"
+Histogram "OHIPS/chamber/v2/Error"
+Histogram "OHIPS/chamber/v2/Pattern"
+Histogram "OHIPS/chamber/v2/Coordinate"
+Histogram "OHIPS/chamber/v2/Slope"
+Histogram "OHIPS/chamber/v2/Chi-square"
+Histogram "OHIPS/chamber/v2/Tagged Wire"
+Histogram "OHIPS/chamber/v2/Efficiency"
+
+zone 2 5 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS Chamber"
+Histogram "OHIPS/chamber/x (disp.)"
+Histogram "OHIPS/chamber/[q] (disp.)"
+Histogram "OHIPS/chamber/y (non-disp.)"
+Histogram "OHIPS/chamber/[f] (non-disp.)"
+Gray "OHIPS/chamber/[q] vs. [f]"
+Histogram "OHIPS/chamber/sigma x"
+Histogram "OHIPS/chamber/sigma [q]"
+Histogram "OHIPS/chamber/sigma y"
+Histogram "OHIPS/chamber/sigma [f]"
+
+close

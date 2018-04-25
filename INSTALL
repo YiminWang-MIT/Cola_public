@@ -1,0 +1,182 @@
+HOW TO INSTALL THE A1 ANALYSIS SOFTWARE
+=======================================
+
+Software needed to compile this package:
+
+Compiler/Parser/Tools:
+
+        gcc/g++                 | GNU Distribution
+	f77			| Fortran compiler
+	cvs			| GNU Distribution
+        gnumake                 | GNU Distribution
+        gzip                    | GNU Distribution
+        ghostscript             | GNU Distribution
+	Motif lib + include     | MOTIF ! Buy it or try lesstif
+        X11  libraries
+	CERN libraries          | only if you want to convert to paw
+
+
+The current platform and configuration is determined by
+a configure script, created by GNU autoconf and autoheader.
+To install the complete package you have first to decide
+where you want to install this package. Recommended are
+the following directory names:
+
+~/Cola				for this directory
+/usr/local/a1			as prefix for the bin,doc,include and
+				other directories.
+/usr/local/wxwin		for the WXWin libraries
+
+!!! Attention SuSE 7.x users !!!
+cernlib, motif, and wxwin are part of the SuSE distribution
+or are available as rpm packages at
+    http://wwwa1.kph.uni-mainz.de/ftp/RPMS/i386/
+Questions? mailto:distler@kph.uni-mainz.de
+
+We usually use this directories by the group kpha1:
+mkdir /usr/local/wxwin
+mkdir /usr/local/a1
+chown root.kpha1 /usr/local/wxwin /usr/local/a1
+chmod g+w /usr/local/wxwin /usr/local/a1
+
+If you distribute your system by NFS to different architectures,
+we recommend the following links and directories (as $ARCHITECTURE 
+variable we recommend to use the result of the GNU script
+"config.guess" which is distributed with this directory or autoconf):
+
+/usr/local/a1/bin      -> /kits/A1/machines/$ARCHITECTURE/bin/
+/usr/local/a1/lib      -> /kits/A1/machines/$ARCHITECTURE/lib/
+/usr/local/a1/doc      -> /kits/A1/doc/
+/usr/local/a1/examples -> /kits/A1/examples/
+/usr/local/a1/include  -> /kits/A1/include/
+/usr/local/a1/info     -> /kits/A1/info/
+/usr/local/a1/man      -> /kits/A1/man/
+/usr/local/a1/share    -> /kits/A1/share/
+
+
+1. Getting the Source Code
+--------------------------
+
+We use a CVS server to keep the sources. Put the following two
+lines in your ~/.profile (or .bashrc or similar) to access this server:
+
+  export CVS_RSH=ssh
+  export CVSROOT=:ext:$USER@a1iserver1.kph.uni-mainz.de:/kits/A1/src/cvsroot
+
+This sets the access method to secure shell and defines the CVS path. Now
+you can get the source code:
+
+  cvs checkout wxwin
+  cvs checkout Cola
+
+this creates the subdirectories wxwin and Cola with all source files.
+
+2. Compiling and installing WXWin
+---------------------------------
+Please, check if wxwin is available for your system.
+You can save a lot of time/pain if you use our rpm's for SuSE Linux 7.x
+
+WXWin is compiled in its sourcedirectory (ugly!):
+
+  cd wxwin
+  ./configure --with-shared --with-motif=/usr/X11R6 --prefix=/usr/local/wxwin
+  make
+  make prog
+  make install
+
+If errors occur during "make prog" they can be ignored. 
+
+3. Compiling Cola
+-----------------
+Create a scratch directory for compilation. It can be deleted
+completely after this installation. Let's call it 
+"~/scratch" and the source directory (where you found this file)
+"~/Cola" in the following.
+Run the configure script IN THE SCRATCH DIRECTORY:
+
+  cd ~/scratch
+  ~/Cola/configure --enable-cola --enable-gdb
+
+This will give some information about your configuration. If 
+you have trouble with the installation you need our assistance,
+first give us the output of this script!
+
+There are some more options which you might want to use, see
+
+  ~/Cola/configure --help
+
+for a complete list. Just to mention the most important ones: 
+
+  --prefix=directory     if you need a different prefix than /usr/local/a1/ 
+  --enable-gdb           compile and link with debug option
+  --enable-shared        compile and install shared libraries
+
+Now you should have subdirectories in your scratch directory 
+containing the different Makefiles, and one Makefile in the
+scratch directory.
+
+Now be bold, try
+
+  make aux
+  make
+
+and watch the output. If there are no errors appearing, you might
+give
+  
+  make install
+
+to create the directories and install all libraries and binaries.
+If you have trouble, you can give these commands in the subdirectories,
+e.g. ~/scratch/HMBook
+
+Some checks: Do you have the following binaries?
+
+  /usr/local/a1/bin/Cindy++
+  /usr/local/a1/bin/Cola++
+  /usr/local/a1/bin/Lumi++
+  /usr/local/a1/bin/Printlog++
+  /usr/local/a1/bin/Simul++
+  /usr/local/a1/bin/hm
+  /usr/local/a1/bin/hm2hbook
+  /usr/local/a1/bin/hmcat
+  /usr/local/a1/bin/hmdir
+  /usr/local/a1/bin/hmview
+
+Do you have the following libraries (if your architecture
+supports shared libraries, the  *.so files, too)?
+
+  /usr/local/a1/lib/lib4vec.a
+  /usr/local/a1/lib/libHBook.a
+  /usr/local/a1/lib/libch++.a
+  /usr/local/a1/lib/libcindy.a
+  /usr/local/a1/lib/libhmbook.a
+  /usr/local/a1/lib/libtma.a
+
+Now set your PATH variable to
+
+  PATH=/usr/local/a1/bin:$PATH
+
+No you are finished. Most problems are solved, if you are
+able to start "hmview" you should see a window opening. 
+
+To test Cola++ (the worst of all programms, using
+all libraries), create a directory, e.g. 
+
+  mkdir ~/Colatest
+  cd ~/Colatest
+  cp ~/Cola/Cola/examples/col/*.col   ~/Colatest
+  cp ~/Cola/Cola/examples/run.db      ~/Colatest
+  cp ~/Cola/Cola/examples/hm/*.hm     ~/Colatest
+ 
+make sure you have given the path to the TMA files in the file run.db, e.g. 
+
+  A.tma.file = "/kits/A1/share/tma/qsdda495.mx4"
+  B.tma.file = "/kits/A1/share/tma/new/bclam495.mxl6"
+  C.tma.file = "/kits/A1/share/tma/qsddc360.mxl2b"
+
+now start Cola++ with a run file
+ 
+  Cola++ -f run_xxxxxxxxx
+
+
+

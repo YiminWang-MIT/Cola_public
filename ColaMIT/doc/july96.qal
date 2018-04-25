@@ -1,0 +1,1216 @@
+; QAL code for OOPS A, B, C single arm measurement
+; Last modified: JULY 27,1996
+
+        FRONTEND OOPSABC
+
+;-------- TDC FOR CHAMBERS: --------------
+
+; NUMBER A56270, ABOUT 200PS/PER CHANNEL
+
+	DEVICE A1YL,LR2228,1,16,2
+	DEVICE A1YR,LR2228,1,16,3
+	DEVICE A1XT,LR2228,1,16,0
+	DEVICE A1XB,LR2228,1,16,1
+	DEVICE A2YL,LR2228,1,16,6
+	DEVICE A2YR,LR2228,1,16,7
+	DEVICE A2XT,LR2228,1,16,4
+	DEVICE A2XB,LR2228,1,16,5
+
+; NUMBER A06793, ABOUT 200PS/PER CHANNEL
+
+	DEVICE A3YL,LR2228,1,17,2
+	DEVICE A3YR,LR2228,1,17,3
+	DEVICE A3XT,LR2228,1,17,0
+	DEVICE A3XB,LR2228,1,17,1
+                 
+	DEVICE B1YL,LR2228,1,17,6
+	DEVICE B1YR,LR2228,1,17,7
+	DEVICE B1XT,LR2228,1,17,4
+	DEVICE B1XB,LR2228,1,17,5
+
+; NUMBER A06799, ABOUT 200PS/PER CHANNEL
+
+	DEVICE B2YL,LR2228,1,18,2
+	DEVICE B2YR,LR2228,1,18,3
+	DEVICE B2XT,LR2228,1,18,0
+	DEVICE B2XB,LR2228,1,18,1
+	DEVICE B3YL,LR2228,1,18,6
+	DEVICE B3YR,LR2228,1,18,7
+	DEVICE B3XT,LR2228,1,18,4
+	DEVICE B3XB,LR2228,1,18,5
+
+; NUMBER 12611, 
+
+      DEVICE C1XT,PH7186,1,8,0
+      DEVICE C1XB,PH7186,1,8,1
+      DEVICE C1YL,PH7186,1,8,2
+      DEVICE C1YR,PH7186,1,8,3
+      DEVICE C2XT,PH7186,1,8,4
+      DEVICE C2XB,PH7186,1,8,5
+      DEVICE C2YL,PH7186,1,8,6
+      DEVICE C2YR,PH7186,1,8,7
+      DEVICE C3XT,PH7186,1,8,8
+      DEVICE C3XB,PH7186,1,8,9
+      DEVICE C3YL,PH7186,1,8,10
+      DEVICE C3YR,PH7186,1,8,11
+
+; ---------TDC FOR SCINTILLATORS: ---------------
+
+; NUMBER A06785, ABOUT 100PS/PER CHANNEL
+
+	DEVICE AT1L,LR2228,1,14,0  
+	DEVICE AT1R,LR2228,1,14,1   
+	DEVICE AT2L,LR2228,1,14,2   
+	DEVICE AT2R,LR2228,1,14,3   
+	DEVICE AT3L,LR2228,1,14,4   
+	DEVICE AT3R,LR2228,1,14,5   
+ 	DEVICE ATLL,LR2228,1,14,6 
+	DEVICE ATRL,LR2228,1,14,7   
+
+; NUMBER AO6784, ABOUT 100PS/PER CHANNEL
+
+ 	DEVICE BT1L,LR2228,1,15,0 
+	DEVICE BT1R,LR2228,1,15,1 
+	DEVICE BT2L,LR2228,1,15,2   
+	DEVICE BT2R,LR2228,1,15,3   
+	DEVICE BT3L,LR2228,1,15,4   
+	DEVICE BT3R,LR2228,1,15,5   
+ 	DEVICE BTLL,LR2228,1,15,6   
+	DEVICE BTRL,LR2228,1,15,7
+
+; NUMBER 12220,
+   
+      DEVICE CT1L,PH7186,1,9,0
+      DEVICE CT1R,PH7186,1,9,1
+      DEVICE CT2L,PH7186,1,9,2
+      DEVICE CT2R,PH7186,1,9,3
+      DEVICE CT3L,PH7186,1,9,4
+      DEVICE CT3R,PH7186,1,9,5
+      DEVICE CTLL,PH7186,1,9,6
+      DEVICE CTRL,PH7186,1,9,7
+
+; ---------- ADC FOR SCIN.--------------:
+
+; ADC FOR OOPS A
+; NUMBER 10358
+
+	DEVICE AA1L,PH7166,2,10,0  
+	DEVICE AA1R,PH7166,2,10,1
+	DEVICE AA2L,PH7166,2,10,2
+	DEVICE AA2R,PH7166,2,10,3
+	DEVICE AA3L,PH7166,2,10,4
+	DEVICE AA3R,PH7166,2,10,5
+
+;     ADC FOR OOPS B
+      DEVICE BA1L,PH7166,2,10,8
+      DEVICE BA1R,PH7166,2,10,9
+      DEVICE BA2L,PH7166,2,10,10
+      DEVICE BA2R,PH7166,2,10,11
+      DEVICE BA3L,PH7166,2,10,12
+      DEVICE BA3R,PH7166,2,10,13
+
+
+;     ADC FOR OOPS C
+      DEVICE CA1L,PH7166,2,9,0
+      DEVICE CA1R,PH7166,2,9,1
+      DEVICE CA2L,PH7166,2,9,2
+      DEVICE CA2R,PH7166,2,9,3
+      DEVICE CA3L,PH7166,2,9,4
+      DEVICE CA3R,PH7166,2,9,5 
+
+; ------------ ADC FOR HDC'S O-E: ----------------
+
+; NUMBER 10347
+
+	DEVICE A1YO,PH7166,2,12,1
+	DEVICE A1XO,PH7166,2,12,0
+	DEVICE A2YO,PH7166,2,12,3
+	DEVICE A2XO,PH7166,2,12,2
+	DEVICE A3YO,PH7166,2,12,5
+	DEVICE A3XO,PH7166,2,12,4
+
+	DEVICE B1YO,PH7166,2,12,15
+	DEVICE B1XO,PH7166,2,12,6
+	DEVICE B2YO,PH7166,2,12,9
+	DEVICE B2XO,PH7166,2,12,8
+	DEVICE B3YO,PH7166,2,12,11
+	DEVICE B3XO,PH7166,2,12,10
+
+      DEVICE C1YO,LR2248,2,16,1
+      DEVICE C1XO,LR2248,2,16,0
+      DEVICE C2YO,LR2248,2,16,3
+      DEVICE C2XO,LR2248,2,16,2
+      DEVICE C3YO,LR2248,2,16,5
+      DEVICE C3XO,LR2248,2,16,4
+
+; ------------ BEAM INFO FOR EVENT 8 ----------------
+
+	DEVICE  HEL8,     SE0604, 3,23,0	; Copy for Helicity & control signals
+
+;--------------- EVENT 5 SCALER -----------------
+
+      DEVICE BT3BIC,      KS3615, 4, 18, 0 ; Total Charge (BT3 BIC) 
+
+;---------------------------------------------------
+;  event 10 stuff (B-line Moller)
+;---------------------------------------------------
+;
+;   Helicity word bits:
+;
+;      0   HEL-
+;      1   HEL+
+;      2   GUN   for pedestal identification
+;      3   NEW   new as opposed to complement helicity word
+;
+	DEVICE	HALO1,  LR2249, 3,4,0	; Moller Halo monitor
+	DEVICE  HALO2,  LR2249, 3,4,1	; Target Halo monitor 
+
+;	DEVICE	EVPSN0,  LR4208, 3,9,0  ; Ev. Position TDC ch 0 
+;	DEVICE	EVPSN1,  LR4208, 3,9,1  ; Ev. Position TDC ch 1
+;	DEVICE	EVPSN2,  LR4208, 3,9,2  ; Ev. Position TDC ch 2
+;	DEVICE	EVPSN3,  LR4208, 3,9,3  ; Ev. Position TDC ch 3
+;	DEVICE	EVPSN4,  LR4208, 3,9,4  ; Ev. Position TDC ch 4
+;	DEVICE	EVPSN5,  LR4208, 3,9,5  ; Ev. Position TDC ch 5
+;	DEVICE	EVPSN6,  LR4208, 3,9,6  ; Ev. Position TDC ch 6
+;	DEVICE	EVPSN7,  LR4208, 3,9,7  ; Ev. Position TDC ch 7
+
+	DEVICE  TIMSL,   KS3615, 3,16,0	; Timeslot scaler
+;	DEVICE  NIMOUT,  BI3251, 3,17,0 ; Output register
+	DEVICE  HEL,     SE0604, 3,11,0	; Helicity & control signals
+
+	DEVICE  IC1,    YA0344, 3,13,0	; Cerenkov 1 (unused)
+	DEVICE  IC2,    YA0344, 3,13,1	; Cerenkov 2 (unused)
+	DEVICE  BT1,    YA0344, 3,13,2	; Toroid 1
+	DEVICE  BT2,    YA0344, 3,13,3	; Toroid 2
+
+	DEVICE  MOLX,   YA0344, 3,15,0	; Position monitor 1 X
+	DEVICE  MOLY,   YA0344, 3,15,1	; Position monitor 1 Y
+	DEVICE  TGTX,   YA0344, 3,15,2	; Position monitor 2 X
+	DEVICE  TGTY,   YA0344, 3,15,3	; Position monitor 2 Y
+;
+;
+
+;---------------------------------------------------
+;       Event specification for event 3
+;---------------------------------------------------
+
+	SPECIFY EVENT 3
+
+; Using fast clear to clear all scalers
+; Output register 5
+
+        TFCNA 4,16,1,23,0,20,0
+
+; Using fast clear to clear all tdc and adc module
+; Output register 6
+
+        TFCNA 4,16,1,23,0,40,0
+
+      ELAM A1XT
+      ELAM B1XT
+      ELAM C1XT
+
+;---------------------------------------------------
+;  moller crate
+;---------------------------------------------------
+ 
+	CL   TIMSL		; Clear scalers
+
+	ELAM HEL		; enable LAMS OF INPUT REG.
+
+	CL   IC1
+	CL   MOLX
+	CL   HALO1
+	ELAM IC1
+	ELAM MOLX
+	ELAM HALO1
+
+;	CL   BTWVFM		; Clear Beam Toriod WaVeForM digitizer
+
+;	CL   EVPSN0		; Clear event position tdc
+
+	FLUSH
+	PROCESS EVENT 3
+	END EVENT 3
+
+
+; *************************************************************************
+;
+;--------------------------------------------------
+;        Event specification for event 5: Read Scalers
+;--------------------------------------------------
+
+	SPECIFY EVENT 5
+
+      RC24 BT3BIC          ; (Scaler 1)
+
+; Turn on hardware inhibit: output register 3
+
+        TFCNA 4,16,1,23,0,4,0
+
+; Read and Clear all 32 Channels of Phillips 7132: 
+; Crate 2, Slot 1 (24 bit data)
+; Total scalers: 32
+
+	TFCNA 4,17,2,1,1,0,0	
+	TFCNA 2,2,2,1,0          ; Chan 00 = OOPS A S1L (Scaler 2)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,1          ; Chan 01 = OOPS A S1R (Scaler 3)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,2          ; Chan 02 = OOPS A S2L (Scaler 4)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,3          ; Chan 03 = OOPS A S2R (Scaler 5)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,4          ; Chan 04 = OOPS A S3L (Scaler 6)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,5          ; Chan 05 = OOPS A S3R (Scaler 7)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,6          ; Chan 06 = OOPS A S2LL (Scaler 8)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,7          ; Chan 07 = OOPS A S2RL (Scaler 9)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,8          ; Chan 08 = OOPS A S1L&S1R (Scaler 10)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,9          ; Chan 09 = OOPS A S2L&S2R (Scaler 11)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,10         ; Chan 10 = OOPS A S3L&S3R (Scaler 12)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,11         ; Chan 11 = OOPS A SINGLE RATE (Scaler 13)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,12         ; Chan 12 = OOPS SINGLE OR (Scaler 14)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,13         ; Chan 13 = OOPS RETIMING OR (Scaler 15)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,14         ; Chan 14 = OOPS SINGLE + CONINCIDENCE 
+                               ;           (Scaler 16)
+	TFCNA 4,17,2,1,1,0,0
+	TFCNA 2,2,2,1,15         ; Chan 15 = COMPUTER BUSY (Scaler 17)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,0          ; Chan 16 = OOPS B S1L (Scaler 18)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,1          ; Chan 17 = OOPS B S1R (Scaler 19)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,2          ; Chan 18 = OOPS B S2L (Scaler 20)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,3          ; Chan 19 = OOPS B S2R (Scaler 21)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,4          ; Chan 20 = OOPS B S3L (Scaler 22)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,5          ; Chan 21 = OOPS B S3R (Scaler 23)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,6          ; Chan 22 = OOPS B S2LL (Scaler 24)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,7          ; Chan 23 = OOPS B S2RL (Scaler 25)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,8          ; Chan 24 = OOPS B S1L&S1R (Scaler 26)
+      TFCNA 4,17,2,1,1,1,0
+ 	TFCNA 2,2,2,1,9          ; Chan 25 = OOPS B S2L&S2R (Scaler 27)
+      TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,10         ; Chan 26 = OOPS B S3L&S3R (Scaler 28)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,11         ; Chan 27 = OOPS B SINGLE RATE (Scaler 29)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,12         ; Chan 28 = EVENT 5 (Scaler 30) 
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,13         ; Chan 29 = UNUSED (Scaler 31)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,14         ; Chan 30 = 10 HZ CLOCK (Scaler 32)
+	TFCNA 4,17,2,1,1,1,0
+	TFCNA 2,2,2,1,15         ; Chan 31 = OOPS FINAL TRIGGER (Scaler 33)
+
+
+; Read all 12 Channels of LeCroy 2551: 
+; Crate 2, Slot 3 
+; Total scalers: 44
+	TFCNA 2,0,2,3,0          ; Chan 00 = OOPS C S1L (Scaler 34)
+	TFCNA 2,0,2,3,1          ; Chan 01 = OOPS C S1R (Scaler 35)
+	TFCNA 2,0,2,3,2          ; Chan 02 = OOPS C S2L (Scaler 36)
+	TFCNA 2,0,2,3,3          ; Chan 03 = OOPS C S2R (Scaler 37)
+	TFCNA 2,0,2,3,4          ; Chan 04 = OOPS C S3L (Scaler 38)
+	TFCNA 2,0,2,3,5          ; Chan 05 = OOPS C S3R (Scaler 39)
+	TFCNA 2,0,2,3,6          ; Chan 06 = OOPS C S2LL (Scaler 40)
+	TFCNA 2,0,2,3,7          ; Chan 07 = OOPS C S2LR (Scaler 41)
+	TFCNA 2,0,2,3,8          ; Chan 08 = OOPS C S1L&S1R (Scaler 42)
+	TFCNA 2,0,2,3,9          ; Chan 09 = OOPS C S2L&S2R (Scaler 43)
+	TFCNA 2,0,2,3,10         ; Chan 10 = OOPS C S3L&S3R (Scaler 44)
+	TFCNA 2,0,2,3,11         ; Chan 11 = OOPS C SINGLE (Scaler 45)
+
+; Read all 12 Channels of LeCroy 2551: 
+; Crate 2, Slot 18 
+; Total scales: 56
+
+	TFCNA 2,0,2,18,0          ; Chan 00 = OOPS A (1&2&3) (Scaler 46) 
+	TFCNA 2,0,2,18,1          ; Chan 01 = OOPS A (1&2) (Scaler 47)
+	TFCNA 2,0,2,18,2          ; Chan 02 = OOPS B (1&2&3) (Scaler 48)
+	TFCNA 2,0,2,18,3          ; Chan 03 = OOPS B (1&2) (Scaler 49)
+	TFCNA 2,0,2,18,4          ; Chan 04 = OOPS C (1&2&3) (Scaler 50)
+	TFCNA 2,0,2,18,5          ; Chan 05 = OOPS C (1&2) (Scaler 51)
+	TFCNA 2,0,2,18,6          ; Chan 06 = (Scaler 52)
+	TFCNA 2,0,2,18,7          ; Chan 07 = (Scaler 53)
+	TFCNA 2,0,2,18,8          ; Chan 08 = (Scaler 54)
+	TFCNA 2,0,2,18,9          ; Chan 09 = (Scaler 55)
+	TFCNA 2,0,2,18,10         ; Chan 10 = (Scaler 56)
+	TFCNA 2,0,2,18,11         ; Chan 11 = (Scaler 57)
+
+
+;; Read and Clear all 32 Channels of Phillips 7132: 
+; Crate 2, Slot 5 (24 bit data)
+; Total scalers: 88
+
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,0          ; Chan 00 = OOPS A 1XT (Scaler 57
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,1          ; Chan 01 = OOPS A 1XB (Scaler 58
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,2          ; Chan 02 = OOPS A 1YL (Scaler 59
+;	TFCNA 4,17,2,5,1,0,0 
+;	TFCNA 2,2,2,5,3          ; Chan 03 = OOPS A 1YR (Scaler 60
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,4          ; Chan 04 = OOPS A 2XT (Scaler 61
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,5          ; Chan 05 = OOPS A 2XB (Scaler 62
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,6          ; Chan 06 = OOPS A 2YL (Scaler 63
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,7          ; Chan 07 = OOPS A 2YR (Scaler 64
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,8          ; Chan 08 = OOPS A 3XT (Scaler 65
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,9          ; Chan 09 = OOPS A 3XB (Scaler 66
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,10         ; Chan 10 = OOPS A 3YL (Scaler 67
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,11         ; Chan 11 = OOPS A 3YR (Scaler 68
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,12         ; Chan 12 = UNUSED (Scaler 69
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,13         ; Chan 13 = UNUSED (Scaler 70
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,14         ; Chan 14 = UNUSED (Scaler 71
+;	TFCNA 4,17,2,5,1,0,0
+;	TFCNA 2,2,2,5,15         ; Chan 15 = UNUSED (Scaler 72
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,0          ; Chan 16 = OOPS B 1XT (Scaler 73 
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,1          ; Chan 17 = OOPS B 1XB (Scaler 74
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,2          ; Chan 18 = OOPS B 1YL (Scaler 75
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,3          ; Chan 19 = OOPS B 1YR (Scaler 76
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,4          ; Chan 20 = OOPS B 2XT (Scaler 77
+;	TFCNA 4,17,2,5,1,1,0 
+;	TFCNA 2,2,2,5,5          ; Chan 21 = OOPS B 2XB (Scaler 78
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,6          ; Chan 22 = OOPS B 2YL (Scaler 79
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,7          ; Chan 23 = OOPS B 2YR (Scaler 80
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,8          ; Chan 24 = OOPS B 3XT (Scaler 81
+;	TFCNA 4,17,2,5,1,1,0
+;     TFCNA 2,2,2,5,9          ; Chan 25 = OOPS B 3XB (Scaler 82
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,10         ; Chan 26 = OOPS B 3YL (Scaler 83
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,11         ; Chan 27 = OOPS B 3YR (Scaler 84
+;	TFCNA 4,17,2,5,1,1,0 
+;	TFCNA 2,2,2,5,12         ; Chan 28 = UNUSED (Scaler 85
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,13         ; Chan 29 = UNUSED (Scaler 86
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,14         ; Chan 30 = UNUSED (Scaler 87
+;	TFCNA 4,17,2,5,1,1,0
+;	TFCNA 2,2,2,5,15         ; Chan 31 = UNUSED (Scaler 88
+;
+
+; Read all 12 Channels of LeCroy 2551: 
+; Crate 2, Slot 7
+; Total scalers: 68
+
+	TFCNA 2,0,2,7,0          ; Chan 00 = OOPS A 1XT (Scaler 58 )
+	TFCNA 2,0,2,7,1          ; Chan 01 = OOPS A 1XB (Scaler 59 )
+	TFCNA 2,0,2,7,2          ; Chan 02 = OOPS A 1YL (Scaler 60 )
+	TFCNA 2,0,2,7,3          ; Chan 03 = OOPS A 1YR (Scaler 61 )
+	TFCNA 2,0,2,7,4          ; Chan 04 = OOPS A 2XT (Scaler 62 )
+	TFCNA 2,0,2,7,5          ; Chan 05 = OOPS A 2XB (Scaler 63 )
+	TFCNA 2,0,2,7,6          ; Chan 06 = OOPS A 2YL (Scaler 64 )
+	TFCNA 2,0,2,7,7          ; Chan 07 = OOPS A 2YR (Scaler 65 )
+	TFCNA 2,0,2,7,8          ; Chan 08 = OOPS A 3XT (Scaler 66 )
+	TFCNA 2,0,2,7,9          ; Chan 09 = OOPS A 3XB (Scaler 67 )
+	TFCNA 2,0,2,7,10         ; Chan 10 = OOPS A 3YL (Scaler 68 )
+	TFCNA 2,0,2,7,11         ; Chan 11 = OOPS A 3YR (Scaler 69 )
+
+; Read all 12 Channels of LeCroy 2551: 
+; Crate 2, Slot 6
+; Total scalers: 80
+
+	TFCNA 2,0,2,6,0          ; Chan 00 = OOPS B 1XT (Scaler 70 )
+	TFCNA 2,0,2,6,1          ; Chan 01 = OOPS B 1XB (Scaler 71 )
+	TFCNA 2,0,2,6,2          ; Chan 02 = OOPS B 1YL (Scaler 72 )
+	TFCNA 2,0,2,6,3          ; Chan 03 = OOPS B 1YR (Scaler 73 )
+	TFCNA 2,0,2,6,4          ; Chan 04 = OOPS B 2XT (Scaler 74 )
+	TFCNA 2,0,2,6,5          ; Chan 05 = OOPS B 2XB (Scaler 75 )
+	TFCNA 2,0,2,6,6          ; Chan 06 = OOPS B 2YL (Scaler 76 )
+	TFCNA 2,0,2,6,7          ; Chan 07 = OOPS B 2YR (Scaler 77 )
+	TFCNA 2,0,2,6,8          ; Chan 08 = OOPS B 3XT (Scaler 78 )
+	TFCNA 2,0,2,6,9          ; Chan 09 = OOPS B 3XB (Scaler 79 )
+	TFCNA 2,0,2,6,10         ; Chan 10 = OOPS B 3YL (Scaler 80 )
+	TFCNA 2,0,2,6,11         ; Chan 11 = OOPS B 3YR (Scaler 81 )
+
+; Read all 12 Channels of LeCroy 2551: 
+; Crate 2, Slot 2 
+; Total scalers: 92
+
+	TFCNA 2,0,2,2,0          ; Chan 00 = OOPS C 1XT (Scaler 82 )
+	TFCNA 2,0,2,2,1          ; Chan 01 = OOPS C 1XB (Scaler 83 )
+	TFCNA 2,0,2,2,2          ; Chan 02 = OOPS C 1YL (Scaler 84 )
+	TFCNA 2,0,2,2,3          ; Chan 03 = OOPS C 1YR (Scaler 85 )
+	TFCNA 2,0,2,2,4          ; Chan 04 = OOPS C 2XT (Scaler 86 )
+	TFCNA 2,0,2,2,5          ; Chan 05 = OOPS C 2XB (Scaler 87 )
+	TFCNA 2,0,2,2,6          ; Chan 06 = OOPS C 2YL (Scaler 88 )
+	TFCNA 2,0,2,2,7          ; Chan 07 = OOPS C 2YR (Scaler 89 )
+	TFCNA 2,0,2,2,8          ; Chan 08 = OOPS C 3XT (Scaler 90 )
+	TFCNA 2,0,2,2,9          ; Chan 09 = OOPS C 3XB (Scaler 91 )
+	TFCNA 2,0,2,2,10         ; Chan 10 = OOPS C 3YL (Scaler 92 )
+	TFCNA 2,0,2,2,11         ; Chan 11 = OOPS C 3YR (Scaler 93 )
+
+; Read all 32 Channels of LECROY 4434: Crate 1, Slot 5 (24 bit data)
+
+;	TFCNA 4,16,1,5,0,17640,0
+;	TFCNA 2,2,1,5,0          ; Chan 00 = OOPS C 1XT (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 01 = OOPS C 1XB (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 02 = OOPS C 1YL (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 03 = OOPS C 1YR (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 04 = OOPS C 2XT (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 05 = OOPS C 2XB (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 06 = OOPS C 2YL (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 07 = OOPS C 2YR (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 08 = OOPS C 3XT (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 09 = OOPS C 3XB (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 10 = OOPS C 3YL (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 11 = OOPS C 3YR (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 12 = (Scaler 
+;     TFCNA 2,2,1,5,0          ; Chan 13 = (Scaler 
+;     TFCNA 2,2,1,5,0          ; Chan 14 = (Scaler 
+;     TFCNA 2,2,1,5,0          ; Chan 15 = (Scaler 
+;     TFCNA 2,2,1,5,0          ; Chan 16 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 17 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 18 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 19 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 20 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 21 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 22 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 23 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 24 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 25 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 26 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 27 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 28 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 29 = (Scaler 
+;	TFCNA 2,2,1,5,0          ; Chan 30 = (Scaler 
+;     TFCNA 2,2,1,5,0          ; Chan 31 = (Scaler 
+
+; Read and Clear all 32 Channels of Phillips 7132H: 
+; Crate 2, Slot 18 (24 bit data)
+
+;	TFCNA 4,17,2,18,1,0,0	
+;	TFCNA 2,2,2,18,0          ; Chan 00 = OOPS A (1&2&3) (Scaler 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,1          ; Chan 01 = OOPS A (1&2) (Scaler 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,2          ; Chan 02 = OOPS B (1&2&3) (Scaler 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,3          ; Chan 03 = OOPS B (1&2) (Scaler 
+;	TFCNA 4,17,2,18,1,0,0 
+;	TFCNA 2,2,2,18,4          ; Chan 04 = OOPS C (1&2&3) (Scaler 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,5          ; Chan 05 = OOPS C (1&2) (Scaler 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,6          ; Chan 06 = 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,7          ; Chan 07 = 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,8          ; Chan 08 = 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,9          ; Chan 09 = 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,10         ; Chan 10 = 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,11         ; Chan 11 = 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,12         ; Chan 12 = 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,13         ; Chan 13 = 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,14         ; Chan 14 = 
+;	TFCNA 4,17,2,18,1,0,0
+;	TFCNA 2,2,2,18,15         ; Chan 15 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,0          ; Chan 16 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,1          ; Chan 17 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,2          ; Chan 18 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,3          ; Chan 19 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,4          ; Chan 20 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,5          ; Chan 21 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,6          ; Chan 22 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,7          ; Chan 23 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,8          ; Chan 24 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,9          ; Chan 25 = 
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,10         ; Chan 26 =
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,11         ; Chan 27 =
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,12         ; Chan 28 =
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,13         ; Chan 29 =
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,14         ; Chan 30 =
+;	TFCNA 4,17,2,18,1,1,0
+;	TFCNA 2,2,2,18,15         ; Chan 31 = 
+;
+
+; Using fast clear to clear all scalers
+; Output register 5
+
+        TFCNA 4,16,1,23,0,20,0
+
+; Turn off inhibit: output register 4
+
+      TFCNA 4,16,1,23,0,10,0
+
+	FLUSH
+	PROCESS EVENT 5
+	END EVENT 5
+
+
+;***************************************************************************
+;
+;--------------------------------------------------
+;        Event specification for event 8
+;--------------------------------------------------
+; Notes on timing:
+;
+;  There should be 1.6 msec between beam bursts.
+;  According to Karen Dow:
+;  Each R16 takes approx. 16 micro-sec to process, including transfer time
+;  from MBD to VAX.
+;  Each CAMAC operation takes approx. 1 micro-sec to process for 300 ft
+;  cable.
+;  According to manual:
+;  Minimum time for each QAL operations (excluding transfer time from MBD 
+;  to VAX) takes around 1 to 3 micro-sec. 
+;
+;  Hence, even when no operations is required at all, one can only read less   
+;  than 100 words between beam bursts.
+  
+
+        SPECIFY EVENT 8 
+
+; The Latch word should be of the following structure:
+;
+;                     N M L K J I O D C B A                                     
+;           - - - - - - - - - - - - - - - -
+;           16                  6         1  
+;
+; where
+;       A - OOPS A fires    
+;       B - OOPS B fires    
+;       C - OOPS C fires    
+;       (D - OOPS D fires) -- not implemented
+;       O - OHIPS fires
+;       I - Coincidence flag
+;       J - OOPS A single flag
+;       K - OOPS B single flag
+;       L - OOPS C single flag
+;       (M - OOPS D single flag) -- not implemented
+;       N - OHIPS single flag
+
+;--------------------------------------------------------------------------
+;    Read The Latch 
+;--------------------------------------------------------------------------
+; Read the Latch
+      TFCNA 1,0,1,4,1
+
+;--------------------------------------------------------------------------
+;    Decide Which Detectors Fire
+;--------------------------------------------------------------------------
+
+; Test OOPS A
+        TBITLO 1
+        IF NONZERO BRANCH AF ; OOPS A fired
+; OOPS A not fired, Test OOPS B
+        TBITLO 2
+        IF NONZERO BRANCH BFA ; OOPS B fired
+; OOPS A, OOPS B not fired, Test OOPS C
+        TBITLO 4
+        IF NONZERO BRANCH CFAB ; OOPS C fired
+; OOPS A, OOPS B, and OOPS C not fired, test OHIPS
+        TBITLO 20
+        IF NONZERO BRANCH OFABC ; Only Ohips fired  
+; None of the detectors fired
+        BRANCH JUNK          ; Junk event
+
+;*** OOPS A FIRES
+AF:
+
+; Test OOPS B
+        TBITLO 2
+        IF NONZERO BRANCH ABF ; OOPS A and B fired
+; OOPS B not fired, Test OOPS C
+        TBITLO 4
+        IF NONZERO BRANCH ACFB  ; OOPS A and C fired; OOPS B did not fired
+;OOPS C not fired, Test OHIPS
+        TBITLO 20 
+        IF NONZERO BRANCH AOFBC  ; OOPS A and Ohips fired; OOPS B,C did not
+                                 ; fired  
+        BRANCH AFBCO              ; only A fired
+
+;***  OOPS A AND OOPS B FIRED
+ABF:
+
+; Test OOPS C
+        TBITLO 4
+        IF NONZERO BRANCH ABCF ; OOPS A, B and C fired
+; Test OHIPS
+        TBITLO 20
+        IF NONZERO BRANCH ABOFC ; OOPS A,B and Ohips fired; OOPS C did not
+                                ; fired 
+        BRANCH ABFCO            ; only OOPS A, B fired
+
+;***  OOPS A, OOPS B AND OOPS C FIRED
+ABCF:
+
+; Test OHIPS
+        TBITLO 20
+        IF NONZERO BRANCH ABCOF ; OOPS A,B,C and Ohips fired
+        BRANCH ABCFO            ; only OOPS A, B, and C fired
+
+;***  OOPS A AND OOPS C FIRED
+ACFB:
+
+; Test OHIPS
+        TBITLO 20
+        IF NONZERO BRANCH ACOFB ; OOPS A,B and Ohips fired; OOPS C did not
+                                ; fired 
+        BRANCH ACFBO            ; only OOPS A, B fired
+
+;***  OOPS B  FIRED
+BFA:
+; Test OOPS C
+        TBITLO 4
+        IF NONZERO BRANCH BCFA ; OOPS B and C fired; OOPS A did not fired
+; Test OHIPS
+        TBITLO 20
+        IF NONZERO BRANCH BOFAC ; OOPS B and Ohips fired; OOPS C did not
+                                ; fired 
+        BRANCH BFACO            ; only OOPS B fired
+
+;***  OOPS B and OOPS C  FIRED
+BCFA:
+; Test OHIPS
+        TBITLO 20
+        IF NONZERO BRANCH BCOFA ; OOPS B, C, and Ohips fired; OOPS A did not
+                                ; fired 
+        BRANCH BCFAO            ; only OOPS B fired
+
+
+
+;***  OOPS C FIRED (OOPS A, B NOT FIRED)
+CFAB:
+
+; Test OHIPS
+        TBITLO 20
+        IF NONZERO BRANCH COFAB ; OOPS C and Ohips fired
+        BRANCH CFABO            ; only OOPS C fired
+
+;--------------------------------------------------------------------------
+; Begin Reading Detectors That Fired
+;--------------------------------------------------------------------------
+; Raw data structure:
+;       Latch word
+;       Data Type Flag
+;       [OOPS A]
+;       [OOPS B]
+;       [OOPS C]
+;       [OHIPS]
+;       misc. TDC
+;
+;     -- [] indicates data may or may not be present depending on the
+;        type of data
+;
+; Data Type Flag:
+;    Decimal 	Octal
+;      -1    	177777 	Junk event
+;       1            1  OOPS A and OHIPS coinc
+;       2            2  OOPS B and OHIPS coinc
+;       3            3  OOPS C and OHIPS coinc
+;       4            4  NOT USED (reserved for OOPS D and OHIPS coinc)
+;       5            5  OOPS A single arm
+;       6            6  OOPS B single arm
+;       7            7  OOPS C single arm
+;       8           10  NOT USED (reserved for OOPS D single arm)
+;       9           11  OHIPS single arm
+;      10           12  OOPS A, B and OHIPS coinc
+;      11           13  OOPS A, C and OHIPS coinc
+;      12           14  NOT USED (reserved for OOPS A, D and OHIPS coinc)
+;      13           15  OOPS B, C and OHIPS coinc
+;      14           16  NOT USED (reserved for OOPS B, D and OHIPS coinc)
+;      15           17  NOT USED (reserved for OOPS C, D and OHIPS coinc)
+;      16           20  OOPS A, B, C and OHIPS coinc
+;      17           21  NOT USED (reserved for OOPS A, B, D and OHIPS coinc)
+;      18           22  NOT USED (reserved for OOPS A, C, D and OHIPS coinc)
+;      19           23  NOT USED (reserved for OOPS B, C, D and OHIPS coinc)
+;      20           24  NOT USED (reserved for OOPS A, B, C, D and OHIPS coinc)
+;      21           25  OOPS A, B single arm
+;      22           26  OOPS A, C single arm
+;      23           27  NOT USED (reserved for OOPS A, D single arm)
+;      24           30  OOPS B, C single arm
+;      25           31  NOT USED (reserved for OOPS B, D single arm)
+;      26           32  NOT USED (reserved for OOPS C, D single arm)
+;      27           33  OOPS A, B, C single arm
+;      28           34  NOT USED (reserved for OOPS A, B, D single arm)
+;      29           35  NOT USED (reserved for OOPS A, C, D single arm)
+;      30           36  NOT USED (reserved for OOPS B, C, D single arm)
+;      31           37  NOT USED (reserved for OOPS A, B, C, D single arm)
+
+;*** COINC: OOPS A  
+AOFBC:
+
+        FLAG 1 ; Flag = 1 (decimal)
+        JCB READA
+        JCB READO
+        JCB READCOIN
+        BRANCH DONE
+
+;*** COINC: OOPS A, B  
+ABOFC:
+
+        FLAG 12 ; Flag = 10 (decimal)
+        JCB READA
+        JCB READB
+        JCB READO
+        JCB READCOIN
+        BRANCH DONE
+
+;*** COINC: OOPS A, C  
+ACOFB:
+
+        FLAG 13 ; Flag = 11 (decimal) 
+        JCB READA
+        JCB READC
+        JCB READO
+        JCB READCOIN
+        BRANCH DONE
+
+;*** COINC: OOPS A, B, C  
+ABCOF:
+
+        FLAG 20 ; Flag = 16 (decimal)
+        JCB READA
+        JCB READB
+        JCB READC
+        JCB READO
+        JCB READCOIN
+        BRANCH DONE
+
+;*** COINC: OOPS B  
+BOFAC:
+
+        FLAG 2  ; Flag = 2 (decimal)
+        JCB READB
+        JCB READO
+        JCB READCOIN
+        BRANCH DONE
+
+;*** COINC: OOPS B,C  
+BCOFA:
+
+        FLAG 15 ; Flag = 13 (decimal)
+        JCB READB
+        JCB READC
+        JCB READO
+        JCB READCOIN
+        BRANCH DONE
+
+;*** COINC: OOPS C  
+COFAB:
+
+        FLAG 3  ; Flag = 3 (decimal)
+        JCB READC
+        JCB READO
+        JCB READCOIN
+        BRANCH DONE
+
+;*** SINGLE ARM: OOPS A
+AFBCO:    
+
+        FLAG 5  ; Flag = 5 (decimal)
+        JCB READA
+        BRANCH DONE
+
+;*** SINGLE ARM: OOPS A,B
+ABFCO:    
+
+        FLAG 25 ; Flag = 21 (decimal)  
+        JCB READA
+        JCB READB
+        BRANCH DONE
+                                 
+
+;*** SINGLE ARM: OOPS A,B,C
+ABCFO:    
+
+        FLAG 33 ; Flag = 27 (decimal)
+        JCB READA
+        JCB READB
+        JCB READC
+        BRANCH DONE
+
+;*** SINGLE ARM: OOPS A,C
+ACFBO:    
+
+        FLAG 26 ; Flag = 22 (decimal)  
+        JCB READA
+        JCB READC
+        BRANCH DONE
+
+;*** SINGLE ARM: OOPS B
+BFACO:    
+
+        FLAG 6  ; Flag = 6 (decimal)
+        JCB READB
+        BRANCH DONE
+
+;*** SINGLE ARM: OOPS B,C
+BCFAO:    
+
+        FLAG 30 ; Flag = 24 (decimal)
+        JCB READB
+        JCB READC
+        BRANCH DONE
+
+;*** SINGLE ARM: OOPS C
+CFABO:    
+
+        FLAG 7  ; Flag = 7 (decimal)
+        JCB READC
+        BRANCH DONE
+
+;-------------------------------------------------------------------------
+; *** OHIPS SINGLE ARM
+OFABC:
+
+        FLAG 11 ; Flag = 9 (decimal)
+        JCB READO ; Read Ohips
+        BRANCH DONE
+
+;-------------------------------------------------------------------------
+;*** JUNK EVENT
+JUNK:
+
+        FLAG 177777     ; Flag -1 indicates junk event
+        BRANCH DONE
+
+;-------------------------------------------------------------------------
+; Done Reading Ohips, Oops, Begin Reading The Rest, and clear all modules
+;-------------------------------------------------------------------------
+DONE:
+
+; Comment out the following so that for this version, we will have only
+; OOPS data.
+; Should begin reading other misc info
+        RC16 HEL8
+        FLAG 7
+        FLAG 7
+        FLAG 7
+        FLAG 106   ; Flag = 70, end of other misc info
+
+; Begin clearing all modules here
+
+; Using fast clear to clear all tdc and adc module
+; Output register 6
+
+        TFCNA 4,16,1,23,0,40,0
+
+; Clear LAM
+         CLAM A1XT
+         CLAM B1XT
+         CLAM C1XT
+;         CLAM B1YO
+;        CLAM AA1L
+;        CLAM BA1L
+;        CLAM CA1L
+
+; For some MBDs, DUMP will cause the CAMAC/MBD to hang. The reason behind is
+; unknown. If this happens, use FLUSH (which will take much longer for 
+; data taking), or use another MBD.
+;        FLUSH
+         DUMP
+        END EVENT 8
+
+;*****************************************************************************
+; BEGIN READING OOPS A
+CB READA
+
+; Word (16-bit) count for each OOPS:
+;   1 word for   FLAG indicating whether LAM is good or bad
+;   6 words for scintillator ADCs
+;   6 words for drift chamber odd minus even signals
+;   8 words for scintillator TDCs
+;  12 words for drift chamber TDCs
+;   1 word marking end of data for each OOPS (To ensure data reading ok)
+;  ---
+;  34 words for each OOPS
+
+; Notes:
+; Each loop will take a minimum  of 2.4 + 1.8 = 4.2 micro sec to complete
+; The digitization time for LeCroy TDC is about 100 micro sec
+; while the digitization time for Phillips ADC is about 10 micro sec (?). 
+; Maybe, we should test the LAM for Phillips ADC first! 
+
+        DOI 100                          ; testing if it takes to long.
+
+; Test LAM for Phillips ADC
+         TLAM A1XT                      ; Test LAM of chamber ADC 
+                                        ; If it converts
+                                        ; we assume the rest is converted also
+            IF Q.EQ.1 BRANCH ALAMOK     ; The LAM was set so go and read
+
+        ENDDOI                          ; LOOP RETURN
+
+        FLAG 177777 ; Flag -1 for bad LAM
+        BRANCH AREAD
+;  We didn't get the LAM, read out anyway.
+
+ALAMOK:
+        FLAG 1  ; Flag 1 for good LAM
+
+; Start reading. First read all the ADC's signal, then all the TDC's signals
+AREAD:
+        RD16 AA1L ; SCINT ADC 1L  
+        RD16 AA1R ; SCINT ADC 1R 
+        RD16 AA2L ; SCINT ADC 2L 
+        RD16 AA2R ; SCINT ADC 2R 
+        RD16 AA3L ; SCINT ADC 3L 
+        RD16 AA3R ; SCINT ADC 3R 
+
+        RD16 A1YO ; CHAM ADC 1Y O-E 
+        RD16 A1XO ; CHAM ADC 1X O-E 
+        RD16 A2YO ; CHAM ADC 2Y O-E 
+        RD16 A2XO ; CHAM ADC 2X O-E
+        RD16 A3YO ; CHAM ADC 3Y O-E
+        RD16 A3XO ; CHAM ADC 3X O-E
+
+        RD16 AT1L ; SCINT TDC 1L  
+        RD16 AT1R ; SCINT TDC 1R 
+        RD16 AT2L ; SCINT TDC 2L 
+        RD16 AT2R ; SCINT TDC 2R 
+        RD16 AT3L ; SCINT TDC 3L 
+        RD16 AT3R ; SCINT TDC 3R 
+        RD16 ATLL ; SCINT TDC 2L (Low threshold)
+        RD16 ATRL ; SCINT TDC 2R (Low threshold)
+
+        RD16 A1YL ; CHAM TDC 1Y LEFT
+        RD16 A1YR ; CHAM TDC 1Y RIGHT
+        RD16 A1XT ; CHAM TDC 1X TOP
+        RD16 A1XB ; CHAM TDC 1X BOTTOM
+        RD16 A2YL ; CHAM TDC 2Y LEFT
+        RD16 A2YR ; CHAM TDC 2Y RIGHT
+        RD16 A2XT ; CHAM TDC 2X TOP
+        RD16 A2XB ; CHAM TDC 2X BOTTOM
+        RD16 A3YL ; CHAM TDC 3Y LEFT
+        RD16 A3YR ; CHAM TDC 3Y RIGHT
+        RD16 A3XT ; CHAM TDC 3X TOP
+        RD16 A3XB ; CHAM TDC 3X BOTTOM
+        FLAG 12   ; end of reading OOPS A
+
+RCB
+; *************************************************************************
+
+;*****************************************************************************
+; BEGIN READING OOPS B
+CB READB
+
+        DOI 100                          ; testing if it takes to long.
+
+; Test LAM for Phillips ADC
+        TLAM B1XT                       ; Test LAM of chamber ADC.
+                                        ; If it converts
+                                        ; we assume the rest is converted also
+            IF Q.EQ.1 BRANCH BLAMOK     ; The LAM was set so go and read
+
+        ENDDOI                          ; LOOP RETURN
+
+        FLAG 177777 ; Flag -1 for bad LAM
+        BRANCH BREAD
+;  We didn't get the LAM, read out anyway.
+
+BLAMOK:
+        FLAG 1  ; Flag 1 for good LAM
+
+; Start reading. First read all the ADC's signal, then all the TDC's signals
+BREAD:
+        RD16 BA1L ; SCINT ADC 1L  
+        RD16 BA1R ; SCINT ADC 1R 
+        RD16 BA2L ; SCINT ADC 2L 
+        RD16 BA2R ; SCINT ADC 2R 
+        RD16 BA3L ; SCINT ADC 3L 
+        RD16 BA3R ; SCINT ADC 3R 
+;
+        RD16 B1YO ; CHAM ADC 1Y O-E 
+        RD16 B1XO ; CHAM ADC 1X O-E 
+        RD16 B2YO ; CHAM ADC 2Y O-E 
+        RD16 B2XO ; CHAM ADC 2X O-E
+        RD16 B3YO ; CHAM ADC 3Y O-E
+        RD16 B3XO ; CHAM ADC 3X O-E
+;
+        RD16 BT1L ; SCINT TDC 1L  
+        RD16 BT1R ; SCINT TDC 1R 
+        RD16 BT2L ; SCINT TDC 2L 
+        RD16 BT2R ; SCINT TDC 2R 
+        RD16 BT3L ; SCINT TDC 3L 
+        RD16 BT3R ; SCINT TDC 3R 
+        RD16 BTLL ; SCINT TDC 2L (Low threshold)
+        RD16 BTRL ; SCINT TDC 2R (Low threshold)
+;
+        RD16 B1YL ; CHAM TDC 1Y LEFT
+        RD16 B1YR ; CHAM TDC 1Y RIGHT
+        RD16 B1XT ; CHAM TDC 1X TOP
+        RD16 B1XB ; CHAM TDC 1X BOTTOM
+        RD16 B2YL ; CHAM TDC 2Y LEFT
+        RD16 B2YR ; CHAM TDC 2Y RIGHT
+        RD16 B2XT ; CHAM TDC 2X TOP
+        RD16 B2XB ; CHAM TDC 2X BOTTOM
+        RD16 B3YL ; CHAM TDC 3Y LEFT
+        RD16 B3YR ; CHAM TDC 3Y RIGHT
+        RD16 B3XT ; CHAM TDC 3X TOP
+        RD16 B3XB ; CHAM TDC 3X BOTTOM
+        FLAG 24   ; end of reading OOPS B
+;
+RCB
+; *************************************************************************
+
+;*****************************************************************************
+; BEGIN READING OOPS C
+CB READC
+
+        DOI 20                          ; testing if it takes to long.
+
+; Test LAM for LeCroy TDC
+        TLAM C1XT                       ; Test LAM of Cham ADC, if it converts
+                                        ; we assume the rest is converted also
+            IF Q.EQ.1 BRANCH CLAMOK     ; The LAM was set so go and read
+
+        ENDDOI                          ; LOOP RETURN
+
+        FLAG 177777 ; Flag -1 for bad LAM
+        BRANCH CREAD
+
+;  We didn't get the LAM, read out anyway.
+
+CLAMOK:
+        FLAG 1  ; Flag 1 for good LAM
+
+; Start reading. First read all the ADC's signal, then all the TDC's signals
+CREAD:
+        RD16 CA1L ; SCINT ADC 1L  
+        RD16 CA1R ; SCINT ADC 1R 
+        RD16 CA2L ; SCINT ADC 2L 
+        RD16 CA2R ; SCINT ADC 2R 
+        RD16 CA3L ; SCINT ADC 3L 
+        RD16 CA3R ; SCINT ADC 3R 
+
+        RD16 C1YO ; CHAM ADC 1Y O-E 
+        RD16 C1XO ; CHAM ADC 1X O-E 
+        RD16 C2YO ; CHAM ADC 2Y O-E 
+        RD16 C2XO ; CHAM ADC 2X O-E
+        RD16 C3YO ; CHAM ADC 3Y O-E
+        RD16 C3XO ; CHAM ADC 3X O-E
+
+        RD16 CT1L ; SCINT TDC 1L  
+        RD16 CT1R ; SCINT TDC 1R 
+        RD16 CT2L ; SCINT TDC 2L 
+        RD16 CT2R ; SCINT TDC 2R 
+        RD16 CT3L ; SCINT TDC 3L 
+        RD16 CT3R ; SCINT TDC 3R 
+        RD16 CTLL ; SCINT TDC 2L (Low threshold)
+        RD16 CTRL ; SCINT TDC 2R (Low threshold)
+
+        RD16 C1YL ; CHAM TDC 1Y LEFT
+        RD16 C1YR ; CHAM TDC 1Y RIGHT
+        RD16 C1XT ; CHAM TDC 1X TOP
+        RD16 C1XB ; CHAM TDC 1X BOTTOM
+        RD16 C2YL ; CHAM TDC 2Y LEFT
+        RD16 C2YR ; CHAM TDC 2Y RIGHT
+        RD16 C2XT ; CHAM TDC 2X TOP
+        RD16 C2XB ; CHAM TDC 2X BOTTOM
+        RD16 C3YL ; CHAM TDC 3Y LEFT
+        RD16 C3YR ; CHAM TDC 3Y RIGHT
+        RD16 C3XT ; CHAM TDC 3X TOP
+        RD16 C3XB ; CHAM TDC 3X BOTTOM
+        FLAG 36   ; end of reading OOPS C
+RCB
+; *************************************************************************
+
+;*****************************************************************************
+; BEGIN READING OHIPS
+CB READO
+;        FLAG 62  ; end of reading OHIPS
+RCB
+
+;*****************************************************************************
+; BEGIN READING COINCIDENCE INFO
+CB READCOIN
+;        FLAG 74  ; Flag = 60
+RCB
+; *************************************************************************
+;
+;
+
+; =======================================================================
+;	CHARGE EVENT
+; =======================================================================
+;
+	SPECIFY EVENT 10
+
+	DOI 100					; wait for ADCs to convert
+	    TLAM IC1
+	    IF Q.EQ.1 BRANCH INT1
+	ENDDOI        
+	FLAG 177777				; no conversion
+	BRANCH INT2
+
+INT1:	FLAG 0					; valid data
+
+INT2:	RC16 HEL				; Helicity bits
+	RD16 TIMSL				; Timeslot scaler
+	RD16 BT1,  BT2				; Toroids
+	RD16 MOLX, MOLY, TGTX, TGTY		; Beam position monitors
+	RD16 HALO1				; Halo 1
+	RD16 HALO2				; Halo 2
+
+	CL   HALO1
+	CLAM IC1,  MOLX
+	ELAM IC1,  MOLX
+
+;	RD24 EVPSN0, EVPSN1			; event position
+;	RD24 EVPSN2, EVPSN3			; event position
+	
+;	CL   EVPSN0
+
+	DUMP
+	PROCESS EVENT 10
+	END EVENT 10
+
+
+        END OOPSAB                

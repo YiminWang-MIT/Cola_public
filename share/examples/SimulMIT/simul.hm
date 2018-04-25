@@ -1,0 +1,25 @@
+zone 2 3 1
+Histogram "kinematic/electron momentum"
+Histogram "kinematic/electron scattering angle"
+Histogram "kinematic/electron out-of-plane angle"
+zone 2 3 1
+Histogram "kinematic/proton momentum" 
+Histogram "kinematic/proton scattering angle"
+Histogram "kinematic/proton out-of-plane angle"
+Histogram "kinematic/pion momentum"
+Histogram "kinematic/pion scattering angle"
+Histogram "kinematic/pion out-of-plane angle"
+zone 2 3 1
+Histogram "kinematic/energy transfer"
+Histogram "kinematic/momentum transfer"
+Histogram "kinematic/4momentum transfer"
+Histogram "kinematic/invariant Mass"
+Gray "kinematic/W vs. Q^2!"
+Histogram "kinematic/theta q"
+zone 2 3 1
+Histogram "kinematic/proton cms momentum"
+Histogram "kinematic/proton cms scattering angle"
+Histogram "kinematic/proton cms out-of-plane angle"
+Histogram "kinematic/pion cms momentum"
+Histogram "kinematic/pion cms scattering angle"
+Histogram "kinematic/pion cms out-of-plane angle"

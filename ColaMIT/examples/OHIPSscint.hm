@@ -1,0 +1,35 @@
+#
+zone 2 4 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS scintillator 1"
+Histogram "OHIPS/scintillator/1/adc/right"
+Histogram "OHIPS/scintillator/1/adc/left"
+Histogram "OHIPS/scintillator/1/adc/average"
+Histogram "OHIPS/scintillator/1/tdc/right"
+Histogram "OHIPS/scintillator/1/tdc/left"
+Histogram "OHIPS/scintillator/1/tdc/sum"
+Histogram "OHIPS/scintillator/1/tdc/diff"
+
+zone 2 4 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS scintillator 2"
+Histogram "OHIPS/scintillator/2/adc/right"
+Histogram "OHIPS/scintillator/2/adc/left"
+Histogram "OHIPS/scintillator/2/adc/average"
+Histogram "OHIPS/scintillator/2/tdc/right"
+Histogram "OHIPS/scintillator/2/tdc/left"
+Histogram "OHIPS/scintillator/2/tdc/sum"
+Histogram "OHIPS/scintillator/2/tdc/diff"
+
+zone 2 4 1
+SetFillRGB 1.0 0.5 0.5
+Title "OHIPS scintillator 3"
+Histogram "OHIPS/scintillator/3/adc/right"
+Histogram "OHIPS/scintillator/3/adc/left"
+Histogram "OHIPS/scintillator/3/adc/average"
+Histogram "OHIPS/scintillator/3/tdc/right"
+Histogram "OHIPS/scintillator/3/tdc/left"
+Histogram "OHIPS/scintillator/3/tdc/sum"
+Histogram "OHIPS/scintillator/3/tdc/diff"
+
+close

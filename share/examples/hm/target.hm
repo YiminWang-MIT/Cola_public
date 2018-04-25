@@ -1,0 +1,16 @@
+# Target coordinates
+#
+zone 2 3 1
+
+SetFillRGB 0.7 0.7 0.7
+
+Title "Target Coordinates"
+
+Histogram "Target/Target x"; 
+Gray      "Target/Target x-y"
+Histogram "Target/Target y"; 
+Gray      "Target/Target x-z"
+Histogram "Target/Target z"; 
+Gray      "Target/Target y-z"
+
+close

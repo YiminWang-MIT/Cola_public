@@ -1,0 +1,103 @@
+
+
+
+		Welcome to DOC++ version 3.00
+		
+
+
+
+DOC++ is a documentation system for C++ and Java programs capable of
+generating output for both, HTML and LaTeX. After augmenting C++ or Java
+source code with special comments, DOC++ will extract a documentation ready
+for viewing with a HTML viewer (Netscape is recommended) or for processing
+with LaTeX. The documentation may include all inheritance dependencies and
+a full class graph.
+
+
+CHANGES FROM V2.0
+=================
+
+A lot has changed since the last version. We have redesigned the syntax for
+doc++ comments according to the conventions used in JavaDoc. This makes
+doc++ easier to understand and your sources look nicer. Notice that these
+Changes are not(!) backward compatible. However a rudimentary conversion
+utility that assists you in upgrading your files is provided.  It is called
+like this: cat <oldfile> | promote | promote > <newfile>
+
+ 
+INSTALLATION:
+=============
+
+Installation of DOC++ is a matter of two seconds:
+
+(1) Copy the executables bin/doc++ and bin/docify to any location in
+    your path (don't forget to rehash!).
+(2) Copy the latex style file docxx.sty to a directory where latex
+    can find it.
+
+
+
+USAGE:
+======
+
+For your first run try building the documentation for DOC++:
+
+(1) cd to the doc directory.
+
+(2) Building the LaTeX documentation:
+(2.a)   Type 'make tex' to build file docxx.tex.
+(2.b)   Process docxx.tex twice by typing two times 'latex docxx.tex'.
+	Note: You will need a running version of LaTeX2e (!) to perform
+	this step.
+(2.c)   View the documentation with 'xdvi docxx.dvi' or have it printed
+	by typing 'dvips docxx.dvi'. The printed version should be
+	identical to the one found in docxx.ps.
+
+(3) Building the HTML documentation:
+(3.a)   Type 'make' to build the html files.
+(3.b)   Start up your HTML-viewer on file index.html, e.g. by typing
+	'netscape index.html'.
+
+
+DOCIFYING YOUR CLASSES:
+=======================
+
+For getting started with docifying your own headers, try out our docify
+program. Asume you have a C++ header file myheader.hh, then you go with
+
+> docify myheader.hh mydocifiedheader.hh
+
+This should add a ManMemo section (///) to all public and protected
+methods/classes etc it finds.
+
+    WARNING: This program has not been tested intensively!
+
+Please report on problems (and success) to doc++@zib-berlin.de.
+
+
+
+COMPILATION:
+============
+
+If you need to compile doc++ (note on DOS systems it is called docxx),
+edit the Makefile to your needs and 'make all'. (On DOS systems you will
+need to 'make CCC=gcc LD=gcc dos'. This requires, of course, gcc to be
+installed on your system).
+
+
+
+WHAT's LEFT:
+============
+
+DOC++ comes with ABSOLUTELY NO WARRANTY and is subject to the GNU PUBLIC
+LICENSE. See file COPYING for the terms and conditions of the GNU PUBLIC
+LICENSE.
+
+    If you intend to use DOC++ commercially on a regular basis you
+    must contact the authors for an appropriate donation.  If you
+    need some more features, we are ready to implement them on a
+    salary basis.
+
+Suggestions, contributions and ratings are welcome by
+
+	doc++@zib.de

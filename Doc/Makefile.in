@@ -1,0 +1,142 @@
+#                                                                -*-makefile-*-
+# the guy to blame:
+#
+# Michael O. Distler                        mailto:distler@mit.edu
+# MIT, Lab for Nuclear Science, 26-456      tel.   (617) 253-6997
+# Cambridge, MA 02139, USA                  fax    (617) 258-5440
+#
+# $Header: https://wwwa1.kph.uni-mainz.de/svn/Cola/trunk/Doc/Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+# Makefile for Doc++ 3.0 distribution + autoconf extension
+#
+srcdir		= @srcdir@
+VPATH		= @srcdir@/src:
+
+CXX		= @CXX@
+DEFS		= @DEFS@
+OPTS		= @OPTS@
+CPPFLAGS	= $(DEFS) -I. -I$(srcdir)/src
+CXXFLAGS	= $(OPTS) -Wall -Wno-deprecated
+LDFLAGS		= $(OPTS)
+
+DVIPS		= @DVIPS@
+INSTALL		= @INSTALL@
+INSTALL_DATA	= @INSTALL_DATA@
+INSTALL_PROGRAM	= @INSTALL_PROGRAM@
+JAVAC		= @JAVAC@
+LATEX		= @LATEX@
+LEX		= @LEX@
+LEXLIB		= @LEXLIB@
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= $(exec_prefix)/bin
+docdir		= $(prefix)/doc/$(DOCXX)
+docsrc	       := $(shell cd $(srcdir)/doc;pwd)
+
+DOCXX		= doc++
+PAPER		= @PAPER@
+DOCXXSTY	= $(srcdir)/src/docxx.sty
+
+SRC		= Entry.cpp McDirectory.cpp McHashTable.cpp McWildMatch.cpp \
+		  classgraph.cpp html.cpp main.cpp nametable.cpp tex2gif.cpp
+GENSRC		= cpp.cpp doc.cpp doc2html.cpp doc2tex.cpp \
+		  java.cpp readfiles.cpp
+MORESRC		= docify.cpp java.h
+GENCLASS	= ClassGraph.class ClassGraphPanel.class \
+		  ClassLayout.class NavigatorButton.class
+BINARY		= $(DOCXX) docify
+
+html		= html
+obj		= obj
+tex		= tex
+DOCS		= $(html)/index.html $(tex)/doc.ps
+
+.PHONY:		all clean doc install veryclean
+
+.SUFFIXES:	.cpp
+$(obj)/%.o:	%.cpp
+	@test -d $(obj) || mkdir $(obj)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+
+all:		$(BINARY) $(DOCS)
+
+doc:		$(DOCS)
+
+$(DOCXX):	$(addprefix $(obj)/,$(patsubst %.cpp,%.o,$(SRC) $(GENSRC)))
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LEXLIB)
+
+docify:		$(obj)/docify.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LEXLIB)
+
+$(html)/index.html:	$(docsrc)/doc.dxx $(DOCXX)
+	@test -d $(html) || mkdir $(html)
+	(cd $(html); ../$(DOCXX) $<)
+
+$(tex)/doc.tex:		$(docsrc)/doc.dxx $(DOCXX)
+	@test -d $(tex) || mkdir $(tex)
+	(cd $(tex); ../$(DOCXX) -t -o $(notdir $@) $(PAPER) $<)
+
+$(tex)/doc.dvi:		$(tex)/doc.tex $(DOCXXSTY)
+	@cp $(DOCXXSTY) $(tex)/$(notdir $(DOCXXSTY))
+	(cd $(tex);$(LATEX) $(notdir $<);$(LATEX) $(notdir $<))
+	@rm -f $(tex)/$(notdir $(DOCXXSTY))
+
+$(tex)/doc.ps:		$(tex)/doc.dvi
+	$(DVIPS) -o $@ $^
+
+$(obj)/cpp.o:		cpp.cpp
+cpp.cpp:		cpp.l
+	$(LEX) -PcppYY -t $< > $@
+
+$(obj)/doc.o:		doc.cpp
+doc.cpp:		doc.l
+	$(LEX) -Pdocyy -t $< > $@
+
+$(obj)/doc2tex.o:	doc2tex.cpp
+doc2tex.cpp:		doc2tex.l
+	$(LEX) -Pdoc2texyy -t $< > $@
+
+$(obj)/doc2html.o:	doc2html.cpp
+doc2html.cpp:		doc2html.l
+	$(LEX) -Pstr2htmlyy -t $< > $@
+
+$(obj)/docify.o:	docify.cpp
+docify.cpp:		docify.l
+	$(LEX) -f -Ca -t $< > $@
+
+$(obj)/java.o:		java.cpp
+java.cpp:		java.l
+	$(LEX) -PjavaYY -t $< > $@
+
+$(obj)/readfiles.o:	readfiles.cpp
+readfiles.cpp:		readfiles.l
+	$(LEX) -Preadfilesyy -t $< > $@
+
+java.h:		$(GENCLASS)
+	($(foreach cl,$(notdir $^),./binToC $(cl:.class=_class) <$(cl);)) >$@
+
+$(GENCLASS):	$(srcdir)/src/ClassGraph.java
+	@rm -f $(notdir $<)
+	@cp $< $(notdir $<)
+	$(JAVAC) -O $(notdir $<)
+	@rm -f $(notdir $<)
+
+install:	$(BINARY) $(DOCS) $(DOCXXSTY)
+	-@$(foreach dir,$(prefix) $(exec_prefix) $(bindir) $(prefix)/doc \
+		$(docdir), test -d $(dir) || mkdir $(dir);)
+	$(foreach bin,$(BINARY),$(INSTALL_PROGRAM) $(bin) $(bindir);)
+	$(foreach doc,$(wildcard $(html)/* $(tex)/*.ps $(tex)/*.tex) \
+		$(DOCXXSTY),$(INSTALL_DATA) $(doc) $(docdir);)
+
+clean:
+	rm -rf $(GENSRC) $(GENCLASS) $(MORESRC) $(obj) core *~ binToC
+
+veryclean:	clean
+	rm -rf $(BINARY) $(html) $(tex)
+
+depend:		$(SRC) $(GENSRC) $(MORESRC)
+	$(CXX) -M $(CPPFLAGS) $(addprefix $(srcdir)/src/,$(SRC)) \
+		$(GENSRC) docify.cpp | sed -e 's-^.*\.o-$(obj)/&-' > $@
+
+-include depend

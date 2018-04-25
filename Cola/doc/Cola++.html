@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>       
+        <TITLE> Cindy++ Online Analysis </TITLE>
+        <META HTTP-EQUIV="Author"   CONTENT="Harald Merkel">
+        <META HTTP-EQUIV="Charset"  CONTENT="iso-8859-1">
+</HEAD>
+<body bgcolor=white>
+<HR>
+<H1 align=center>Cindy Online Analysis</center></H1>
+<HR>
+This help describes the usage of the <B>Cola<sup>++</sup></B>
+interpreter. 
+Click <a href=ColaSourceDoc/index.html>here</a> for the source code 
+and library documentation.
+<p>
+Contents of this page:
+<ul>
+<li><a href=#synopsis   >Synopsis</a>
+<li><a href=#options    >Command line options</a>
+<li><a href=#input      >Input files</a>
+<li><a href=#output     >Output files</a>
+<li><a href=#environment>Environment variables</a>
+<li><a href=#signals    >Signals</a>
+</ul>
+Further readings:
+<ul>
+<li>The graphical user interface <a href=hmview.html>HMView</a>
+<li>Object description file <a href=Col.html>Online.col</a>
+<li>Run database <a href=rundb.html>run.db</a>
+<li>Event structure: <a href=abcn.list>Struct abcn</a>
+<li>First level reconstructed data:<a href=online.list>Struct online</a> or
+<a href=ColaSourceDoc/Firstlevelreconstructeddata..html>
+ commented documentation</a>
+</ul>
+<P>
+<HR>
+<a name=synopsis>
+<H3>Synopsis:</H3>
+<blockquote>
+<B>Cola++</B> [<a href=#options>options</a>]<p>
+</blockquote>
+<hr>
+<a name=options>
+<H3>Command line options:</H3>
+<center>
+<table>
+<tr><th align=left valign=top><B> -h     </B><td>  
+Print brief usage information and exit.
+<tr><th align=left valign=top><B> -f file</B><td>  
+Input file name. Without this option or with '-f -' stdin is assumed.
+<tr><th align=left valign=top><B> -o file</B><td>  
+Filtered output data file name. This is not the name of the output histograms! 
+<tr><th align=left valign=top><B> -O file</B><td>  
+Output histogram file. 
+<tr><th align=left valign=top><B> -d     </B><td>  
+Don't start X11 Histogramviewer. Use this option for batch jobs.
+<tr><th align=left valign=top><B> -v     </B><td>  
+Verbose output of the 'run.db' contents for debugging of your 'run.db'.
+<tr><th align=left valign=top><B> -V     </B><td> 
+Print version and exit.
+<tr><th align=left valign=top><B> -t time</B><td>Use argument as start
+time for run.db access, Format: 'yymmddhhmmss'
+
+<tr><th align=left valign=top><B> -T     </B><td>
+Try to extract start time from filename. This is useful, if you have
+converted data which doesn't contain the correct time of data taking.  
+<tr><th align=left valign=top><B> -q     </B><td>  Quiet output.
+<tr><th align=left valign=top><B> -C <dir>    </B><td> 
+Change to this directory before doing anything. This is usefull if you
+try something like:
+<blockquote> 
+zcat xxx/run_????????????.gz | Cola++
+</blockquote>
+You can easily exceed the command line buffer of your shell, if you do this
+with a large path 'xxx' for your runs! Use instead:
+<blockquote> 
+cd xxx<br>
+zcat run_????????????.gz | Cola++ -C analyzedir
+</blockquote>
+<tr><th align=left valign=top><B> -z     </B><td>
+Decompress input and compress output with gzip.
+<tr><th align=left valign=top><B> -s n   </B><td>  Skip first 'n' events.
+<tr><th align=left valign=top><B> -n n   </B><td>  Terminate after 'n' events. <br>
+                             Check the output of Lumi++ for useful
+			     values for '-s' and '-n'.
+<tr><th align=left valign=top><B> -i     </B><td>  Ignore Floating Point Exceptions 
+                         (default: use signalhandler).
+<tr><th align=left valign=top><B> -x     </B><td>  Core dump on 'Floating point
+exception'. I recommend the use of this option, since the Cola kernel
+should
+never throw a core (tell me, when), and you should write your
+'Online.col' in
+such a way, that it does not produce floating point exceptions.
+</table>
+</center>
+<HR>
+<a name=input>
+<h3>Input Files</h3>
+<dl>
+<dt><B>Option -f 'filename' or stdin</b><dd>
+    The data file to be analyzed. It has to be a Cindy readable file. 
+    The Cindy error message 'bad header' indicates wrong file format,
+    perhaps a missing option <b>'-z'</b>. 
+    <p>
+ 
+<dt><b>Online.col</b> (or environment variable ONLINE_COL)<dd>
+    This is the most important file for Cola.
+    In this file the histograms, physical quantities and cuts for the 
+    analysis are  defined. See <a href = Col.html> here </a> for the 
+    detailed language definition.<p>
+    If the file is not found in the current working directory, the
+    subdirectory './col' is searched for it. <p> 
+<dt><b>run.db</b> (or environment variable RUN_DB)<dd>
+    This file contains the setup of the spectrometers, like momenta and
+    angles. It consists of time stamps which mark the time of changes and
+    the changes. The time of the first event will be used to determine the
+    actual experimental setup.
+    See <a href=rundb.html>this list</a> of valid statements.<p>
+<dt><b>TMA files</b><dd>
+    Cola needs a reconstruction matrix file for each spectrometer. The
+    file names are given in the run.db. Example files are in
+    the Cola source tree.
+    <p>
+<dt><B>HDC configuration file</b><dd>
+    Configuration file for the horizontal drift chamber. The filename
+    is also given in the run.db.
+</dl>
+<HR>
+<a name=output>
+<h3>Output Files</h3>
+<dl>
+<dt><b>Online.his</b> (or environment variable ONLINE_HIS or Option -O)<dd>
+    This histogram output file is writen after the last event. 
+    <P> 
+<dt><b>Online.cnt</b> (or environment variable ONLINE_COUNTER)<dd>
+    List of counters.
+    <p>
+<dt><b>Luminosity.out</b> (or environment variable LUMI_OUT)<dd>
+    Integrated luminosity and other statistical information.
+    <p>
+<dt><b>Luminosity.trip.out</b> (or environment variable LUMI_TRIP)<dd>
+    Integrated luminosity and other statistical information calculated
+    for runs with 'TrippOff' in one of the VDC's.
+    <p>
+<dt><b>File given by Option -o</b><dd>
+    If this option is given, and a 'WriteEvent' statement occurs in
+    your Online.col, Cola works as filter and writes events in 
+    standard Cindy format. These events can be analyzed again by Cola.
+</dl>
+<hr>
+<a name=environment>
+<h3>Environment Variables</h3>
+<table>
+<tr valign=top><th align=left> Variable       <th align=left> Default        <th align=left> Description
+<tr valign=top><td> ONLINE_COL     <td> Online.col     <td> Cola object description filename
+<tr valign=top><td> ONLINE_HIS     <td> Online.his     <td> Output
+file name for histograms
+<tr valign=top><td> ONLINE_HUP     <td> Online.his.hup <td> Histograms (SIGHUP caught)
+<tr valign=top><td> ONLINE_COUNTER <td> Online.cnt     <td> Output file name for counter information
+<tr valign=top><td> LUMI_OUT       <td> Luminosity.out <td> Output file name for statistics
+<tr valign=top><td> LUMI_TRIP      <td> Luminosity.trip.out <td> Output file name for statistics with VDC TrippOff
+<tr valign=top><td> COLAPRINT      <td> stdout         <td> Output file name for "Print" statements
+<tr valign=top><td> DISPLAY        <td> &nbsp;         <td> Display variable for histogram viewer
+<tr valign=top><td> VERBOSE        <td> false          <td> be more verbose
+<tr valign=top><td> RUN_DB         <td> run.db         <td> Input file name for run information
+<tr valign=top><td> ENERGYLOSS     <td> 2              <td> Level of
+energyloss calculation. 0=no correction, 1=one step correction,
+2=multistep correction
+</table>
+<hr>
+<a name=signals>
+<h3>Signals</h3>
+<table align=center>
+<tr valign=top><th align=left>Signal<th align=left>Action
+<tr valign=top><td>SIGFPE<td>The signal is caught by a signal handler and
+ a warning is printed on stderr. This behaviour can be
+ changed by -i and -x, but the better way is to check your
+ Online.col file for statements like the square root of
+ a four momentum square.
+<tr valign=top><td>SIGHUP<td>If you are using Cola without GUI, you can force the
+ program by this signal to write the current histograms to the file 
+ "Online.his.hup" and to continue after this.  
+</table>
+<hr>
+<br>
+<i>Last modified: May 11<sup>th</sup>, 1998 <br>
+Bug reports and comments to 
+<A Href=mailto:cola@wwwa1.kph.uni-mainz.de>Cola@WWWA1.KPh.Uni-Mainz.De</a>
+</i>
+
+

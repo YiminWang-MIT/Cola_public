@@ -1,0 +1,38 @@
+
+zone 2 3 1
+title "Spectrometer A: VDC"
+function "SpecA/VDC/HV1/Current"
+function "SpecA/VDC/HV1/Voltage"
+function "SpecA/VDC/HV2/Current"
+function "SpecA/VDC/HV2/Voltage"
+zone 1 3 3
+function "SpecA/VDC/Threshold"
+
+zone  2 3 1
+title "Spectrometer B: VDC"
+function "SpecB/VDC/HV1/Current"
+function "SpecB/VDC/HV1/Voltage"
+function "SpecB/VDC/HV2/Current"
+function "SpecB/VDC/HV2/Voltage"
+zone 1 3 3
+function "SpecB/VDC/Threshold"
+zone 2 3 1
+title "Spectrometer C: VDC"
+function "SpecC/VDC/HV1/Current"
+function "SpecC/VDC/HV1/Voltage"
+function "SpecC/VDC/HV2/Current"
+function "SpecC/VDC/HV2/Voltage"
+zone 1 3 3
+function "SpecC/VDC/Threshold"
+
+zone 3 3 1
+title "Gasflows Driftchambers"
+function "SpecA/VDC/Argon" 
+function "SpecA/VDC/Argon-Alcohol"
+function "SpecA/VDC/Isobutan"
+function "SpecB/VDC/Argon" 
+function "SpecB/VDC/Argon-Alcohol"
+function "SpecB/VDC/Isobutan"
+function "SpecC/VDC/Argon" 
+function "SpecC/VDC/Argon-Alcohol"
+function "SpecC/VDC/Isobutan"

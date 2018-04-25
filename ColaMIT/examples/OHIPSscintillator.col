@@ -1,0 +1,49 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/OHIPSscintillator.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for OHIPS scintillators
+//
+
+// required definitions
+//
+// spec  :  name of the spectrometer in event configuration oops1
+// nr    :  number of the scintillator (1, 2, or 3)
+// title :  first part of the histogram title
+//
+
+Scalar spec.scint.nr.adc.right  = @oops1.det.spec.scint[nr].adc.right
+Scalar spec.scint.nr.adc.left   = @oops1.det.spec.scint[nr].adc.left
+Scalar spec.scint.nr.energyLoss = \
+sqrt( spec.scint.nr.adc.right * spec.scint.nr.adc.left )
+
+Histogram title"adc/right" \
+spec.scint.nr.adc.right("energy loss", "a.u.", 2.5, 2047.5, 2045) ;
+Histogram title"adc/left" \
+spec.scint.nr.adc.left("energy loss", "a.u.", 2.5, 2047.5, 2045) ;
+Histogram title"adc/average" \
+spec.scint.nr.energyLoss("energy loss", "a.u.", 2.5, 2047.5, 2045) ;
+
+Scalar spec.scint.nr.tdc.right = @oops1.det.spec.scint[nr].tdc.right
+Scalar spec.scint.nr.tdc.left  = @oops1.det.spec.scint[nr].tdc.left
+Scalar spec.scint.nr.tdc.sum   = \
+spec.scint.nr.tdc.right + spec.scint.nr.tdc.left
+Scalar spec.scint.nr.tdc.diff  = \
+spec.scint.nr.tdc.right - spec.scint.nr.tdc.left
+
+Cut ( 1.0<spec.scint.nr.tdc.right && spec.scint.nr.tdc.right<4095.0 && \
+      1.0<spec.scint.nr.tdc.left  && spec.scint.nr.tdc.left<4095.0 ) {
+  Histogram title"tdc/right" \
+	spec.scint.nr.tdc.right("time", "50 ps", -0.5, 4095.5, 4096) ;
+  Histogram title"tdc/left" \
+	spec.scint.nr.tdc.left("time", "50 ps", -0.5, 4095.5, 4096) ;
+  Histogram title"tdc/sum" \
+	spec.scint.nr.tdc.sum("time", "50 ps", -0.5, 8191.5, 8192) ;
+  Histogram title"tdc/diff" \
+	spec.scint.nr.tdc.diff("right - left", "50 ps",-4095.5,4095.5,8191) ;
+}

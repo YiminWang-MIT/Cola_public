@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>Documentation for Printlog++</title>
+</head>
+<hr>
+<center>
+<h1>Printlog++</h1>
+<hr></center>
+
+This program analizes the ECS logfiles and presents a graphical user
+interface to display the ECS parameters. The interface bases on "HMView"
+of the "HMBook" histogram package. 
+
+The program creates a histogram for each parameter which will be displayed
+as polyline. The names of the ECS parameter are translated by an "alias table"
+to more comfortable names.
+
+<h2><HR>Usage<HR></h2>
+<dl>
+<DT><b>Printlog++ </b><DD>
+
+	Without parameter the file
+        <blockquote>
+            "~dbman/LOGFILES/log/opterm.*.*.*-*:*:*"
+        </blockquote>
+	will be analyzed, i.e. the current ECS logfile. This file will be read
+        and after the end of the file, every 10 seconds an update will be
+	attempted.<p>
+
+	This is the standard use during beam time, the load for the 
+        computer is negligible.<p>
+
+<DT><b>Printlog++ -f filename</b><DD>
+
+	With this command an elder opterm file can be analyzed. Usually
+        the command<p> 
+
+<DT><b>Printlog++ -zf filename.gz</b><DD>
+        will be prefered. It will decompress the file first via "zcat".
+	For several files the construction<p>  
+
+<DT><b>[z]cat file1 file2 ... filen | Printlog++ -f -</b><DD>
+	can be used as pipeline.<p>
+
+
+<DT><b>export -n DISPLAY</b><DD>
+<DT><b>Printlog++ -f filename -o histogramfile</b><DD>
+
+	Use this to write batch jobs.
+</dl>
+
+<h2><HR>Further Options<HR> </h2>
+<dl>
+<DT><b>-b yymmddhhmmss</b><DD>
+	
+	(b like "begin") gives a start time for the analysis. The format
+        is the same as the A1 run names or the "run.db" entries.<p>
+
+	Abreviations:
+	<blockquote><tt>
+           yymmdd  	for yymmdd000000<br>
+           yymmddhh  	for yymmddhh0000<br>
+           yymmddhhmm  	for yymmddhhmm00<br>
+	</blockquote></tt><p>
+<DT><b>	
+-b today</b><DD>
+
+	start today at midnight<p>
+
+<DT><b>-e yymmddhhmmss</b><DD>
+
+	end time<p>
+	The options -b and -e can be extracted from the current run.db
+        by the shellscript "rundb-setup".
+
+<DT><b>-h </b><DD>
+	print some nearly useless help lines<p>
+
+<DT><b>-o histogramfile</b><DD>
+	save the histograms in a file. Useful for batch.<p>
+
+</dl>
+
+<h2><HR>Parameter File<HR></h2>
+
+The file "Printlog.alias" will be read in the current working directory to
+get a translation between the cryptic ECS names and "canonical" names. If you
+don't like to have this file in each directory, you can set the
+environment variable PRINTLOG_ALIAS as path to look for it. Use for example
+the line
+<blockquote>
+           export PRINTLOG_ALIAS=~/.Printlog.alias
+</blockquote>
+in your ~/.profile file.
+
+<p> Parameters, which are not translated via this file are stored in
+the histogram directory 
+<blockquote>
+           [dbman]
+</blockquote>
+with their standard ECS name.<p>
+
+Each line of the parameter file consists of four entries:
+
+<blockquote>
+           ECS-name subaddress aliasname unit
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

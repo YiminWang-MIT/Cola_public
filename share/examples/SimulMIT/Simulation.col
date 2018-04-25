@@ -1,0 +1,111 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/share/examples/SimulMIT/Simulation.col,v 1.1.1.1 2002-02-05 14:51:00 distler Exp $
+//
+
+
+#define PI      3.141592653589793
+#define radiant (PI/180)
+#define degree  (180/PI)
+
+#define mass_proton   0.93827231
+#define mass_deuteron 1.87561339
+#define mass_pi0      0.1349764
+#define mass_electron 0.00051099
+
+Fourvector Target       = { mass_proton } ;
+Fourvector Electron_in  = Beam ;
+Fourvector Electron_out = Spectrometer("O");
+Fourvector Proton       = Spectrometer("A");
+Fourvector vPhoton      = Electron_in - Electron_out ;
+
+Fourvector Pion = Target + vPhoton - Proton ;
+Scalar mmiss = 1000 * sqrt(energy(Pion)^2-momentum(Pion)^2) ;
+
+Scalar pElectron   = 1000 * momentum (Electron_out) ;
+Scalar thElectron  = theta (Electron_out) * degree ;
+Scalar phiElectron = varphi (Electron_out) * degree ;
+
+Histogram "kinematic/electron momentum" \
+	pElectron("p?electron!", "MeV/c", 370.0, 540.0, 170);
+Histogram "kinematic/electron scattering angle" \
+	thElectron("[q]?electron!", "deg.", 28.0, 38.0, 100);
+Histogram "kinematic/electron out-of-plane angle" \
+	phiElectron("[f]?electron!", "deg.", -12.0, 12.0, 240);
+
+
+Scalar pProton   = 1000 * momentum (Proton) ;
+Scalar thProton  = theta (Proton) * degree ;
+Scalar phiProton = varphi (Proton) * degree ;
+
+Histogram "kinematic/proton momentum" \
+	pProton("p?proton!", "MeV/c", 400.0, 600.0, 200);
+Histogram "kinematic/proton scattering angle" \
+	thProton("[q]?proton!", "deg.", 10.0, 60.0, 500);
+Histogram "kinematic/proton out-of-plane angle" \
+	phiProton("[f]?proton!", "deg.", 0.0, 90.0, 180);
+
+
+Scalar pPion   = 1000 * momentum (Pion) ;
+Scalar thPion  = theta (Pion) * degree ;
+Scalar phiPion = varphi (Pion) * degree ;
+
+Histogram "kinematic/pion momentum" \
+	pPion("p?pion!", "MeV/c", 0.0, 300.0, 300);
+Histogram "kinematic/pion scattering angle" \
+	thPion("[q]?pion!", "deg.", 0.0, 90.0, 360);
+Histogram "kinematic/pion out-of-plane angle" \
+	phiPion("[f]?pion!", "deg.", 0.0, 90.0, 180);
+
+
+Scalar energytransfer   = 1000 * energy (vPhoton)
+Scalar momentumtransfer = 1000 * momentum (vPhoton)
+Scalar Q2               = (momentumtransfer^2 - energytransfer^2) * 1E-6
+Scalar thQ  = theta (vPhoton) * degree ;
+// Delta Center of Mass
+Fourvector s = vPhoton + Target;
+Scalar W = 1000 * sqrt(energy(s)^2-momentum(s)^2) ;
+
+Fourvector ProtonCMS = Rotate(Lorentz(Proton, -s), vPhoton)
+Fourvector PionCMS   = Rotate(Lorentz(Pion, -s), vPhoton)
+
+Histogram "kinematic/energy transfer" \
+	energytransfer("E?transfer!", "MeV", 280.0, 480.0, 200) ;
+Histogram "kinematic/momentum transfer" \
+	momentumtransfer("p?transfer!", "MeV/c", 380.0, 680.0, 300) ;
+Histogram "kinematic/4momentum transfer" \
+	Q2("Q^2!", "GeV^2!/c^2!", 0.0, 0.2, 100) ;
+Histogram "kinematic/invariant Mass" \
+	W("W", "MeV/c^2!", 1100, 1300, 100) ;
+Histogram "kinematic/W vs. Q^2!" \
+	Q2("Q^2!", "GeV^2!/c^2!", 0.1, 0.15, 100) \
+	W("W", "MeV/c^2!", 1100, 1300, 100) ;
+Histogram "kinematic/theta q" \
+	thQ("[q]?q!", "deg.", 0.0, 45.0, 90) ;
+
+Scalar pProtonCMS   = 1000 * momentum (ProtonCMS) ;
+Scalar thProtonCMS  = theta (ProtonCMS) * degree ;
+Scalar phiProtonCMS = varphi (ProtonCMS) * degree ;
+
+Histogram "kinematic/proton cms momentum" \
+	pProtonCMS("p?proton!^*!", "MeV/c", 0.0, 400.0, 200);
+Histogram "kinematic/proton cms scattering angle" \
+	thProtonCMS("[q]?proton!^*!", "deg.", 0.0, 180.0, 360);
+Histogram "kinematic/proton cms out-of-plane angle" \
+	phiProtonCMS("[f]?proton!^*!", "deg.", 0.0, 90.0, 180);
+
+Scalar pPionCMS   = 1000 * momentum (PionCMS) ;
+Scalar thPionCMS  = theta (PionCMS) * degree ;
+Scalar phiPionCMS = varphi (PionCMS) * degree ;
+
+Histogram "kinematic/pion cms momentum" \
+	pPionCMS("p?pion!^*!", "MeV/c", 0.0, 400.0, 200);
+Histogram "kinematic/pion cms scattering angle" \
+	thPionCMS("[q]?pion!^*!", "deg.", 0.0, 180.0, 360);
+Histogram "kinematic/pion cms out-of-plane angle" \
+	phiPionCMS("[f]?pion!^*!", "deg.", 0.0, 90.0, 180);

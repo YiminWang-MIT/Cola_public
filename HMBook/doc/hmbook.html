@@ -1,0 +1,429 @@
+<Title> HMBook </Title>
+<HR><H1><Center>H M B o o k</center></H1><HR>
+
+<H1>Introduction</H1>
+
+The HMBOOK projekt was started to create a machine independent booking
+and plotting program for physical data representation.  The concept is
+based on HBOOK, HPLOT and PAW of the CERN libraries, but there are of
+course some differences.
+<P>
+First, HMBOOK is written in C. Nearly on every computer there is a
+compiler available, so it should be possible to implement this
+package without problems. This Program was developed with the public
+domain GNU C compiler, if there are problems to use HMBOOK you should
+try to get this compiler form the wellknown ftp sites.
+
+The graphic output is made in POSTSCRIPT, you can translate this output to
+many printer formats by the use of the public domain interpreter 
+GHOSTSCRIPT.<P>
+
+<H2>Quickstart</H2>
+
+If you just want to use the program library and don't want to waste your time
+with reading a manual, here is a <A HREF = "example.c">example program</A>,
+ which you can vary for your purposes (see <A HREF="compile.html">here</A> 
+how to compile and link the program, and <A HREF="output.ps">here</A> to see the
+expected output). <p>
+
+<H2> Text Representation</H2>
+
+This chapter applies for all labels, titles and units of HMBook. Normal text
+could be used, of course, but you will surely use also special characters and 
+symbols for mathematical representation. But don't forget: HMBook is of
+course not a complete formular interpreter so it has some restrictions. But 
+the usual greek characters and mathematical symbols with subscript and
+superscript are mostly sufficient. 
+
+A valid procedure call looks e.g. like
+<blockquote><PRE>
+HMTitle("Reaction [g]p[\\256p]^0!p at [q]_[p]![\\273] 10^o!");
+</PRE>
+</blockquote>this example will result to
+<blockquote>
+<IMG SRC=hmbooktext.gif>
+</blockquote>
+
+Table <A HREF="helvetica.ps">Helvetica</A> and
+<A HREF="symbol.ps">Symbol</A> show the available 
+Postscript fonts. A nonstandard character of a font can be used
+bu its octal representation, starting with two backslashes (see the rightarrow in
+the example above). All characters in [...] are set in symbol font.   
+<p> 
+Superscript is initiated by "^", subscript by "_". Both end with "!".
+Here are some examples of the common use of superscript, subscript and
+symbol font:
+
+<blockquote><center><IMG SRC=hmbook.textexample.gif></center></blockquote>
+
+<HR>
+<H1>Reference Section</H1>
+<A HREF="helvetica.ps">Helvetica font</A><BR>
+<A HREF="symbol.ps">Symbol font</A><BR>
+<A HREF="hmbookoptions.html">Options</A><BR>
+
+<H3>Subroutines HMBook</H3>
+<PRE>
+HIST *<A HREF="#HMBook1">HMBook1</A> (char *title, char *labelx, char *labely, 
+               char *unitx, char *unity, 
+	       int nx, float minx, float maxx);
+HIST *<A HREF="#HMBook2">HMBook2</A> (char *title, 
+               char *labelx, char *labely, char *labelz,
+               char *unitx, char *unity, char *unitz,
+               int nx, float minx, float maxx,
+               int ny, float miny, float maxy);
+void <A HREF="#HMSetRebin">HMSetRebin</A> (int rebinfactor);
+void <A HREF="#HMSetPredefinedStyle">HMSetPredefinedStyle</A> (int style);
+void <A HREF="#HMWrite">HMWrite</A> (HIST *id, FILE *fp, char *name);
+HIST *<A HREF="#HMRead">HMRead</A> (FILE *fp);
+HIST *<A HREF="#HMReadIsolated">HMReadIsolated</A> (FILE *fp);
+void <A HREF="#HMWriteAll">HMWriteAll</A> (char * filename);
+void <A HREF="#HMReadAll">HMReadAll</A> (char * filename);
+void <A HREF="#HMWriteAscii">HMWriteAscii</A> (FILE *fp, HIST *id);
+void <A HREF="#HMFill">HMFill</A> (HIST *id, float x, float y, float weight);
+void <A HREF="#HMDelete">HMDelete</A> (HIST *id);
+void <A HREF="#HMHistogram">HMHistogram</A> (HIST *id);
+void <A HREF="#HMHistogram">HMDataError</A> (HIST *id);
+void <A HREF="#HMHistogram">HMGray</A> (HIST *id);
+void <A HREF="#HMHistogram">HMBox</A> (HIST *id);
+void <A HREF="#HMHistogram">HMLego</A> (HIST *id);
+void <A HREF="#HMHistogram">HMSurface</A> (HIST *id);
+void <A HREF="#HMHistogram">HMScatter</A> (HIST *id);
+void <A HREF="#HMHistogram">HMFunction</A> (HIST *id);
+void <A HREF="#HMMarkHist">HMMarkHist</a> (HIST *id, int where, char *txt);
+void <A HREF="#HMFillFunction">HMFillFunction1</A>(HIST *id, float (*f)(float x));
+void <A HREF="#HMFillFunction">HMFillFunction2</A>(HIST *id, float (*f)(float x, float y));
+HIST <A HREF="#HMOperation">*HMOperation</A> (HIST *id1, char oper,
+                   HIST *id2, char *title, 
+	           char *labz, char *unitz);
+void HMSetScale (HIST *id, float scale);
+void HMSetDivide (HIST*id, HIST *divide);
+HIST *HMScanFile (char *filename, char *histogram);
+HIST <A HREF="#HMScalar">*HMScalar</A> (HIST *id1, char oper, float scalar);
+HIST *HMSmooth (HIST *id, int bins);
+float HMRandom1 (HIST *id);
+void HMRandom2 (HIST *id, float *xreturn, float *yreturn);
+float HMExtract1 (HIST *id, float x);
+float HMExtract2 (HIST *id, float x, float y);
+float HMFitData (int ndata, float x[], float y[], float erry[],
+	         double (*func)(double x, double par[]), 
+		 float parameter[], int dim);
+float HMBinX(HIST *id, int i);
+float HMBinY(HIST *id, int i);
+int HMDimension(HIST *id);
+void HMBookParams(HIST *id, int *nx, int *ny, float *minx, float *maxx, 
+		  float *miny, float *maxy);
+void HMInfo1D(HIST *id, float *Maximum, float *Maxposition,
+	      float *Minimum, float *Minposition,
+	      float *FWHM, float *FWHMposition,
+	      float *RMS, float *Mean,
+	      float *Integral);
+float HMIntegralRegion(HIST *id, float *RMS, float *Mean);
+void HMSetArray(HIST *id, int n, float *x, float *y);
+</pre>
+<H3>Subroutines HMPlot</H3>
+<PRE>
+void <A HREF="#HMZone">HMZone</A> (int nrx, int nry, int nrnext);
+void <A HREF="#HMTitle">HMTitle</A> (char *title);
+void <A HREF="#HMSetOption">HMSetOption</A> (int option, float value);
+void <A HREF="#HMPlotError">HMPlotError</A> (int nnx, float *x, float *y, 
+	          float *xerr, float *yerr,
+                  char *title, char *xlab, char *ylab,
+                  char *xunit, char *yunit);
+void <A HREF="#HMPlotFunction">HMPlotFunction</A> (int nnx, float *x, float *y, 
+                     char *title, char *xlab, char *ylab,
+                     char *xunit, char *yunit);
+void <A HREF="#HMMarkFunction">HMMarkFunction</A> (int where, float *x, float *y, 
+                     char *mark);
+void <A HREF="#HMPlotFile">HMPlotFile</A>	(char *filename);
+void <A HREF="#HMPipe">HMPipe</A>	();
+void <A HREF="#HMClose">HMClose</A> ();
+void <A HREF="#HMMinimax">HMMinimumX</A> (float min);
+void <A HREF="#HMMinimax">HMMinimumY</A> (float min);
+void <A HREF="#HMMinimax">HMMinimumZ</A> (float min);
+void <A HREF="#HMMinimax">HMMaximumX</A> (float max);
+void <A HREF="#HMMinimax">HMMaximumY</A> (float max);
+void <A HREF="#HMMinimax">HMMaximumZ</A> (float max);
+void <A HREF="#HMSame">HMSame</A> ();
+void <A HREF="#HMExplain">HMExplain</A> (char *comment);
+</PRE>
+<HR>
+<B><!------------------------------------------------------->
+<A Name="HMPlotFile">HMPlotFile</A>(char *filename)
+</B><BR><BR><I>
+	This call opens the postscript file for output. Every following plot
+	call will be printed into this file. This call should always be the
+	first call of plotting.
+</I><DL>
+<DT><B>filename</B><DD> The name of the postscript file.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMPipe">HMPipe</A>()
+</B><BR><BR><I>
+	This call opens instead of a file a pipe to a second process running
+	the ghostscript interpreter. On X11 displays this should open
+        a window with the results.
+</I><DL>
+<DT><B>-</B><DD> none
+</DL><HR><B><!------------------------------------------------------->
+<A Name="HMClose">HMClose</A>()
+</B><BR><BR><I>
+Close the postscript file opened by HMPlotFile. No further output to this file is possible.</I><DL>
+<DT><B>-</B><DD>
+</DL><HR><B><!------------------------------------------------------->
+<A Name="HMZone">HMZone</A>(int x, int y, int first)
+</B><BR><BR><I>
+With HMZone you can show several plots on one page.
+</I><DL>
+<DT><B>x</B><DD> is the horizontal number of pictures.
+<DT><B>y</B><DD> is the vertical number of pictures.
+<DT><B>start</B><DD> is the number of the picture to start with. Usual you will start with picture 1, but you can change the format of the page during plotting. With this argumetn you can omit pictures, for example to put two samll and one large picture on one page.
+</DL><HR><B><!------------------------------------------------------->
+<A Name="HMTitle">HMTitle</A>(char *title)
+</B><BR><BR><I>
+This subroutine prints a title at the top of the page.
+</I><DL>
+<DT><B>title</B><DD> Thet title, of course.
+</DL><HR><B><!------------------------------------------------------->
+<A Name="HMSetOption">HMSetOption</A>(int option, float value)
+</B><BR><BR><I>
+We can set several parameters, like paper size or font size with this call.
+</I><DL>
+<DT><B>option</B><DD> The number of the option. If you include ``hmplot.h'' you can use the name of the option (see <A HREF="hmbookoptions.html">table</A>).
+<DT><B>value</B><DD> The new value of the choosen parameter.
+</DL><HR><B><!------------------------------------------------------->
+<A Name="HMDelete">HMDelete</A>(HIST *id)
+</B><BR><BR><I>
+Delete a histogram. Never try to access the histogram after this call!
+</I><DL>
+<DT><B>id</B><DD> The pointer to the histogram to delete.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMSame">HMSame</A>()
+</B><BR><BR><I>
+Tells HMPlot to print the next plot into the same picture. With this call you
+can plot several lines in one picture. The line style is changed for every line (solid, dashed, dotted, dash-dot, dash-dot-dot, etc. ). Use HMExplain to 
+clearify your picture!
+</I><DL>
+<DT><B>-</B><DD> none.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMExplain">HMExplain</A>(char *comment)
+</B><BR><BR><I>
+If you plot several curves in one picture, you should use this 
+subroutine ot explain, what which curve means. Just call this directly 
+after drawing a curve and before any next call. In the upper left corner
+of the picture apears a short line with the previous used line style, followed 
+by the explaination.
+</I><DL>
+<DT><B>comment</B><DD> The text to label your last curve.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMPlotFunction">HMPlotFunction</A> (int nnx, float *x, float *y, 
+			char *title, char *xlab, char *ylab,
+			char *xunit, char *yunit)
+
+</B><BR><BR><I>
+Plots a curve given by an array of x and y values.
+</I><DL>
+<DT><B>nnx</B><DD>Number of points in the arrays.
+<DT><B>x</B><DD>Array containing the values for the x axis.
+<DT><B>y</B><DD>Array containing the values for the x axis.
+<DT><B>title</B><DD> Title of the picture, printed below picture.
+<DT><B>xlab</B><DD> Label for the x axis.
+<DT><B>ylab</B><DD> Label for the y axis.
+<DT><B>xunit</B><DD> Unit for the x axis.
+<DT><B>yunit</B><DD> Unit for the y axis.
+</DL><HR><B><!------------------------------------------------------->
+
+void <A Name="HMMarkFunction">HMMarkFunction</A> (int where, float *x, float *y, 
+                     char *mark)
+</B><BR><BR><I>
+With this call you can mark a line you just have drawn with HMFunction. 
+<b>x</b> and <b>y</b> should be the same as at the call of HMFunction,
+<b>where</b> is a number between 1 and <b>nnx</b> of HMFunction. A small value
+plots the text at the beginning of the line, a large value at the end. 
+</I><DL>
+<DT><B>where</B><DD>Where to plot the text.
+<DT><B>x</B><DD>Array containing the values for the x axis.
+<DT><B>y</B><DD>Array containing the values for the x axis.
+<DT><B>mark</B><DD>The text to b plotted.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMMinimax">HMMinimumX</A> (float min)<BR>
+void HMMinimumY (float min)<BR>
+void HMMinimumZ (float min)<BR>
+void HMMaximumX (float max)<BR>
+void HMMaximumY (float max)<BR>
+void HMMaximumZ (float max)
+</B><BR><BR><I>
+With these calls you can choose the scaling of the pictures. Without
+them HMBook tries to choose the scaling by itself.
+</I>
+<DL><DT><B>min/max</B><DD> Mimimum or Maximum.
+</DL><HR><B><!------------------------------------------------------->
+
+void <A Name="HMPlotError">HMPlotError</A> (int nnx, float *x, float *y, float *xerr, float *yerr, 
+			char *title, char *xlab, char *ylab,
+			char *xunit, char *yunit)
+</B><BR><BR><I>
+Plot several data points with error bars.
+</I>
+<DL><DT><B>nnx</B><DD>Number of points in the arrays.
+<DT><B>x</B><DD>Array containing the values for the x axis.
+<DT><B>y</B><DD>Array containing the values for the x axis.
+<DT><B>xerr</B><DD>Error bars for the x value.
+<DT><B>yerr</B><DD>Error bars for the y value.
+<DT><B>title</B><DD> Title of the picture, printed below picture.
+<DT><B>xlab</B><DD> Label for the x axis.
+<DT><B>ylab</B><DD> Label for the y axis.
+<DT><B>xunit</B><DD> Unit for the x axis.
+<DT><B>yunit</B><DD> Unit for the y axis.
+</DL><HR><B><!------------------------------------------------------->
+HIST *<A Name="HMBook1">HMBook1</A> (char *title, char *labelx, char *labely,  
+	       char *unitx, char *unity, int nx, float minx, float maxx)
+</B><BR><BR><I>
+Booking of a 1-dimensional histogram. The return value is a pointer to
+the new allocated memory containing the histogram.<p>
+</I><DL>
+<DT><B>title         </B><DD> Title of the Histogram
+<DT><B>labelx, labely</B><DD> Axis labels
+<DT><B>unitx, unity  </B><DD> Units for the Axis.
+<DT><B>nx            </B><DD> Number of bins.
+<DT><B>minx,maxx     </B><DD> range for x values. Binning width is (maxx-minx)/nx.
+</DL><HR><B><!------------------------------------------------------->
+HIST *<A Name=HMBook2>HMBook2</A> (char *title, 
+               char *labelx, char *labely, char *labelz,
+               char *unitx, char *unity, char *unitz,
+               int nx, float minx, float maxx,
+               int ny, float miny, float maxy)
+</B><BR><BR><I>
+Booking of a 2-dimensional histogram. The return value is a pointer to
+the new allocated memory containing the histogram.
+</I><DL>
+<DT><B>title</B><DD>  Title of the Histogram
+<DT><B>labelx, labely, labelz</B><DD> Axis labels
+<DT><B>unitx, unity, unitz</B><DD> Units for the Axis.
+<DT><B>nx, ny</B><DD> Number of bins.
+<DT><B>minx,maxx,miny,maxy</B><DD> range for x,y values.
+</DL>
+
+<HR><B>
+<A Name=HMFill>HMFill</A> (HIST *id, float x, float y, float weight)
+</B><BR><BR><I>
+Filling of a histogram. The value of ``weight'' is added to the
+contents of the bin addressed by x,y.
+</I><DL>
+<DT><B>id</B><DD> Pointer to histogram.
+<DT><B>x,y</B><DD> x and y value for 2-dim. histograms. For 1-dim.
+ histograms y is ignored.
+<DT><B>weight</B><DD> Weight to be filled in histogram. Choose 1.0 for
+just ``counting'' the entries at the bin.  
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMFillFunction">HMFillFunction1</A>
+(HIST *id, float (*f)(float x))<BR>
+void HMFillFunction2(HIST *id, float (*f)(float x, float y))
+</B><BR><BR><I>
+The value of the function ``f'' is calculated at the center
+of each bin and is filled into the 1-dim or 2-dim histogram.
+</I><DL>
+<DT><B>id</B><DD> Pointer to histogram.
+<DT><B>f</B><DD> function.
+</DL><HR><B><!------------------------------------------------------->
+<A Name="HMHistogram">HMHistogram</A> (HIST *id)<BR>
+HMGray (HIST *id)<BR>
+HMLego (HIST *id)<BR>
+HMBox (HIST *id)<BR>
+HMSurface (HIST *id)<BR>
+HMScatter (HIST *id)<BR>
+HMFunction (HIST *id)
+</B><BR><BR><I>
+Ploting the histogram in the style 
+histogram(1-dim), 
+grayscale plot(2-dim), 
+lego plot (=manhattan plot, 2-dim), 
+box plot (2-dim), 
+scatter plot (2-dim), 
+as a surface (2-dim), 
+or as a line (1-dim).
+</I><DL>
+<DT><B>id</B><DD> Pointer to histogram.
+</DL><HR>
+
+void <A Name="HMWrite">HMWrite</A>
+(HIST *id, FILE *fp, char *name)
+</B><BR><BR><I>
+Save a histogram. 
+</I><DL>
+<DT><B>id</B><DD> Pointer to histogram.
+<DT><B>fp</B><DD> File pointer for output.
+<DT><B>name</B><DD> Arbitrary string to identify the histogram. 
+                   Usually the title.
+</DL><HR><B><!------------------------------------------------------->
+HIST * <A Name="HMRead">HMRead</A>
+(FILE *fp)
+</B><BR><BR><I>
+Read the next histogram in file. 
+</I><DL>
+<DT><B>id</B><DD> Pointer to histogram.
+<DT><B>fp</B><DD> File pointer for input.
+</DL><HR><B><!------------------------------------------------------->
+HIST * <A Name="HMReadIsolated">HMReadIsolated</A>
+(FILE *fp)
+</B><BR><BR><I>
+Read the next histogram in file. This call doesn't chain the
+histogram, so it can only be accessed by it's (HIST *)id. 
+</I><DL>
+<DT><B>id</B><DD> Pointer to histogram.
+<DT><B>fp</B><DD> File pointer for input.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMReadAll">HMReadAll</A>
+(char *filename)
+</B><BR><BR><I>
+Read all histograms in file.
+</I><DL>
+<DT><B>filename</B><DD> The name of the file.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMWriteAll">HMWriteAll</A>
+(char *filename)
+</B><BR><BR><I>
+Save all histograms in a file.
+</I><DL>
+<DT><B>filename</B><DD> The name of the file.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMWriteAscii">HMWriteAscii</A>
+(FILE *fp, HIST *id)
+</B><BR><BR><I>
+Ascii dump of histogram to file.
+</I><DL>
+<DT><B>id</B><DD> Pointer to histogram.
+<DT><B>fp</B><DD> File pointer for output.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMFind">HMFind</A>
+(char *name)
+</B><BR><BR><I>
+Find file identified by name (See HMWrite), usualy name=title.
+</I><DL>
+<DT><B>name</B><DD> The name.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMSetRebin">HMSetRebin</A>
+(int rebinfactor)
+</B><BR><BR><I>
+Several bins will be summed up into one bin for plotting.
+</I><DL>
+<DT><B>rebinfactor</B><DD> The number of bins to sum up.
+</DL><HR><B><!------------------------------------------------------->
+void <A Name="HMSetPredefinedStyle">HMSetPredefinedStyle</A>
+(int style)
+</B><BR><BR><I>
+A shortcut to set different plotting styles.
+</I><DL>
+<DT><B>style</B><DD> The id of the style. See hmplot.h for valid id's,
+ e.g.  ST_A4, ST_LETTER, ST_OVERHEAD, ST_PSFIG
+</DL><HR><B><!------------------------------------------------------->
+
+
+
+
+
+
+
+
+
+
+

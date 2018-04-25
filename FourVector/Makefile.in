@@ -1,0 +1,105 @@
+#								-*-makefile-*-
+# Copyright (c) 1991-94 by	Michael O. Distler,
+#				Institut fuer Kernphysik,
+#				Johannes Gutenberg-Universitaet Mainz
+#
+# All rights reserved.
+#
+# $Header: https://wwwa1.kph.uni-mainz.de/svn/Cola/trunk/FourVector/Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../Makefile.inc
+
+incprefix= $(incdir)/FourVector
+
+CPPFLAGS= $(DEFS) -I$(srcdir) -I..
+CXXFLAGS= $(OPTS) -O2 $(WARN)
+LDFLAGS	= $(OPTS)
+
+CXXSRC	= FourVector.cc FourVectorEloss.cc SimFourVector.cc Landau.cc \
+	  Multiple.cc sim4vec.cc test4vec.cc testLandau.cc testMultiple.cc \
+	  Spinor.cc
+INC	= FourVector.h Landau.h Multiple.h Rand.h Spinor.h
+SSRC	= FourVector.sgml Makefile.in
+
+SUBDIR	= $(notdir $(srcdir))
+BINARY	= sim4vec test4vec testLandau testMultiple
+
+libobjs	= FourVector.o SimFourVector.o FourVectorEloss.o Landau.o Multiple.o \
+	  Spinor.o
+library	= lib4vec.a
+
+VERSION	= 3.9
+shlib	= $(SHARED_LIB).$(VERSION)
+
+all :	$(BINARY)
+
+lib :	$(BUILD_LIBS)
+
+sim4vec :	sim4vec.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS) -lm
+
+test4vec :	test4vec.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS) -lm
+
+testLandau :	testLandau.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS) -lm
+
+testMultiple :	testMultiple.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS) -lm
+
+$(library) :	$(libobjs)
+	@ ar -crv $@ $^
+	$(RANLIB) $@
+
+$(shlib) $(SHARED_LIB) :	$(addprefix $(PICDIR)/,$(libobjs))
+	$(link_shlib)
+
+doc :	$(htmldir)/index.html $(texdir)/FourVector.ps
+
+$(htmldir)/index.html:	FourVector.h
+	@test -d $(htmldir) || mkdir $(htmldir)
+	(cd $(dir $<); $(DOCXX) -d $(shell pwd)/$(htmldir) $(notdir $<))
+
+$(texdir)/FourVector.tex:	FourVector.h
+	@test -d $(texdir) || mkdir $(texdir)
+	(cd $(dir $<); $(DOCXX) -t -o $(shell pwd)/$@ $(notdir $<))
+
+$(texdir)/FourVector.dvi:	$(texdir)/FourVector.tex
+	@test -f $(texdir)/$(DOCXXSTY) || \
+	    ln -s $(shell cd $(srcdir)/../Doc/src;pwd)/$(DOCXXSTY) $(texdir)
+	(cd $(texdir);$(LATEX) $(notdir $<);$(LATEX) $(notdir $<))
+
+$(texdir)/FourVector.ps:	$(texdir)/FourVector.dvi
+	$(DVIPS) -o $@ $^
+
+install:	.install
+.install:	$(INC) $(BUILD_LIBS) \
+		$(htmldir)/index.html $(texdir)/FourVector.ps
+	-@$(foreach dir,$(libdir) $(docdir) $(docdir)/FourVector $(incprefix),\
+		test -d $(dir) || mkdir -p $(dir);)
+	$(INSTALL_DATA) $(library) $(libdir)/$(library)
+	$(install_shlib)
+	$(foreach file,$(INC),\
+	  $(INSTALL_DATA) $(srcdir)/$(file) $(incprefix)/$(file);)
+	$(foreach doc,$(wildcard $(htmldir)/* $(texdir)/*.ps $(texdir)/*.tex),\
+		$(INSTALL_DATA) $(doc) $(docdir)/FourVector;)
+	date > $@
+
+clean:
+	rm -f *~ *.o nohup.out core $(PICDIR)/*.o
+
+veryclean:	clean
+	rm  -f $(BINARY) $(BUILD_LIBS) lib4vec.so .install .release
+	rm -rf $(PICDIR) $(htmldir) $(texdir)
+
+distclean:	veryclean
+	rm -f Makefile .depend
+
+.depend:	$(CXXSRC)
+	$(CC) -M $(CPPFLAGS) $^ | sed -e 's-^.*\.o-$(PICDIR)/& &-' > $@
+
+-include .depend

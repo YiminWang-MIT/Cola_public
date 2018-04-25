@@ -1,0 +1,50 @@
+#
+# This macro displays the status of the wirechambers in Spectrometer A
+#
+zone 2 3 1
+SetFillRGB 1.0 0.5 0.5
+
+Title "Spectrometer A: U1 Layer"
+Histogram "HDC/u1/time"
+Histogram "HDC/u1/wire"
+Minimumx 0
+Maximumx 10
+Histogram "HDC/u1/multi"
+Histogram "HDC/u1/x"
+Histogram "HDC/u1/xcell"
+Histogram "HDC/u1/oe"
+
+zone 2 3 1
+Title "Spectrometer A: U2 Layer"
+Histogram "HDC/u2/time"
+Histogram "HDC/u2/wire"
+Minimumx 0
+Maximumx 10
+Histogram "HDC/u2/multi"
+Histogram "HDC/u2/x"
+Histogram "HDC/u2/xcell"
+Histogram "HDC/u2/oe"
+
+zone 2 3 1
+Title "Spectrometer A: V1 Layer"
+Histogram "HDC/v1/time"
+Histogram "HDC/v1/wire"
+Minimumx 0
+Maximumx 10
+Histogram "HDC/v1/multi"
+Histogram "HDC/v1/x"
+Histogram "HDC/v1/xcell"
+Histogram "HDC/v1/oe"
+
+zone 2 3 1
+Title "Spectrometer A: V2 Layer"
+Histogram "HDC/v2/time"
+Histogram "HDC/v2/wire"
+Minimumx 0
+Maximumx 10
+Histogram "HDC/v2/multi"
+Histogram "HDC/v2/x"
+Histogram "HDC/v2/xcell"
+Histogram "HDC/v2/oe"
+
+close

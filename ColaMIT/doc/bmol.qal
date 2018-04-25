@@ -1,0 +1,310 @@
+;       BMOL.QAL              KAD               5/13/91
+;
+;       QAL code for the B-Line Moller polarimeter.
+;
+;       EVENT TYPE      FUNCTION
+;       3               Camac intialization for QRU, QRE
+;       4               SCALERS
+;       5               MOLLER integration and Coincidence event
+;       11              MOLLER target pol measurement event
+;       13              TARGET FLIP RESET DOWN
+;       14              TARGET FLIP RESET UP
+;       16              MOLLER quad step/target move event
+;       23              TARGET FLIP STANDBY
+;
+;       REVISIONS:
+;       13-may-91       KAD     Taken from [GEN.DAQ]GEN.QAL; GEN-type
+;                               events deleted (except in initialization
+;                               and scalers).
+;       24-jun-91       KAD     Move QSHUNT to output reg 2,10,1 --
+;                               faked as reading AS4 current from XCS,
+;                               writing it to 2,10,1 in QUAD_XCS
+;       08-apr-93       EJB     Change # eve 5's collected to 4000 per
+;                               scan point. Also modify to get BPMs
+;                               in Yale integrator and Halo monitors
+;                               in LR2249A
+;       30-aug-93       KAD     Remove GEN-specific DEVICE declarations
+;                               and OHIPS,NPOL scalers from event 4,3.
+;       08-sep-93       DHB     Modified writes to NIMOUT in accordance
+;                               with simplified CAMAC circuit
+;       23-MAR-95       KAD     Substitute 24-bit read of turn-by-turn clock
+;                               for two dummy flag statements in event 5.
+;                               Words 21-22 in data stream.
+;       16-AUG-95       GTZ     Add Output register to Moller Crate (2)
+;                               Slot 14 this needs to be taken out if the 
+;                               Yale module is put back in since the Yale is a
+;                               double wide. Delay in the ring of N-turns will
+;                               controlled from this output register.
+;       28-AUG-95       GTZ     Change Yale module 2249W pending SAMPLE run
+;                               and the return of the YALE modules
+;       31-JAN-96       SBS     Get rid of everything related with Al's box
+;
+;       6-NOV-97        SBS     Changed Output Register from slot 1 to 3
+;
+; ******************************************************************************
+        FRONTEND BMOL
+
+;       CRATE 3
+        DEVICE  GATCON, SE0612,3,3,0            ;gate controller & output reg.
+
+        DEVICE  QUAD,   KS3112,3,2,0            ;dac to control quad field
+
+        DEVICE  MHALO,  LR2249,3,4,0            ;halo upstream of moeller
+        DEVICE  THALO,  LR2249,3,4,1            ;halo upstream of he3-target
+
+                                                ;gated by RUN*BEAM  (NIM)
+        DEVICE  SC1,    KS3615,3,6,0            ;c1
+        DEVICE  SC2,    KS3615,3,6,1            ;c2
+        DEVICE  SC3,    KS3615,3,6,2            ;gated moller events
+        DEVICE  SC4,    KS3615,3,6,3            ;ungated moller events
+        DEVICE  SC5,    KS3615,3,6,4            ;ung. evts hel left
+        DEVICE  SC6,    KS3615,3,6,5            ;ung. evts hel right
+
+                                                ;gated by RUN (TTL)
+        DEVICE  SC7,    KS3610, 3,7,0           ;spare 
+        DEVICE  SC8,    KS3610, 3,7,1           ;spare  
+        DEVICE  SC9,    KS3610, 3,7,2           ;spare 
+        DEVICE  SC10,   KS3610, 3,7,3           ;spare 
+        DEVICE  SC11,   KS3610, 3,7,4           ;spare 
+        DEVICE  SC12,   KS3610, 3,7,5           ;spare 
+
+                                                ;gated by RUN (NIM): gate goes 
+                                                ;away between event 5's
+        DEVICE  SC13,   KS3610,3,8,0            ;run*beam  (nim)
+        DEVICE  SC14,   KS3610,3,8,1            ;evt 4 triggers (nim)
+        DEVICE  SC15,   KS3610,3,8,2            ;hel left  (-)  (nim)
+        DEVICE  SC16,   KS3610,3,8,3            ;hel right (+)  (nim)
+        DEVICE  SC17,   KS3610,3,8,4            ;spare
+        DEVICE  SC18,   KS3610,3,8,5            ;spare
+
+        DEVICE  MC1,    KS3610,3,9,0            ;Moller c1 count
+        DEVICE  MC2,    KS3610,3,9,1            ;Moller c2 count
+        DEVICE  M12E,   KS3610,3,9,2            ;Moller c1+c2 count early
+        DEVICE  M12O,   KS3610,3,9,3            ;Moller c1+c2 count ontime
+        DEVICE  M12L,   KS3610,3,9,4            ;Moller c1+c2 count late
+        DEVICE  MCSPAR, KS3610,3,9,5            ;Spare scaler channel
+
+
+        DEVICE  TBYT,   KS3615,3,10,0           ;Turn-by-turn clock for ring
+        DEVICE  NDELAY, JO0040,3,5,0            ;Output reg for N-turn delay
+
+;
+;       Address 0 of SE0604 in slot 11 has the 20th bit STUCK ON, so
+;       use it for helicity (RD16) instead of QSHUNT (RD24)
+;
+        DEVICE  HEL,    SE0604,3,11,0           ;helicity signal(strobed by EGC)
+        DEVICE  QSHUNT, SE0604,3,11,1           ;quad shunt signal 
+
+        DEVICE  IC1,    YA0344,3,13,0           ;Moller C1 integ over beam burst
+        DEVICE  IC2,    YA0344,3,13,1           ;Moller C2 integ over beam burst
+        DEVICE  BT1,    YA0344,3,13,2           ;BT1 integ over beam burst
+        DEVICE  BT2,    YA0344,3,13,3           ;BT2 integ over beam burst (spar
+e)
+
+        DEVICE  MOLX    YA0344,3,15,0           ;MOLX integ over beam burst
+        DEVICE  MOLY    YA0344,3,15,1           ;MOLY integ over beam burst
+        DEVICE  TGTX    YA0344,3,15,2           ;TGTX integ over beam burst
+        DEVICE  TGTY    YA0344,3,15,3           ;TGTY integ over beam burst
+
+
+                                                ;TDC'S FOR MOLLER COIN MODE
+        DEVICE  M1TDC   LR2228,3,19,0
+        DEVICE  M2TDC   LR2228,3,19,1
+        DEVICE  MCTSP1  LR2228,3,19,2
+        DEVICE  MCTSP2  LR2228,3,19,3
+        DEVICE  MCTSP3  LR2228,3,19,4
+        DEVICE  MCTSP4  LR2228,3,19,5
+        DEVICE  MCTSP5  LR2228,3,19,6
+        DEVICE  MCTSP6  LR2228,3,19,7
+;       DEVICE  MOTDC   EG0811,3,19,12
+
+
+;       DEVICE  IC1,    LR2249,3,15,4           ;Moller C1 integ over beam burst
+;       DEVICE  IC2,    LR2249,3,15,5           ;Moller C2 integ over beam burst
+;       DEVICE  BT1,    LR2249,3,15,6           ;BT1 integ over beam burst
+;       DEVICE  BT2,    LR2249,3,15,7           ;BT2 integ over beam burst (spar
+e)
+
+
+;       DEVICE  MOLX,   LR2249,3,15,0           ;moller x
+;       DEVICE  MOLY,   LR2249,3,15,1           ;moller y
+;       DEVICE  TGTX,   LR2249,3,15,2           ;target x
+;       DEVICE  TGTY,   LR2249,3,15,3           ;target y
+
+        DEVICE  S60HZ,  KS3615,3,16,0           ;phase of beam pulse (1-10)
+
+        DEVICE  NIMOUT, BR3251,3,17,0           ;output reg. for Helmholtz coil 
+control
+
+        DEVICE  INTVDT, KS3615,3,20,0           ;emf,helmholtz signals
+        DEVICE  CURRNT, KS3615,3,20,1
+        DEVICE  EMSP1,  KS3615,3,20,2           ;event 5 running scaler
+        DEVICE  SC19,   KS3615,3,20,4           ;prescaled event 5's
+        DEVICE  SC20,   KS3615,3,20,5           ;Spare
+
+; ******************************************************************************
+;       EVENT 3: MOLLER SPECIFIC CAMAC INITIALIZATION
+; ******************************************************************************
+        SPECIFY EVENT 3
+
+        CL SC1, SC2, SC3, SC4, SC5, SC6         ;clear scalers
+;       CL SC7, SC6, SC8, SC10,SC11,SC12
+;       CL SC13,SC14,SC15,SC16,SC17,SC18
+        CL SC19,SC20,EMSP1
+
+        CL MC1,MC2,M12E,M12O,M12L               ;clear coin Moller scalar
+        CL M1TDC
+        ELAM M1TDC
+
+;       JCB STANDBY
+
+        ELAM HEL,QSHUNT                         ;enable lams of input reg.
+
+        CL   IC1,MOLX,MHALO                     ;clear ADC's
+        ELAM IC1,MOLX,MHALO                     ;enable ADC's
+
+        FLUSH
+        PROCESS EVENT 3
+        END EVENT 3
+
+; ******************************************************************************
+;       EVENT 4: SCALER EVENT 
+; ******************************************************************************
+        SPECIFY EVENT 4                         ;20 (SCMAX) I*4 words (WMZ)
+
+        JCB MOLSC                               ;moller scalers: 40 I*2 words
+
+        FLUSH
+        PROCESS EVENT 4
+        END EVENT 4
+
+; ******************************************************************************
+;       EVENT 5: MOLLER EVENT -- both integrate and coincidence modes
+; ******************************************************************************
+        SPECIFY EVENT 5
+                                        ;word
+                                        ;1-2    Q header words
+        RC16 HEL                        ;3      new(3), gun(2), H+(1), H-(0) 
+        RD16 S60HZ                      ;4      Time slot
+        RD24 QSHUNT                     ;5-6    Quad shunt from DVM as a check
+
+                                        ;       Scalers for coincidence mode
+        RC24 MC1                        ;7-8    Cerenkov #1 scalar
+        RC24 MC2                        ;9-10   Cerenkov #2 scalar
+        RC24 M12E,M12O,M12L             ;11-16  C1+C2 early,ontime,late
+        RC24 MCSPAR                     ;17-18  One spare scaler channel
+
+        FLAG 0                          ;19-20  2 more spare words 
+        FLAG 0
+;       FLAG 0                          ;032395KAD Replaced by
+;       FLAG 0
+        RC24 TBYT                       ;21-22 TURN-BY-TURN CLOCK
+
+        DOI 100
+            TLAM IC1
+            IF Q.EQ.1 BRANCH INT1
+        ENDDOI        
+        FLAG 177777                     ;23     ADC conversion timeout
+        BRANCH INT2            
+
+INT1:   FLAG 0                          ;23     ADC conversion 
+INT2:   RD16 IC1,IC2,BT1,BT2            ;24-27  Integrated Cer 1,2, BT1, spare
+        RD16 MOLX, MOLY,TGTX,TGTY       ;28-31  BPM's 
+        RD16 MHALO,THALO                ;32-33  beam halo monitors 
+
+        DOI 50
+          TLAM M1TDC
+          IF Q.EQ.1 BRANCH MOTC1
+        ENDDOI
+        FLAG 177777
+        BRANCH MOTC2
+
+MOTC1:  FLAG 0                          ;34     conversion ok
+
+MOTC2:  RC16 M1TDC, M2TDC               ;35-36  readout 1st event/burst data
+        RC16 MCTSP1,MCTSP2,MCTSP3       ;37-42  6 spare Moller coincs TDCs 
+        RC16 MCTSP4,MCTSP5,MCTSP6
+
+        CL M1TDC                        ;       clear TDC
+        CL   IC1,MHALO
+        ELAM IC1,MHALO
+
+;       Check to see if time to trigger event 16 for next point in scan
+;
+        RD24 EMSP1                      ;43-44 read runing #  event 5's
+        RD24 SC19                       ;45-46 read prescaled # of event 5's  
+        TBITLO 1000                     ;to see if there are enough
+;
+        IF ZERO BRANCH MORE5
+        TFCNA 4,16,3,21,3,5,0           ;disable event 5 in LTM
+        TFCNA 4,16,3,21,2,20,0          ;enable event 16 in LTM
+        TFCNA 4,16,3,21,0,20,0          ;trigger event 16 in LTM
+        WR24 GATCON,5,0                 ;disable gate controller
+;                  
+MORE5:
+        FLUSH
+        PROCESS EVENT 5     
+        END EVENT 5
+
+
+; ******************************************************************************
+;       EVENT 16: Moeller magnet/target scan
+; ******************************************************************************
+;
+;       Dummy event to get to PROC16: all the work is there, but might as 
+;       well read target and quad
+;
+        SPECIFY EVENT 16
+
+        RD24 QSHUNT
+        RC24 INTVDT,CURRNT
+        JCB MOLSC
+        TFCNA 4,16,3,21,3,20,0                  ;clear ev. 16 trigger register
+;       TFCNA 4,16,3,21,2,15,0                  ;enable event 13 in LTM
+;       TFCNA 4,16,3,21,2,16,0                  ;enable event 14 in LTM
+;       TFCNA 4,16,3,21,2,27,0                  ;enable event 23 in LTM
+
+        FLUSH
+        PROCESS EVENT 16
+        END EVENT 16
+;
+; ******************************************************************************
+;       EVENT 23: STANDBY -- TURNS OFF MAGNET CURRENT
+; ******************************************************************************
+;
+;       SPECIFY EVENT 23
+
+;       JCB STANDBY
+;       FLUSH
+;
+;       PROCESS EVENT 23
+;       END EVENT 23
+
+; ******************************************************************************
+; SUBROUTINES:
+;       3: MOLSC     -- READ AND CLEAR MOLLER SCALERS (EVS 4,16)
+;       6: STANDY    -- PUT MOLLER TARGET IN STANDY MODE (EVS 3,23)
+; ******************************************************************************
+; READ MOLLER SCALERS
+
+        CB MOLSC
+
+        RC24 SC1,SC2,SC3,SC4,SC5,SC6            ;Read and Clear
+;       RC24 SC7,SC8,SC9,SC10,SC11,SC12
+;       RC24 SC13,SC14,SC15,SC16,SC17,SC18
+        RC24 SC19,SC20
+
+        RCB
+;******************************************************************************
+;STANDBY
+
+;       CB STANDBY
+
+;SEND ONE BIT TO THE PC TO SHUTDOWN THE COIL POWER SUPPLY
+
+;       CL CURRNT,INTVDT
+
+;       RCB
+
+        END EVENT MODE
+        END BMOL

@@ -1,0 +1,7 @@
+#define PI      3.141592653589793
+#define radiant (PI/180)
+#define degree  (180/PI)
+
+#define mass_proton   0.93827231
+#define mass_pi0      0.1349764
+#define mass_electron 0.00051199

@@ -1,0 +1,36 @@
+#define histo(nr,nrs) \
+Histogram @online.A.dE.paddle==nr \
+	"Pulsheight/Paddle dE"nrs": dE - T_kin!" \
+	TProton("T_p!","GeV",0.0,0.06,100) \
+	A.dE.Energy ("E_dE!", adcrangeA)
+Scalar A.dE.Energy.left = @online.A.dE.Energy.left
+Cut (@online.A.trigger && @online.C.trigger && A.dE.Energy > 120 ||\
+     @online.A.trigger && @online.B.trigger && A.dE.Energy > 120 )
+{
+//	&& abs(MissingMass - mass_pi0 * 1000) < 5.0 \
+//	&& abs(coincidenceTime) < 2
+histo( 1, "1");	histo( 2, "2");	histo( 3, "3");	histo( 4, "4");	
+histo( 5, "5");	histo( 6, "6"); histo( 7, "7");	histo( 8, "8");
+histo( 9, "9");	histo(10,"10");	histo(11,"11");	histo(12,"12")
+histo(13,"13");	histo(14,"14");	histo(15,"15");	histo(16,"16")
+Scalar phkorr =(abs(@online.A.dE.paddle==1) * 9 + \
+	  	abs(@online.A.dE.paddle==2) * 11.4 + \
+		abs(@online.A.dE.paddle==3) * 9.52 + \
+		abs(@online.A.dE.paddle==4) * 6.01+ \
+		abs(@online.A.dE.paddle==5) * 6.88 + \
+		abs(@online.A.dE.paddle==6) * 5.82 + \
+		abs(@online.A.dE.paddle==7) * 4.38 + \
+		abs(@online.A.dE.paddle==8) * 2.60 + \
+		abs(@online.A.dE.paddle==9) * 2.57 + \
+		abs(@online.A.dE.paddle==10) * 2.21 + \
+		abs(@online.A.dE.paddle==11) * 1.77 + \
+		abs(@online.A.dE.paddle==12) * 1.58 + \
+		abs(@online.A.dE.paddle==13) * 1.04 + \
+		abs(@online.A.dE.paddle==14) * 0.865 + \
+		abs(@online.A.dE.paddle==15) * 1)/5 * A.dE.Energy
+
+Histogram "Pulsheight/Paddle Korr: dE - T_kin!" \
+	  TProton("T_p!","GeV",0.0,0.060,100) \
+	  phkorr ("E_dE!", adcrangeA)
+
+}

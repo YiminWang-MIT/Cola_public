@@ -1,0 +1,94 @@
+This is TeX, Version 3.141 (C version d) (format=lplain 94.3.11)  21 JUN 1994 09:55
+**\nonstopmode\input{tmanote.tex}
+(tmanote.tex (/usr/local/lib/tex/inputs/styles/kph_art.sty
+
+Document Style `kph_art' v1.5c <14--MAY--1992> (SST)
+German documentation dated    <14--MAY--1992> (SST)
+
+(/usr/local/lib/tex/inputs/latex/article.sty
+Standard Document Style `article' <14 Jan 92>.
+(/usr/local/lib/tex/inputs/latex/art11.sty)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+))
+(/usr/local/lib/tex/inputs/styles/a4.sty
+Style option `A4' 1.2a <30 Nov 90> (NP and JLB)
+English documentation   <26 Feb 90> (JLB)
+)
+(/usr/local/lib/tex/inputs/styles/german.sty
+Document Style Option `german' Version 2.4a of 12 Apr 1992
+\U@D=\dimen99
+) (tmanote.aux)
+Overfull \hbox (1.00499pt too wide) in paragraph at lines 14--14
+ [][] 
+
+\hbox(9.79996+18.20004)x375.80377
+.\glue(\leftskip) 0.0 plus 1.0fil
+.\hbox(0.0+0.0)x0.0
+.\hbox(9.79996+18.20004)x376.80876
+..\mathon
+..\vbox(9.79996+18.20004)x376.80876
+...\hbox(9.79996+4.20004)x376.80876 []
+...\glue(\lineskip) 0.0
+...\hbox(9.79996+4.20004)x376.80876 []
+..\mathoff
+.\penalty 10000
+.\glue(\parfillskip) 0.0
+.etc.
+
+[1
+
+] [2]
+LaTeX Warning [l. 191]: Reference `schreiner' on page 3 undefined
+[3] [4]
+Overfull \hbox (8.35333pt too wide) in paragraph at lines 300--311
+\cmr/m/n/11 Ferner zeig-te sich, da^^Y man bei der Ver-wen-dung von FORT-RAN f[
+]ur I/O-Aufgaben,
+
+\hbox(8.21289+2.73785)x375.80377, glue set - 1.0
+.\cmr/m/n/11 F
+.\kern-0.9029
+.\cmr/m/n/11 e
+.\cmr/m/n/11 r
+.\cmr/m/n/11 n
+.etc.
+
+[5]
+Underfull \hbox (badness 1178) in paragraph at lines 320--322
+[] [][]\cmr/m/n/11 H.Kramer \cmr/m/sl/11 TMA - Using the TMA - ver-tex re-con-s
+truc-tion soft-ware
+
+\hbox(8.21289+2.73785)x353.50711, glue set 2.27853
+.\hbox(0.0+0.0)x0.0
+.\glue 0.0
+.\hbox(8.21289+2.73785)x0.0
+..\glue 0.0
+..\glue -16.87427
+..\glue -5.4224
+..\hbox(8.21289+2.73785)x16.87427, glue set 5.4224fil
+...\glue 0.0 plus 1.0fil
+...\cmr/m/n/11 [
+...\cmr/m/n/11 4
+...\cmr/m/n/11 ]
+..\glue 5.4224
+.\penalty 0
+.\setlanguage1 (hyphenmin 2,2)
+.etc.
+
+[6] (tmanote.aux) ) 
+Here is how much of TeX's memory you used:
+ 440 strings out of 11900
+ 4137 string characters out of 81847
+ 36500 words of memory out of 262141
+ 2445 multiletter control sequences out of 9500
+ 11687 words of font info for 47 fonts, out of 100000 for 255
+ 14 hyphenation exceptions out of 607
+ 19i,9n,19p,691b,228s stack positions out of 300i,40n,60p,3000b,4000s
+
+Output written on tmanote.dvi (6 pages, 21156 bytes).

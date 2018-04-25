@@ -1,0 +1,41 @@
+#								 -*-makefile-*-
+#
+# $Id: Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+.PHONY : all clean lib veryclean distclean
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../../Makefile.inc
+
+EXP	= abcn
+CXXFLAGS= $(OPTS) $(WARN) -fno-strict-aliasing
+LDFLAGS	= $(OPTS)
+CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(topdir)/Cola/include -I$(incdir) -I.. -I../..
+
+# libobjs	= EventSimReader.o  Generator.o SimSpek.o ../Colli.o ../Dipol.o ../FringeFall.o ../Generate.o ../Matrix3D.o ../Multipol.o ../deForestCC1.o ../qspinColli.o ../qspinSpectrometer.o ../simDetector.o ../simSpectrometer.o ../simSpecwithTrace.o ../spinTransfer.o
+ libobjs	= EventSimReader.o  Generator.o SimSpek.o 
+library	= libeventsimreader.a
+
+
+
+all:	lib
+
+lib:	$(library)
+
+$(library) :	$(libobjs)
+	@ ar -crv $@ $^
+	$(RANLIB) $@
+
+clean :
+	rm -rf *~ *.o
+
+veryclean :	clean
+	rm -f $(library) $(QSPIN)
+
+distclean:	veryclean
+	rm -f Makefile
+
+-include $(libobjs:%.o=.%.depend)

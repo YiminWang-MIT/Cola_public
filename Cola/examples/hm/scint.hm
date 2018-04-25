@@ -1,0 +1,14 @@
+#
+zone 2 3 1
+SetFillRGB 1.0 0.5 0.5
+
+Title "scintillator"
+Histogram "Spec. A/Scintillator/Paddle dE"
+Histogram "Spec. A/Scintillator/Paddle ToF"
+
+SetFillRGB 0.5 0.5 1.0
+
+Histogram "Spec. C/Scintillator/Paddle dE"
+Histogram "Spec. C/Scintillator/Paddle ToF"
+
+close

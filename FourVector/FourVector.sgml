@@ -1,0 +1,90 @@
+<!doctype linuxdoc system>
+
+<!--    Copyright (c) 1996 by   Michael O. Distler,
+                                Institut f&ue;r Kernphysik,
+                                Johannes Gutenberg-Universit&ae;t Mainz
+        All rights reserved.
+
+        $Header: /tmp/cvsroot/Cola/FourVector/FourVector.sgml,v 3.0 1997-07-09 10:14:33 merkel Exp $
+
+        user's guide to the four vector library -->
+
+<article>
+
+<title>FourVector user's guide
+<author>Michael O. Distler,<htmlurl url="mailto:distler@kph.uni-mainz.de"
+	name="distler@kph.uni-mainz.de" ><newline>
+	<tt/Institut f&ue;r Kernphysik, Universit&ae;t Mainz/
+<date>Version 1.0, 13. Januar 1996
+<abstract>
+This document is a user's guide to the FourVector library, a library
+written in C++, used to simplify the kinematic calculations in simulation
+and analysis programs. This guide documents lib4vec.a version 2.1.
+</abstract>
+
+<toc>
+
+<sect>Introduction
+<p>
+
+<sect1>About this document
+<p>
+This document has been written in SGML using the Linuxdoc-SGML formatting
+system. You can get the Linuxdoc-SGML package from <tscreen><htmlurl
+url="ftp://ftp.th-darmstadt.de/pub/os/Linux/tsx-11.mit.edu/docs/linuxdoc-sgml-1.4.tar.gz" name="ftp://ftp.th-darmstadt.de/pub/os/Linux/tsx-11.mit.edu/docs/linuxdoc-sgml-1.4.tar.gz" ></tscreen>
+or <tscreen><htmlurl url="ftp://sunsite.unc.edu/pub/Linux/utils/text/linuxdoc-sgml-1.4.tar.gz" name="ftp://sunsite.unc.edu/pub/Linux/utils/text/linuxdoc-sgml-1.4.tar.gz" ></tscreen>
+
+<sect1>Why C++ ?
+<p>
+There are several reasons to use OOP or <em/object oriented programing/
+for this kind of software development. OOP offers the methods to analyse
+the problem, to design the software and for the coding. The phase of
+analysis and of design can be much shorter. Teamwork is made easy. The
+Code will be readable, can be reused and maintenance is made easy. Although
+C++ is only one of several OOP languages (among <it/smalltalk/ and
+<it/eiffel/) it has some specific advantages.
+C++ compilers produce very efficient code. Programers, who are used to
+the C language, can slowly adapt to OOP, because C++ is only a better
+C in some respect. Finally the GNU C++ compiler is free available and makes
+the porting of the software to different platforms a minor problem:
+<tscreen><htmlurl url="ftp://ftp.th-darmstadt.de/pub/gnu/gcc-2.7.2.tar.gz"
+name="ftp://ftp.th-darmstadt.de/pub/gnu/gcc-2.7.2.tar.gz" ></tscreen>
+or <tscreen><htmlurl url="ftp://prep.ai.mit.edu/pub/gnu/gcc-2.7.2.tar.gz"
+name="ftp://prep.ai.mit.edu/pub/gnu/gcc-2.7.2.tar.gz" ></tscreen>
+
+<sect1>How it works
+<p>
+
+<sect>Class Hierarchy
+<p>
+
+<sect1>class FourVector
+<p>
+<descrip>
+<tag/FourVector()/
+	Constructor
+</descrip>
+
+<sect1>class SimFourVector
+<p>
+obsolete
+
+<sect1>class SimulFourVector
+<p>
+
+<sect1>class FourVectorEloss
+<p>
+
+<sect>Using the library
+<p>
+
+<sect1>Basic concepts
+<p>
+
+<sect1>Simulation
+<p>
+
+<sect1>special functions for spectrometer
+<p>
+
+</article>

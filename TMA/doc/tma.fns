@@ -1,0 +1,4 @@
+\initial {T}
+\entry {\code {TMA{\_}del}}{2, 3}
+\entry {\code {TMA{\_}new}}{1, 3}
+\entry {\code {TMA{\_}run}}{2, 3}

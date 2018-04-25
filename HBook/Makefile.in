@@ -1,0 +1,122 @@
+#								-*-makefile-*-
+# Created 1993 by	Michael O. Distler,
+#			Institut fuer Kernphysik,
+#			Johannes Gutenberg-Universitaet Mainz
+#
+# $Header: https://wwwa1.kph.uni-mainz.de/svn/Cola/trunk/HBook/Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+# Makefile fuer die hbook interface library.
+#
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../Makefile.inc
+
+incprefix= $(incdir)/HBook
+
+CFLAGS	= $(OPTS) -O2 $(WARN)
+CXXFLAGS= $(OPTS) -O2 $(WARN)
+CPPFLAGS= $(DEFS) -I$(srcdir) -I$(srcdir)/../FourVector
+LDFLAGS	= $(OPTS) -L../FourVector -L$(CERNLIB)
+
+FSRC	= hbook.f ntuple.f hserver.f
+CXXSRC	= HBook.cc hmap.cc htest.cc ntest.cc landau.cc exp.cc ascii2ntuple.cc
+EXE	= hmap htest ntest hbook ntuple hserver landau exp ascii2ntuple
+
+SUBDIR	= $(notdir $(srcdir))
+libobjs	= HBook.o
+library	= libHBook.a
+MORELIBS= -lpacklib -lkernlib $(FLIBS) $(LIBS) -lm
+
+VERSION	= 1.32
+shlib	= $(SHARED_LIB).$(VERSION)
+
+all :	$(EXE)
+
+doc :	$(htmldir)/HBook.html $(texdir)/HBook.ps
+
+lib :	$(BUILD_LIBS)
+
+hmap :	hmap.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(MORELIBS)
+
+exp :	exp.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(MORELIBS)
+
+htest :	htest.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(MORELIBS)
+
+ntest :	ntest.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(MORELIBS)
+
+landau:	landau.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ -l4vec $(MORELIBS)
+
+ascii2ntuple :	ascii2ntuple.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(MORELIBS)
+
+$(library) :	$(libobjs)
+	@ ar -crv $@ $^
+	$(RANLIB) $@
+
+$(shlib) $(SHARED_LIB) :	$(addprefix $(PICDIR)/,$(libobjs))
+	$(link_shlib)
+
+hbook :	hbook.o $(CERNLIB)/libpacklib.a $(CERNLIB)/libkernlib.a
+	$(F77) -o $@ $^ $(FLIBS) $(LIBS)
+
+ntuple :	ntuple.o $(CERNLIB)/libpacklib.a $(CERNLIB)/libkernlib.a
+	$(F77) -o $@ $^ $(FLIBS) $(LIBS) -lm
+
+hserver :	hserver.o $(CERNLIB)/libpacklib.a $(CERNLIB)/libkernlib.a
+	$(F77) -o $@ $^ $(FLIBS) $(LIBS) -lm
+
+$(htmldir)/HBook.html:	HBook.h
+	@test -d $(htmldir) || mkdir $(htmldir)
+	(cd $(dir $<); $(DOCXX) -d $(shell pwd)/$(htmldir) $(notdir $<))
+
+$(texdir)/HBook.tex:	HBook.h
+	@test -d $(texdir) || mkdir $(texdir)
+	(cd $(dir $<); $(DOCXX) -t -o $(shell pwd)/$@ $(notdir $<))
+
+$(texdir)/HBook.dvi:	$(texdir)/HBook.tex
+	@test -f $(texdir)/$(DOCXXSTY) || \
+	    ln -s $(shell cd $(srcdir)/../Doc/src;pwd)/$(DOCXXSTY) $(texdir)
+	(cd $(texdir);$(LATEX) $(notdir $<);$(LATEX) $(notdir $<))
+
+$(texdir)/HBook.ps:	$(texdir)/HBook.dvi
+	$(DVIPS) -o $@ $^
+
+install :	.install
+.install :	HBook.h $(BUILD_LIBS) \
+		$(htmldir)/HBook.html $(texdir)/HBook.ps
+	-@$(foreach dir,$(exec_prefix) $(libdir) $(incdir) $(incprefix) \
+		$(docdir) $(docdir)/HBook,test -d $(dir) || mkdir $(dir);)
+	$(INSTALL_DATA) $(library) $(libdir)/$(library)
+	$(install_shlib)
+	$(INSTALL_DATA) $(srcdir)/HBook.h $(incprefix)/HBook.h
+	$(foreach doc,$(wildcard $(htmldir)/* $(texdir)/*.ps $(texdir)/*.tex),\
+		$(INSTALL_DATA) $(doc) $(docdir)/HBook;)
+	date > $@
+
+uninstall :
+	rm -f  $(libdir)/$(library) $(libdir)/$(SHARED_LIB)
+	rm -f  $(basename $(libdir)/$(shlib)) $(libdir)/$(shlib)
+	rm -rf $(incprefix)/HBook.h $(docdir)/HBook .install
+
+clean :
+	rm -f  *~ *.o $(EXE) core last.kumac* paw.metafile
+	rm -rf histo.dat histo.map ntuple.dat $(PICDIR)
+
+veryclean :	clean
+	rm -rf $(BUILD_LIBS) $(SHARED_LIB) $(htmldir) $(texdir)
+	rm -f  .install .release
+
+distclean :	veryclean
+	rm -f Makefile .depend
+
+.depend :	$(CXXSRC)
+	$(CC) -M $(CPPFLAGS) $^ | sed -e 's-^.*\.o-$(PICDIR)/& &-' > $@
+
+-include .depend

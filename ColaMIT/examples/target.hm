@@ -1,0 +1,28 @@
+#
+zone 2 4 1
+Title "Target"
+SetFillRGB 1.0 0.5 0.5
+Histogram "OHIPS/target/[D]p"
+Histogram "OHIPS/target/[q]"
+Histogram "OHIPS/target/[y0]"
+Histogram "OHIPS/target/[f]"
+SetFillRGB 0.5 1.0 0.5 
+Histogram "OOPS A/target/[D]p"
+Histogram "OOPS A/target/[q]"
+Histogram "OOPS A/target/[y0]"
+Histogram "OOPS A/target/[f]"
+
+zone 2 4 1
+Title "Target"
+SetFillRGB 0.5 0.5 1.0
+Histogram "OOPS B/target/[D]p"
+Histogram "OOPS B/target/[q]"
+Histogram "OOPS B/target/[y0]"
+Histogram "OOPS B/target/[f]"
+SetFillRGB 1.0 1.0 0.5
+Histogram "OOPS C/target/[D]p"
+Histogram "OOPS C/target/[q]"
+Histogram "OOPS C/target/[y0]"
+Histogram "OOPS C/target/[f]"
+
+close

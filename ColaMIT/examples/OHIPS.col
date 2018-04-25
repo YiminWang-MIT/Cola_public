@@ -1,0 +1,84 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/OHIPS.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for OHIPS
+//
+
+// required definitions
+//
+// spec   :  name of the spectrometer in event configuration oops1
+// htitle :  first part of the histogram title
+
+Scalar spec.noLAM = @oops1.det.spec.noLAM
+Histogram htitle"noLAM" spec.noLAM("Look At Me", "boolean", -3.5, 3.5, 7)
+
+#   define nr 1
+#   define title htitle"scintillator/1/"
+#   include "OHIPSscintillator.col"
+#   undef title
+#   undef nr
+
+#   define nr 2
+#   define title htitle"scintillator/2/"
+#   include "OHIPSscintillator.col"
+Scalar spec.scint.nr.meantime  = @oops1.det.spec.scint[nr].meantime
+Histogram title"tdc/meantime" \
+	spec.scint.nr.meantime("meantime", "50 ps", -0.5, 4094.5, 4095) ;
+#   undef title
+#   undef nr
+
+#   define nr 3
+#   define title htitle"scintillator/3/"
+#   include "OHIPSscintillator.col"
+#   undef title
+#   undef nr
+
+#   define title htitle"cerenkov/"
+#   include "OHIPScerenkov.col"
+#   undef title
+
+#   define title htitle"leadglas/"
+#   include "OHIPSleadglas.col"
+#   undef title
+
+Cut (spec.scint.2.tdc.left) && (spec.scint.2.tdc.right) {
+
+#   define layer u1
+#   define title htitle"chamber/u1/"
+#   include "OHIPSchamber.col"
+#   undef title
+#   undef layer
+
+#   define layer v1
+#   define title htitle"chamber/v1/"
+#   include "OHIPSchamber.col"
+#   undef title
+#   undef layer
+
+#   define layer u2
+#   define title htitle"chamber/u2/"
+#   include "OHIPSchamber.col"
+#   undef title
+#   undef layer
+
+#   define layer v2
+#   define title htitle"chamber/v2/"
+#   include "OHIPSchamber.col"
+#   undef title
+#   undef layer
+
+}
+
+#define title htitle"focal plane/"
+#include "OHIPSfocalplane.col"
+#undef title
+
+#define title htitle"target/"
+#include "OHIPStarget.col"
+#undef title

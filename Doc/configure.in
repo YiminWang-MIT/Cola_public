@@ -1,0 +1,58 @@
+dnl
+dnl the guy to blame:
+dnl
+dnl Michael O. Distler                        mailto:distler@mit.edu
+dnl MIT, Lab for Nuclear Science, 26-456      tel.   (617) 253-6997
+dnl Cambridge, MA 02139, USA                  fax    (617) 258-5440
+dnl
+dnl $Header: /tmp/cvsroot/Cola/Doc/configure.in,v 1.5 2004-06-17 15:33:01 bernauer Exp $
+dnl
+dnl Process this file with autoconf to produce a configure script.
+dnl
+AC_INIT(src/docxx.sty)
+dnl
+dnl check command line options
+dnl
+AC_PREFIX_DEFAULT(/usr/local/a1)
+AC_SUBST(OPTS)
+AC_SUBST(PAPER)
+AC_ARG_ENABLE(gdb,
+	[  --enable-gdb            compile and link with debug option],
+	[OPTS="$OPTS -g"],[OPTS="$OPTS -O"])
+AC_ARG_WITH(javac,
+	[  --with-javac=DIR        use the javac binary found in DIR])
+AC_ARG_WITH(tex,
+	[  --with-latex=DIR        use the latex binary found in DIR])
+AC_ARG_WITH(perl,
+	[  --with-perl=DIR         use the perl binary found in DIR])
+AC_ARG_WITH(paper,
+	[  --with-paper=FLAGS      use FLAGS to produce LaTeX output])
+test "x$with_paper" = "x"    && PAPER=$with_paper
+test "x$prefix" = xNONE      && prefix=$ac_default_prefix
+test "x$exec_prefix" = xNONE && exec_prefix=$prefix
+dnl
+dnl find certain programs
+dnl
+test -n ""$CC  || CC=gcc
+test -n ""$CXX || CXX=g++ && CCC=$CXX
+
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_INSTALL
+AC_PROG_LEX
+AC_PATH_PROG(JAVAC,javac,[:],
+	$with_javac:$exec_prefix/bin:/usr/lib/java/bin:/usr/local/java/bin:/usr/local/bin:$PATH)
+test "$JAVAC" = ":" && find $srcdir/classes -name '*.class' -exec cp  {} . \;
+AC_PATH_PROG(PERL,perl,[:],$with_perl:$PATH:/usr/local/bin:$exec_prefix/bin)
+test "$PERL" = ":" && find $srcdir/include -name '*.h' -exec cp {} . \;
+AC_PATH_PROG(DVIPS,dvips,[:],$with_latex:$PATH:/usr/local/bin:$exec_prefix/bin)
+AC_PATH_PROGS(LATEX,latex2e latex,[:],
+	$with_latex:$PATH:/usr/local/bin:$exec_prefix/bin)
+dnl
+dnl find library function
+dnl
+AC_CHECK_FUNC(strdup,[],AC_DEFINE(NEED_STRDUP_PROTOTYP))
+dnl
+dnl write output
+dnl
+AC_OUTPUT(Makefile binToC,chmod +x binToC)

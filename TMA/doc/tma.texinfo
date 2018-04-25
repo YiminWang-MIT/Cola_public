@@ -1,0 +1,255 @@
+\input texinfo @c -*-texinfo-*-
+@c %**start of header
+@setfilename tma.info
+@settitle Vertex - Reconstruction Routines
+@c %**end of header
+@setchapternewpage odd
+
+
+@titlepage
+@sp 11
+@center @titlefont{TraceMachine -- TMA}
+@sp 1
+@center Using the fast Vertex Reconstruction routines
+@sp 2
+@center 
+@center by Helmut Kramer
+@sp 2
+@center working draft of 14 April 1992
+@c @today
+
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1992 Institut fuer Kernphysik, Universitaet Mainz (FRG)
+			    	
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@end titlepage
+@page
+
+
+@ifinfo
+@node top, TraceMachine, (dir), (dir)
+@top TMA
+
+@menu
+* TraceMachine::                TraceMachine
+
+ --- The Detailed Node Listing ---
+
+TMA package
+
+
+TraceMachine
+
+* Intro::                       Introduction
+* C::                           Programming in C
+* Fortran::                     Programming in Fortran
+* bundle::                      Invocing bundle
+
+Programming in C
+
+* C-Interface::                 C-Interface description
+* C-Example::                   Programming Example
+
+Programming in Fortran
+
+* F-Interface::                 FORTRAN-Interface description
+* F-Example::                   Programming Example
+
+ --- The Detailed Node Listing ---
+
+TMA package
+
+
+TraceMachine
+
+* Intro::                       Introduction
+* C::                           Programming in C
+* Fortran::                     Programming in Fortran
+* bundle::                      Invocing bundle
+
+Programming in C
+
+* C-Interface::                 C-Interface description
+* C-Example::                   Programming Example
+
+Programming in Fortran
+
+* F-Interface::                 FORTRAN-Interface description
+* F-Example::                   Programming Example
+@end menu
+@end ifinfo
+
+@node TraceMachine,  , top, top
+@comment  node-name,  next,  previous,  up
+@unnumberedsec TraceMachine
+
+@menu
+* Intro::                       Introduction
+* C::                           Programming in C
+* Fortran::                     Programming in Fortran
+* bundle::                      Invocing bundle
+@end menu
+
+@node Intro, C,  , TraceMachine
+@comment  node-name,  next,  previous,  up
+@unnumberedsubsec Introduction
+This section describes the user-interface of the TMA-software. The software
+is split into two parts. The first part provides the functions needed
+to reconstruct target coordinates from focal plane vectors. This 
+part is useful for on- and offline analysis programms. Since 
+lot of the analysis software is traditionally written in FORTRAN
+both  a C and a FORTRAN interface is provided, which are described
+below. The transformation from focal plane to target coordinates is done
+ by a multidimensional polynomial. The parameters which characterize
+this polynomial (transfer coefficients and powers) must be stored in a
+a single file. This file can be build by hand or whith the aid of a
+tool which is also part of the TMA-software. This tool called bundle 
+combines the parameter files obtained from analysis  programms.
+
+@node C, Fortran, Intro, TraceMachine
+@comment  node-name,  next,  previous,  up
+@unnumberedsubsec Programming in C
+@menu
+* C-Interface::                 C-Interface description
+* C-Example::                   Programming Example
+@end menu
+
+The usage of the reconstruction functions within C is described in this
+section. All prototypes and structures are defined in 
+@file{tma/TraceMachine.c}. You can also safely include this file in 
+C++ programms without the @code{extern "C" } mechanism. However a 
+C++-interface   will also be available soon.
+
+
+@node C-Interface, C-Example,  , C
+@comment  node-name,  next,  previous,  up
+@unnumberedsubsubsec C-Interface description
+The reconstruction software is implemented in an object-based manner as
+far as the interface is concerned. Instead of function 
+which calculates the target coordinates from a certain focal plane vector,
+ we have  a machine (class) which has the ability to perform
+the described transformation (class-method).
+This is exactly the situation we encounter in real world: 
+The machine at hand is our spectrometer - with the only difference that it 
+does the transformation in the opposite direction. 
+Like in real life the first thing  you have to do is building a machine 
+with the desired transformation proberties.
+@deftypefun {TraceMachine *} TMA_new ( char * @var{fname}, int @var{mode})
+The parameter @var{fname} is the name of a file which contains the 
+description of the transformation polynomial. 
+The @var{mode} parameter is not used so far. The return value is a
+pointer to the new machine and must be supplied in all other functions
+described below.  @code{NULL} is returned if an error has occured.
+This function plays the role of a constructor  in C++-terminolgy. 
+Note that you can not access the components of a @code{TraceMachine} 
+structure. 
+@end deftypefun
+After successful  creation of a @code{TraceMachine} you are ready for 
+reconstruction.
+@deftypefun {struct target_ko *} TMA_run ( TraceMachine * @var{tp}, struct focalplane_ko * @var{fp})
+A target coordinate is calculated from  the focalplane coordinate
+supplied by @var{fp}. 
+The right @code{TraceMachine} is chosen by @var{tp} which 
+contains all intrinsic information.
+@end deftypefun
+Like in real life you might loose interest in your machine. In that case
+the machine is do not just thrown away but all valuable parts are recycled.
+@deftypefun void TMA_del ( TraceMachine *tp)
+This function does all the necessary cleanup operations. On 
+return all further access on tp is undefined. It is our destructor.
+@end deftypefun
+@node C-Example,  , C-Interface, C
+@comment  node-name,  next,  previous,  up
+@unnumberedsubsubsec Programming Example
+In this section a small example in C is presented. The programm below works
+as a filter. Focal plane coordinates are read from standard input and
+the calculated target coordinates are printed on standard output. This 
+example is also part of the distribution (@file{tMachine.c}).
+@include c.example
+@node Fortran, bundle, C, TraceMachine
+@comment  node-name,  next,  previous,  up
+@unnumberedsubsec Programming in Fortran
+@menu
+* F-Interface::                 FORTRAN-Interface description
+* F-Example::                   Programming Example
+@end menu
+
+In this section the FORTRAN -- interface is explained. There is of course
+no difference in the functionality provided for C or FORTRAN. 
+The FORTRAN -- interface  was developed on a DECstation with 
+Digitals FORTRAN for RISC compiler.
+
+@node F-Interface, F-Example,  , Fortran
+@comment  node-name,  next,  previous,  up
+@unnumberedsubsubsec FORTRAN-Interface description
+
+@deftypefun  integer TMA_new ( character *(*) @var{fname}, integer @var{mode})
+@code{TMA_new} creates a machine which you can use for coordinate
+reconstruction. @var{fname} is the file which contains the description 
+of the transformation polynomial. The @var{mode} parameter is not
+used so far. This function returns the intrinsic number of the 
+machine.  You must supply this number to all other functions described below.
+If the return value is 0 an error has occured. This function is
+similar to @code{open}.
+@end deftypefun
+@deftypefun subroutine TMA_run ({real*4 (4)}  @var{tp}, {real*4 (4)} @var{fp},  integer @var{tm} )
+@code{TMA_run} calculates the target coordinates @var{tp} from the
+focal plane coordinates @var{fp}. The machine @var{tm} is used.
+@end deftypefun
+@deftypefun subroutine TMA_del ( integer tm)
+This function does all the necessary cleanup operations. On 
+return all usage of @var{tm} is undefined. This function is similar to
+@code{close}.
+@end deftypefun
+@node F-Example,  , F-Interface, Fortran
+@comment  node-name,  next,  previous,  up
+@unnumberedsubsubsec Programming Example
+Like our C example we present a filter programm which reads focal plane
+data from the keyboard and displays the results on the screen. It terminates
+when an error or an @code{EOF} occurs.
+@include f.example
+@page
+@node bundle,  , Fortran, TraceMachine
+@comment  node-name,  next,  previous,  up
+@unnumberedsubsec Invocing bundle
+The @code{bundle} Syntax is 
+@example
+bundle [OPTIONS]
+@end example
+@code{bundle} produces an input file for the
+reconstruction routines.
+Since the transfer coefficients and the corrosponding powers 
+are provided for each focal plane coordinate seperatly this programm
+is needed to order them and to produce a single description file.
+@table @samp
+@item -d @var{filename}
+This option is used to specify a file which contains the coefficients
+and powers for the delta target coordinate.  default: delta.hmx
+
+@item -t @var{filename}
+This option is used to specify a file which contains the coefficients
+and powers for the theta target coordinate.  default: theta0.hmx
+
+@item -p @var{filename}
+This option is used to specify a file which contains the coefficients
+and powers for the phi target coordinate.  default: phi0.hmx
+
+@item -y @var{filename}
+This option is used to specify a file which contains the coefficients
+and powers for the y target coordinate.  default: y0.hmx
+
+@item -o @var{filename}
+This option specifies an output file otherwise the result is printed on
+standard output.
+
+@item -v 
+This option causes @code{bundle} to print its current version.
+@end table
+
+
+@bye
+
+

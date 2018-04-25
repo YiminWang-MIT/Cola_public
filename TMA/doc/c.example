@@ -1,0 +1,28 @@
+@example
+#include <stdio.h>
+#include <stdlib.h>
+#include "tma/TraceMachine.h"
+
+int main(int argc, char *argv[])
+@{
+  TraceMachine *tp;
+  struct target_ko     *result;
+  struct focalplane_ko   fp;
+  
+  if (argc != 2) @{
+    fprintf(stderr, "usage: %s filename\n", argv[0]);
+    exit(1);
+  @}
+ 
+  if (tp = TMA_new(argv[1], 0)) @{
+    while (scanf("%f %f %f %f",&fp.x_fp,&fp.th_fp,&fp.y_fp,&fp.ph_fp) == 4) @{
+      result = TMA_run(&fp, tp);
+      printf("%g %g %g %g\n", result -> dp_tg, result -> th_tg, 
+             result -> y_tg, result -> ph_tg); 
+    @}    
+      return 0;
+  @}
+  fprintf(stderr, "%s :: TMA_new failed\n", argv[0]);
+  return 1;
+@}
+@end example

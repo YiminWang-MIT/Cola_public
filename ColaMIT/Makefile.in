@@ -1,0 +1,255 @@
+#								 -*-makefile-*-
+# Created 1996/97 by	Michael O. Distler 
+#	                Harald Merkel
+#
+#		 	A1 Collaboration
+#			Institut für Kernphysik
+#			Johannes Gutenberg-Universität Mainz
+#
+# $Header: https://wwwa1.kph.uni-mainz.de/svn/Cola/trunk/ColaMIT/Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@:@srcdir@/doc
+
+include	../Makefile.inc
+
+EXP	= oops1
+OUT     = online
+
+INCDIR	= $(srcdir)/include
+EXPDIR	= $(INCDIR)/$(EXP)
+OUTDIR	= $(INCDIR)/$(OUT)
+
+CPPFLAGS= -I. -I.. -I$(srcdir) -I$(topdir) -I$(incdir) -I$(topdir)/Cola  \
+	  -I$(EXPDIR) -I$(OUTDIR) -I$(incdir) -I$(incdir)/Aqua \
+	  $(WX_CFLAGS) $(DEFS) -D__ColaMIT__
+
+CFLAGS	= $(OPTS) $(WARN)
+CXXFLAGS= $(OPTS) $(WARN)
+LDFLAGS	= $(OPTS) -L$(libdir)
+
+NTPLIBS = -L$(CERNLIB) -lpacklib -lkernlib $(FLIBS)
+
+BINARY	= SimulMIT
+TOOLS	= qhead qpsql qread qsend qtest rund
+TESTBIN	= libtest fclient
+ifeq ($(ISSTATIC),0)
+BINARY	+= ColaMIT Filter Statistic StripChart
+TESTBIN	+= HDCextract HELcheck
+endif
+
+CSRC	= tcpiplib.c qsend.c
+
+CXXSRC	= Cola.cc Decode.cc Filter.cc Focus.cc HDCextract.cc HDCraw.cc \
+	  HELcheck.cc Luminosity.cc StatPage.cc Statistic.cc  \
+	  StripChart.cc TCCC.cc Targetlength.cc UniqRunDB.cc VDCraw.cc \
+	  qhead.cc qpsql.cc qread.cc qtape.cc qtest.cc rund.cc
+
+FSRC	= fclient.f
+
+CXXGEN	= ExpressionParser.parse.cc RunParser.parse.cc \
+	  ReactionParser.parse.cc ReactionParser.lex.cc\
+	  StripChart.lex.cc StripChart.parse.cc \
+          UniqRunDB.lex.cc UniqRunDB.parse.cc
+
+DOCSRC	= ColaMIT.dxx \
+	  bottom.html classHeader.inc indexHeader.inc hierHeader.inc
+
+ANAOBJ	= HDCraw.o VDCraw.o StatPage.o Focus.o TCCC.o
+
+NTOBJ	= ColaNtuple.o
+
+AUXOBJ	= Masses.o Parsermain.o ReactionParser.parse.o ReactionParser.lex.o \
+	  Reactions.o ReadRundb.o Material.o Luminosity.o Targetlength.o \
+	  QuasiRandom.o Radiation.o SQL.o evaluate.o display.o
+
+.PHONY:	static
+
+all :	$(BINARY) $(TOOLS) $(TESTBIN)
+
+ColaMIT	:	Cola.o $(ANAOBJ) $(NTOBJ) $(AUXOBJ) Aqua_$(OUT).o \
+		$(LIBDETECT) $(LIBCH) $(LIBSIMUL) $(LIB4VEC) $(LIBHMVIEW) \
+		$(LIBHMBOOK) $(LIBTMA) $(LIBAQUA_READER)
+	$(CXX) $(LDFLAGS) $^ -o $@ $(LDSHARE) \
+	$(WX_LIBS) $(MOTIFLIBS) $(LIBS) $(NTPLIBS) $(LDREADER) -lm
+	$(reportsuccess)
+
+SimulMIT:	Simul.o $(NTOBJ) $(AUXOBJ) Aqua_$(OUT).o \
+		$(LIBDETECT) $(LIBCH) $(LIBSIMUL) $(LIB4VEC) $(LIBHMVIEW) \
+		$(LIBHMBOOK) $(LIBMODEL) $(LIBAQUA_READER)
+	$(CXX) $(LDFLAGS) $^ -o $@ $(WX_LIBS) $(MOTIFLIBS) $(LIBS) $(NTPLIBS) \
+	$(PGLIBS) $(LDREADER) -lm $(FLIBS)
+	$(reportsuccess)
+
+Filter :	Filter.o ReadRundb.o SQL.o $(LIBAQUA_READER)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $^ $(LDREADER) $(LIBS)
+	$(reportsuccess)
+
+Statistic :	Statistic.o StatPage.o $(LIBAQUA_READER)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $^ $(LIBS) $(LDREADER)
+	$(reportsuccess)
+
+StripChart :	StripChart.o StripChart.parse.o StripChart.lex.o \
+		$(LIBHMVIEW) $(LIBHMBOOK) $(LIBAQUA_READER)
+	$(CXX) $(LDFLAGS) $^ -o $@ $(LDSHARE) \
+	$(WX_LIBS) $(MOTIFLIBS) $(LIBS) $(LDREADER) -lm
+	$(reportsuccess)
+
+HDCextract :	HDCextract.o HDCraw.o ReadRundb.o SQL.o \
+		$(LIBCH) $(LIBAQUA_READER)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $^ $(LDREADER) $(LIBS)
+	$(reportsuccess)
+
+HELcheck :	HELcheck.o ReadRundb.o SQL.o $(LIBAQUA_READER)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $^ $(LDREADER) $(LIBS)
+	$(reportsuccess)
+
+rund :		rund.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+	$(reportsuccess)
+
+qhead :		qhead.o qtape.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+qpsql :		qpsql.o qtape.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+qread :		qread.o qtape.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+qtest :		qtest.o qtape.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+qsend :		qsend.o tcpiplib.o
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+libtest :	tcpiplib.c
+	$(CC) $(CFLAGS) -DLIB_TEST -o $@ $^ $(LIBS)
+
+fclient :	fclient.o tcpiplib.o
+	$(F77) $(OPTS) -o $@ $^ $(LIBS)
+
+$(addprefix Aqua_$(EXP),.cc .h .list) :	$(EXPDIR)/$(EXP).h $(AQUACONFIG)
+	$(AQUACONFIG) --base $(EXPDIR) --exp $(EXP) --file $(EXP).h
+
+$(addprefix Aqua_$(OUT),.cc .h .list) :	$(OUTDIR)/$(OUT).h $(AQUACONFIG)
+	$(AQUACONFIG) --base $(OUTDIR) --exp $(OUT) --file $(OUT).h
+
+$(LIB4VEC) $(LIBCH) $(LIBHMVIEW) $(LIBHMBOOK) $(LIBTMA) :
+	$(MAKE) -C $(dir $@) $(notdir $@)
+
+Simul.o :	../Cola/Simul.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+ReadRundb.o :	../Cola/ReadRundb.cc RunParser.parse.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+Parsermain.o :	../Cola/Parsermain.cc ExpressionParser.parse.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+Reactions.o :	../Cola/Reactions.cc  ReactionParser.parse.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+ColaNtuple.o :	../Cola/ColaNtuple.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+evaluate.o :	../Cola/evaluate.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+Masses.o :	../Cola/Masses.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+Material.o :	../Cola/Material.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+QuasiRandom.o :	../Cola/QuasiRandom.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+Radiation.o:	../Cola/Radiation.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+display.o:	../Cola/display.cc
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+ExpressionParser.parse.cc ExpressionParser.parse.h : ../Cola/ExpressionParser.y
+	$(reportaction)
+	@ $(BISONXX) -dvy $(BISONFLAGS) $^ -o $*.cc -h $*.h
+
+RunParser.parse.cc RunParser.parse.h :	../Cola/RunParser.y
+	$(reportaction)
+	@ $(BISONXX) -dvy $(BISONFLAGS) $^ -o $*.cc -h $*.h
+
+ReactionParser.parse.cc ReactionParser.parse.h : ../Cola/ReactionParser.y
+	$(reportaction)
+	@ $(BISONXX) -dvy $(BISONFLAGS) $^ -o $*.cc -h $*.h
+
+ReactionParser.lex.cc ReactionParser.lex.h : ../Cola/ReactionParser.l
+	$(reportaction)
+	@ $(FLEXXX) -8 $(FLEXFLAGS) -o$*.cc -h$*.h $<
+
+UniqRunDB :	 UniqRunDB.o UniqRunDB.lex.o UniqRunDB.parse.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+doc :	$(htmldir)/index.html $(texdir)/ColaMIT.ps
+
+$(htmldir)/index.html:	$(DOCSRC)
+	@test -d $(htmldir) || mkdir $(htmldir)
+	(cd $(dir $<); cp *.gif $(shell pwd)/$(htmldir);\
+	 $(DOCXX) -B bottom.html -d $(shell pwd)/$(htmldir) $(notdir $<))
+
+$(texdir)/ColaMIT.tex:	ColaMIT.dxx
+	@test -d $(texdir) || mkdir $(texdir)
+	(cd $(dir $<); $(DOCXX) -t -o $(shell pwd)/$@ $(notdir $<))
+
+$(texdir)/ColaMIT.dvi:	$(texdir)/ColaMIT.tex
+	@test -f $(texdir)/$(DOCXXSTY) || \
+	    ln -s $(shell cd $(srcdir)/../Doc/src;pwd)/$(DOCXXSTY) $(texdir)
+	(cd $(texdir);$(LATEX) $(notdir $<);$(LATEX) $(notdir $<))
+
+$(texdir)/ColaMIT.ps:	$(texdir)/ColaMIT.dvi
+	$(DVIPS) -o $@ $^
+
+install :	.install
+.install:	$(BINARY) $(TOOLS) Aqua_$(EXP).list Aqua_$(OUT).list
+	-@$(foreach dir,$(exec_prefix) $(bindir) $(libdir) $(sharedir) \
+		$(exampledir) $(exampledir)/ColaMIT $(docdir) \
+		$(docdir)/ColaMIT,test -d $(dir) || mkdir $(dir);)
+	$(foreach file,$(BINARY) $(TOOLS),\
+		$(INSTALL_PROGRAM) $(file) $(bindir)/$(file);)
+	$(foreach file,$(wildcard $(srcdir)/examples/*.col \
+		$(srcdir)/examples/*.db $(srcdir)/examples/*.hm),\
+		$(INSTALL_DATA) $(file) \
+		$(exampledir)/ColaMIT/$(notdir $(file));)
+	$(foreach file,$(wildcard $(srcdir)/doc/*.qal $(htmldir)/* \
+		$(texdir)/*.ps $(texdir)/*.tex Aqua_$(EXP).list Aqua_$(OUT).list),\
+		$(INSTALL_DATA) $(file) $(docdir)/ColaMIT/$(notdir $(file));)
+	date > $@
+
+clean :
+	rm -f *~ *.o core
+	rm -rf tmp $(PICDIR)
+
+veryclean :	clean
+	rm -f Aqua_$(EXP).{cc,h,list} Aqua_$(OUT).{cc,h,list}
+	rm -f $(BINARY) $(TOOLS) $(TESTBIN) nohup.out .install
+	rm -f RunParser.y *.parse.cc *.parse.h *.parse.output *.lex.cc *.lex.h
+
+distclean:	veryclean
+	rm -f Makefile .depend
+
+.depend :	$(CSRC) $(CXXSRC) $(CXXGEN) Aqua_$(EXP).cc Aqua_$(OUT).cc
+	$(CC) -M $(CPPFLAGS) $^ > $@
+
+-include .depend

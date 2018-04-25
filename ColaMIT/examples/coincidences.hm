@@ -1,0 +1,14 @@
+#
+zone 2 4 1
+SetFillRGB 1.0 0.5 1.0
+Title "Coincidence"
+Histogram "coincidence/tdc 1"
+Histogram "coincidence/tdc 2"
+Histogram "coincidence/tdc 3"
+Histogram "coincidence/tdc 4"
+Histogram "coincidence/tdc 5"
+Histogram "coincidence/tdc 6"
+Histogram "coincidence/tdc 7"
+Histogram "coincidence/tdc 8"
+
+close

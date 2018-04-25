@@ -1,0 +1,99 @@
+#								 -*-makefile-*-
+# Created 1996-98 by	Michael O. Distler
+#			M.I.T., Laboratory for Nuclear Science
+#			Cambridge, MA
+#              
+#	                Harald Merkel
+#		 	A1 Collaboration, Institut für Kernphysik
+#			Johannes Gutenberg-Universität Mainz
+#
+# $Header: https://wwwa1.kph.uni-mainz.de/svn/Cola/trunk/ColaIASA/Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../Makefile.inc
+
+EXP	= iasa0
+OUT     = online
+
+shlib	= $(EXP).$(SHARED_EXT).1
+expso	= $(basename $(shlib))
+expobj := $(shell if [ -f $(libdir)/$(expso) -a $(ISSHARED) -eq 1 ];\
+		  then echo $(libdir)/$(expso);else echo $(EXP).o;fi)
+
+INCDIR	= $(srcdir)/include
+EXPDIR	= $(INCDIR)
+OUTDIR	= $(INCDIR)
+
+CPPFLAGS= -I. -I.. -I$(srcdir) -I$(srcdir)/.. -I$(incdir) -I$(EXPDIR) \
+	  -I$(OUTDIR) $(WX_CFLAGS) $(DEFS) -D__ColaIASA__
+
+CFLAGS	= $(OPTS) $(WARN)
+CXXFLAGS= $(OPTS) $(WARN)
+LDFLAGS	= $(OPTS) -L$(libdir)
+
+BINARY	= # ColaIASA
+TOOLS	= Decode.$(EXP) EPICS2Cindy
+
+CXXSRC	= EPICS2Cindy.cc Decode.cc
+CGEN	= getdate.c
+DOCSRC	=
+AUXOBJ	=
+
+all :	$(BINARY) $(TOOLS)
+
+ColaIASA :	Cola.o $(AUXOBJ) $(expobj) $(LIBCINDY) $(LIBHMBOOK)
+	$(CXX) $(LDFLAGS) $^ $(LDSHARE) \
+	$(WX_LIBS) $(MOTIFLIBS) $(LIBS) -lm -o $@
+	$(reportsuccess)
+
+Decode.$(EXP) :	Decode.o $(expobj) $(LIBCINDY)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $^ $(LIBS)
+	$(reportsuccess)
+
+EPICS2Cindy :	EPICS2Cindy.o getdate.o $(expobj) $(LIBCINDY)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $^ $(LIBS)
+	$(reportsuccess)
+
+$(EXP).o  :		$(EXP).cc
+$(EXP).cc $(EXP).list :	$(EXPDIR)/$(EXP).h $(CINDY)
+	$(CINDY) -C $(EXPDIR) -e $* -s $@ -p $*.list -n cindy
+$(expso)  :	$(PICDIR)/$(EXP).o
+		$(CXX) -shared $(SHFLAGS) -o $@ $^
+
+$(OUT).o  :		$(OUT).cc
+$(OUT).cc $(OUT).list :	$(OUTDIR)/$(OUT).h $(CINDY)
+	$(CINDY) -C $(OUTDIR) -e $* -s $@ -p $*.list -x
+
+$(LIBCINDY) $(LIBHMBOOK) $(CINDY) :
+	$(MAKE) -C $(dir $@) $(notdir $@)
+
+install :	.install
+.install:	$(BINARY) $(TOOLS) $(EXP).list
+	-@$(foreach dir,$(exec_prefix) $(bindir) $(libdir) $(sharedir) \
+		$(exampledir) $(exampledir)/ColaMIT $(docdir) \
+		$(docdir)/ColaMIT,test -d $(dir) || mkdir $(dir);)
+	$(foreach file,$(BINARY) $(TOOLS),\
+		$(INSTALL_PROGRAM) $(file) $(bindir)/$(file);)
+	if test -f $(expso);then \
+		$(INSTALL_PROGRAM) $(expso) $(libdir)/$(expso);fi
+	date > $@
+
+clean :
+	rm -f *~ *.o core
+	rm -rf tmp $(PICDIR)
+
+veryclean :	clean
+	rm -f $(EXP).list $(EXP).cc $(expso) $(OUT).list $(OUT).cc
+	rm -f $(BINARY) $(TOOLS) $(TESTBIN) nohup.out
+
+distclean:	veryclean
+	rm -f RunParser.cc ExpressionParser.cc $(CGEN)
+	rm -f Makefile .depend
+
+.depend :	$(CXXSRC) $(CGEN) $(EXP).cc
+	$(CC) -M $(CPPFLAGS) $^ > $@
+
+-include .depend

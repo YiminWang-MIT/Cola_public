@@ -1,0 +1,273 @@
+// Harald Merkel, 
+// A1 Collaboration, Institut für Kernpysik, Universität Mainz
+// 08/22/97
+//
+// This include file defines the rawdata histograms
+// use with: #define SPECA
+//           #include "rawdata.col"
+//           ...
+//
+
+"         Rawdata.col"
+
+#ifdef SPECA
+#define Spectrometer A
+#define spectrometer a
+#define sp title"Spec. A/"
+//#define adcrange "ADC Counts",0,4000,100
+#define adcrange "ADC Counts",0,1500,150
+#define adcrangeA "ADC Counts",0,1500,150
+#define drifttimerange "t","channels",0,2048,2048
+#endif
+ 
+#ifdef SPECB
+#define Spectrometer B
+#define spectrometer b
+#define adcrange "ADC Counts",0,500,100
+#define drifttimerange "t","channels",0,2048,2048
+#define sp title"Spec. B/"
+#endif
+
+#ifdef SPECC
+#define Spectrometer C
+#define spectrometer c
+#define sp title"Spec. C/"
+#define adcrange       "ADC Counts", 0, 1500, 100
+#define drifttimerange "t", "channels", 0, 4096, 4096
+#endif
+
+#define spc(var)  Spectrometer.var
+#define spec @online.Spectrometer
+//-----------------------------------------------------------------------------
+//			Vertex Coordinates
+//-----------------------------------------------------------------------------
+Scalar spc(Vertexx) = spec.vertex.x
+Scalar spc(Vertexy) = spec.vertex.y
+Scalar spc(Vertexz) = spec.vertex.z
+
+Histogram sp"Vertex/x"         spc(Vertexx)  ("x","mm",-6.0, 6.0, 120)
+Histogram sp"Vertex/y"         spc(Vertexy)  ("y","mm",-6.0, 6.0, 120)
+Histogram sp"Vertex/z"         spc(Vertexz)  ("z","mm",-60.0, 60.0, 120)
+
+//-----------------------------------------------------------------------------
+//			Target Coordinates
+//-----------------------------------------------------------------------------
+Scalar spc(phi0)   = spec.target.ph / 1000 * degree
+Scalar spc(theta0) = spec.target.th / 1000 * degree
+Scalar spc(deltap) = spec.target.dp
+Scalar spc(len)    = spec.target.len
+Scalar spc(y0)     = spec.target.y0 * 10
+Histogram sp"Target/[F]_0!"         spc(phi0)  ("[F]_0!","°",-10,10,200)
+Histogram sp"Target/[Q]_0!"         spc(theta0)("[Q]_0!","°",-10,10,200)
+Histogram sp"Target/[F]_0! vs. [Q]_0!"  spc(phi0)("[F]_0!","°",-7,7,100)\
+				    spc(theta0)("[Q]_0!","°",-7,7,100)
+Histogram sp"Target/[D]p"           spc(deltap)("[D]p","%",-20,50,300)
+Histogram sp"Target/[D]p vs. [F]_0!"    spc(deltap)("[D]p","%",-10,30,100)\
+                                    spc(phi0)  ("[F]_0!","°",-7,7,100)
+Histogram sp"Target/y_0!"           spc(y0)("y_0!","mm",-40,40,100)
+Histogram sp"Target/y_0! vs. [F]_0!"    spc(y0)("y_0!","mm",-40,40,100)\
+                                    spc(phi0)  ("[F]_0!","°",-7,7,100)
+Histogram sp"Target/length"         spc(len)("l","cm",900,1400,500)
+
+//-----------------------------------------------------------------------------
+//			Focal Plane Coordinates
+//-----------------------------------------------------------------------------
+Scalar spc(fp.x)     = spec.x
+Scalar spc(fp.y)     = spec.y
+Scalar spc(fp.theta) = spec.theta / 1000 * degree
+Scalar spc(fp.phi)   = spec.phi   / 1000 * degree
+Scalar spc(fp.dx)     = spec.dx
+Scalar spc(fp.dy)     = spec.dy
+Scalar spc(fp.dtheta) = spec.dtheta / 1000 * degree
+Scalar spc(fp.dphi)   = spec.dphi   / 1000 * degree
+Scalar spc(x_scint)    = spec.x_scint
+Scalar spc(y_scint)    = spec.y_scint
+
+Histogram sp"Focal Plane/x (disp.)"  spc(fp.x)     ("x","mm",-1200,1600,240)
+Histogram sp"Focal Plane/y"          spc(fp.y)     ("y","mm",-200.0,200.0,200)
+Histogram sp"Focal Plane/[q] (disp.)" spc(fp.theta)("[q]","°",0.0,90.0,90)
+Histogram sp"Focal Plane/[f]"        spc(fp.phi)   ("[f]","°",-20,20.0,160)
+Histogram sp"Focal Plane/[D]x (disp.)"  spc(fp.dx) ("[D]x","mm",0,1,100)
+Histogram sp"Focal Plane/[D]y"       spc(fp.dy) ("[D]y","mm",0,1,100)
+Histogram sp"Focal Plane/[D][q] (disp.)" spc(fp.dtheta)("[D][q]","°",0,1,100)
+Histogram sp"Focal Plane/[D][f]"     spc(fp.dphi) ("[D][f]","°",0,1,100)
+Histogram sp"Focal Plane/x vs. y"        spc(fp.x)     ("x","mm",-1200,1600,100)\
+		                     spc(fp.y)     ("y","mm",-200.0,200.0,100)
+Histogram sp"Focal Plane/[q] vs. [f]"    spc(fp.theta) ("[q]","°",0.0,90.0,180)\
+			             spc(fp.phi)   ("[f]","°",-20.0,20.0,160)
+Histogram sp"Focal Plane/[q] vs. x"    spc(fp.theta) ("[q]","°",0.0,90.0,180)\
+			             spc(fp.x)     ("x","mm",-1200,1600,240)
+
+Histogram sp"Focal Plane/x_scint!"  spc(x_scint) ("x_scint!","mm",-700,2100,480)
+Histogram sp"Focal Plane/y_scint!"  spc(y_scint) ("y_scint!","mm",-300,300,150)
+Histogram sp"Focal Plane/[q] vs. x_scint!"    spc(x_scint) ("x_scint!","mm",-700,2100,480) spc(fp.theta) ("[q]","°",0.0,90.0,180)
+Histogram sp"Focal Plane/[q] vs. y_scint!x"    spc(y_scint) ("y_scint!","mm",-300,300,150) spc(fp.theta)("[q]","°",0.0,90.0,180)
+
+
+#ifdef NEVER
+Cut abs(spc(fp.theta)-46) < 1.0 {
+Histogram sp"len vs. fp.x"  spc(len)("l","cm",-150,150,150) spc(fp.x) ("x","mm",-1200,1600,240)
+}
+
+Cut abs(spc(fp.x)) < 25 {
+Histogram sp"len vs. fp.th" spc(len)("l","cm",-150,150,150) spc(fp.theta) ("[q]","°",0.0,90.0,90)
+}
+#endif
+
+//-----------------------------------------------------------------------------
+// Scintillator Energy
+//-----------------------------------------------------------------------------
+Scalar spc(dE.Energy)  = sqrt(spec.dE.Energy.left*spec.dE.Energy.right)
+Scalar spc(ToF.Energy) = sqrt(spec.ToF.Energy.left*spec.ToF.Energy.right)
+Scalar spc(Energy)     = (spc(ToF.Energy) + spc(dE.Energy))/2
+Scalar spc(dE.paddle)  = spec.dE.paddle
+Scalar spc(ToF.paddle) = spec.ToF.paddle
+Scalar spc(Index_patt) = spec.Index_pattern
+Scalar spc(Index_x)    = spec.Index_x
+
+//-----------------------------------------------------------------------------
+// Singles Time Of Flight
+//-----------------------------------------------------------------------------
+Scalar spc(singleTime) = spec.singlecorr
+Scalar spc(rawsingle)  = spec.single_tdc
+ 
+Histogram sp"Scintillator/Energy dE vs. ToF"  spc(dE.Energy) ("E_dE!", adcrange)\
+                                          spc(ToF.Energy)("E_ToF!",adcrange)
+Histogram sp"Scintillator/Energy dE"      spc(dE.Energy) ("E_dE!", adcrange)
+Histogram sp"Scintillator/Energy ToF"     spc(ToF.Energy)("E_ToF!",adcrange)
+Histogram sp"Scintillator/Energy"         spc(Energy)    ("E",     adcrange)
+Histogram sp"Scintillator/Paddle dE"  spc(dE.paddle)("Paddle","",-0.5,15.5,16)
+Histogram sp"Scintillator/Paddle ToF" spc(ToF.paddle)("Paddle","",-0.5,15.5,16)
+Histogram sp"Scintillator/Paddle dE vs. ToF" \
+	                              spc(dE.paddle)("Paddle","",0.5,15.5,15)\
+	                              spc(ToF.paddle)("Paddle","",0.5,15.5,15)
+Histogram sp"Scintillator/Paddle_patt!" spc(Index_patt)("Paddle","",-0.5,15.5,16)
+Histogram sp"Scintillator/Paddle_x!" spc(Index_x)("Paddle","",-0.5,15.5,16)
+Histogram sp"Scintillator/Paddle_x! vs. Paddle_patt!" \
+                             spc(Index_x)("Paddle_x!","",-0.5,15.5,16) \
+                             spc(Index_patt)("Paddle_patt!","",-0.5,15.5,16)
+Histogram sp"Scintillator/Paddle_ToF! vs. Paddle_patt!" \
+                             spc(ToF.paddle)("Paddle_ToF!","",-0.5,15.5,16) \
+                             spc(Index_patt)("Paddle_patt!","",-0.5,15.5,16)
+Histogram sp"Scintillator/Paddle_dE! vs. Paddle_patt!" \
+                             spc(dE.paddle)("Paddle_dE!","",-0.5,15.5,16) \
+                             spc(Index_patt)("Paddle_patt!","",-0.5,15.5,16)
+Histogram sp"Scintillator/Paddle_ToF! vs. Paddle_x!" \
+                             spc(ToF.paddle)("Paddle_ToF!","",-0.5,15.5,16) \
+                             spc(Index_x)("Paddle_x!","",-0.5,15.5,16)
+Histogram sp"Scintillator/Paddle_dE! vs. Paddle_x!" \
+                             spc(dE.paddle)("Paddle_dE!","",-0.5,15.5,16) \
+                             spc(Index_x)("Paddle_x!","",-0.5,15.5,16)
+Histogram sp"Scintillator/Paddle_ToF! vs. x_scint!" \
+                             spc(x_scint) ("x_scint!","mm",-700,2100,480) \
+                             spc(ToF.paddle)("Paddle_ToF!","",-0.5,15.5,16)
+Histogram sp"Scintillator/Paddle_dE! vs. x_scint!" \
+                             spc(x_scint) ("x_scint!","mm",-700,2100,480) \
+                             spc(dE.paddle)("Paddle_dE!","",-0.5,15.5,16)
+//-----------------------------------------------------------------------------
+// Cerenkov detector
+//-----------------------------------------------------------------------------
+#define cer_adcrange -100,1000,1100
+#define cer_erange 1,1501,1500
+#define cer(ch) @.spectrometer.det.trigger.cerenkov.mirror[ch].energy
+
+Scalar spc(Cerenkov.sum) = spec.Cerenkov.sum
+Scalar spc(Cerenkov.hit) = spec.Cerenkov.hit
+Scalar spc(mirror0)  = cer(0)
+Scalar spc(mirror1)  = cer(1)
+Scalar spc(mirror2)  = cer(2)
+Scalar spc(mirror3)  = cer(3)
+Scalar spc(mirror4)  = cer(4)
+#ifndef SPECB
+Scalar spc(mirror5)  = cer(5)
+Scalar spc(mirror6)  = cer(6)
+Scalar spc(mirror7)  = cer(7)
+Scalar spc(mirror8)  = cer(8)
+Scalar spc(mirror9)  = cer(9)
+Scalar spc(mirror10) = cer(10)
+Scalar spc(mirror11) = cer(11)
+#endif
+
+Histogram sp"Cerenkov/Energy" spc(Cerenkov.sum)("[S]E","channel",cer_adcrange)
+Histogram sp"Cerenkov/Hits"   spc(Cerenkov.hit)("Hits","", -0.5, 12.5, 13)
+Histogram sp"Cerenkov/Mirror/0"  spc(mirror0) ("E","channel", cer_erange)
+Histogram sp"Cerenkov/Mirror/1"  spc(mirror1) ("E","channel", cer_erange)
+Histogram sp"Cerenkov/Mirror/2"  spc(mirror2) ("E","channel", cer_erange)
+Histogram sp"Cerenkov/Mirror/3"  spc(mirror3) ("E","channel", cer_erange)
+Histogram sp"Cerenkov/Mirror/4"  spc(mirror4) ("E","channel", cer_erange)
+#ifndef SPECB
+Histogram sp"Cerenkov/Mirror/5"  spc(mirror5) ("E","channel", cer_erange)
+Histogram sp"Cerenkov/Mirror/6"  spc(mirror6) ("E","channel", cer_erange)
+Histogram sp"Cerenkov/Mirror/7"  spc(mirror7) ("E","channel", cer_erange)
+Histogram sp"Cerenkov/Mirror/8"  spc(mirror8) ("E","channel", cer_erange)
+Histogram sp"Cerenkov/Mirror/9"  spc(mirror9) ("E","channel", cer_erange)
+Histogram sp"Cerenkov/Mirror/10" spc(mirror10)("E","channel", cer_erange)
+Histogram sp"Cerenkov/Mirror/11" spc(mirror11)("E","channel", cer_erange)
+#endif
+
+#undef scer
+#undef cer
+#undef cer_adcrange
+//-----------------------------------------------------------------------------
+// VDC spectra
+//-----------------------------------------------------------------------------
+Scalar spc(vdc).x1.time  = -1
+Scalar spc(vdc).x1.wire  = -1
+Scalar spc(vdc).x1.error = spec.x1.error
+Scalar spc(vdc).x1.multi = spec.x1.multi
+Scalar spc(vdc).s1.time  = -1
+Scalar spc(vdc).s1.wire  = -1
+Scalar spc(vdc).s1.error = spec.s1.error
+Scalar spc(vdc).s1.multi = spec.s1.multi
+Scalar spc(vdc).x2.time  = -1
+Scalar spc(vdc).x2.wire  = -1
+Scalar spc(vdc).x2.error = spec.x2.error
+Scalar spc(vdc).x2.multi = spec.x2.multi
+Scalar spc(vdc).s2.time  = -1
+Scalar spc(vdc).s2.wire  = -1
+Scalar spc(vdc).s2.error = spec.s2.error
+Scalar spc(vdc).s2.multi = spec.s2.multi
+//
+// Don't change the name of the following Histograms!!!!!!!
+// They deserve a special treatment since they are filled several 
+// times for each event. The subroutine "vdc*raw" searches for the
+// Name of these histograms.
+//
+Histogram sp"x1-layer/Efficiency"   spc(vdc).x1.wire("# of wire","",1,512,511)
+Histogram sp"x1-layer/Drift Time"   spc(vdc).x1.time(drifttimerange)
+Histogram sp"x1-layer/Nr of Wire"   spc(vdc).x1.wire("# of wire","",1,512,511)
+Histogram sp"x1-layer/Error"        spc(vdc).x1.error("","",0,32,32)
+Histogram sp"x1-layer/Multiplicity" spc(vdc).x1.multi("n","",-0.5,20.5,21)
+Histogram sp"x1-layer/Tagged Wire"  spc(vdc).x1.wire("# of wire","",1,512,511)
+
+Histogram sp"s1-layer/Efficiency"   spc(vdc).s1.wire("# of wire","",1,512,511)
+Histogram sp"s1-layer/Drift Time"   spc(vdc).s1.time(drifttimerange)
+Histogram sp"s1-layer/Nr of Wire"   spc(vdc).s1.wire("# of wire","",1,512,511)
+Histogram sp"s1-layer/Error"        spc(vdc).s1.error("","",0,32,32)
+Histogram sp"s1-layer/Multiplicity" spc(vdc).s1.multi("n","",-0.5,20.5,21)
+Histogram sp"s1-layer/Tagged Wire"  spc(vdc).s1.wire("# of wire","",1,512,511)
+
+Histogram sp"x2-layer/Efficiency"   spc(vdc).x2.wire("# of wire","",1,512,511)
+Histogram sp"x2-layer/Drift Time"   spc(vdc).x2.time(drifttimerange)
+Histogram sp"x2-layer/Nr of Wire"   spc(vdc).x2.wire("# of wire","",1,512,511)
+Histogram sp"x2-layer/Error"        spc(vdc).x2.error("","",0,32,32)
+Histogram sp"x2-layer/Multiplicity" spc(vdc).x2.multi("n","",-0.5,20.5,21)
+Histogram sp"x2-layer/Tagged Wire"  spc(vdc).x2.wire("# of wire","",1,512,511)
+
+Histogram sp"s2-layer/Efficiency"   spc(vdc).s2.wire("# of wire","",1,512,511)
+Histogram sp"s2-layer/Drift Time"   spc(vdc).s2.time(drifttimerange)
+Histogram sp"s2-layer/Nr of Wire"   spc(vdc).s2.wire("# of wire","",1,512,511)
+Histogram sp"s2-layer/Error"        spc(vdc).s2.error("","",0,32,32)
+Histogram sp"s2-layer/Multiplicity" spc(vdc).s2.multi("n","",-0.5,20.5,21)
+Histogram sp"s2-layer/Tagged Wire"  spc(vdc).s2.wire("# of wire","",1,512,511)
+//-----------------------------------------------------------------------------
+
+#undef Spectrometer
+#undef spectrometer
+#undef sp
+#undef adcrange
+#undef drifttimerange
+#undef title
+#undef SPECA
+#undef SPECB
+#undef SPECC

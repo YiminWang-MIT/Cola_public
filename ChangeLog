@@ -1,0 +1,4937 @@
+COLA: Cindy OnLine Analysis
+
+Copyright (c) 1996-2001
+
+Institut für Kernphysik, Universität Mainz	tel. +49 6131 39-25802
+55099 Mainz, Germany				fax  +49 6131 39-22964
+
+Please do not change this file. Check CVSROOT/Colalog.sh instead.
+
+$Log: not supported by cvs2svn $
+Revision 1.1186  2008/05/30 16:34:47  patrick
+*** empty log message ***
+
+Revision 1.1185  2008/05/30 16:25:23  distler
+copied new silicon structure to Cola abcn
+
+Revision 1.1184  2008/05/30 15:44:46  nungesse
+changed sync_info to unsigned
+
+Revision 1.1183  2008/05/27 08:31:59  makek
+Added FlashADC detector class for data analysis with flash ADC.
+Also added run.db parameter for data analysis with flash ADC.
+Modified Files:
+Cola/Cola.cc Cola/Cola.h Cola/rundatabase.h
+Cola/include/online/online.h Detector/Makefile.in
+Detector/SiliconDetector.cc Detector/SiliconDetector.h
+Added Files:
+Detector/FlashADC.cc Detector/FlashADC.h
+
+Revision 1.1182  2008/05/19 08:57:33  patrick
+Latest version of KAOS trajectory analysis and detector calibration
+included
+
+Revision 1.1181  2008/05/19 08:57:23  patrick
+Latest version of KAOS trajectory analysis and detector calibration
+included
+
+Revision 1.1180  2008/05/02 10:59:33  boesz
+add charge ratio to cluster analyse
+
+Revision 1.1179  2008/04/29 14:52:04  patrick
+improved y-coordinate calculation
+
+Revision 1.1178  2008/04/29 09:03:44  patrick
+focal plane coordinates for kaos included, absorption length correction for TOF
+walls included
+
+Revision 1.1177  2008/04/29 09:03:38  patrick
+focal plane coordinates for kaos included, absorption length correction for TOF
+walls included
+
+Revision 1.1176  2008/04/25 11:16:41  boesz
+new cluster analyse
+
+Revision 1.1175  2008/04/24 16:11:45  boesz
+new cluster analyse
+
+Revision 1.1174  2008/04/24 16:07:42  patrick
+adc online spectra included.
+
+Revision 1.1173  2008/04/24 16:07:36  patrick
+adc online spectra included.
+
+Revision 1.1172  2008/04/22 14:46:46  boesz
+add function center_of_charge
+
+Revision 1.1171  2008/04/22 14:45:52  boesz
+change variable name
+
+Revision 1.1170  2008/04/22 09:16:08  patrick
+corrected fibre detector class
+
+Revision 1.1169  2008/04/22 09:16:02  patrick
+corrected fibre detector class
+
+Revision 1.1168  2008/04/18 15:01:48  patrick
+kaos analysis.
+
+Revision 1.1167  2008/04/18 15:01:43  patrick
+kaos analysis.
+
+Revision 1.1166  2008/04/15 13:34:33  boesz
+change data structure, add cluster analyse
+
+Revision 1.1165  2008/04/15 13:34:15  boesz
+change data structure, add cluster analyse
+
+Revision 1.1164  2008/04/07 15:57:33  boesz
+fix for fibre detector
+
+Revision 1.1163  2008/04/07 14:08:59  nungesse
+removed double line in help
+
+Revision 1.1162  2008/04/07 10:47:25  patrick
+all KAOS detectors with improved analysis.
+
+Revision 1.1161  2008/04/07 10:47:15  patrick
+all KAOS detectors with improved analysis.
+
+Revision 1.1160  2008/03/26 16:29:42  bernauer
+The formula to calculate F2 from G_E/G_M had sign errors. Corrected, now conforming to Boffi.
+
+Revision 1.1159  2008/03/20 17:23:58  bernauer
+Some cleanups in simSpecwithTrace. This part of the code is work in progress.
+
+Revision 1.1158  2008/03/17 10:34:54  cola
+changes to KAOS detector classes and Cola.cc during March 2008 beam-time.
+For fibre detector read-out b_info must be set to a_info:
+Cola.cc in line 1094:
+
+Revision 1.1157  2008/03/11 14:27:43  cola
+MWPC analysis
+
+Revision 1.1156  2008/03/11 14:27:35  cola
+MWPC analysis
+
+Revision 1.1155  2008/03/06 16:10:15  bernauer
+Corrected focus correction of spec C to match the correction of A.
+Updated correction factors according to blomquist paper (see comment).
+Removed unneeded and bogus code.
+
+Revision 1.1154  2008/02/28 17:07:42  bernauer
+JCB: Found a bug in the Compound Landau_par calculation. Please check!
+
+Revision 1.1153  2008/02/27 10:46:16  patrick
+new hm2root converter added in HMBOOK/
+
+Revision 1.1152  2008/02/22 16:50:53  patrick
+maximum as hit channel
+
+Revision 1.1151  2008/02/22 15:05:24  patrick
+bug corrected...
+
+Revision 1.1150  2008/02/21 16:00:58  patrick
+*** empty log message ***
+
+Revision 1.1149  2008/02/15 16:59:08  boesz
+remove ADCs with bit-error, some corrections
+
+Revision 1.1148  2008/02/15 16:57:24  boesz
+remove ADC with bit-errors, some corrections
+
+Revision 1.1147  2008/02/15 14:05:26  cola
+*** empty log message ***
+
+Revision 1.1146  2008/02/15 13:50:42  cola
+*** empty log message ***
+
+Revision 1.1145  2008/02/12 17:52:26  cola
+*** empty log message ***
+
+Revision 1.1144  2008/02/12 16:52:05  cola
+Expanded KAOS MWPC Analyse
+
+Revision 1.1143  2008/02/12 16:51:04  cola
+KAOS MWPC Calculating Hit position
+
+Revision 1.1142  2008/02/12 13:32:12  nungesse
+fixed missing CatchStatus
+
+Revision 1.1141  2008/02/02 12:57:30  sirca
+Methods to access the KAOS field parameterizations.
+
+Revision 1.1140  2008/02/01 17:43:11  patrick
+MWPC detector class added for KAOS
+
+Revision 1.1139  2008/02/01 17:43:02  patrick
+MWPC detector class added for KAOS
+
+Revision 1.1138  2008/01/24 10:25:49  sirca
+Include rules to compile the stand-alone code SimDecay to simulate
+K+ and pi+ decay in spectrometers A, B, and KAOS.
+
+Revision 1.1137  2008/01/23 17:23:33  sirca
+Root macro files for processing of the results of the standalone program
+SimDecay.  This program can also do more general decays, i.e. kaons, pions
+in spectrometers A, B, and KAOS.
+
+Revision 1.1136  2008/01/23 17:20:58  sirca
+Directory /var/cvsroot/Cola/Simulation/SimDecay added to the repository
+
+Revision 1.1135  2008/01/23 17:20:42  sirca
+Modified CVS header.
+
+Revision 1.1134  2008/01/23 17:17:53  sirca
+First useful release of SimDecay (Simul++ "plug-in") to simulate pion
+decay in Spectrometers A and B.
+
+Revision 1.1133  2008/01/18 11:21:52  patrick
+KAOS online analysis modified after Nov 2007 beam-time;
+new run.db variables for KAOS
+
+Revision 1.1132  2008/01/18 07:09:34  schlimme
+change d.f. default to 1.0 for coming beam time
+
+Revision 1.1131  2008/01/13 10:54:16  distler
+added .d.trigger.pattern
+
+Revision 1.1130  2008/01/08 13:27:06  makek
+Warning in Silicon detector code corrected.
+
+Revision 1.1129  2008/01/08 13:18:16  makek
+Corrected floating point exceptions in target energyloss correction for Silicon Detector Particles
+
+Revision 1.1128  2008/01/08 12:05:59  makek
+Change to Silicon Detector online structure: added fADC-reconstructed energies and Target energy loss correction for fADC-reconstructed particle.
+
+Steps for Target energy loss for Silicon Detector reconstructed particles decreased: 100->20
+
+Some variable initialization modified in SiliconDetector.cc (si_theta_cnt, si_phi_cnt)
+
+Revision 1.1127  2007/12/19 15:49:54  makek
+*** empty log message ***
+
+Revision 1.1126  2007/12/19 15:49:49  makek
+*** empty log message ***
+
+Revision 1.1125  2007/11/26 13:49:07  weinrief
+TriplePol generator should work with Golak code now.
+mode 0 generates normal phase space
+mode 1 produces a pencil generator phase space
+mode 2 writes in input file for the Golak code
+mode 3 reads in the processed cross section files
+to do: proton polarization
+
+Revision 1.1124  2007/11/14 10:02:34  nungesse
+corrected warnings from new GCC for (char *)
+
+Revision 1.1123  2007/11/06 12:09:50  distler
+First version of Cola that recognizes Kaos in reaction and rundb
+
+Revision 1.1122  2007/10/12 11:56:06  merkel
+I've added some comments for Michael!
+
+Revision 1.1121  2007/10/11 14:17:05  merkel
+Floating point exceptions for SSE enabled.
+
+Revision 1.1120  2007/10/10 14:02:00  schlimme
+made easy pattern plot optional with flag BSSTOOLS
+----------------------------------------------------------------------
+
+Revision 1.1119  2007/10/04 13:07:41  bernauer
+He3nr: made dt an environment variable: He3nr_DT. Default is Pi/18000
+     Increased precision of Locus root bisection.
+
+Revision 1.1118  2007/10/01 14:06:30  bernauer
+Corrected units of He3nr
+
+Revision 1.1117  2007/09/24 18:14:21  makek
+Added Silicon fADC data for energy reconstruction
+
+Revision 1.1116  2007/09/24 18:14:07  makek
+Added Silicon fADC data for energy reconstruction
+
+Revision 1.1115  2007/09/20 17:20:12  cola
+update of abcn/silicon.h
+
+Revision 1.1114  2007/09/20 11:21:18  bernauer
+Added relativistic phase space calculation to He3nr.
+Generator should be renamed when the old cruft (He3fast, He3base etc.) has been removed.
+
+Revision 1.1113  2007/09/07 18:18:25  aqua
+added fadc items to silicon.h
+
+Revision 1.1112  2007/09/06 15:42:09  bernauer
+I don't know why, but the line replaced in Generate.h did not work. Works now
+
+Revision 1.1111  2007/09/06 12:25:24  schlimme
+easy plotting routine
+----------------------------------------------------------------------
+
+Revision 1.1110  2007/06/28 12:52:03  patrick
+cluster search refined.
+
+Revision 1.1109  2007/06/28 11:13:18  schlimme
+changed help output
+
+Revision 1.1108  2007/06/28 10:57:58  schlimme
+added azz(1508) -> default, dilution factor = 1.0+-0 default
+change output
+
+Revision 1.1107  2007/06/28 08:20:26  distler
+more patterns in ndet.h
+
+Revision 1.1106  2007/06/27 17:03:42  distler
+update of ndet.h
+
+Revision 1.1105  2007/06/27 17:00:25  distler
+enable NDET in Luminosity.cc
+
+Revision 1.1104  2007/06/22 10:10:27  merkel
+hmbook float -> double
+
+Revision 1.1103  2007/06/22 10:07:31  merkel
+hmbook float -> double
+
+Revision 1.1102  2007/06/22 10:07:12  merkel
+hmbook float -> double
+
+Revision 1.1101  2007/06/22 07:33:05  merkel
+Change float -> double
+
+Revision 1.1100  2007/06/21 08:25:36  patrick
+Gain and pedestal subtraction for kaos TOF wall added.
+
+Revision 1.1099  2007/06/21 08:25:06  patrick
+Gain and pedestal subtraction for kaos TOF wall added.
+
+Revision 1.1098  2007/06/15 16:08:33  patrick
+Hit pattern for KAOS scintillator wall added.
+
+Revision 1.1097  2007/06/15 16:08:20  patrick
+Hit pattern for KAOS scintillator wall added.
+
+Revision 1.1096  2007/06/15 16:07:53  patrick
+Hit pattern for KAOS scintillator wall added.
+
+Revision 1.1095  2007/06/11 08:33:19  weinrief
+Added new model TriplePol
+
+Revision 1.1094  2007/06/11 08:33:11  weinrief
+Added new model TriplePol
+
+Revision 1.1093  2007/06/11 08:33:04  weinrief
+Added new model TriplePol
+
+Revision 1.1092  2007/06/11 08:05:16  weinrief
+Added new run.db variables Target.Polarisation and Simul.TargetPol
+
+Revision 1.1091  2007/06/10 13:48:57  distler
+added readme in Simulation/Golak
+
+Revision 1.1090  2007/06/10 13:48:26  distler
+improved detection of cpu type
+
+Revision 1.1089  2007/06/10 13:41:32  distler
+Makefile for Golak code
+
+Status:
+
+Vendor Tag:	initial
+Release Tags:	start
+
+N Cola/Simulation/Golak/Makefile.in
+
+No conflicts created by this import
+
+Revision 1.1088  2007/06/03 17:42:29  distler
+first version of Ndet simulation by B.S.Schlimme and M.O.Distler
+
+Revision 1.1087  2007/06/03 17:42:22  distler
+first version of Ndet simulation by B.S.Schlimme and M.O.Distler
+
+Revision 1.1086  2007/06/03 17:42:05  distler
+first version of Ndet simulation by B.S.Schlimme and M.O.Distler
+
+Revision 1.1085  2007/05/27 17:09:39  distler
+Base version of NDET
+configure is aware of the intel fortran compiler
+
+Revision 1.1084  2007/05/27 17:09:32  distler
+Base version of NDET
+configure is aware of the intel fortran compiler
+
+Revision 1.1083  2007/05/27 17:09:15  distler
+Base version of NDET
+configure is aware of the intel fortran compiler
+
+Revision 1.1082  2007/05/27 17:09:08  distler
+Base version of NDET
+configure is aware of the intel fortran compiler
+
+Revision 1.1081  2007/05/27 17:09:01  distler
+Base version of NDET
+configure is aware of the intel fortran compiler
+
+Revision 1.1080  2007/05/27 17:08:48  distler
+Base version of NDET
+configure is aware of the intel fortran compiler
+
+Revision 1.1079  2007/05/27 17:07:34  distler
+base version of NDET
+
+Revision 1.1078  2007/05/15 08:52:45  sirca
+*** empty log message ***
+
+Revision 1.1077  2007/05/15 08:48:50  sirca
+*** empty log message ***
+
+Revision 1.1076  2007/05/09 14:51:53  sirca
+First step towards a generalization of the decay part to arbitrary
+two-body decays (e.g. pi+ to mu+ neutrino or K+ to mu+ neutrino).
+This is done in SimDecay.* at present for pi+ decay only; future
+extensions for multiple decay channels are straightforward.
+Delec.h replaced by SimParticle.*.
+
+Revision 1.1075  2007/05/09 14:33:52  sirca
+Added extern P_muminus and P_muplus declarations.
+
+Revision 1.1074  2007/04/20 13:29:12  sirca
+Included <iostream> UNantiquitated header.
+
+Revision 1.1073  2007/04/20 13:21:28  sirca
+Added simFocalCoord structure for simulation including particle decay.
+Contains 4 members: x, th, y, ph for the particle that makes it through
+without decaying (e.g. pi+), and 4 members: x_decay, th_decay, y_decay,
+ph_decay for the particle from the decay (e.g. mu+).
+
+Revision 1.1072  2007/04/20 13:19:14  sirca
+Added the focal plane coordinates for simulation.  Works only for pi+
+in SpecA at this time.  *** WORK IN PROGRESS ***
+
+Revision 1.1071  2007/04/20 13:16:22  sirca
+Added muons.
+
+Revision 1.1070  2007/04/20 06:58:18  sirca
+Added (struct FocalCoord *fc) as last argument of check() function calls
+to accommodate a new version of "generalized" collimator check with
+particle tracking (and possible subsequent decay in the spectrometers).
+Only meaningful for Spec A, B, C at the moment - the rest have NULL.
+
+Revision 1.1069  2007/04/20 06:54:53  sirca
+Added the "NULL" pointer to check() function call because prototype changed.
+
+Revision 1.1068  2007/04/20 06:53:26  sirca
+Add simulated focal-plane coordinates into the online.X.simfp structure
+(X = A, B, C for now).
+
+Revision 1.1067  2007/04/19 19:45:18  cola
+small modifications to Kaos Detectors class.
+
+Revision 1.1066  2007/04/19 19:45:10  cola
+small modifications to Kaos Detectors class.
+
+Revision 1.1065  2007/04/19 17:53:11  cola
+*** empty log message ***
+
+Revision 1.1064  2007/04/19 17:24:31  cola
+*** empty log message ***
+
+Revision 1.1063  2007/04/19 17:24:11  cola
+*** empty log message ***
+
+Revision 1.1062  2007/04/18 12:37:36  sirca
+Fix deg2rad bug.
+
+Revision 1.1061  2007/04/18 12:28:49  sirca
+First shot at particle decay in spectrometers A and B in Simul++.
+*** WORK IN PROGRESS ***
+
+Revision 1.1060  2007/04/18 12:17:00  sirca
+Include DECAY environmental variable to set the flag for particle
+decay in simulation.
+
+Revision 1.1059  2007/04/18 12:15:39  sirca
+Initial commit for changes related to particle decay simulation.
+Makefile.in: added DSpectrometerA.o DSpectrometerB.o DipolB.o ran1.o
+             to $(libobjs)
+CK_RungeKutta.h CK_RungeKutta.cc: two modifications of odeint()
+             integrators to determine when to stop the integration
+             of track and to tell when the particle is out of the spectrometer
+simSpectrometer.cc and .h: pick up environmental variable DECAY and
+             include the appropriate decay flag into constructor
+
+Revision 1.1058  2007/04/11 09:45:23  nungesse
+first version of data structure for KAOS
+
+Revision 1.1057  2007/04/11 09:44:23  nungesse
+new data structure for KAOS
+
+Revision 1.1056  2007/04/05 07:58:04  merkel
+Cleaning up etamaid for external use
+
+Revision 1.1055  2007/04/05 07:57:51  merkel
+Cleaning up etamaid for external use
+
+Revision 1.1054  2007/04/04 08:54:58  cola
+        online.ppolA.scat.ph*=1000; //silly mrad in online struct.
+>       online.ppolA.scat.th*=1000;
+
+Revision 1.1053  2007/03/13 15:10:20  patrick
+Final bug fix (hopefully)
+
+Revision 1.1052  2007/03/13 14:56:26  patrick
+Bug fixed in  FibreDetector::init(...) ???
+
+Revision 1.1051  2007/03/13 14:56:13  patrick
+Bug fixed in  FibreDetector::init(...) ???
+
+Revision 1.1050  2007/03/13 14:56:00  patrick
+Bug fixed in  FibreDetector::init(...) ???
+
+Revision 1.1049  2007/03/13 14:09:52  patrick
+Changes to FibreDetector.cc
+Bug fixed???
+
+Revision 1.1048  2007/03/13 14:09:38  patrick
+Changes to FibreDetector.cc
+Bug fixed???
+
+Revision 1.1047  2007/03/13 10:21:57  cola
+- segfault eventnr output
+- 1 sleep second for make
+- tripoff treatment for syncinfo errors
+
+Revision 1.1046  2007/03/13 10:17:34  cola
+I don't wnat to think about n-tupples
+
+Revision 1.1045  2007/03/13 10:16:43  cola
+Added workaround for doublepulses in b_ps_runtime
+
+Revision 1.1044  2007/03/13 10:15:32  cola
+Added syntax for string concatenation
+
+Revision 1.1043  2007/03/13 10:14:57  cola
+Now using GZIP from config.h
+
+Revision 1.1042  2007/03/13 10:14:21  cola
+wrong include path changed
+
+Revision 1.1041  2007/03/07 14:43:33  patrick
+added additional Fibre channels.
+
+Revision 1.1040  2007/03/07 14:43:04  patrick
+added additional Fibre channels.
+
+Revision 1.1039  2007/02/28 18:55:14  patrick
+adding a third MaPMT to fibre detector class.
+
+Revision 1.1038  2007/02/28 18:55:01  patrick
+adding a third MaPMT to fibre detector class.
+
+Revision 1.1037  2007/02/28 18:54:34  patrick
+adding a third MaPMT to fibre detector class.
+
+Revision 1.1036  2007/02/27 22:38:19  patrick
+no change
+
+Revision 1.1035  2007/02/27 22:37:01  patrick
+Added trigger channel variable in run.db for dibre detector class.
+
+Revision 1.1034  2007/02/27 22:36:40  patrick
+Added trigger channel variable in run.db for dibre detector class.
+
+Revision 1.1033  2007/02/21 21:50:38  merkel
+EtaMaid
+
+Revision 1.1032  2007/02/16 12:33:02  merkel
+Eta-Maid
+
+Revision 1.1031  2007/02/16 12:32:54  merkel
+Eta-Maid
+
+Revision 1.1030  2007/02/16 09:11:37  bernauer
+Added new toy generator for He3eepn, non relativistic generation + non uniform + T1(grid)
+
+Revision 1.1029  2007/02/16 09:11:26  bernauer
+Added new toy generator for He3eepn, non relativistic generation + non uniform + T1(grid)
+
+Revision 1.1028  2007/02/16 09:11:09  bernauer
+Added new toy generator for He3eepn, non relativistic generation + non uniform + T1(grid)
+
+Revision 1.1027  2007/02/07 09:28:16  weinrief
+Added new generator TripleLabHe3 and did some code cleanup.
+
+Revision 1.1026  2007/02/07 09:28:09  weinrief
+Added new generator TripleLabHe3 and did some code cleanup.
+
+Revision 1.1025  2007/02/07 09:27:44  weinrief
+Added new generator TripleLabHe3 and did some code cleanup.
+
+Revision 1.1024  2007/01/25 15:03:53  weinrief
+Added variable omega and q generation range to He3eepn generator
+
+Revision 1.1023  2007/01/24 15:11:01  weinrief
+Added getT1stepsize to gridinterpolation
+
+Revision 1.1022  2007/01/23 15:28:31  weinrief
+Small Bugfix in He3eepn
+
+Revision 1.1021  2007/01/22 09:14:43  sirca
+Added "using namespace std;" to get iostream stuff working
+(although the qspin binaries are presently not in the "make" scheme).
+
+Revision 1.1020  2007/01/11 09:53:49  doria
+Bug in mean
+
+Revision 1.1019  2007/01/08 15:42:50  patrick
+TDC correction for trigger afterpulses.
+
+Revision 1.1018  2006/12/18 13:29:49  weinrief
+Small changes to He3eepn generator
+
+Revision 1.1017  2006/12/13 17:31:16  distler
+fixed missing sqlca.h problem
+fixed missing system function in dmaini
+
+Revision 1.1016  2006/12/13 17:30:47  distler
+fixed missing sqlca.h problem
+fixed missing system function in dmaini
+
+Revision 1.1015  2006/12/13 17:30:39  distler
+fixed missing sqlca.h problem
+fixed missing system function in dmaini
+
+Revision 1.1014  2006/12/13 17:30:30  distler
+fixed missing sqlca.h problem
+fixed missing system function in dmaini
+
+Revision 1.1013  2006/12/13 17:30:09  distler
+fixed missing sqlca.h problem
+fixed missing system function in dmaini
+
+Revision 1.1012  2006/12/08 16:02:28  distler
+undo of Harald's gcc-4 changes
+the missing destructor in the .y files has been added to bison.h, already.
+Recompile Bison and install Bison if you have problems.
+
+Revision 1.1011  2006/12/08 16:02:20  distler
+undo of Harald's gcc-4 changes
+the missing destructor in the .y files has been added to bison.h, already.
+Recompile Bison and install Bison if you have problems.
+
+Revision 1.1010  2006/12/08 16:02:12  distler
+undo of Harald's gcc-4 changes
+the missing destructor in the .y files has been added to bison.h, already.
+Recompile Bison and install Bison if you have problems.
+
+Revision 1.1009  2006/12/08 16:02:03  distler
+undo of Harald's gcc-4 changes
+the missing destructor in the .y files has been added to bison.h, already.
+Recompile Bison and install Bison if you have problems.
+
+Revision 1.1008  2006/12/08 16:00:51  distler
+undo of Harald's gcc-4 changes
+the missing destructor in the .y files has been added to bison.h, already.
+Recompile Bison and install Bison if you have problems.
+
+Revision 1.1007  2006/12/08 16:00:42  distler
+undo of Harald's gcc-4 changes
+the missing destructor in the .y files has been added to bison.h, already.
+Recompile Bison and install Bison if you have problems.
+
+Revision 1.1006  2006/12/08 16:00:30  distler
+undo of Harald's gcc-4 changes
+the missing destructor in the .y files has been added to bison.h, already.
+Recompile Bison and install Bison if you have problems.
+
+Revision 1.1005  2006/12/07 14:32:20  cola
+uninitialized variable
+
+Revision 1.1004  2006/12/07 14:27:52  cola
+online.datataking2
+
+Revision 1.1003  2006/12/07 14:26:44  cola
+update error for errorbars
+
+Revision 1.1002  2006/12/07 14:26:05  cola
+online.datataking2 introduced, SI-Bug removed
+
+Revision 1.1001  2006/12/07 14:07:37  merkel
+gcc-4
+
+Revision 1.1000  2006/12/07 14:07:29  merkel
+gcc-4
+
+Revision 1.999  2006/12/07 14:07:21  merkel
+gcc-4
+
+Revision 1.998  2006/12/07 14:07:12  merkel
+gcc-4
+
+Revision 1.997  2006/12/07 14:07:02  merkel
+gcc-4
+
+Revision 1.996  2006/12/07 14:06:54  merkel
+gcc-4
+
+Revision 1.995  2006/12/07 14:06:46  merkel
+gcc-4
+
+Revision 1.994  2006/12/07 14:06:38  merkel
+gcc-4
+
+Revision 1.993  2006/12/07 14:06:29  merkel
+gcc-4
+
+Revision 1.992  2006/12/07 14:06:21  merkel
+gcc-4
+
+Revision 1.991  2006/12/07 14:06:13  merkel
+gcc-4
+
+Revision 1.990  2006/12/07 14:06:05  merkel
+gcc-4
+
+Revision 1.989  2006/12/07 14:05:53  merkel
+gcc-4
+
+Revision 1.988  2006/11/28 18:40:04  cola
+for use of gcc 4, some bugs in libf2c has to be patched.
+
+Revision 1.987  2006/11/28 18:39:55  cola
+for use of gcc 4, some bugs in libf2c has to be patched.
+
+Revision 1.986  2006/11/28 18:39:47  cola
+for use of gcc 4, some bugs in libf2c has to be patched.
+
+Revision 1.985  2006/11/28 18:39:34  cola
+for use of gcc 4, some bugs in libf2c has to be patched.
+
+Revision 1.984  2006/11/22 08:31:49  merkel
+- option DATA_MARK=0 for meany and meanx
+- bug solved: "2d-pic; same;1d-pic" throws segmentation fault
+
+Revision 1.983  2006/11/21 15:42:35  patrick
+Full analysis of 3 x 12 ADC channels for the fibre detector.
+
+Revision 1.982  2006/11/21 15:42:06  patrick
+Full analysis of 3 x 12 ADC channels for the fibre detector.
+
+Revision 1.981  2006/11/02 14:54:36  merkel
+Gentoo likes to format man pages by itself...
+
+Revision 1.980  2006/10/23 13:45:15  weinrief
+small changes to He3eepn generator
+
+Revision 1.979  2006/10/20 13:42:05  weinrief
+Changed the integration volume of the He3eepn generator.
+
+Revision 1.978  2006/10/16 14:16:51  weinrief
+Some changes to phasespace simulation of He3eepn generator
+
+Revision 1.977  2006/08/25 14:50:03  patrick
+fibre channel identification added.
+
+Revision 1.976  2006/08/25 14:49:44  patrick
+fibre channel identification added.
+
+Revision 1.975  2006/08/18 11:21:00  patrick
+coincidence window added.
+
+Revision 1.974  2006/08/18 10:16:50  patrick
+minor change in Fibre Detector class.
+
+Revision 1.973  2006/08/17 09:34:37  patrick
+minor changes to Fibre Detector class.
+
+Revision 1.972  2006/08/17 09:34:08  patrick
+minor changes to Fibre Detector class.
+
+Revision 1.971  2006/08/16 13:56:00  patrick
+Some changes to the KAOS fibre detector class.
+
+Revision 1.970  2006/08/16 13:55:31  patrick
+Some changes to the KAOS fibre detector class.
+
+Revision 1.969  2006/08/14 15:34:34  patrick
+Fibre Detector analysis class and rundb modified
+
+Revision 1.968  2006/08/14 15:34:20  patrick
+Fibre Detector analysis class and rundb modified
+
+Revision 1.967  2006/08/14 15:34:00  patrick
+Fibre Detector analysis class and rundb modified
+
+Revision 1.966  2006/08/04 09:19:15  patrick
+Update of fibre detector class for future use.
+Special fibre detector read-out for GSI-Beamtime.
+
+Revision 1.965  2006/08/04 09:19:01  patrick
+Update of fibre detector class for future use.
+Special fibre detector read-out for GSI-Beamtime.
+
+Revision 1.964  2006/08/04 09:18:42  patrick
+Update of fibre detector class for future use.
+Special fibre detector read-out for GSI-Beamtime.
+
+Revision 1.963  2006/07/27 08:19:31  weinrief
+Added calculation of T1 non-relativistic to He3eepn model
+
+Revision 1.962  2006/06/27 12:34:08  distler
+fixed several compiler warnings to keep gcc-4 happy
+
+Revision 1.961  2006/06/27 12:33:52  distler
+fixed several compiler warnings to keep gcc-4 happy
+
+Revision 1.960  2006/06/23 11:48:23  merkel
+a little bit less output for latex
+
+Revision 1.959  2006/06/23 11:46:32  merkel
+minor numerical problems solved
+
+Revision 1.958  2006/06/23 11:44:52  merkel
+- "template <>" has to be in front of
+  each template function definition
+- "struct" should be named for global variables
+- "friend" definitions are not sufficient
+  as function header, definitions have to be included
+  twice.
+
+Revision 1.957  2006/06/23 11:44:44  merkel
+- "template <>" has to be in front of
+  each template function definition
+- "struct" should be named for global variables
+- "friend" definitions are not sufficient
+  as function header, definitions have to be included
+  twice.
+
+Revision 1.956  2006/06/23 11:44:36  merkel
+- "template <>" has to be in front of
+  each template function definition
+- "struct" should be named for global variables
+- "friend" definitions are not sufficient
+  as function header, definitions have to be included
+  twice.
+
+Revision 1.955  2006/06/23 11:44:27  merkel
+- "template <>" has to be in front of
+  each template function definition
+- "struct" should be named for global variables
+- "friend" definitions are not sufficient
+  as function header, definitions have to be included
+  twice.
+
+Revision 1.954  2006/06/23 11:44:13  merkel
+- "template <>" has to be in front of
+  each template function definition
+- "struct" should be named for global variables
+- "friend" definitions are not sufficient
+  as function header, definitions have to be included
+  twice.
+
+Revision 1.953  2006/04/10 12:50:55  weinrief
+Added new calculation method for T1max in He3eepn model.
+
+Revision 1.952  2006/04/04 14:36:39  bernauer
+Bad Mistake: Forgot to remove hack to display only accepted wires in multiplicity. Fixed. JCB
+
+Revision 1.951  2006/02/17 10:18:50  weinrief
+Fixed bug in He3eepn generator
+
+Revision 1.950  2006/02/02 15:42:21  weinrief
+Removed a bug from He3eepn generator.
+
+Revision 1.949  2006/01/31 13:19:49  aqua
+new entry in silicon.h (misc)
+
+Revision 1.948  2005/12/16 12:06:16  weinrief
+Removed some errors in He3eepn generator.
+
+Revision 1.947  2005/12/14 09:09:44  weinrief
+Removed some old code and fixed a bug in He3eepn generator.
+
+Revision 1.946  2005/12/09 13:17:06  weinrief
+New He3eepn generator added. Needs some checks.
+
+Revision 1.945  2005/12/09 13:16:42  weinrief
+New He3eepn generator added. Needs some checks.
+
+Revision 1.944  2005/10/05 16:51:09  middletn
+*** empty log message ***
+
+Revision 1.943  2005/10/05 16:44:03  middletn
+*** empty log message ***
+
+Revision 1.942  2005/10/05 16:43:50  middletn
+*** empty log message ***
+
+Revision 1.941  2005/10/05 16:43:37  middletn
+*** empty log message ***
+
+Revision 1.940  2005/10/05 16:43:20  middletn
+*** empty log message ***
+
+Revision 1.939  2005/10/05 16:30:12  middletn
+Directory /var/cvsroot/Cola/share/examples/rundb/eepn_target added to the repository
+
+Revision 1.938  2005/08/22 07:41:12  sirca
+Fix compilation error: jump to 'default:' case label crossing
+initialization of certain variables.
+
+Revision 1.937  2005/07/13 11:54:43  weinrief
+some warnings removed
+
+Revision 1.936  2005/07/13 11:19:26  weinrief
+New model He3eepn implemented
+
+Revision 1.935  2005/07/13 11:17:45  weinrief
+New model He3eepn implemented
+
+Revision 1.934  2005/07/13 11:15:32  weinrief
+New model He3eepn implemented
+
+Revision 1.933  2005/07/12 12:21:52  middletn
+Slight change to the previous update to model the H3 detection efficiency.
+
+Revision 1.932  2005/07/01 08:05:13  cola
+Context switch toreduce CPU load in AquaQuantize mode
+----------------------------------------------------------------------
+
+Revision 1.931  2005/06/30 15:16:05  cola
+patch for qunatize H.M.
+----------------------------------------------------------------------
+
+Revision 1.930  2005/06/22 13:17:01  middletn
+*** empty log message ***
+
+Revision 1.929  2005/06/22 13:16:48  middletn
+*** empty log message ***
+
+Revision 1.928  2005/06/22 13:16:31  middletn
+*** empty log message ***
+
+Revision 1.927  2005/06/04 10:02:38  ulm
+Added boron-12 and nitrogen-12 nuclei.
+
+Revision 1.926  2005/06/03 20:02:19  ulm
+Fixed "-b today" option in Printmezzo.
+(Did this ever work before?)
+
+Revision 1.925  2005/06/02 13:27:13  distler
+updated config scripts in readline to support athlon64
+
+Revision 1.924  2005/05/31 06:34:40  makek
+Modification of Silicon Detector software according to new detector
+setup for the BoundDelta2005.
+
+Revision 1.923  2005/05/28 12:00:20  makek
+Change in Silicon Detector software: corrected pathlength in class
+Layer.
+
+Revision 1.922  2005/05/28 11:59:24  makek
+Correction to silicon Detector software: corrected pathlength for class
+Layer.
+
+Revision 1.921  2005/05/24 19:36:04  makek
+Silicon Detector software changes: first detector layer thickness changed to 300 um,
+absorber thickness to 1.9 mm.
+
+Revision 1.920  2005/05/24 19:35:45  makek
+Silicon Detector software changes: first detector layer thickness changed to 300 um,
+absorber thickness to 1.9 mm.
+
+Revision 1.919  2005/05/24 19:33:52  makek
+*** empty log message ***
+
+Revision 1.918  2005/05/24 19:31:30  makek
+Small changes in Silicon Detector software: unused variables put under comment, changed
+msx1 thickness to 300 um and absorber thickness to 1.9 mm.
+
+Revision 1.917  2005/05/22 09:58:46  makek
+Corrected floating point error for PWIA/BoundDelta model: proton+pion mass threshold inserted.
+
+Revision 1.916  2005/05/18 09:44:15  makek
+Corrections to the Bound Delta simulation part.
+
+Revision 1.915  2005/05/17 15:48:31  makek
+Changes made to BoundDelta/QuasifreeDelta simulation. There seemed to be
+problems with particle geometry, I think they are fixed now.
+
+Revision 1.914  2005/05/17 15:38:59  makek
+Developments in Silicon Detector simulation: all detector layers included, angle straggling included,
+energy straggling included and target energy loss included. Corrected error: target coordinates divided by
+10: units set to [cm].
+
+Revision 1.913  2005/05/17 15:37:19  makek
+Developments in Silicon Detector simulation: all detector layers included, angle straggling included,
+energy straggling included and target energy loss included.
+
+Revision 1.912  2005/05/17 15:34:35  makek
+Silicon Detector included in simulation as sim[9].
+
+Revision 1.911  2005/05/17 15:16:54  makek
+SiDetectorCalibration.cc holds some simple calibration code for Silicon Detector.
+
+Revision 1.910  2005/05/17 15:15:57  makek
+SiDetectorCalibartion.h is used to initiate variables for Silicon Detector calibration.
+
+Revision 1.909  2005/05/17 15:14:26  makek
+SiDetectorProton.cc should be included in SiliconDetector.cc for identifying detected particle as proton
+and to eliminate noises.
+
+Revision 1.908  2005/05/17 15:10:43  makek
+Changes to Silcon Detector software: -class Layer introduced to describe detector layers
+				     -File SiDetectorProton.cc included - used to identify protons
+				     -SiDetectorCalibartion.h & SiDetectorCalibration.cc included - for
+				      calibration
+				     -som other changes and improvments
+
+Revision 1.907  2005/05/17 15:02:30  makek
+Changes in Silicon Detector software: added new class Layer to describe detector layers.
+Some other improvments to software.
+
+Revision 1.906  2005/05/17 14:56:55  makek
+Changes made to Silicon Detector online structure: added new online and simulation variables
+
+Revision 1.905  2005/05/17 14:53:59  makek
+Changes made for Silicon Detector: -default Silicon Detecor particle is set to proton
+				   -particle detected in Silicon Detector can be called from col files as
+                                    Spectrometer("SI")
+				   -target energy loss correction incorporated for Silicon Detector using
+                                    EnergyLossCorr function.
+
+Revision 1.904  2005/05/17 13:43:11  merkel
+Histogram file format changed for 64 bit architecture
+
+Revision 1.903  2005/05/17 13:43:03  merkel
+Histogram file format changed for 64 bit architecture
+
+Revision 1.902  2005/05/17 10:21:35  distler
+athlon64 changes
+
+Revision 1.901  2005/05/17 10:21:25  distler
+athlon64 changes
+
+Revision 1.900  2005/05/17 10:21:18  distler
+athlon64 changes
+
+Revision 1.899  2005/05/17 10:20:58  distler
+athlon64 changes
+
+Revision 1.898  2005/05/17 10:20:46  distler
+athlon64 changes
+
+Revision 1.897  2005/05/10 09:14:41  merkel
+debug output in Generate.cc removed
+
+Revision 1.896  2005/04/18 15:38:58  patrick
+added debug information for Fibre detector.
+
+Revision 1.895  2005/04/07 14:56:43  distler
+extended hdc structure: added hit count for each plane
+
+Revision 1.894  2005/03/22 13:18:35  distler
+test for new location of openmotif in configure
+
+Revision 1.893  2005/03/08 08:58:05  heim
+Switsch 'tof_cs' added to take phase space into account or not. Default
+is 0, what means 'weight *= Gamma'. Use 'TOF_CS=1' as environment variable
+to set 'weight *= 1'.
+
+Revision 1.892  2005/03/08 08:56:59  heim
+Switsch 'tof_cs' added to take phase space into account or not. Default
+is 0, what means 'weight *= Gamma'. Use 'TOF_CS=1' as environment variable
+to set 'weight *= 1'.
+
+Revision 1.891  2005/02/28 16:09:20  merkel
+Model VCS
+
+Revision 1.890  2005/02/28 16:09:01  merkel
+Model VCS
+
+Revision 1.889  2005/02/25 09:45:26  merkel
+some documentation/minor bugs
+
+Revision 1.888  2005/02/23 13:20:31  merkel
+Neumann algorithm for VCS
+
+Revision 1.887  2005/02/23 13:20:25  merkel
+Neumann algorithm for VCS
+
+Revision 1.886  2005/02/23 13:20:15  merkel
+Neumann algorithm for VCS
+
+Revision 1.885  2005/02/17 10:15:24  doria
+*** empty log message ***
+
+Revision 1.884  2005/02/15 09:23:00  heim
+Bugfix: Argument of sqrt changed to double.
+
+Revision 1.883  2005/02/15 09:21:45  heim
+Bugfix: Argument of sqrt changed to double.
+
+Revision 1.882  2005/02/08 06:11:25  heim
+New neutron efficiency for He3 2002 added.
+
+Revision 1.881  2005/02/08 06:00:27  heim
+Additional function (posVertical) for ToF.
+
+Revision 1.880  2005/02/08 05:58:56  heim
+Update of ToF section.
+
+Revision 1.879  2005/02/08 05:58:20  heim
+Variables for neutron efficiency in ToF added.
+
+Revision 1.878  2005/02/08 05:57:34  heim
+Update of ToF section (event nr).
+
+Revision 1.877  2005/02/08 05:56:50  heim
+Update.
+
+Revision 1.876  2005/02/08 05:56:25  heim
+Update.
+
+Revision 1.875  2005/02/08 04:57:32  heim
+Directory containing gain correction for ToF.
+
+Revision 1.874  2005/02/08 04:48:38  heim
+Directory /var/cvsroot/Cola/share/examples/rundb/ToF/gain added to the repository
+
+Revision 1.873  2005/02/07 13:24:36  heim
+New neutron efficiency for He3 added.
+
+Revision 1.872  2005/02/07 13:00:37  heim
+Directory containing db files with informations for neutron
+efficiency. The number in the filename gives the threshold to use it
+for.
+
+Revision 1.871  2005/02/07 12:56:15  heim
+db file for simulations with ToF.
+
+Revision 1.870  2005/02/07 12:55:04  heim
+Directory /var/cvsroot/Cola/share/examples/rundb/ToF/n_eff added to the repository
+
+Revision 1.869  2005/02/03 17:22:47  distler
+fix Postgres nonsense ? DLLIMPORT ?
+
+Revision 1.868  2005/01/29 12:03:49  doria
+Function w2 modified
+
+Revision 1.867  2005/01/27 10:24:58  doria
+atan2
+
+Revision 1.866  2005/01/27 10:16:28  doria
+CalcPolarizationin Makefile
+
+Revision 1.865  2005/01/27 10:15:05  doria
+small changes of setup
+
+Revision 1.864  2005/01/27 10:00:40  doria
+Utility to calulate VCS polarisation
+
+Revision 1.863  2005/01/27 09:59:15  doria
+VCS Model
+
+Revision 1.862  2005/01/24 09:28:18  merkel
+Introduction of silicon detector in simulation
+
+Revision 1.861  2005/01/24 09:28:09  merkel
+Introduction of silicon detector in simulation
+
+Revision 1.860  2005/01/18 16:22:49  makek
+Modified Files:
+	online.h
+Changes in Silicon detector online structure.
+
+Revision 1.859  2005/01/18 16:20:32  makek
+Modified Files:
+ 	SiliconDetector.cc
+Changes in Silicon detector software according to new detector layers.
+
+Revision 1.858  2005/01/18 16:17:36  makek
+Changes in Silicon Detector Software according to new detector layers
+
+Revision 1.857  2005/01/14 08:53:33  merkel
+VCS polarization
+
+Revision 1.856  2005/01/13 16:05:02  merkel
+still polarization...
+
+Revision 1.855  2005/01/13 16:04:53  merkel
+still polarization...
+
+Revision 1.854  2005/01/13 13:43:08  merkel
+update
+
+Revision 1.853  2005/01/13 13:40:57  merkel
+VCS polarisation
+
+Revision 1.852  2005/01/13 13:39:54  merkel
+Polarization Simulation
+
+Revision 1.851  2005/01/13 13:38:55  merkel
+Polarization simulation
+
+Revision 1.850  2005/01/13 13:38:49  merkel
+Polarization simulation
+
+Revision 1.849  2005/01/13 13:33:02  merkel
+staterror introduced
+
+Revision 1.848  2004/11/16 12:24:18  doria
+*** empty log message ***
+
+Revision 1.847  2004/11/16 11:05:35  merkel
+Simulation of the fpp coordinates for VCS
+
+Revision 1.846  2004/11/15 14:49:02  doria
+Small correction
+
+Revision 1.845  2004/11/15 14:33:04  doria
+Calculation of the VCS Polarizations added
+
+Revision 1.844  2004/11/15 14:31:31  doria
+HBChPT Model for Virtual Compton Scattering (nucl-th/9910036)
+
+Revision 1.843  2004/10/29 09:19:04  merkel
+wrong sign in simulation of fpp coordinates repaired
+
+Revision 1.842  2004/10/22 16:57:11  patrick
+cluster analysis added to class FibreDetector
+
+Revision 1.841  2004/10/22 16:57:02  patrick
+cluster analysis added to class FibreDetector
+
+Revision 1.840  2004/10/22 16:56:51  patrick
+cluster analysis added to class FibreDetector
+
+Revision 1.839  2004/10/19 07:39:13  cola
+Bug abs -> fabs
+
+Revision 1.838  2004/10/18 10:06:45  merkel
+Warnings removed....
+
+Revision 1.837  2004/10/18 09:56:27  merkel
+Warning removed
+
+Revision 1.836  2004/10/13 06:36:47  boehmr
+Replacement of jmp_buf/setjmp()/longjmp() with sigjmp_buf/sigsetjmp()/siglongjmp()
+and doing an enableFPE() in the signal handler cured the floating point exception
+problems at least for me (r. boehm). But caution: I don't really know why it didn't
+work and why it does work now...
+
+Revision 1.835  2004/10/13 06:27:20  boehmr
+Replacement of jmp_buf/setjmp()/longjmp() with sigjmp_buf/sigsetjmp()/siglongjmp()
+and doing an enableFPE() in the signale handler cured the floating point exception
+problems at least for me (r. boehm). But caution: I don't really know why it didn't
+work and why it does work now...
+
+Revision 1.834  2004/10/08 11:15:35  merkel
+Some warnings removed
+VCS Elastic polarization repaired
+
+Revision 1.833  2004/10/08 11:15:30  merkel
+Some warnings removed
+VCS Elastic polarization repaired
+
+Revision 1.832  2004/10/08 11:15:22  merkel
+Some warnings removed
+VCS Elastic polarization repaired
+
+Revision 1.831  2004/10/05 15:04:27  patrick
+correction of CATCH TDC rollover added to Detector/FibreDetector.cc.
+
+Revision 1.830  2004/10/05 15:04:21  patrick
+correction of CATCH TDC rollover added to Detector/FibreDetector.cc.
+
+Revision 1.829  2004/10/05 15:04:09  patrick
+correction of CATCH TDC rollover added to Detector/FibreDetector.cc.
+
+Revision 1.828  2004/09/27 12:35:16  merkel
+option --disable-new-dtag for linkage
+
+Revision 1.827  2004/09/24 15:50:59  patrick
+For the analysis of the fibre detector (mapped onto specC data) I
+added detector class FibreDetector, and struct SciFi to rundb and online.
+
+Revision 1.826  2004/09/24 15:50:53  patrick
+For the analysis of the fibre detector (mapped onto specC data) I
+added detector class FibreDetector, and struct SciFi to rundb and online.
+
+Revision 1.825  2004/09/24 15:50:44  patrick
+For the analysis of the fibre detector (mapped onto specC data) I
+added detector class FibreDetector, and struct SciFi to rundb and online.
+
+Revision 1.824  2004/09/23 13:46:32  nungesse
+*** empty log message ***
+
+Revision 1.823  2004/09/21 14:35:24  merkel
+missing header file
+
+Revision 1.822  2004/09/20 08:46:54  patrick
+*** empty log message ***
+
+Revision 1.821  2004/09/17 15:36:11  nungesse
+*** empty log message ***
+
+Revision 1.820  2004/09/16 13:18:31  distler
+some cosmetic changes
+
+Revision 1.819  2004/09/16 10:14:50  merkel
+Warnings removed.
+
+Revision 1.818  2004/09/16 10:14:43  merkel
+Warnings removed.
+
+Revision 1.817  2004/09/15 14:41:06  nungesse
+*** empty log message ***
+
+Revision 1.816  2004/09/14 14:23:46  merkel
+- Focus correction for out of plane
+- new (char *)[] ===> new char *[]
+
+Revision 1.815  2004/09/14 14:23:41  merkel
+- Focus correction for out of plane
+- new (char *)[] ===> new char *[]
+
+Revision 1.814  2004/09/14 14:23:28  merkel
+- Focus correction for out of plane
+- new (char *)[] ===> new char *[]
+
+Revision 1.813  2004/08/25 13:29:51  ding
+Quantity 'residuum' built in for PDC (measure for intrinsic resolution).
+
+Revision 1.812  2004/08/19 14:59:52  distler
+removed Pablo's debug code in Simul.cc
+
+Revision 1.811  2004/08/17 12:01:53  distler
+Added angle parameter and configuration file for silicon detector in run.db.
+New analysis code for si detector by Mihael Makek.
+Small changes to online structure.
+
+Revision 1.810  2004/08/17 12:01:47  distler
+Added angle parameter and configuration file for silicon detector in run.db.
+New analysis code for si detector by Mihael Makek.
+Small changes to online structure.
+
+Revision 1.809  2004/08/17 12:01:37  distler
+Added angle parameter and configuration file for silicon detector in run.db.
+New analysis code for si detector by Mihael Makek.
+Small changes to online structure.
+
+Revision 1.808  2004/07/30 13:07:40  bernauer
+Density Correction für Elektronen wieder an geschaltet
+
+Revision 1.807  2004/07/30 13:01:04  bernauer
+Typo in Material constructor corrected. Eloss correction now much better ;)
+online.vertex.* should be filled correctly
+
+Revision 1.806  2004/07/22 09:23:16  bernauer
+small fixup of landauloss
+
+Revision 1.805  2004/07/22 09:15:45  merkel
+1. FPP Euler Angles
+2. Bug in Landau
+
+Revision 1.804  2004/07/21 10:35:39  bernauer
+Some small bugfixes, hmsub repaired
+online.datataking now gives Unix time  in hours (it's a double)
+The old behaviour was very strange and probably a bug, but please check.
+
+Revision 1.803  2004/07/21 10:35:32  bernauer
+Some small bugfixes, hmsub repaired
+online.datataking now gives Unix time  in hours (it's a double)
+The old behaviour was very strange and probably a bug, but please check.
+
+Revision 1.802  2004/07/21 10:35:21  bernauer
+Some small bugfixes, hmsub repaired
+online.datataking now gives Unix time  in hours (it's a double)
+The old behaviour was very strange and probably a bug, but please check.
+
+Revision 1.801  2004/06/23 10:46:18  bernauer
+Added cola/landautest.cc (forgotten)
+Reenabled some sanitychecks
+
+Revision 1.800  2004/06/18 11:06:46  bernauer
+Further updates to Eloss-Correction. Should be much better. Please test
+
+Revision 1.799  2004/06/17 15:40:36  bernauer
+Deleted debug output in Radiation.cc
+
+Revision 1.798  2004/06/17 15:33:14  bernauer
+Begin of ElossCorrection-Correction. Use tag pre_eloss till further notice
+Merged basic version of EventSim. Not fully tested
+
+Revision 1.797  2004/06/17 15:33:08  bernauer
+Begin of ElossCorrection-Correction. Use tag pre_eloss till further notice
+Merged basic version of EventSim. Not fully tested
+
+Revision 1.796  2004/06/17 15:33:01  bernauer
+Begin of ElossCorrection-Correction. Use tag pre_eloss till further notice
+Merged basic version of EventSim. Not fully tested
+
+Revision 1.795  2004/06/17 15:32:55  bernauer
+Begin of ElossCorrection-Correction. Use tag pre_eloss till further notice
+Merged basic version of EventSim. Not fully tested
+
+Revision 1.794  2004/06/17 15:32:48  bernauer
+Begin of ElossCorrection-Correction. Use tag pre_eloss till further notice
+Merged basic version of EventSim. Not fully tested
+
+Revision 1.793  2004/06/17 15:32:41  bernauer
+Begin of ElossCorrection-Correction. Use tag pre_eloss till further notice
+Merged basic version of EventSim. Not fully tested
+
+Revision 1.792  2004/06/17 15:26:09  bernauer
+EventSimulator for Cola. Start Cola with -S. Not fully tested yet.
+
+Status:
+
+Vendor Tag:	eventsim
+Release Tags:	start
+
+N Cola/Simulation/EventSim/Makefile.in
+N Cola/Simulation/EventSim/EventSimReader.h
+N Cola/Simulation/EventSim/EventSimReader.cc
+N Cola/Simulation/EventSim/Generator.cc
+N Cola/Simulation/EventSim/SimSpek.cc
+N Cola/Simulation/EventSim/Generator.h
+N Cola/Simulation/EventSim/debug.h
+N Cola/Simulation/EventSim/SimSpek.h
+N Cola/Simulation/EventSim/tests/EventSimTest.cc
+N Cola/Simulation/EventSim/tests/Makefile.in
+
+No conflicts created by this import
+
+Revision 1.791  2004/06/10 10:43:31  barneo
+A few bugs have been fixed in Lumi++, most of them related with the inclusion
+of Hadron3 in the code. This is the final version.
+
+Revision 1.790  2004/05/31 15:58:24  distler
+new unit 0x040C of specA reads target position
+not tested, yet
+
+Revision 1.789  2004/05/24 18:52:24  distler
+first version of Detector/SiliconDetector
+will handle Silicon events in the future
+
+Revision 1.788  2004/05/24 18:52:19  distler
+first version of Detector/SiliconDetector
+will handle Silicon events in the future
+
+Revision 1.787  2004/05/24 18:52:14  distler
+first version of Detector/SiliconDetector
+will handle Silicon events in the future
+
+Revision 1.786  2004/05/24 11:31:38  distler
+Removed libelf test from configure.
+On a gentoo system Cola compiles fine without libelf.
+If somebody has to reenable the libelf test, it should
+be done with a specific function instead of 'main'.
+
+Revision 1.785  2004/05/24 09:43:23  boehmr
+added 6-dim. isotropic event generator
+
+Revision 1.784  2004/05/24 09:42:35  boehmr
+added 6-dim. isotropic event generator
+
+Revision 1.783  2004/05/24 09:41:14  boehmr
+added model 'Iso6D' for 6 dim. isotropic event generation (test)
+
+Revision 1.782  2004/05/24 09:39:31  boehmr
+added model 'Iso6d' for 6-dim. isotropic event generation (test)
+
+Revision 1.781  2004/05/19 17:48:15  distler
+disabled vcsssa debug code in Targetlength.cc
+this debug code produced a file 'debug.ps' which
+could be several 100MB big. At 2GB it would crash Cola.
+
+Revision 1.780  2004/05/19 12:25:44  distler
+added 12 ADC channels for msx counter
+
+Revision 1.779  2004/05/19 10:32:19  distler
+old density for liquid hydrogen of 0.0708 g/cm3 is valid
+only for 26K and 4bar. Taken from an old Particle Data Booklet (1996?).
+the density 0.069 g/cm3 is a reasonable value for the A1 target
+21.84K and 2bar. See: http://webbook.nist.gov/chemistry/fluid/
+Changes effect Material.cc and Targetlength.cc
+
+Revision 1.778  2004/05/05 11:55:34  distler
+Removed debug output in Parsermain.cc
+
+Revision 1.777  2004/04/21 01:30:07  a1online
+Mn55 and Fe56 added as reaction nuclei. (ding)
+
+Revision 1.776  2004/04/15 19:00:06  ding
+Another quantity called "resid" for pion-chamber defined, similar to
+"residuum", but not corrected for staggering (lateral displacement of wires).
+There have to be two peaks in the corresponding histogram (separated by
+two times the TRUE staggering).
+
+Revision 1.775  2004/04/15 12:56:00  ding
+New quantity called "Residuum" for pion driftchamber is evaluated many times
+for each event. It's the difference between the driftlength and the
+calculated distance between wire and track. Measures the intrinsic resolution.
+
+Revision 1.774  2004/04/05 14:48:21  barneo
+A few include files have been fix.
+
+Revision 1.773  2004/04/05 14:48:07  barneo
+A few include files have been fix.
+
+Revision 1.772  2004/04/05 10:17:39  merkel
+BetheHeitler: Tool to calculate the Bethe-Heitler + Born cross section
+Has to be compiled with "make -C Cola BetheHeitler"
+
+Revision 1.771  2004/04/05 10:17:21  merkel
+BetheHeitler: Tool to calculate the Bethe-Heitler + Born cross section
+Has to be compiled with "make -C Cola BetheHeitler"
+
+Revision 1.770  2004/04/01 14:42:25  distler
+lastest changes of ToF code by J.Heim
+'droop corrections'
+
+Revision 1.769  2004/04/01 14:42:12  distler
+lastest changes of ToF code by J.Heim
+'droop corrections'
+
+Revision 1.768  2004/03/31 17:47:45  ding
+New initial values for optimization of driftpath(drifttime)-relation.
+
+Revision 1.767  2004/03/17 16:24:28  ding
+path length correction for Spec. D (using abtime)
+
+Revision 1.766  2004/03/08 17:19:00  merkel
+1. gcc extensions are nonsense (Targetlength)
+2. fitspline: absolute path in include works only on standard systems!
+3. DeuteronBreakup: includefiles fixed
+
+Revision 1.765  2004/03/08 17:18:47  merkel
+1. gcc extensions are nonsense (Targetlength)
+2. fitspline: absolute path in include works only on standard systems!
+3. DeuteronBreakup: includefiles fixed
+
+Revision 1.764  2004/03/02 15:59:57  distler
+new AquaSilicon version with scalers
+
+Revision 1.763  2004/02/26 15:51:45  distler
+added some comments in vdcPlane.cc
+
+Revision 1.762  2004/02/17 18:32:12  ding
+Initialization files for SOS drift chamber
+to be found by run.db in /usr/local/a1/share/pdcD/
+
+Revision 1.761  2004/02/17 18:29:49  ding
+Directory /data/kits/A1/src/cvsroot/Cola/share/pdcD added to the repository
+
+Revision 1.760  2004/02/17 18:24:30  ding
+Spline Parameter for SOS drift chamber built in
+
+Revision 1.759  2004/02/17 18:24:02  ding
+Spline Parameter for SOS drift chamber built in
+
+Revision 1.758  2004/02/12 10:11:41  merkel
+spintrace likes y0 in mm instead of cm
+
+Revision 1.757  2004/02/11 10:16:50  merkel
+debug for vcsssa
+
+Revision 1.756  2004/02/11 08:37:29  a1online
+snow correction for vcsssa data (H.Merkel)
+
+Revision 1.755  2004/02/11 08:37:06  a1online
+snow correction for vcsssa data (H.Merkel)
+
+Revision 1.754  2004/02/01 19:51:59  merkel
+some bugs in spin rotation
+
+Revision 1.753  2004/02/01 19:51:36  merkel
+some bugs in spin rotation
+
+Revision 1.752  2004/01/29 20:49:12  merkel
+Weighted histogram method for FPP
+
+Revision 1.751  2004/01/29 20:48:49  merkel
+Weighted histogram method for FPP
+
+Revision 1.750  2004/01/26 20:12:01  distler
+do not change AC_HELP_STRING to AS_HELP_STRING in configure.in
+use autoconf version >= 2.59 !!! e.g.: autoconf-2.59;autoheader-2.59
+
+Revision 1.749  2004/01/26 19:29:03  distler
+_XOPEN_SOURCE and _XOPEN_SOURCE_EXTENDED have to be defined
+to find mkstemp in stdlib.h
+
+Revision 1.748  2004/01/23 11:44:04  sirca
+Included $(LIBSIMUL) to allow for use of SpinMatrix class (which is only
+adopted from Cola and not used in ColaMIT at the moment).
+
+Revision 1.747  2004/01/20 14:33:31  bernauer
+HMBook gefixed:
+ - hmcat kann jetzt auch nur eine Datei verarbeiten
+ - Interpolate funktioniert jetzt richtig.
+ - InterpolateError ist neu. Sinn -- naja
+Cola:
+   run.db: addition_title, wird in die Titel-Leiste eingeblendet
+   Die Neue SplineTM: Alte TM auf Basisklasse portiert.
+   neuer TM einschalten mit <spec>.tma.type=1
+   Filename für First-Order Elemente: <spec>.tma.firstorder="name"
+   Die Fit-Programme werden später hinzugefügt.
+
+Revision 1.746  2004/01/20 14:33:15  bernauer
+HMBook gefixed:
+ - hmcat kann jetzt auch nur eine Datei verarbeiten
+ - Interpolate funktioniert jetzt richtig.
+ - InterpolateError ist neu. Sinn -- naja
+Cola:
+   run.db: addition_title, wird in die Titel-Leiste eingeblendet
+   Die Neue SplineTM: Alte TM auf Basisklasse portiert.
+   neuer TM einschalten mit <spec>.tma.type=1
+   Filename für First-Order Elemente: <spec>.tma.firstorder="name"
+   Die Fit-Programme werden später hinzugefügt.
+
+Revision 1.745  2004/01/20 14:33:00  bernauer
+HMBook gefixed:
+ - hmcat kann jetzt auch nur eine Datei verarbeiten
+ - Interpolate funktioniert jetzt richtig.
+ - InterpolateError ist neu. Sinn -- naja
+Cola:
+   run.db: addition_title, wird in die Titel-Leiste eingeblendet
+   Die Neue SplineTM: Alte TM auf Basisklasse portiert.
+   neuer TM einschalten mit <spec>.tma.type=1
+   Filename für First-Order Elemente: <spec>.tma.firstorder="name"
+   Die Fit-Programme werden später hinzugefügt.
+
+Revision 1.744  2004/01/20 14:32:41  bernauer
+HMBook gefixed:
+ - hmcat kann jetzt auch nur eine Datei verarbeiten
+ - Interpolate funktioniert jetzt richtig.
+ - InterpolateError ist neu. Sinn -- naja
+Cola:
+   run.db: addition_title, wird in die Titel-Leiste eingeblendet
+   Die Neue SplineTM: Alte TM auf Basisklasse portiert.
+   neuer TM einschalten mit <spec>.tma.type=1
+   Filename für First-Order Elemente: <spec>.tma.firstorder="name"
+   Die Fit-Programme werden später hinzugefügt.
+
+Revision 1.743  2004/01/20 14:32:20  bernauer
+HMBook gefixed:
+ - hmcat kann jetzt auch nur eine Datei verarbeiten
+ - Interpolate funktioniert jetzt richtig.
+ - InterpolateError ist neu. Sinn -- naja
+Cola:
+   run.db: addition_title, wird in die Titel-Leiste eingeblendet
+   Die Neue SplineTM: Alte TM auf Basisklasse portiert.
+   neuer TM einschalten mit <spec>.tma.type=1
+   Filename für First-Order Elemente: <spec>.tma.firstorder="name"
+   Die Fit-Programme werden später hinzugefügt.
+
+Revision 1.742  2004/01/14 11:57:34  a1online
+Assertion -A- no longer valid for c preprocessor
+i.e. some additional assertions might be given, like architecture
+
+Revision 1.741  2004/01/12 20:45:43  merkel
+Focal Plane Polarimeter per event analysis
+
+Revision 1.740  2004/01/12 20:45:34  merkel
+Focal Plane Polarimeter per event analysis
+
+Revision 1.739  2004/01/12 20:45:21  merkel
+Focal Plane Polarimeter per event analysis
+
+Revision 1.738  2004/01/12 20:40:38  merkel
+Muessen denn immer Warnungen kommen?
+
+Revision 1.737  2004/01/12 11:46:39  boehmr
+added Deuteron breakup
+
+Revision 1.736  2004/01/12 11:46:20  boehmr
+added Deuteron breakup
+
+Revision 1.735  2004/01/12 11:45:32  boehmr
+added Arenhoevel structure function interpolation routine
+
+Revision 1.734  2004/01/12 11:44:19  boehmr
+added DeuteronBreakup.cc/.o
+
+Revision 1.733  2004/01/12 11:41:24  boehmr
+new model 'DBreakup' for Arenhoevel D(e,e'p)n cross section
+
+Revision 1.732  2004/01/12 11:40:11  boehmr
+Routines to interpolate Arenhoevel D(e,e'p)n structure functions
+
+Revision 1.731  2004/01/12 10:08:14  distler
+new Aqua function:
+ AquaShortSubTree *AquaTree::getShortSubSubTree(const char *nodename,
+                                                int inc=1);
+full HDC support enabled
+
+Revision 1.730  2004/01/12 10:02:29  distler
+new Aqua function:
+ AquaShortSubTree *AquaTree::getShortSubSubTree(const char *nodename,
+                                                int inc=1);
+full HDC support enabled
+
+Revision 1.729  2004/01/12 10:02:07  distler
+new Aqua function:
+ AquaShortSubTree *AquaTree::getShortSubSubTree(const char *nodename,
+                                                int inc=1);
+full HDC support enabled
+
+Revision 1.728  2004/01/08 15:36:02  merkel
+sch.... gnome terminal
+
+Revision 1.727  2004/01/07 09:11:31  merkel
+y0 in simulation, needed for fpp simulation
+
+Revision 1.726  2004/01/06 15:06:08  merkel
+Polarization simulation for Elastic Scattering
+
+Revision 1.725  2004/01/06 15:05:40  merkel
+Polarization simulation for Elastic Scattering
+
+Revision 1.724  2004/01/06 01:21:41  distler
+changed $(libdir) to @exec_prefix@/lib in Makefile.inc.in
+used in cola ebuild
+
+Revision 1.723  2003/11/21 16:41:48  distler
+New silicon detector added to abcn structure
+
+Revision 1.722  2003/11/13 17:21:00  ding
+pdcD Y-plane can be optimized independently with same features as X-plane.
+
+Revision 1.721  2003/11/11 14:27:09  ding
+Inconsitent class declarations removed.
+
+Revision 1.720  2003/11/10 11:28:35  ding
+Using splines as drifttime-driftpath relation ('ddr')
+This ddr can be optimized by fit procedure based on simplex algorithm
+Up to now only X-plane has this feature...
+
+Revision 1.719  2003/11/10 11:12:45  ding
+new headers with Id and time stamp
+
+Revision 1.718  2003/11/10 11:08:08  ding
+*** empty log message ***
+
+Revision 1.717  2003/11/10 11:03:27  ding
+Using splines as drifttime-driftpath relation ('ddr')
+This ddr can be optimized by fit procedure based on simplex algorithm
+Up to now only X-plane has this feature...
+
+Revision 1.716  2003/11/06 15:44:37  merkel
+A bug lead to invalid entries for the coincidence time,
+even when the event should be removed due to invalid
+reconstructed coordinates. Seems to affect only
+the coincidence time.
+
+Revision 1.715  2003/10/04 12:54:36  a1online
+theta cms angle for pi0 models changed!
+
+Revision 1.714  2003/10/02 00:13:52  a1online
+Simulation of elastic scattering was wrong...
+
+Revision 1.713  2003/09/18 13:57:26  jover
+In the ElasticProton eventgenerator:
+
+Test in the last version removed.
+Now the complete cross section is calculated
+
+Revision 1.712  2003/09/18 12:57:41  jover
+In ElasticProton event generator:
+
+Calculation of the cross section and proton polarization changed..
+Now the the cross section is calculated in CMS with input particles in
+Lab system. An error in the polarization of the proton is fixed.
+
+Revision 1.711  2003/09/18 12:57:18  jover
+In ElasticProton event generator:
+
+Calculation of the cross section and proton polarization changed..
+Now the the cross section is calculated in CMS with input particles in
+Lab system. An error in the polarization of the proton is fixed.
+
+Revision 1.710  2003/09/11 12:12:06  bernauer
+*** empty log message ***
+
+Revision 1.709  2003/08/27 09:49:07  distler
+removed warning message for polHe3 target (pathlength < 0)
+This warning showed up for every stray particle in specB
+and was not very helpful.
+
+Revision 1.708  2003/08/08 11:51:38  merkel
+java event display started
+
+Revision 1.707  2003/08/08 11:51:33  merkel
+java event display started
+
+Revision 1.706  2003/08/08 11:51:25  merkel
+java event display started
+
+Revision 1.705  2003/08/08 11:51:19  merkel
+java event display started
+
+Revision 1.704  2003/08/08 11:51:11  merkel
+java event display started
+
+Revision 1.703  2003/08/08 11:51:03  merkel
+java event display started
+
+Revision 1.702  2003/08/08 11:50:57  merkel
+java event display started
+
+Revision 1.701  2003/08/08 11:50:49  merkel
+java event display started
+
+Revision 1.700  2003/08/08 11:50:41  merkel
+java event display started
+
+Revision 1.699  2003/08/08 11:50:24  merkel
+java event display started
+
+Revision 1.698  2003/08/05 10:57:19  merkel
+Comment out, because error for not H3 reactions:
+Simul.cc::877
+//    sim[5]->resolution(&online.B.target);
+
+Revision 1.697  2003/08/05 09:36:43  distler
+added out-of-plane support for spekB (focus correction)
+removed some legacy mecdas support
+new target cell (polarized helium 3)
+spelling correction in deForestCC1 subroutines
+
+Revision 1.696  2003/08/05 09:36:36  distler
+added out-of-plane support for spekB (focus correction)
+removed some legacy mecdas support
+new target cell (polarized helium 3)
+spelling correction in deForestCC1 subroutines
+
+Revision 1.695  2003/08/05 09:36:29  distler
+added out-of-plane support for spekB (focus correction)
+removed some legacy mecdas support
+new target cell (polarized helium 3)
+spelling correction in deForestCC1 subroutines
+
+Revision 1.694  2003/08/05 09:36:24  distler
+added out-of-plane support for spekB (focus correction)
+removed some legacy mecdas support
+new target cell (polarized helium 3)
+spelling correction in deForestCC1 subroutines
+
+Revision 1.693  2003/08/05 09:36:08  distler
+added out-of-plane support for spekB (focus correction)
+removed some legacy mecdas support
+new target cell (polarized helium 3)
+spelling correction in deForestCC1 subroutines
+
+Revision 1.692  2003/08/05 09:35:58  distler
+added out-of-plane support for spekB (focus correction)
+removed some legacy mecdas support
+new target cell (polarized helium 3)
+spelling correction in deForestCC1 subroutines
+
+Revision 1.691  2003/08/05 09:35:49  distler
+added out-of-plane support for spekB (focus correction)
+removed some legacy mecdas support
+new target cell (polarized helium 3)
+spelling correction in deForestCC1 subroutines
+
+Revision 1.690  2003/08/05 09:35:34  distler
+added out-of-plane support for spekB (focus correction)
+removed some legacy mecdas support
+new target cell (polarized helium 3)
+spelling correction in deForestCC1 subroutines
+
+Revision 1.689  2003/07/29 12:26:56  merkel
+Debug output removed
+
+Revision 1.688  2003/07/29 11:58:59  merkel
+PWIA included in event generation
+new ModelTypes:
+  TwoBodyPWIA                to extract a momentum distribution
+  ThreeBodyPWIA              to extract a spectral function
+  TwoBodyHe3                 same with He3 momentum distribution
+  ThreeBodyHe3
+
+Revision 1.687  2003/07/29 11:58:51  merkel
+PWIA included in event generation
+new ModelTypes:
+  TwoBodyPWIA                to extract a momentum distribution
+  ThreeBodyPWIA              to extract a spectral function
+  TwoBodyHe3                 same with He3 momentum distribution
+  ThreeBodyHe3
+
+Revision 1.686  2003/07/29 11:58:36  merkel
+PWIA included in event generation
+new ModelTypes:
+  TwoBodyPWIA                to extract a momentum distribution
+  ThreeBodyPWIA              to extract a spectral function
+  TwoBodyHe3                 same with He3 momentum distribution
+  ThreeBodyHe3
+
+Revision 1.685  2003/07/16 14:34:22  barneo
+Modifications to the Hadron3 databases.
+
+Revision 1.684  2003/07/16 14:34:15  barneo
+Modifications to the Hadron3 databases.
+
+Revision 1.683  2003/07/16 14:34:07  barneo
+Modifications to the Hadron3 databases.
+
+Revision 1.682  2003/07/16 14:33:46  barneo
+Modifications to the Hadron3 databases.
+
+Revision 1.681  2003/07/10 11:10:52  heim
+Improved position offsetes and effective speeds of light.
+
+Revision 1.680  2003/07/08 08:02:30  distler
+bugfix in simHadron3 - particle mass member function has been used,
+even if pointer was NULL.
+
+Revision 1.679  2003/06/25 17:37:47  heim
+Position calculation customised.
+
+Revision 1.678  2003/06/25 11:04:32  heim
+New Values for position offset ToF.Position.Offset (in ns). Slight
+changes in ToF.SoL.
+
+Revision 1.677  2003/06/24 16:09:36  barneo
+I forgot a few lines for debugging in Simul.cc when I made the last commint
+just a moment ago.
+
+Revision 1.676  2003/06/24 16:07:32  barneo
+In this commit several changes have been made:
+
+  - Adding Hadron3 scalers and efficiencies for all kinematics in 2002 data
+  - A bug in Hadron3 code has been found. It only affects two counters (and I must
+probably the only one who looks at them). Nothing to worry about.
+  - An useles entry has been removed from H3 database and a couple of new entries added
+in the H3 online structure. Both related with the H3 efficiencies.
+  - Implementation of H3 in Lumi++ has been improved, plus modifications due to changes
+in the H3 scalers in 2002.
+  - New version of H3 detector simulation in Simul++, including detector resolution and energy
+losses
+  - Others already existing H3 databases have been updated.
+
+Revision 1.675  2003/06/24 16:07:21  barneo
+In this commit several changes have been made:
+
+  - Adding Hadron3 scalers and efficiencies for all kinematics in 2002 data
+  - A bug in Hadron3 code has been found. It only affects two counters (and I must
+probably the only one who looks at them). Nothing to worry about.
+  - An useles entry has been removed from H3 database and a couple of new entries added
+in the H3 online structure. Both related with the H3 efficiencies.
+  - Implementation of H3 in Lumi++ has been improved, plus modifications due to changes
+in the H3 scalers in 2002.
+  - New version of H3 detector simulation in Simul++, including detector resolution and energy
+losses
+  - Others already existing H3 databases have been updated.
+
+Revision 1.674  2003/06/24 16:07:05  barneo
+In this commit several changes have been made:
+
+  - Adding Hadron3 scalers and efficiencies for all kinematics in 2002 data
+  - A bug in Hadron3 code has been found. It only affects two counters (and I must
+probably the only one who looks at them). Nothing to worry about.
+  - An useles entry has been removed from H3 database and a couple of new entries added
+in the H3 online structure. Both related with the H3 efficiencies.
+  - Implementation of H3 in Lumi++ has been improved, plus modifications due to changes
+in the H3 scalers in 2002.
+  - New version of H3 detector simulation in Simul++, including detector resolution and energy
+losses
+  - Others already existing H3 databases have been updated.
+
+Revision 1.673  2003/06/13 11:44:37  merkel
+class generateTripleLab:
+generation volume was multiplied twice!
+
+Revision 1.672  2003/06/11 12:35:03  middletn
+Change to a small error in the neutron detection efficiency code for TOF.
+
+Revision 1.671  2003/05/16 16:24:04  distler
+string concatenation works for histogram labels, now.
+
+Revision 1.670  2003/05/15 16:14:25  distler
+fixed energy loss calculation for negative pathlength
+  subroutines return 0.0 now - caused floating point error before
+fixed out of bound index in Hadron3 simulation
+fixed reaction parser for triple reactions like He3(e,B:e'H3:p)pn
+
+Revision 1.669  2003/05/15 16:14:04  distler
+fixed energy loss calculation for negative pathlength
+  subroutines return 0.0 now - caused floating point error before
+fixed out of bound index in Hadron3 simulation
+fixed reaction parser for triple reactions like He3(e,B:e'H3:p)pn
+
+Revision 1.668  2003/05/15 16:13:54  distler
+fixed energy loss calculation for negative pathlength
+  subroutines return 0.0 now - caused floating point error before
+fixed out of bound index in Hadron3 simulation
+fixed reaction parser for triple reactions like He3(e,B:e'H3:p)pn
+
+Revision 1.667  2003/05/15 16:13:38  distler
+fixed energy loss calculation for negative pathlength
+  subroutines return 0.0 now - caused floating point error before
+fixed out of bound index in Hadron3 simulation
+fixed reaction parser for triple reactions like He3(e,B:e'H3:p)pn
+
+Revision 1.666  2003/05/14 00:51:04  distler
+fixed retrieval of timestamp for rundb
+added output operator to Particle class
+prepared Cola for Ndet 2003 experiment
+
+Revision 1.665  2003/05/14 00:50:55  distler
+fixed retrieval of timestamp for rundb
+added output operator to Particle class
+prepared Cola for Ndet 2003 experiment
+
+Revision 1.664  2003/05/14 00:50:44  distler
+fixed retrieval of timestamp for rundb
+added output operator to Particle class
+prepared Cola for Ndet 2003 experiment
+
+Revision 1.663  2003/05/14 00:50:29  distler
+fixed retrieval of timestamp for rundb
+added output operator to Particle class
+prepared Cola for Ndet 2003 experiment
+
+Revision 1.662  2003/05/05 14:54:17  distler
+another update of ndet structure
+
+Revision 1.661  2003/05/05 13:48:50  distler
+ndet structure updated.
+
+Revision 1.660  2003/04/30 14:19:01  distler
+updated ndet structure. second neutron detector included.
+
+Revision 1.659  2003/04/25 12:14:13  barneo
+Mezzo doesn't check SpecA entries when A is not specified in the reaction.
+
+Revision 1.658  2003/04/17 06:58:12  sirca
+For some reason (left-over from previous experiment?), ntuples were
+only filled under a ``if (ntuple && resultB && !online.H.hadronOK)''
+condition.  Changed this to ``if (ntuple)'' only.
+
+Revision 1.657  2003/04/15 14:25:51  sirca
+With RH9, libpq++ stuff is not shipped as a part of the postgres-devel
+package anymore.  It is now called libpqxx and needs to be compiled
+separately.  The libpq++.h "convenience header" is now called all.h.
+Since this change is peculiar to RH9, I included it under the
+HAVE_LIBPQPP_HH (and not _H) define in configure, which was devised
+for RH8 anyway.
+
+Revision 1.656  2003/04/07 16:49:52  ding
+pdcD events with multiplicity=0 excluded from giving (erroneous)
+track coordinates.
+
+Revision 1.655  2003/03/31 13:37:36  heim
+Calculation of position changed.
+
+Revision 1.654  2003/03/28 14:19:13  barneo
+simH3 enabled again after bugfixing
+
+Revision 1.653  2003/03/28 14:18:57  barneo
+simH3 enabled again after bugfixing
+
+Revision 1.652  2003/03/26 14:22:16  ding
+pdcD efficiency bug fixed
+
+Revision 1.651  2003/03/25 11:26:53  jover
+In Generate.cc
+ElasticCrossSection calculation with outgoing photon at CM
+
+Revision 1.650  2003/03/24 17:51:32  heim
+Effective speed of light for the ToF bars changed.
+
+Revision 1.649  2003/03/21 11:35:04  jover
+In Generate.cc
+Some factors on ElasticCrossSection() corrected
+
+Revision 1.648  2003/03/19 14:46:38  barneo
+One entry has change in the H2-He3-eepn database.
+
+Revision 1.647  2003/03/19 13:45:09  barneo
+There was a mistake in H3.common-A1.db file for Hadron3 database. It is fix now
+
+Revision 1.646  2003/03/19 12:11:41  jover
+In Masses.*
+Particle::setSpin() and Particle::Lorentz() returns now a Particle
+
+In Generate.*
+Current conservation at ElasticCrossSection calculation checked and
+ includes a new proton Spin calculation for correct photon spin sum.
+
+Revision 1.645  2003/03/19 12:11:21  jover
+In Masses.*
+Particle::setSpin() and Particle::Lorentz() returns now a Particle
+
+In Generate.*
+Current conservation at ElasticCrossSection calculation checked and
+ includes a new proton Spin calculation for correct photon spin sum.
+
+Revision 1.644  2003/03/14 13:37:29  merkel
+continued...
+
+Revision 1.643  2003/03/14 13:29:23  merkel
+Memory managment checked with valgrind
+
+Revision 1.642  2003/03/14 13:29:15  merkel
+Memory managment checked with valgrind
+
+Revision 1.641  2003/03/14 13:28:56  merkel
+Memory managment checked with valgrind
+
+Revision 1.640  2003/03/12 15:40:47  merkel
+simH3 Disabled
+
+Revision 1.639  2003/03/12 12:33:56  middletn
+Small change to ToF momentum range
+
+Revision 1.638  2003/03/11 13:40:35  merkel
+Some warnings removed...
+
+Revision 1.637  2003/03/11 13:40:12  merkel
+Some warnings removed...
+
+Revision 1.636  2003/03/11 12:23:56  merkel
+Iso c/c++ preprocessor now standard, i.e. option -traditional is
+removed for the preprocessor.
+Missing Library -ldl in Cola/ColaMIT/Makefile.in
+
+Revision 1.635  2003/03/11 12:23:44  merkel
+Iso c/c++ preprocessor now standard, i.e. option -traditional is
+removed for the preprocessor.
+Missing Library -ldl in Cola/ColaMIT/Makefile.in
+
+Revision 1.634  2003/03/11 11:45:20  barneo
+Adding database files with H3 calibrations for the 2002 3He(e,e'pn) data.
+Updated main database for the 3He(e,e'pn) experiment to include them.
+Timing corrections for a proton in H3 have been changed to eliminate the
+dependency of the correction on stoppers/non-stoppers in L1.
+Database with H3 calibrations for the 2000 3He(e,e'pn) data have been changed
+according to the new method.
+
+Revision 1.633  2003/03/11 11:45:11  barneo
+Adding database files with H3 calibrations for the 2002 3He(e,e'pn) data.
+Updated main database for the 3He(e,e'pn) experiment to include them.
+Timing corrections for a proton in H3 have been changed to eliminate the
+dependency of the correction on stoppers/non-stoppers in L1.
+Database with H3 calibrations for the 2000 3He(e,e'pn) data have been changed
+according to the new method.
+
+Revision 1.632  2003/03/11 11:45:03  barneo
+Adding database files with H3 calibrations for the 2002 3He(e,e'pn) data.
+Updated main database for the 3He(e,e'pn) experiment to include them.
+Timing corrections for a proton in H3 have been changed to eliminate the
+dependency of the correction on stoppers/non-stoppers in L1.
+Database with H3 calibrations for the 2000 3He(e,e'pn) data have been changed
+according to the new method.
+
+Revision 1.631  2003/03/11 11:44:44  barneo
+Adding database files with H3 calibrations for the 2002 3He(e,e'pn) data.
+Updated main database for the 3He(e,e'pn) experiment to include them.
+Timing corrections for a proton in H3 have been changed to eliminate the
+dependency of the correction on stoppers/non-stoppers in L1.
+Database with H3 calibrations for the 2000 3He(e,e'pn) data have been changed
+according to the new method.
+
+Revision 1.630  2003/03/06 19:29:01  middletn
+Changes to some of the ToF files
+
+Revision 1.629  2003/03/06 19:28:51  middletn
+Changes to some of the ToF files
+
+Revision 1.628  2003/03/06 19:28:35  middletn
+Changes to some of the ToF files
+
+Revision 1.627  2003/03/03 21:23:40  baumannd
+added required libdl to linker rule for move_dE_ToF
+
+Revision 1.626  2003/03/03 20:58:09  distler
+added required libdl to linker rule for Cola, Simul, and Lumi
+
+Revision 1.625  2003/03/03 20:57:39  distler
+added required libdl to linker rule for Cola, Simul, and Lumi
+
+Revision 1.624  2003/02/28 11:55:12  a1online
+compare of mezzo values with rundatabase
+
+Revision 1.623  2003/02/26 10:40:40  a1online
+remove segmentation fault for start without "run.db". HM
+
+Revision 1.622  2003/02/26 10:40:22  a1online
+remove segmentation fault for start without "run.db". HM
+
+Revision 1.621  2003/02/25 18:50:57  distler
+mezzoReader has been included in Cola.
+items have to be defined with prefix @mezzo.
+eventbuilder has been modified to guarantee that
+ the mezzo dump is the first event.
+eventbuilder has been modified in order to create
+ and alter sql tables in necessary.
+
+Revision 1.620  2003/02/25 18:50:38  distler
+mezzoReader has been included in Cola.
+items have to be defined with prefix @mezzo.
+eventbuilder has been modified to guarantee that
+ the mezzo dump is the first event.
+eventbuilder has been modified in order to create
+ and alter sql tables in necessary.
+
+Revision 1.619  2003/02/25 14:45:28  distler
+changed Cola and pdcD: new histogram for 'drift length'
+changed Generate.h to work with ColaMIT
+first try to analyze older runs (before abcn) with Cola.
+
+Revision 1.618  2003/02/25 14:45:05  distler
+changed Cola and pdcD: new histogram for 'drift length'
+changed Generate.h to work with ColaMIT
+first try to analyze older runs (before abcn) with Cola.
+
+Revision 1.617  2003/02/25 14:44:55  distler
+changed Cola and pdcD: new histogram for 'drift length'
+changed Generate.h to work with ColaMIT
+first try to analyze older runs (before abcn) with Cola.
+
+Revision 1.616  2003/02/25 14:44:38  distler
+changed Cola and pdcD: new histogram for 'drift length'
+changed Generate.h to work with ColaMIT
+first try to analyze older runs (before abcn) with Cola.
+
+Revision 1.615  2003/02/24 13:54:57  merkel
+error propagation for weighted histograms
+
+Revision 1.614  2003/02/24 13:54:50  merkel
+error propagation for weighted histograms
+
+Revision 1.613  2003/02/24 13:54:30  merkel
+error propagation for weighted histograms
+
+Revision 1.612  2003/02/10 11:59:02  jover
+error fixed on Proton Spin calculation at ElasticProton Simulation
+CVSr ----------------------------------------------------------------------
+
+Revision 1.611  2003/01/30 15:56:23  jover
+initialized target.y0 in simSpectrometer::check with 0
+
+Revision 1.610  2003/01/22 21:20:06  sirca
+Removed the #include <unistd.h> since it conflicted with openssl on
+Redhat 8.0, and is not needed in this particular source anyway.
+
+Revision 1.609  2003/01/22 09:07:50  a1online
+COL-files: the AND operator evaluates now the right argument only
+if left argumnet is valid and true. By this more floating point
+exceptions can be handled.
+
+Revision 1.608  2003/01/16 00:21:38  a1online
+Luminosity calculation for scaled doubles.... HM
+
+Revision 1.607  2003/01/14 20:59:35  a1online
+just a string... HM
+
+Revision 1.606  2003/01/03 18:57:48  ding
+single wire efficiency for pion chamber (pdcD) built in.
+
+Revision 1.605  2002/12/19 11:52:24  jover
+Introduction of the final proton spin at the BetheHeitlerPeak envent
+generator
+
+Revision 1.604  2002/12/19 11:52:19  jover
+Introduction of the final proton spin at the BetheHeitlerPeak envent
+generator
+
+Revision 1.603  2002/12/19 11:52:05  jover
+Introduction of the final proton spin at the BetheHeitlerPeak envent
+generator
+
+Revision 1.602  2002/12/18 15:53:13  distler
+added readout of fastbus tdcs of SpekA
+detector structure extended, accordingly
+
+Revision 1.601  2002/12/18 15:08:34  ding
+two different functions timeToLengthX / Y respectively
+
+Revision 1.600  2002/12/15 15:14:06  a1online
+Four momentum for Spectrometer D introduced. (ulm)
+Symbolic constants for pdcD.
+
+Revision 1.599  2002/12/15 15:13:59  a1online
+Four momentum for Spectrometer D introduced. (ulm)
+Symbolic constants for pdcD.
+
+Revision 1.598  2002/12/15 15:04:09  distler
+removed re-declaration of putenv
+
+Revision 1.597  2002/12/15 10:48:41  distler
+Extended drift chamber structures in abcn.h. LAM/timeout status added.
+More minor fixes for gcc3.2
+
+Revision 1.596  2002/12/15 10:47:39  distler
+Extended drift chamber structures in abcn.h. LAM/timeout status added.
+More minor fixes for gcc3.2
+
+Revision 1.595  2002/12/15 10:47:33  distler
+Extended drift chamber structures in abcn.h. LAM/timeout status added.
+More minor fixes for gcc3.2
+
+Revision 1.594  2002/12/15 10:47:25  distler
+Extended drift chamber structures in abcn.h. LAM/timeout status added.
+More minor fixes for gcc3.2
+
+Revision 1.593  2002/12/15 10:47:19  distler
+Extended drift chamber structures in abcn.h. LAM/timeout status added.
+More minor fixes for gcc3.2
+
+Revision 1.592  2002/12/15 10:47:05  distler
+Extended drift chamber structures in abcn.h. LAM/timeout status added.
+More minor fixes for gcc3.2
+
+Revision 1.591  2002/12/15 01:01:46  a1online
+errors dx, dtheta, dy, dphi in graphical output (ding)
+
+Revision 1.590  2002/12/14 06:26:23  a1online
+errors of chamber coordinates added: dx, dth, dy, dphi.  (pmerle)
+
+Revision 1.589  2002/12/13 20:52:51  a1online
+code optimized for speed (use table for the powers of three)
+
+Revision 1.588  2002/12/13 16:38:13  a1online
+some optimization..
+
+Revision 1.587  2002/12/13 15:46:04  a1online
+Brute force reconstruction for spec D
+
+Revision 1.586  2002/12/13 15:45:50  a1online
+Brute force reconstruction for spec D
+
+Revision 1.585  2002/12/13 04:26:00  a1online
+timing peak for AD coincidences -ulm-
+chi sqr fitting for pdcD -mod-
+
+Revision 1.584  2002/12/13 04:25:47  a1online
+timing peak for AD coincidences -ulm-
+chi sqr fitting for pdcD -mod-
+
+Revision 1.583  2002/12/12 23:52:13  distler
+ColaMIT compiles under gcc3.2
+
+Revision 1.582  2002/12/12 23:51:49  distler
+ColaMIT compiles under gcc3.2
+
+Revision 1.581  2002/12/12 23:07:41  distler
+Eventdisplay patch had to be included in ColaMIT.
+
+Revision 1.580  2002/12/12 23:07:25  distler
+Eventdisplay patch had to be included in ColaMIT.
+
+Revision 1.579  2002/12/12 23:07:06  distler
+Eventdisplay patch had to be included in ColaMIT.
+
+Revision 1.578  2002/12/12 19:30:23  a1online
+Eventdisplay added
+
+Revision 1.577  2002/12/12 19:22:43  distler
+wire and drifttime histograms in pdcD
+length structure available
+
+Revision 1.576  2002/12/12 19:22:36  distler
+wire and drifttime histograms in pdcD
+length structure available
+
+Revision 1.575  2002/12/12 18:46:57  a1online
+drift length will be exported
+
+Revision 1.574  2002/12/12 16:51:08  a1online
+included short orbit spectrometer (spekD) in Cola.
+chamber and scintillator subroutines are in Cola/Detector
+updated abcn and online structures
+
+Revision 1.573  2002/12/12 16:51:02  a1online
+included short orbit spectrometer (spekD) in Cola.
+chamber and scintillator subroutines are in Cola/Detector
+updated abcn and online structures
+
+Revision 1.572  2002/12/12 16:50:54  a1online
+included short orbit spectrometer (spekD) in Cola.
+chamber and scintillator subroutines are in Cola/Detector
+updated abcn and online structures
+
+Revision 1.571  2002/12/12 16:50:46  a1online
+included short orbit spectrometer (spekD) in Cola.
+chamber and scintillator subroutines are in Cola/Detector
+updated abcn and online structures
+
+Revision 1.570  2002/12/12 16:50:30  a1online
+included short orbit spectrometer (spekD) in Cola.
+chamber and scintillator subroutines are in Cola/Detector
+updated abcn and online structures
+
+Revision 1.569  2002/12/12 12:24:48  distler
+Cola compiles and runs under gcc3.2
+
+Revision 1.568  2002/12/12 12:24:41  distler
+Cola compiles and runs under gcc3.2
+
+Revision 1.567  2002/12/12 12:24:36  distler
+Cola compiles and runs under gcc3.2
+
+Revision 1.566  2002/12/12 12:24:12  distler
+Cola compiles and runs under gcc3.2
+
+Revision 1.565  2002/12/12 12:23:56  distler
+Cola compiles and runs under gcc3.2
+
+Revision 1.564  2002/12/10 19:02:57  distler
+Cola/HMBook compiles under gcc version 3.2
+you need an updated wxWin-distribution, though.
+
+Revision 1.563  2002/12/10 19:02:23  distler
+Cola/HMBook compiles under gcc version 3.2
+you need an updated wxWin-distribution, though.
+
+Revision 1.562  2002/12/09 20:16:10  distler
+updated configure script
+
+Revision 1.561  2002/12/09 20:15:55  distler
+updated configure script
+
+Revision 1.560  2002/12/09 19:40:23  distler
+Cola/Simulation compiles under gcc version 3.2
+
+Revision 1.559  2002/12/09 19:19:56  distler
+Cola/HBook compiles under gcc version 3.2
+
+Revision 1.558  2002/12/03 14:55:15  merkel
+what was this? missing header files...
+
+Revision 1.557  2002/11/26 18:43:06  distler
+Cola/Model compiles under gcc version 3.2
+
+Revision 1.556  2002/11/26 18:31:46  distler
+Cola/dmaini compiles under gcc version 3.2
+new program 'combine' combines dmaini mx-files to matrix file
+
+Revision 1.555  2002/11/26 18:11:50  distler
+Cola/FourVector compiles under gcc version 3.2
+
+Revision 1.554  2002/11/26 18:11:44  distler
+Cola/FourVector compiles under gcc version 3.2
+
+Revision 1.553  2002/11/26 18:11:33  distler
+Cola/FourVector compiles under gcc version 3.2
+
+Revision 1.552  2002/11/26 17:11:28  distler
+Cola/TMA compiles under gcc version 3.2
+
+Revision 1.551  2002/11/25 18:51:43  ulm
+Adapt image height.
+
+Revision 1.550  2002/11/25 18:39:26  ulm
+A1 logo with antialiasing as in a1logo-medium.gif
+
+Revision 1.549  2002/11/08 20:27:33  distler
+first attempt to compile Cola with gcc3/SuSE81
+new autoconf is happy, Bison, Flex, and Chamber compile fine.
+
+Revision 1.548  2002/11/08 20:27:26  distler
+first attempt to compile Cola with gcc3/SuSE81
+new autoconf is happy, Bison, Flex, and Chamber compile fine.
+
+Revision 1.547  2002/11/08 20:27:06  distler
+first attempt to compile Cola with gcc3/SuSE81
+new autoconf is happy, Bison, Flex, and Chamber compile fine.
+
+Revision 1.546  2002/11/08 20:24:47  distler
+patched for use without ps_scaler in spekB
+
+Revision 1.545  2002/11/06 17:05:31  a1online
+Some variables of the online structure for the TOF stands are cleared at the
+beginning of every event.
+
+Revision 1.544  2002/11/06 14:17:18  a1online
+Changing the way the data of the Horizontal Bar in TOF is read in ToF.cc.
+With the former implementation by Juergen Heim it was not possible to compile
+Cola++ again.
+Also commiting one caracter difference in Printmezzo code, which is a blank.
+I do not know what is the purpose of such a change but it is commited anyway.
+PABLO
+
+Revision 1.543  2002/11/06 14:17:02  a1online
+Changing the way the data of the Horizontal Bar in TOF is read in ToF.cc.
+With the former implementation by Juergen Heim it was not possible to compile
+Cola++ again.
+Also commiting one caracter difference in Printmezzo code, which is a blank.
+I do not know what is the purpose of such a change but it is commited anyway.
+PABLO
+
+Revision 1.542  2002/11/06 08:24:24  heim
+Database for ToF with new tzero values for stand 2, frame F2. Signal
+cables for this layer were replaced by shorter ones between the October
+and November beamtime of 3He(e,e'np)!
+For analysing the data taken before November 2002 use He3-tof-2002.db
+or H2-tof-2002.db respectively.
+
+Revision 1.541  2002/11/05 18:39:04  a1online
+Mezzo format for Printlog
+
+Revision 1.540  2002/11/04 21:08:53  distler
+new horizontal bar in tofa1.h
+
+Revision 1.539  2002/11/04 14:46:05  heim
+Variable for horizontal bar added.
+
+Revision 1.538  2002/11/04 14:45:11  heim
+Horizontal bar added to ToF.
+
+Revision 1.537  2002/10/27 22:03:50  heim
+New values for ToF.Top.QDC.Scale and ToF.Bottom.QDC.Scale (conversion from
+channels to MeVee).
+
+Revision 1.536  2002/10/26 21:16:10  heim
+Typing error corrected in struct ToFpaddle:
+"TDCfailpattern" instead of "TDCfalipattern"
+
+Revision 1.535  2002/10/26 18:45:08  distler
+An implicit cut in ToF.cc has been removed, which marked events with small
+TDC values (<60) as bad. The cut has been introduced for debug purposes
+before we found the hardware bug in the fast clear logic.
+
+Revision 1.534  2002/10/26 04:39:49  heim
+This database was added for analysing the He3 data in the experiment in
+October/November 2002.
+Changes in the setup (e.g. HV) might create the need for new database
+entries. Now consisyently with the existence of two files for the 2000
+experiment.
+
+Revision 1.533  2002/10/26 04:33:30  heim
+4 new entried added:
+  + ToF.TDCpattern.Flag
+  + ToF.TDCpattern
+  + ToF.QDCpattern.Flag
+  + ToF.QDCpattern
+Flags decide if a pattern has to be matched or if a range is allowed
+for the pattern.
+The patterns are explained in the ToF database and here.
+The behaviour of ToF.cc with the default values here is the same as in the
+past.
+For the detailed description see the file itself or Cola.cc (default values).
+
+Revision 1.532  2002/10/26 04:31:59  heim
+TDCpattern renamed to TDCfailpattern. TDCfailpattern now with the same
+meaning for the TDCs as QDCpattern for the QDCs.
+time_t and time_b renamed to time_top and time_bot according to a suggestion
+of M. Distler.
+
+Revision 1.531  2002/10/26 04:29:32  heim
+Former variable TDCpattern is now named TDCfailpattern to have the same
+meaning of TDCpattern and QDCpattern.
+time_t and time_b renamed in time_top and time_bot according to M. Distlers
+suggestion.
+New possibilities for chosing the behaviour of the analysis by entries
+in the database (how many TDCs and QDCs are required). That makes the
+analysis more flexible. Not any more always two TDC required. Now depending
+on the entry in the database.
+
+Revision 1.530  2002/10/26 04:24:49  heim
+Default values for 4 new variables:
+  + ToF.TDCpattern.Flag
+  + ToF.TDCpattern
+  + ToF.QDCpattern.Flag
+  + ToF.QDCpattern
+Flags decide if a pattern has to be matched or if a range is allowed
+for the pattern.
+The patterns are explained in the ToF database and here.
+The behaviour of ToF.cc with the default values here is the same as in the
+past.
+
+Revision 1.529  2002/10/26 04:21:55  heim
+4 new variables:
+  + ToF.TDCpattern.Flag
+  + ToF.TDCpattern
+  + ToF.QDCpattern.Flag
+  + ToF.QDCpattern
+Falgs distinguis if a pattern has to be matched or if a range is allowed
+for the pattern.
+The patterns are explained in the ToF database in in Cola.cc.
+
+Revision 1.528  2002/10/22 22:27:41  heim
+New values for
+- Top/Bottom Rise
+- Top/Bottom Ped
+- Tzero
+
+Revision 1.527  2002/10/22 07:20:06  heim
+* Structure cleaned up a bit.
+* pedestals and speed of light determined by M. Distler put into the
+  database.
+* QDC scale set do default values. Will be updated as soon as possible.
+* tzeroes updated. The values of this version are better that the last
+  ones after changing several things in the code.
+  THE'LL HAVE TO BE RECALCULATED ANYHOW!!!!!
+
+Revision 1.526  2002/10/22 06:45:20  heim
+* TOF_WALKCORRECTION added as a switch to "turn on/off" the walk correction
+  for ToF.
+
+* Position calculation changed from
+
+    onl->position = (onl->diff * rT.SOL[nr] + rT.position_offset[nr]);
+
+  to
+
+    onl->position = (onl->diff + rT.position_offset[nr]) * rT.SOL[nr];
+
+  That means
+  - position_offset is now in time space (ns) and not any more in length
+    space (cm)
+  - advantage: independent from new calibratiions of SoL
+
+* Variable gmean is again in online structure.
+
+Revision 1.525  2002/10/22 06:37:13  heim
+TOF_WALKCORRECTION added as a switch to "turn on/off" the walk correction
+for ToF.
+
+Revision 1.524  2002/10/21 15:11:39  kohlm
+missing linebreak added to last line
+
+Revision 1.523  2002/10/21 08:34:10  heim
+Removed entries:
+================
+ - ToF.Top.TDC.Offse
+ - ToF.Bottom.TDC.Offset
+ - ToF.Top.Threshold
+ - ToF.Bottom.Threshold
+They are no more of use. (See comment for the update of ToF.cc to version
+2.24.)
+
+Update of:
+==========
+ - ToF.Top.Rise
+ - ToF.Bottom.Rise
+ - ToF.Tzero
+ - ToF.Top.TDC.Scale
+ - ToF.Bottom.TDC.Scale
+The walk/risetime correction changed from
+
+  double time_t=rawdata->TDCtop - rT.top_TDCOffset[nr] - rT.top_rise[nr];
+  time_t -= rT.top_rise[nr] * sqrt(rT.top_threshold[nr]/ph_t);
+
+to
+
+  double time_t=rawdata->TDCtop;
+  time_t -= rT.top_rise[nr] * sqrt(1.0/ph_t);
+
+in ToF.cc (version 2.24).
+
+
+Default values:
+===============
+ - ToF.Position.Offset
+ - ToF.SoL
+ - ToF.Top.QDC.Scale
+ - ToF.Bottom.QDC.Scale
+ - ToF.Top.Ped
+ - ToF.Bottom.Ped
+This values will be updated as soon as possible.
+
+Revision 1.522  2002/10/21 08:18:51  heim
+top_TDCOffset, bottom_TDCOffset, top_threshold and bottom_threshold
+removed.
+
+This variables aren't any more used. (See comment for update of ToF.cc
+to version 2.24.)
+
+Revision 1.521  2002/10/21 08:16:11  heim
+rundb.ToF.top_threshold, rundb.ToF.bottom_threshold, rundb.ToF.top_TDCOffset
+and rundb.ToF.bottom_TDCOffset removed.
+
+The are no more needed (see comment for update of ToF.cc to version 2.24).
+
+Revision 1.520  2002/10/21 08:14:12  heim
+rT.top_TDCOffset, rT.bottom_TDCOffset, rT.top_threshold and
+rT.bottom_threshold removed. The walk correction is now for the top TDC
+
+  time_t -= rT.top_rise[nr] * sqrt(1.0/ph_t);
+
+ instead of
+
+ time_t -= rT.top_rise[nr] * sqrt(rT.top_threshold[nr]/ph_t);
+
+For the bottom TDC the same procedure.
+
+
+TDCOffset was set to the same constant value for each bar -> tzero
+correction has to be redone for the old files. In the new database
+H2-tof-2002.db that is commited today, tzero already includes the
+former offsets.
+
+Revision 1.519  2002/10/18 19:06:33  distler
+new item abcn.tof.BHtime
+
+Revision 1.518  2002/10/17 08:29:55  a1online
+Bugs related with ToF are fix.
+
+Revision 1.517  2002/10/16 13:38:41  jover
+   function "sign" takes 0 as positiv
+
+Revision 1.516  2002/10/16 13:27:21  merkel
+function "sign" for .col files
+
+Revision 1.515  2002/10/16 12:24:17  middletn
+Additions for ToF in Simul, the entries in the db files are not yet correct and will be added later.
+
+Revision 1.514  2002/10/16 12:24:02  middletn
+Additions for ToF in Simul, the entries in the db files are not yet correct and will be added later.
+
+Revision 1.513  2002/10/15 15:09:20  jover
+ I have added the Particle operator = (FourVector) method
+ in the Particle class to avoid the constructor use
+
+Revision 1.512  2002/10/15 08:41:06  merkel
+Color for 2D plots
+
+Revision 1.511  2002/10/14 18:04:08  heim
+Some brackets added in neutron ID part (if ... else {}).
+
+Revision 1.510  2002/10/14 17:52:02  heim
+Variable gmean added to online structure.
+
+Revision 1.509  2002/10/14 17:50:50  heim
+Variable gmean added.
+
+Revision 1.508  2002/10/14 10:30:46  jover
+ I have simplyfied the rotations at Momentum class, added serE, setP and
+ getP methods in FourVector class and redefined polarization in
+ Particle class as a FourVector.
+
+ Therefore I have add the methods setSpin, getSpin, getPolarization, Lorentz
+ rotation, rotationTo and redefined the default Constuctor.
+
+ Because all this changes I have made little changes in simDetectorBase.h
+ Generate.cc and Reactions.cc
+
+Revision 1.507  2002/10/14 10:30:40  jover
+ I have simplyfied the rotations at Momentum class, added serE, setP and
+ getP methods in FourVector class and redefined polarization in
+ Particle class as a FourVector.
+
+ Therefore I have add the methods setSpin, getSpin, getPolarization, Lorentz
+ rotation, rotationTo and redefined the default Constuctor.
+
+ Because all this changes I have made little changes in simDetectorBase.h
+ Generate.cc and Reactions.cc
+
+Revision 1.506  2002/10/14 10:30:25  jover
+ I have simplyfied the rotations at Momentum class, added serE, setP and
+ getP methods in FourVector class and redefined polarization in
+ Particle class as a FourVector.
+
+ Therefore I have add the methods setSpin, getSpin, getPolarization, Lorentz
+ rotation, rotationTo and redefined the default Constuctor.
+
+ Because all this changes I have made little changes in simDetectorBase.h
+ Generate.cc and Reactions.cc
+
+Revision 1.505  2002/10/14 08:57:14  barneo
+Fixing a few compilation problems related with the FourVector polarization
+of class Particles.
+
+Revision 1.504  2002/10/14 08:56:59  barneo
+Fixing a few compilation problems related with the FourVector polarization
+of class Particles.
+
+Revision 1.503  2002/10/11 13:45:47  jover
+CSV: Particle(0) to Particle() on simDetectorBase.h and Reactions.cc
+
+Revision 1.502  2002/10/05 18:50:47  a1online
+Evaluation of the {,,,} expression in the col-file
+for each event (up to now only during initialization)
+
+Revision 1.501  2002/10/05 01:28:37  heim
+Floating point exception produceb by H3scaler is solved.
+
+Revision 1.500  2002/10/04 23:58:26  heim
+Check if beta < 1 for shifted times. Otherwise one would get floating point exceptions.
+
+Revision 1.499  2002/10/04 00:07:44  a1online
+Hadron3 clears all data entries before starting analysis.
+
+Revision 1.498  2002/10/04 00:07:29  a1online
+Hadron3 clears all data entries before starting analysis.
+
+Revision 1.497  2002/10/03 12:57:25  a1online
+Included tmean corrected for startime in ToF.cc
+
+Revision 1.496  2002/10/03 12:57:09  a1online
+Included tmean corrected for startime in ToF.cc
+
+Revision 1.495  2002/10/03 12:36:25  a1online
+Including juergens changes in ToF.
+
+Revision 1.494  2002/10/03 01:01:11  heim
+tzero updated for experiment in September 2002.
+
+Revision 1.493  2002/10/02 23:19:36  heim
+TDC pattern added.
+
+Revision 1.492  2002/10/02 20:34:44  heim
+TDC pattern added.
+
+Revision 1.491  2002/10/02 00:22:38  a1online
+Initialization in Hadron3 will happen only when the detector H3 is specified in the reaction.
+Someone included the use of tof.clocktics in Luminosity.cc in a1online sources. I assume it must go
+the repository.
+
+Revision 1.490  2002/10/01 02:37:31  heim
+time_t and time_b added to online structure.
+
+Revision 1.489  2002/10/01 02:36:45  heim
+time_t and time_b added to online structure.
+
+Revision 1.488  2002/09/29 18:28:35  barneo
+corrected errors in H2-tof-2002.db database
+
+Revision 1.487  2002/09/28 14:39:24  distler
+Cola/rundatabase.h:313: missing ';' before right brace
+
+Revision 1.486  2002/09/27 18:34:16  barneo
+Added H2-tof database for 2002 preserving data from 2000.
+
+Revision 1.485  2002/09/27 18:34:01  barneo
+Added H2-tof database for 2002 preserving data from 2000.
+
+Revision 1.484  2002/09/27 17:20:57  heim
+Update of pedestal and rise for (e,e'np) test experiment in
+September/October 2002.
+
+Revision 1.483  2002/09/27 11:56:36  heim
+ToF positions and angles updated for (e,e'np) test beamtime in
+September 2002.
+
+Revision 1.482  2002/09/26 14:31:13  distler
+Header files of abcn have to enter into the dependency list.
+
+Revision 1.481  2002/09/26 13:47:04  distler
+Introduced clockticks for all detectors.
+
+Revision 1.480  2002/09/26 10:44:12  barneo
+Enabling luminosity for Hadron3 in Cola++.
+
+Revision 1.479  2002/09/18 15:18:14  distler
+added clockticks to tof structure
+
+Revision 1.478  2002/09/12 09:39:13  middletn
+Changing ToF simulation form three collimators to three stands of eight. Updtaed .db files to go along with this.
+
+Revision 1.477  2002/09/12 09:39:01  middletn
+Changing ToF simulation form three collimators to three stands of eight. Updtaed .db files to go along with this.
+
+Revision 1.476  2002/09/03 14:27:05  barneo
+Ntuples are filled again with -999 when the variable is invalid.
+
+Revision 1.475  2002/09/03 10:03:11  barneo
+Neutron efficiency for the TOF detector implemented via a new function available
+to be used in col files: NeutronEfficiency.
+Implementation of energy losses for a proton in TOF has been initiated.
+
+Revision 1.474  2002/08/23 07:50:08  sirca
+Changed the behaviour of a PVS variable filling -999 into an ntuple
+for its invalid instance.  Now it is assigned the value of HUGE from
+<math.h> which is something like 10e+38.
+
+Revision 1.473  2002/08/21 20:02:50  distler
+use --enable-cxxcpp if your Cola or Simul reports strange
+preprocessor errors like:
+*command line*:1: extra text at end of directive
+
+Revision 1.472  2002/08/21 19:57:13  distler
+cut and paste error in Colli.cc
+now, oops collimators are initialized properly
+
+Revision 1.471  2002/08/07 15:45:02  cola
+added OHIPS S1 tdc offsets to run.db
+
+Revision 1.470  2002/08/07 09:03:29  sirca
+Added code to handle OHIPS scint1 TDC offsets (development stage).
+Ambiguities of neighbouring paddles are resolved by selecting the
+paddle with the largest ADC value averaged between left and right PMTs.
+
+Revision 1.469  2002/08/07 07:34:29  sirca
+Removed comment stating that ntuples not yet implemented.
+
+Revision 1.468  2002/08/05 15:13:57  sirca
+Commented out several cout statements someone apparently left behind
+for debugging purposes in certain parts of the event generators.
+
+Revision 1.467  2002/08/05 15:13:44  sirca
+Commented out several cout statements someone apparently left behind
+for debugging purposes in certain parts of the event generators.
+
+Revision 1.466  2002/08/05 09:23:12  sirca
+Added ntuple capability to Simul++ and SimulMIT.
+
+Revision 1.465  2002/08/05 09:21:46  sirca
+Added ntuple capability to Simul++ and SimulMIT.
+
+Revision 1.464  2002/08/05 09:21:29  sirca
+Added ntuple capability to Simul++ and SimulMIT.
+
+Revision 1.463  2002/07/24 16:48:24  distler
+added raw adc to speca/specc/npol
+
+Revision 1.462  2002/07/24 16:06:12  barneo
+Fixing a mistake in Cola.
+
+Revision 1.461  2002/07/23 12:44:26  barneo
+Including TOF scalers in Lumi++ and making corrections to Hadron3. Also the
+Hadron3 live times and scalers database are commited to the repository.
+
+Revision 1.460  2002/07/23 12:44:07  barneo
+Including TOF scalers in Lumi++ and making corrections to Hadron3. Also the
+Hadron3 live times and scalers database are commited to the repository.
+
+Revision 1.459  2002/07/12 11:17:12  middletn
+Mistake fixed that was made in earlier change.
+
+Revision 1.458  2002/07/11 17:17:04  distler
+New collimator classes for the simulation of OOPS and OHIPS
+OOPS/OHIPS_simple: just a simple front collimator
+                   replaces the old short/long collimators
+OOPS/OHIPS_fancy:  prepared to modell the spectrometer acceptance
+                   with additional cuts on momentum and angles
+OOPS/OHIPS_qspin:  prepared to use the qspin library
+                   full backtracing with internal collimators
+*fancy and *qspin is work in progress
+
+Revision 1.457  2002/07/10 14:13:45  middletn
+Changes to ToF.cc to include neutron detection efficiencies. Also updated the database files to include this and the fix to the run.db files for the electron proton coincidence timing.
+
+Revision 1.456  2002/07/10 14:13:40  middletn
+Changes to ToF.cc to include neutron detection efficiencies. Also updated the database files to include this and the fix to the run.db files for the electron proton coincidence timing.
+
+Revision 1.455  2002/07/10 14:13:26  middletn
+Changes to ToF.cc to include neutron detection efficiencies. Also updated the database files to include this and the fix to the run.db files for the electron proton coincidence timing.
+
+Revision 1.454  2002/07/01 09:31:50  sirca
+Added search paths /usr/include for libpq++.h and /usr/include/libpq
+for pgdatabase.h which are the standard include directories of the
+postgres package in RH7.3.
+
+Revision 1.453  2002/06/28 06:31:45  kohlm
+small bug in Luminosity.cc concerning BCwithoutA removed.
+
+Revision 1.452  2002/06/20 15:44:20  kohlm
+Having upgraded my private Cola source tree, I checked in the following,
+hopefully helpful improvements.
+-Added rundb switch wobbler_corr(def.="yes") to switch it off if wished;
+-Revised PLU Deadtime correction: PLU Deatime depends on the strobe signal.
+ In the past, the strobe usually was scaled like the singles, the strobe
+ scaling can now be adjusted in rundb by A{BC}.Scaler.Strobe(def.=1).
+ The PLU deadtime per event was in old times 400ns, in old Boehm trigger 90ns,
+ can now be given by A{BC}.Scaler.StrobeDead(def.=90).
+ For the new Merle trigger, as far as I know the strobe is periodic and
+ does not depend on singles rates. To switch off
+ PLU deadtime correction, set A{BC}.Scaler.StrobeDead=0.
+ The effect in comparison to the old correction is very small (at 0.1% level),
+ but increases at higher single rates.
+-Additional Lumi output: Number of raw trigger before PLU is reached, and the
+ ratio of A{BC}events of raw trigger and after having passed coincPLU.
+ Also, a check of the deadtime correction is given by comparison of the
+ corrected number of A{BC}events with raw triggers (Ncorr-raw)/raw. This
+ number should be close to 0, if scalings have been chosen correctly.
+-the paddle shifts of the triggering dE and ToF paddles are included in the
+ online structure.
+
+Revision 1.451  2002/06/20 15:43:48  kohlm
+Having upgraded my private Cola source tree, I checked in the following,
+hopefully helpful improvements.
+-Added rundb switch wobbler_corr(def.="yes") to switch it off if wished;
+-Revised PLU Deadtime correction: PLU Deatime depends on the strobe signal.
+ In the past, the strobe usually was scaled like the singles, the strobe
+ scaling can now be adjusted in rundb by A{BC}.Scaler.Strobe(def.=1).
+ The PLU deadtime per event was in old times 400ns, in old Boehm trigger 90ns,
+ can now be given by A{BC}.Scaler.StrobeDead(def.=90).
+ For the new Merle trigger, as far as I know the strobe is periodic and
+ does not depend on singles rates. To switch off
+ PLU deadtime correction, set A{BC}.Scaler.StrobeDead=0.
+ The effect in comparison to the old correction is very small (at 0.1% level),
+ but increases at higher single rates.
+-Additional Lumi output: Number of raw trigger before PLU is reached, and the
+ ratio of A{BC}events of raw trigger and after having passed coincPLU.
+ Also, a check of the deadtime correction is given by comparison of the
+ corrected number of A{BC}events with raw triggers (Ncorr-raw)/raw. This
+ number should be close to 0, if scalings have been chosen correctly.
+-the paddle shifts of the triggering dE and ToF paddles are included in the
+ online structure.
+
+Revision 1.450  2002/06/20 15:42:59  kohlm
+Having upgraded my private Cola source tree, I checked in the following,
+hopefully helpful improvements.
+-Added rundb switch wobbler_corr(def.="yes") to switch it off if wished;
+-Revised PLU Deadtime correction: PLU Deatime depends on the strobe signal.
+ In the past, the strobe usually was scaled like the singles, the strobe
+ scaling can now be adjusted in rundb by A{BC}.Scaler.Strobe(def.=1).
+ The PLU deadtime per event was in old times 400ns, in old Boehm trigger 90ns,
+ can now be given by A{BC}.Scaler.StrobeDead(def.=90).
+ For the new Merle trigger, as far as I know the strobe is periodic and
+ does not depend on singles rates. To switch off
+ PLU deadtime correction, set A{BC}.Scaler.StrobeDead=0.
+ The effect in comparison to the old correction is very small (at 0.1% level),
+ but increases at higher single rates.
+-Additional Lumi output: Number of raw trigger before PLU is reached, and the
+ ratio of A{BC}events of raw trigger and after having passed coincPLU.
+ Also, a check of the deadtime correction is given by comparison of the
+ corrected number of A{BC}events with raw triggers (Ncorr-raw)/raw. This
+ number should be close to 0, if scalings have been chosen correctly.
+-the paddle shifts of the triggering dE and ToF paddles are included in the
+ online structure.
+
+Revision 1.449  2002/06/05 20:56:12  middletn
+Last attempt, changes to tof.db to fit in with new Spectrometer B timing and moved one variable from ToF.cc to Cola.cc.
+
+Revision 1.448  2002/06/05 20:56:05  middletn
+Last attempt, changes to tof.db to fit in with new Spectrometer B timing and moved one variable from ToF.cc to Cola.cc.
+
+Revision 1.447  2002/06/05 20:55:55  middletn
+Last attempt, changes to tof.db to fit in with new Spectrometer B timing and moved one variable from ToF.cc to Cola.cc.
+
+Revision 1.446  2002/06/04 05:28:40  kohlm
+online.datataking = unixtime with some offset in onlinestructure
+
+Revision 1.445  2002/06/04 05:28:27  kohlm
+online.datataking = unixtime with some offset in onlinestructure
+
+Revision 1.444  2002/05/28 21:20:41  cola
+The common offset to all the wire planes "-48.0*sqrt(2.0)" were
+omitted from the init file, because this offset is unphysical and
+it has been kept in the init file without good reason. New ohips
+matrix element have to be employed with this new initial file.
+-itaru nakagawa
+
+Revision 1.443  2002/05/28 14:24:20  barneo
+The way to handle online.H.hadronOK and online.ToF.tofok has been change to avoid
+reading information from previous events when there is not particle in the current
+one. Also iplemented energy loss in target and air for a charged particle in TOF
+detector.
+
+Revision 1.442  2002/05/28 14:23:43  barneo
+The way to handle online.H.hadronOK and online.ToF.tofok has been change to avoid
+reading information from previous events when there is not particle in the current
+one. Also iplemented energy loss in target and air for a charged particle in TOF
+detector.
+
+Revision 1.441  2002/05/28 01:53:44  distler
+Since March 2002 the rundb flag B.use_dE is active.
+During the eepn beamtime in 2000 B.ToF was used.
+The flag B.use_dE was silently ignored, then.
+For the new version of Cola B.use_dE has to be set to zero.
+
+Revision 1.440  2002/05/25 16:16:18  middletn
+Changes to ToF.cc to improve how fourvectors are output. Also entered default initialisation values for ToF.
+
+Revision 1.439  2002/05/25 16:16:08  middletn
+Changes to ToF.cc to improve how fourvectors are output. Also entered default initialisation values for ToF.
+
+Revision 1.438  2002/05/25 16:15:55  middletn
+Changes to ToF.cc to improve how fourvectors are output. Also entered default initialisation values for ToF.
+
+Revision 1.437  2002/05/22 13:58:57  middletn
+Changes to ToF.cc to allow non physical particles with beta greater than one to be used in fourvectors, also some tidying up of ToF.cc done.
+
+Revision 1.436  2002/05/22 13:58:51  middletn
+Changes to ToF.cc to allow non physical particles with beta greater than one to be used in fourvectors, also some tidying up of ToF.cc done.
+
+Revision 1.435  2002/05/22 13:58:41  middletn
+Changes to ToF.cc to allow non physical particles with beta greater than one to be used in fourvectors, also some tidying up of ToF.cc done.
+
+Revision 1.434  2002/05/21 15:15:45  barneo
+Hadron3 in Lumi++ is giving problem. This is a provisional fix while
+I make something better.
+
+Revision 1.433  2002/05/19 03:18:54  kohlm
+comments removed from Luminosity.cc
+
+Revision 1.432  2002/05/19 03:01:02  kohlm
+added BCwithoutA to Luminosity.cc and Luminosity.h
+
+Revision 1.431  2002/05/13 10:01:29  barneo
+Database run.db file for 3He(e,e'pn) experiment updated to support H3hel program
+for the Hadron3 detector.
+
+Revision 1.430  2002/05/13 10:01:18  barneo
+Database run.db file for 3He(e,e'pn) experiment updated to support H3hel program
+for the Hadron3 detector.
+
+Revision 1.429  2002/05/10 03:19:01  kohlm
+variable length and wall thickness for flat hydrogen target cell in rundb
+Target.WallThickness = 0.00889 // instead of 0.01016 mm
+Target.Length = 48.0 // instead of 49.5 mm
+
+Revision 1.428  2002/05/02 13:24:07  barneo
+Problem with char * declarations in Luminosity.cc is solved, I hope.
+
+Revision 1.427  2002/05/02 12:50:27  merkel
+Bug in Convert statement for 2-dim Histograms
+
+Revision 1.426  2002/04/30 13:31:58  barneo
+Mayor update in Lumi++ and Luminosity class to implement Hadron3 detector
+in luminosity calculations. This implementation is almost complete.
+Some software infrastructure has also been implemented for TOF detector.
+
+In Cola++.cc a routine for energy loss corrections in target and air for
+a proton in TOF has been included. At this moment it gives floating
+exception problems, reason why this new code in commented out.
+
+A small simple bug has been corrected in TOF code.
+
+Revision 1.425  2002/04/29 13:04:46  merkel
+Some possible floating point exceptions removed.
+Sign error in Simul++ for OOP angle!
+
+Revision 1.424  2002/04/26 14:26:14  kohlm
+*** empty log message ***
+
+Revision 1.423  2002/04/24 12:53:57  merkel
+some more markers
+
+Revision 1.422  2002/04/23 08:04:54  merkel
+ToF Energyloss corrections commented out
+
+Revision 1.421  2002/04/12 12:39:35  barneo
+Hadron3 database entries in run.db updated for testpulse efficiency program.
+Also a few unused entries left when the conversion from ADAM to COLA code
+have been removed. Database files updated acordingly as well.
+
+Revision 1.420  2002/04/12 12:39:25  barneo
+Hadron3 database entries in run.db updated for testpulse efficiency program.
+Also a few unused entries left when the conversion from ADAM to COLA code
+have been removed. Database files updated acordingly as well.
+
+Revision 1.419  2002/04/10 12:13:36  merkel
+Timezone
+
+Revision 1.418  2002/04/10 12:10:40  a1online
+Timezone -> Europe/Berlin
+
+Revision 1.417  2002/04/03 15:57:35  barneo
+Fixing a mistake in the He3-TOF database file. It should be PTime but not NTime.
+
+Revision 1.416  2002/04/03 14:52:12  barneo
+Updating deuterium density in the database.
+
+Revision 1.415  2002/04/03 14:05:02  seimetz
+npol files with modifications in neutron ID for Aqua-Cola
+
+Revision 1.414  2002/04/03 11:41:19  barneo
+Fixing a small mistake I made in the last commit.
+
+Revision 1.413  2002/04/03 11:37:58  barneo
+Two modifications:
+  -- Modified acces to raw data in Hadron3 after the change to Aqua because
+     it was not using the itemOK flags, which made not possible to read the
+     data.
+  -- Added energy loss in the target for the TOF particle when it is a proton.
+     It will be useful in (e,e'pp) analysis.
+
+Revision 1.412  2002/04/03 11:37:46  barneo
+Two modifications:
+  -- Modified acces to raw data in Hadron3 after the change to Aqua because
+     it was not using the itemOK flags, which made not possible to read the
+     data.
+  -- Added energy loss in the target for the TOF particle when it is a proton.
+     It will be useful in (e,e'pp) analysis.
+
+Revision 1.411  2002/03/31 22:58:10  a1online
+dE trigger for B defines timing
+
+Revision 1.410  2002/03/31 00:29:36  distler
+Last ToF commit was not complete.
+In order to compile cola, rundatabase.h and online.h had to be changed.
+
+Revision 1.409  2002/03/31 00:29:10  distler
+Last ToF commit was not complete.
+In order to compile cola, rundatabase.h and online.h had to be changed.
+
+Revision 1.408  2002/03/28 17:36:59  heim
+Varaibles for cuts in time and vertex added.
+
+Revision 1.407  2002/03/28 17:34:13  heim
+Some new variables like VertexZ added to make them available later in
+ToF code.
+
+Revision 1.406  2002/03/28 17:31:31  heim
+Variables for kinetic energy of prompt and random neutrons added.
+
+Revision 1.405  2002/03/28 17:30:21  heim
+Variables for additional cuts (time, vertex) added.
+
+Revision 1.404  2002/03/22 16:25:01  distler
+changes to the two-body generator: Simul.CMS.Theta and Simul.CMS.Phi
+reflect the CMS angle of the first (detected) particle
+-Q option enabled for SimulMIT, which is using a first version of Luminosity.
+
+Revision 1.403  2002/03/22 16:24:53  distler
+changes to the two-body generator: Simul.CMS.Theta and Simul.CMS.Phi
+reflect the CMS angle of the first (detected) particle
+-Q option enabled for SimulMIT, which is using a first version of Luminosity.
+
+Revision 1.402  2002/03/22 16:24:47  distler
+changes to the two-body generator: Simul.CMS.Theta and Simul.CMS.Phi
+reflect the CMS angle of the first (detected) particle
+-Q option enabled for SimulMIT, which is using a first version of Luminosity.
+
+Revision 1.401  2002/03/22 15:29:05  merkel
+Some cleanups
+
+Revision 1.400  2002/03/21 05:07:15  distler
+avoid devision by zero error in H3 simulation code
+by properly initializing variables even if H3.run.db is not included
+
+Revision 1.399  2002/03/21 04:24:26  distler
+match spectrometer angles in simulation with analysis.
+had to change sign for oopses and ohips
+
+Revision 1.398  2002/03/21 02:19:33  distler
+ColaMIT memory hole removed: Focus object
+
+Revision 1.397  2002/03/20 22:50:46  distler
+set default ENERGYLOSS=2. fixed online help of Simul : SIMULATION_HIS
+
+Revision 1.396  2002/03/20 22:50:41  distler
+set default ENERGYLOSS=2. fixed online help of Simul : SIMULATION_HIS
+
+Revision 1.395  2002/03/20 21:29:17  sirca
+Changed collimator names to presently valid ones.
+
+Revision 1.394  2002/03/20 21:02:18  cola
+Added three new run.db variables:
+OHIPS Leadglass Software Gain Matching Variables:
+   OHIPS.pbg.offset, OHIPS.pbg.gmfactor, OHIPS.pbg.tbfactor
+
+Added three new online variables:
+OHIPS Leadglass Software Gain Matched Sums:
+online.ohips.leadglas.sum, online.ohips.leadglas.top, online.ohips.leadglas.btm
+
+top corresponds to leadglass blocks 1 to 9
+btm corresponds to leadglass blocks 10 to 18
+
+-Sean Stave
+
+Revision 1.393  2002/03/20 21:02:11  cola
+Added three new run.db variables:
+OHIPS Leadglass Software Gain Matching Variables:
+   OHIPS.pbg.offset, OHIPS.pbg.gmfactor, OHIPS.pbg.tbfactor
+
+Added three new online variables:
+OHIPS Leadglass Software Gain Matched Sums:
+online.ohips.leadglas.sum, online.ohips.leadglas.top, online.ohips.leadglas.btm
+
+top corresponds to leadglass blocks 1 to 9
+btm corresponds to leadglass blocks 10 to 18
+
+-Sean Stave
+
+Revision 1.392  2002/03/20 20:07:01  distler
+bugfix: LDREADER was not defined for --enable-shared
+
+Revision 1.391  2002/03/20 19:47:01  distler
+Updated --enable-shared and --enable-static options of configure.
+For now, static versions of Cola and other analysis programs
+will not be compiled by make.
+This is because AquaReader requires shared library support.
+However, you can compile a static version of Simul.
+
+Revision 1.390  2002/03/20 19:46:53  distler
+Updated --enable-shared and --enable-static options of configure.
+For now, static versions of Cola and other analysis programs
+will not be compiled by make.
+This is because AquaReader requires shared library support.
+However, you can compile a static version of Simul.
+
+Revision 1.389  2002/03/20 19:46:46  distler
+Updated --enable-shared and --enable-static options of configure.
+For now, static versions of Cola and other analysis programs
+will not be compiled by make.
+This is because AquaReader requires shared library support.
+However, you can compile a static version of Simul.
+
+Revision 1.388  2002/03/20 19:46:32  distler
+Updated --enable-shared and --enable-static options of configure.
+For now, static versions of Cola and other analysis programs
+will not be compiled by make.
+This is because AquaReader requires shared library support.
+However, you can compile a static version of Simul.
+
+Revision 1.387  2002/03/20 19:46:25  distler
+Updated --enable-shared and --enable-static options of configure.
+For now, static versions of Cola and other analysis programs
+will not be compiled by make.
+This is because AquaReader requires shared library support.
+However, you can compile a static version of Simul.
+
+Revision 1.386  2002/03/18 20:52:54  distler
+make Cola sources ready for RedHat 7.0
+fixed problems with automatic cast, string.h, stdlib.h, ...
+
+Revision 1.385  2002/03/18 20:52:48  distler
+make Cola sources ready for RedHat 7.0
+fixed problems with automatic cast, string.h, stdlib.h, ...
+
+Revision 1.384  2002/03/18 20:52:39  distler
+make Cola sources ready for RedHat 7.0
+fixed problems with automatic cast, string.h, stdlib.h, ...
+
+Revision 1.383  2002/03/18 16:26:14  distler
+fixed bux in memory management of ColaNtuple
+
+Revision 1.382  2002/03/18 09:35:38  merkel
+option -S,-D for better Makefiles
+
+Revision 1.381  2002/03/17 16:06:22  sirca
+Added Landau losses to OOPS, and also fixed the problem that OOPS and OHIPS
+were treated as having equal distances between the scattering chamber exit
+foil and the spectrometer entrance foil.  (NB They are different, but still
+need to be checked, OHIPS is set to 500 mm, OOPS to 50 mm.)
+
+Revision 1.380  2002/03/16 21:20:57  distler
+ColaMIT/Filter.cc needs AquaCompress.h
+
+Revision 1.379  2002/03/15 23:48:23  distler
+bugfix for output option in Cola(MIT). mode has to specified for outpot files.
+
+Revision 1.378  2002/03/15 23:48:04  distler
+bugfix for output option in Cola(MIT). mode has to specified for outpot files.
+
+Revision 1.377  2002/03/15 22:21:56  distler
+do not include String.h. The String class is part of libg++ which is not
+available on all systems. Here only 'cerr' and 'endl' were use. The cerr
+stream is defined in iostream.h and is part of libstdc++ which should be
+available on all systems that have a C++ compiler.
+
+Revision 1.376  2002/03/15 22:11:47  distler
+typo in ColaNtuple.cc
+added tof-correction files in ColaMIT/examples
+
+Revision 1.375  2002/03/15 22:11:41  distler
+typo in ColaNtuple.cc
+added tof-correction files in ColaMIT/examples
+
+Revision 1.374  2002/03/15 22:11:33  distler
+typo in ColaNtuple.cc
+added tof-correction files in ColaMIT/examples
+
+Revision 1.373  2002/03/14 16:46:04  merkel
+Utility for Moeller polarimeter analysis included
+
+Revision 1.372  2002/03/13 23:33:09  distler
+Simul.cc is used in both Cola and ColaMIT!
+Had to adjust ColaMIT/Simul.h to recent changes.
+
+Revision 1.371  2002/03/13 23:32:43  distler
+Simul.cc is used in both Cola and ColaMIT!
+Had to adjust ColaMIT/Simul.h to recent changes.
+
+Revision 1.370  2002/03/12 19:04:54  distler
+corrected RCS keyword in QuasiRandom.cc
+
+Revision 1.369  2002/03/12 18:57:03  distler
+removed unneccessary variable. added cvs id in the header.
+
+Revision 1.368  2002/03/12 15:37:02  merkel
+...
+
+Revision 1.367  2002/03/12 14:58:33  merkel
+Repairing the Simulation
+-- Simul needs the abcn structure!!
+-- Line 157 of QuasiRandom.cc needs volatile
+   Why??????
+
+Revision 1.366  2002/03/12 13:40:37  merkel
+Some bugs removed to compile. Please be more careful!
+
+Revision 1.365  2002/03/07 19:17:57  distler
+avoid division by zero error in Material.cc
+
+Revision 1.364  2002/03/06 17:15:31  middletn
+Small changes to the ToF databases and some code to stop non-ToF events appearing in the zero bin of fourvectors from ToF.
+
+Revision 1.363  2002/03/06 17:15:23  middletn
+Small changes to the ToF databases and some code to stop non-ToF events appearing in the zero bin of fourvectors from ToF.
+
+Revision 1.362  2002/03/06 17:15:15  middletn
+Small changes to the ToF databases and some code to stop non-ToF events appearing in the zero bin of fourvectors from ToF.
+
+Revision 1.361  2002/03/05 06:36:11  distler
+another makefile bug
+
+Revision 1.360  2002/03/05 05:00:25  distler
+Bugfix in Cola/Makefile.in
+
+Revision 1.359  2002/03/05 03:52:21  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.358  2002/03/05 03:52:14  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.357  2002/03/05 03:50:22  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.356  2002/03/05 03:50:15  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.355  2002/03/05 03:50:07  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.354  2002/03/05 03:49:59  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.353  2002/03/05 03:49:54  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.352  2002/03/05 03:49:45  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.351  2002/03/05 03:49:36  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.350  2002/03/05 03:49:30  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.349  2002/03/05 03:49:24  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.348  2002/03/05 03:49:19  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.347  2002/03/05 03:49:12  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.346  2002/03/05 03:49:05  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.345  2002/03/05 03:48:47  distler
+Aqua support for Cola and ColaMIT
+Not tested, yet. Expect bugs!
+
+Revision 1.344  2002/03/04 03:29:18  sirca
+Fixed an incorrect behaviour of the two-body kinematics routine when dealing
+with Maid for pi0 vs. pi+/- channel: thetacms in the kinematics routine
+is equal to thetacms in Maid for pi0, while it is M_PI-thetacms for the
+charged channels.
+
+Revision 1.343  2002/03/04 03:29:08  sirca
+Fixed an incorrect behaviour of the two-body kinematics routine when dealing
+with Maid for pi0 vs. pi+/- channel: thetacms in the kinematics routine
+is equal to thetacms in Maid for pi0, while it is M_PI-thetacms for the
+charged channels.
+
+Revision 1.342  2002/03/04 03:25:45  sirca
+Implemented OOPS and OHIPS collimators for short and long drift.  Previous
+values of drift distances were wrong since they corresponded to the "folklore"
+settings of 1.6m/2m for OHIPS and 1.4m/2.5m for OOPS.  Now the correct
+distances from target centre to collimators (and their dimensions) are used.
+
+Revision 1.341  2002/02/25 18:05:58  kohlm
+After agreement in A1 seminar of Feb 25, 2002 it is decided to comment out the five lines in Material.cc for the electron energyloss as previously introduced by S. Sirca.
+
+Revision 1.340  2002/02/21 16:44:20  barneo
+I did one more mistake. It is fixed until I find the next one.
+
+Revision 1.339  2002/02/21 16:41:09  barneo
+Updated once again the 3He(e,e'pn) main database to fix mistake with the name of
+the files of Hadron3 database.
+
+Revision 1.338  2002/02/21 16:40:54  barneo
+Updated once again the 3He(e,e'pn) main database to fix mistake with the name of
+the files of Hadron3 database.
+
+Revision 1.337  2002/02/21 13:39:47  barneo
+I forgot this file in the previous commit. It is an updated version of the main
+database file for the 2H and 3He(e,e'pn) experiment.
+
+Revision 1.336  2002/02/21 13:27:27  barneo
+Several aspects of the Hadron3 and TOF detectors have been improved:
+
+  -- Fix bug in He3-tof.db
+  -- Hadron3 database entries related with timing corrections have been improved.
+In adition, they are especified per subset of data.
+  -- Hadron3 analysis code related with timing corrections has been improved.
+  -- In Hadron3 simulation, a collimator dedicated to this detector has been included.
+  -- Some superflous entries in Hadron3 database have been removed.
+
+Revision 1.335  2002/02/21 13:27:20  barneo
+Several aspects of the Hadron3 and TOF detectors have been improved:
+
+  -- Fix bug in He3-tof.db
+  -- Hadron3 database entries related with timing corrections have been improved.
+In adition, they are especified per subset of data.
+  -- Hadron3 analysis code related with timing corrections has been improved.
+  -- In Hadron3 simulation, a collimator dedicated to this detector has been included.
+  -- Some superflous entries in Hadron3 database have been removed.
+
+Revision 1.334  2002/02/21 13:27:12  barneo
+Several aspects of the Hadron3 and TOF detectors have been improved:
+
+  -- Fix bug in He3-tof.db
+  -- Hadron3 database entries related with timing corrections have been improved.
+In adition, they are especified per subset of data.
+  -- Hadron3 analysis code related with timing corrections has been improved.
+  -- In Hadron3 simulation, a collimator dedicated to this detector has been included.
+  -- Some superflous entries in Hadron3 database have been removed.
+
+Revision 1.333  2002/02/21 13:27:07  barneo
+Several aspects of the Hadron3 and TOF detectors have been improved:
+
+  -- Fix bug in He3-tof.db
+  -- Hadron3 database entries related with timing corrections have been improved.
+In adition, they are especified per subset of data.
+  -- Hadron3 analysis code related with timing corrections has been improved.
+  -- In Hadron3 simulation, a collimator dedicated to this detector has been included.
+  -- Some superflous entries in Hadron3 database have been removed.
+
+Revision 1.332  2002/02/21 13:26:52  barneo
+Several aspects of the Hadron3 and TOF detectors have been improved:
+
+  -- Fix bug in He3-tof.db
+  -- Hadron3 database entries related with timing corrections have been improved.
+In adition, they are especified per subset of data.
+  -- Hadron3 analysis code related with timing corrections has been improved.
+  -- In Hadron3 simulation, a collimator dedicated to this detector has been included.
+  -- Some superflous entries in Hadron3 database have been removed.
+
+Revision 1.331  2002/02/17 22:56:20  sirca
+Added (dp-dependent and dp-independent) momentum and angular resolution
+to the run.db "pick-up".  I tested it with SimulMIT for a N-D setting
+corresponding to [980130000000], and it seemed to work fine.
+
+Revision 1.330  2002/02/17 06:24:04  a1online
+Fix LumiSum parsing problem with stars in runlist.txt
+
+Revision 1.329  2002/02/16 22:45:54  sirca
+Implemented methods target::EnergyLossSimBeam and target::EnergyLossSimChamber
+into Targetlength.cc (they were dummy before, saying just P += 0; ).
+There is still an inconsistency I do not know how to resolve: in both the
+EnergyLossSimChamber and EnergyLossCorrChamber, only the TgChamberOOPSAir
+is used, regardless of the spectrometer, while TgChamberOHIPSAir should
+be used for OHIPS.
+
+Revision 1.328  2002/02/16 22:39:34  a1online
+Bug for two '_' in setup name removed
+
+Revision 1.327  2002/02/13 10:41:03  merkel
+some changes to maid
+
+Revision 1.326  2002/02/05 23:34:29  sirca
+Added default initialisation (to zero) of BPM offsets and slopes for SimulMIT.
+
+Revision 1.325  2002/02/05 14:55:24  distler
+SimulMIT shares (most) sources with Simul++
+see Cola/share/examples/SimulMIT for an example
+
+Revision 1.324  2002/02/05 14:55:16  distler
+SimulMIT shares (most) sources with Simul++
+see Cola/share/examples/SimulMIT for an example
+
+Revision 1.323  2002/02/05 14:55:11  distler
+SimulMIT shares (most) sources with Simul++
+see Cola/share/examples/SimulMIT for an example
+
+Revision 1.322  2002/02/05 14:54:49  distler
+SimulMIT shares (most) sources with Simul++
+see Cola/share/examples/SimulMIT for an example
+
+Revision 1.321  2002/02/05 14:51:00  distler
+examples for SimulMIT
+
+Status:
+
+Vendor Tag:	SimulMITexamples
+Release Tags:	start
+
+N Cola/share/examples/SimulMIT/simul.hm
+N Cola/share/examples/SimulMIT/simul.sh
+N Cola/share/examples/SimulMIT/Simulation.col
+N Cola/share/examples/SimulMIT/run.db
+
+No conflicts created by this import
+
+Revision 1.320  2002/01/31 15:53:26  middletn
+These never commited earlier for some reason but here they are.
+
+Revision 1.319  2002/01/31 15:53:20  middletn
+These never commited earlier for some reason but here they are.
+
+Revision 1.318  2002/01/31 13:54:44  middletn
+Updated good ToF event conditions and improved cuts.
+
+Revision 1.317  2002/01/31 13:54:31  middletn
+Updated good ToF event conditions and improved cuts.
+
+Revision 1.316  2002/01/19 23:42:28  distler
+the mecdas data structure does not allow nested array definitions, like
+.d.vdc.x[8].wire[8] - workaround implemented. .x[1].wire -> .x1.wire
+
+Revision 1.315  2002/01/19 03:21:16  a1online
+Scaling improved
+
+Revision 1.314  2002/01/16 13:56:02  middletn
+Changes for neutron identification in ToF, need to tie it in with the hit counters yet but that should follow shortly.Also gets rid of flasher events that were present. D.M.
+
+Revision 1.313  2002/01/16 13:55:56  middletn
+Changes for neutron identification in ToF, need to tie it in with the hit counters yet but that should follow shortly.Also gets rid of flasher events that were present. D.M.
+
+Revision 1.312  2002/01/16 13:55:45  middletn
+Changes for neutron identification in ToF, need to tie it in with the hit counters yet but that should follow shortly.Also gets rid of flasher events that were present. D.M.
+
+Revision 1.311  2001/12/21 11:28:28  kleinf
+npol.cc:
+
+Revision 1.310  2001/12/20 13:03:41  kleinf
+npol.cc, online.h:
+
+bugfix for npol: re-insered "vetohit" and "ndethit" for 2nd wall online
+
+Revision 1.309  2001/12/20 11:12:25  seimetz
+Little errors in npol routines corrected. MS/FK
+
+Revision 1.308  2001/12/20 10:19:21  distler
+added script example to simulate input for matrix generation using qspin
+
+Revision 1.307  2001/12/19 18:10:32  kleinf
+npol.cc, npol.h, npolPrint.cc, online.h:
+New Cola version for neutron polarimeter, merged "Glasgow" and "Mainz" version.
+Changes in reconstruction for single paddle and for 1st and 2nd wall.
+
+Revision 1.306  2001/12/19 18:01:31  kleinf
+*** empty log message ***
+
+Revision 1.305  2001/12/19 18:00:25  kleinf
+New run.db variables for npol:
+
+nPol.minADC         default: {0,0,0,0,0}
+nPol.file.timeCut   default: " "
+nPol.file.pulshCut  default: " "
+
+and a variable for the longitudinal beam polarisation
+
+Revision 1.304  2001/12/19 14:24:10  distler
+first step to include qspin into Simul
+new pure virtual base class qspinSpectrometer
+
+Revision 1.303  2001/12/19 12:00:48  distler
+qspin sources by Th.Pospischil integrated into Cola/Simulation
+
+Revision 1.302  2001/12/19 12:00:04  distler
+qspin sources by Th.Pospischil integrated into Cola/Simulation
+
+Revision 1.301  2001/12/19 11:59:45  distler
+qspin sources by Th.Pospischil integrated into Cola/Simulation
+
+Revision 1.300  2001/12/18 18:35:41  distler
+QSPIN scripts
+
+Status:
+
+Vendor Tag:	qspin
+Release Tags:	start
+
+N Cola/share/examples/qspin/Xresources
+N Cola/share/examples/qspin/profile
+N Cola/share/examples/qspin/hm/target.hm
+N Cola/share/examples/qspin/hm/hdc.hm
+N Cola/share/examples/qspin/hm/focalplaneA.hm
+N Cola/share/examples/qspin/hm/focalplaneB.hm
+N Cola/share/examples/qspin/hm/focalplaneC.hm
+N Cola/share/examples/qspin/hm/vdcA.hm
+N Cola/share/examples/qspin/hm/vdcB.hm
+N Cola/share/examples/qspin/hm/vdcC.hm
+N Cola/share/examples/qspin/hm/tripleTiming.hm
+N Cola/share/examples/qspin/col/Online.col
+N Cola/share/examples/qspin/col/Rawdefinitions.col
+N Cola/share/examples/qspin/col/Target.col
+N Cola/share/examples/qspin/col/Filter.col
+N Cola/share/examples/qspin/col/Rawdata.col
+N Cola/share/examples/qspin/col/Constants.col
+N Cola/share/examples/qspin/emacs/cola-mode.el
+N Cola/share/examples/qspin/qspin/show_track.sh
+N Cola/share/examples/qspin/qspin/oops_cut.eps
+N Cola/share/examples/qspin/qspin/A_grey.ps
+N Cola/share/examples/qspin/qspin/show_trackOOPS.sh
+N Cola/share/examples/qspin/qspin/ohips.eps
+N Cola/share/examples/qspin/qspin/show_trackOHIPS.sh
+N Cola/share/examples/qspin/rundb/H2-He3-eepn.run.db
+N Cola/share/examples/qspin/rundb/O16-eepn.run.db
+N Cola/share/examples/qspin/rundb/Hadron3/H3.detector.db
+N Cola/share/examples/qspin/rundb/Hadron3/H3.A1n2.db
+N Cola/share/examples/qspin/rundb/Hadron3/H3.A1n4.db
+N Cola/share/examples/qspin/rundb/Hadron3/H3.A1o2.db
+N Cola/share/examples/qspin/rundb/Hadron3/H3.A1o4.db
+N Cola/share/examples/qspin/rundb/Hadron3/H3.common.db
+N Cola/share/examples/qspin/utils/VDC_DRIFT.cc
+N Cola/share/examples/qspin/utils/VDC_DRIFT.ps
+N Cola/share/examples/qspin/utils/Makefile
+N Cola/share/examples/qspin/utils/VDC_TDC_off.cc
+N Cola/share/examples/qspin/utils/drift_opt_s.sh
+N Cola/share/examples/qspin/utils/psclopt.cc
+N Cola/share/examples/qspin/utils/psplot.cc
+N Cola/share/examples/qspin/utils/drift_opt.sh
+N Cola/share/examples/qspin/utils/psclopt.h
+N Cola/share/examples/qspin/utils/VDC_DRIFT_S.ps
+N Cola/share/examples/qspin/utils/data2ps.cc
+N Cola/share/examples/qspin/utils/psplot.h
+N Cola/share/examples/qspin/shellscripts/opsh
+N Cola/share/examples/qspin/shellscripts/filter.sh
+N Cola/share/examples/qspin/shellscripts/simul.sh
+N Cola/share/examples/qspin/shellscripts/check.sh
+N Cola/share/examples/qspin/shellscripts/lumi.sh
+N Cola/share/examples/qspin/shellscripts/opterm.sh
+N Cola/share/examples/qspin/shellscripts/analyze.sh
+N Cola/share/examples/qspin/shellscripts/analyzecd.sh
+N Cola/share/examples/qspin/shellscripts/lumiSum2tex.sh
+
+No conflicts created by this import
+
+Revision 1.299  2001/12/10 16:32:41  sirca
+Small fix of the path-length correction of tcoinc.  If the tccorr-OOPS
+or tccorr-OHIPS parameter files are not found, default values for the
+time offset and path lengths as given in TCCC.h are adopted, and no
+corrections are calculated.
+
+Revision 1.298  2001/12/06 23:34:49  cola
+added -I$(srcdir)/../Cola for include search path.
+
+Revision 1.297  2001/12/06 23:32:57  cola
+include <string.h> for redhat7.0 compatibility.
+
+Revision 1.296  2001/12/06 23:31:10  cola
+include <string.h> for redhat7.0 compatibiliy. (Itaru Nakagawa)
+
+Revision 1.295  2001/12/06 23:29:28  cola
+include <stdlib.h> as well for redhat7.0 version.
+
+Revision 1.294  2001/12/04 14:59:20  kleinf
+Add information (Lambda, deltaQ and filname of AdcRatio) to output
+
+Revision 1.293  2001/11/29 14:38:47  kleinf
+Indroduce a new variable called  "line" or "l"
+This variable is the hit position in the scinitillator axis and is
+equal to respective TDC_diff-coordinate.
+
+The hit position l is calculated from the ratio of the ADC's:
+
+l = LAMBDA/2 * ( ln(ADC1/ADC2) - ln(Q1/Q2) )
+
+where the single ADC's are given as
+
+ADC1 = Q1 exp(- (L/2 - l) / LAMBDA)
+ADC2 = Q2 exp(- (L/2 + l) / LAMBDA).
+
+As parameter for the reconstruction of l the attenuate length LAMBDA
+[cm] and the ratio Q1/Q2 must be given via the configuration file
+"nPol.file.adcRatio".
+
+This variable is also used for a transit time correction of the single
+TDC's:
+ TDC1 + l / SoL
+ TDC2 - l / SoL
+The corrected TDC's then are independent from the hit position in
+
+Revision 1.292  2001/11/29 14:38:41  kleinf
+Indroduce a new variable called  "line" or "l"
+This variable is the hit position in the scinitillator axis and is
+equal to respective TDC_diff-coordinate.
+
+The hit position l is calculated from the ratio of the ADC's:
+
+l = LAMBDA/2 * ( ln(ADC1/ADC2) - ln(Q1/Q2) )
+
+where the single ADC's are given as
+
+ADC1 = Q1 exp(- (L/2 - l) / LAMBDA)
+ADC2 = Q2 exp(- (L/2 + l) / LAMBDA).
+
+As parameter for the reconstruction of l the attenuate length LAMBDA
+[cm] and the ratio Q1/Q2 must be given via the configuration file
+"nPol.file.adcRatio".
+
+This variable is also used for a transit time correction of the single
+TDC's:
+ TDC1 + l / SoL
+ TDC2 - l / SoL
+The corrected TDC's then are independent from the hit position in
+
+Revision 1.291  2001/11/29 14:14:34  kleinf
+npolPrint.cc:
+Print now in verbose mode (Cola -v) not only the "$setup_npol.conf" file but
+also a second file "$setup_npol.pos" with the absolute position of the
+scintillators (in cart. npol coord. system).
+Format of this file:
+Paddle number	 x-pos	y-pos	z-pos
+
+Revision 1.290  2001/11/29 12:12:12  middletn
+Changes to where fourvector is produced in ToF and a fix for the energy and momentum calculated for bars. D.M.
+
+Revision 1.289  2001/11/27 15:51:11  barneo
+Database entries for 2H target updated.
+
+Revision 1.288  2001/11/27 15:49:47  barneo
+Redesign of Hadron3 database. Common file divided in global detector entries
+and general kinematics dependent entries.
+
+Revision 1.287  2001/11/15 10:08:58  middletn
+Changes to ToF database so that g-mean pulseheights are now in real energies (electron equivalent). The changes to H3Tracking.cc and npol.h are to include libraries that are needed to compile Cola on RedHat 7.1 in Glasgow. D.M.
+
+Revision 1.286  2001/11/15 10:08:47  middletn
+Changes to ToF database so that g-mean pulseheights are now in real energies (electron equivalent). The changes to H3Tracking.cc and npol.h are to include libraries that are needed to compile Cola on RedHat 7.1 in Glasgow. D.M.
+
+Revision 1.285  2001/10/26 11:29:29  barneo
+Fixed two thousand year bug in Lumi++ when reading timestamps and a print format
+mistake in LumiSum.
+
+Revision 1.284  2001/10/23 12:38:05  merkel
+Ghostscript 6.51 of SUSE 7.3
+can't work with "mark" redefined. Fixed
+
+Revision 1.283  2001/09/26 10:10:53  barneo
+Hadron3 detector related files updated:
+- Implemented Hadron3 simulation in Simul++. Ready for optimisation.
+- All Hadron3 databases included and main database updated acordingly.
+- Improvements in Hadron3 analysis in Cola++.
+
+Revision 1.282  2001/09/26 10:10:45  barneo
+Hadron3 detector related files updated:
+- Implemented Hadron3 simulation in Simul++. Ready for optimisation.
+- All Hadron3 databases included and main database updated acordingly.
+- Improvements in Hadron3 analysis in Cola++.
+
+Revision 1.281  2001/09/26 10:10:34  barneo
+Hadron3 detector related files updated:
+- Implemented Hadron3 simulation in Simul++. Ready for optimisation.
+- All Hadron3 databases included and main database updated acordingly.
+- Improvements in Hadron3 analysis in Cola++.
+
+Revision 1.280  2001/09/26 10:10:27  barneo
+Hadron3 detector related files updated:
+- Implemented Hadron3 simulation in Simul++. Ready for optimisation.
+- All Hadron3 databases included and main database updated acordingly.
+- Improvements in Hadron3 analysis in Cola++.
+
+Revision 1.279  2001/09/26 10:10:13  barneo
+Hadron3 detector related files updated:
+- Implemented Hadron3 simulation in Simul++. Ready for optimisation.
+- All Hadron3 databases included and main database updated acordingly.
+- Improvements in Hadron3 analysis in Cola++.
+
+Revision 1.278  2001/09/24 15:45:32  kleinf
+The two position variables (x,z resp. y,z), which are independent from
+TDC_diff, now  always (for every event and paddle) exist in the
+online structure - even if allOk < 55.
+Furthermore the "hittpaddle_cut" (and the "hitCut") of the paddles
+will now explicit set to zero at the beginning of the event reconstruction.
+
+Revision 1.277  2001/09/21 17:32:52  distler
+check if HAVE_CONFIG_H is defined in SQL.cc
+
+Revision 1.276  2001/09/18 16:26:09  sirca
+If rundb.use_vertex was not initialised properly to "BPM" or "OHIPS",
+it caused Cola to crash.  Fixed.  Default now is rundb.use_vertex = "".
+
+Revision 1.275  2001/09/16 15:46:39  sirca
+First serious version of path-length corrections for OOPS-OHIPS coincidences
+implemented.  It is based on polynomial corrections to tcoinc in terms of
+powers of target phi, theta, and dp coordinates.  The coefficients of the
+polynomials are determined by spectrometer models by qspin, and should be
+kinematics-independent to a good approximation.  Since we do not have the
+explicit length matrix elements within the TMA files, the correction
+coefficients are stored in separate files, and are invoked and initialized
+from run.db in a way similar to the TMA initfiles.
+
+Revision 1.274  2001/09/16 15:46:23  sirca
+First serious version of path-length corrections for OOPS-OHIPS coincidences
+implemented.  It is based on polynomial corrections to tcoinc in terms of
+powers of target phi, theta, and dp coordinates.  The coefficients of the
+polynomials are determined by spectrometer models by qspin, and should be
+kinematics-independent to a good approximation.  Since we do not have the
+explicit length matrix elements within the TMA files, the correction
+coefficients are stored in separate files, and are invoked and initialized
+from run.db in a way similar to the TMA initfiles.
+
+Revision 1.273  2001/09/14 00:21:45  sirca
+Next iteration of path-length corrections for OOPSA-OHIPS coincs built in.
+Distinguish between possibilities with resultA, resultO true or false.
+Fixed drift distances (short for OOPS, long for OHIPS) only.
+
+Revision 1.272  2001/09/11 14:09:57  kleinf
+-Upgrade of the run.db-check for npol, added warning messages for
+ not in run.db specified configuration files.
+
+-Added further information to the ".conf"-files and improved the
+
+Revision 1.271  2001/09/11 14:05:01  kleinf
+*** empty log message ***
+
+Revision 1.270  2001/09/10 17:23:30  kleinf
+Cola.cc
+- Use Cola verbose flag (-v) for npol verbose mode. Call the creater for
+  the object "npol" now with this variable.
+
+Online.h
+- Removed npol raw data from online structure
+
+npol.h/npol.cc
+- Removed npol raw data implementation for online structure
+- Verbose mode: ".conf"-file is only created if verbose flag is given,
+                the name of the config. files is printed on screen
+- Allow that beta=v/c > 1 is written in the online structure
+- Changed rules for the Software Triggers, depends now on rundb.vetouse,
+  rundb.neighbourvetouse, same behaviour like HitPaddle.
+- Fixed bug in calculation of phi_lab, now it's around zero and
+
+Revision 1.269  2001/09/10 17:23:15  kleinf
+Cola.cc
+- Use Cola verbose flag (-v) for npol verbose mode. Call the creater for
+  the object "npol" now with this variable.
+
+Online.h
+- Removed npol raw data from online structure
+
+npol.h/npol.cc
+- Removed npol raw data implementation for online structure
+- Verbose mode: ".conf"-file is only created if verbose flag is given,
+                the name of the config. files is printed on screen
+- Allow that beta=v/c > 1 is written in the online structure
+- Changed rules for the Software Triggers, depends now on rundb.vetouse,
+  rundb.neighbourvetouse, same behaviour like HitPaddle.
+- Fixed bug in calculation of phi_lab, now it's around zero and
+
+Revision 1.268  2001/09/07 20:17:21  sirca
+First attempt at flight-path corrections for tcoinc.  Only OHIPS-OOPS A
+case handled for now, with polynomial parameters to be transferred to
+the run.db.  No walk-effect corrections applied.
+
+Revision 1.267  2001/08/22 17:22:33  distler
+new file ColaRevisions.h
+contains revision numbers of all Cola source files
+updated automatically by CVSROOT/Colalog.sh
+
+Revision 1.266  2001/08/17 19:44:05  sirca
+Criterion for vertex determination changed slightly.  Now OHIPS is first
+checked for (resultO), then BPMs are used (or not used), depending on the
+run.db specification.  If everything else fails, vertex x and y are set
+to beam offsets, and z is set to zero.
+
+Revision 1.265  2001/08/17 18:26:20  sirca
+For vertex calculation, either use BPM and OHIPS information to determine
+vertex x, y, and z, OR use only OHIPS to determine z via y0, and set x and y
+to zero, OR set the vertex to zero.  BPMs might be very unreliable in
+certain runs, so now we have all options.
+
+Revision 1.264  2001/08/16 08:32:54  barneo
+Further improvements in the Hadron3 Tracks.
+
+Revision 1.263  2001/08/13 15:40:13  barneo
+Changing a few more things in Hadron3 code for its tracks.
+
+Revision 1.262  2001/08/13 14:37:53  barneo
+A few changes in the design of Hadron3 code to improve the use of tracks.
+
+Revision 1.261  2001/08/13 13:32:20  merkel
+Some more error messages for .col parser.
+There is still a problem: Bison++ reports
+5 reduce/reduce conflicts, which are caused by the rules for
+"undefined scalar"/"undefined fourvector". E.g. it's imposible
+to tell for an undefined "x", if "x^2" is a undefined scalar or
+a undefined fourvector. Bison just takes the first rule, which is fine with
+me. But the warning is ugly.....
+
+Revision 1.260  2001/08/12 14:41:42  sirca
+Previous out-of-plane correction was wrong.  Reverted to old solution.
+
+Revision 1.259  2001/08/11 15:22:49  sirca
+Small out-of-plane correction factor 1/cos(oop_angle) for path length in
+target, wall, ans snow, in OOPS.  Assume OHIPS track is always in-plane.
+
+Revision 1.258  2001/08/11 15:21:51  sirca
+Small out-of-plane correction factor of 1/cos(oop_angle) for path length
+in target, wall, and snow, in OOPS.  Assume OHIPS track is always in-plane.
+
+Revision 1.257  2001/08/10 11:44:31  sirca
+Reaction vertex is set to zero in all three components only if both
+resultO (of OHIPS) and BPM information are missing.
+
+Revision 1.256  2001/08/10 01:31:20  sirca
+Changed a sign in the online.Vertex.x and .y with respect to that given
+by BPM x and y calculated values.
+
+Revision 1.255  2001/08/10 00:33:01  sirca
+Target vertex now determined by BPM0 and BPM1 beam-position monitors
+for x and y coordinates, and by OHIPS for z_react (from y_0).  Target
+offsets, beam offsets, and BPM0/BPM1 calibration constants (horizontal
+and vertical offsets and slopes) can be entered from the run.db.
+
+Revision 1.254  2001/08/09 14:39:03  heim
+ToF ouput now controlled by compiler flags
+
+Revision 1.253  2001/08/09 14:38:04  heim
+ps and file output now controlled by compiler flags
+
+Revision 1.252  2001/08/09 14:36:37  heim
+New flags for debugging and ps output.
+
+Revision 1.251  2001/08/08 13:08:26  merkel
+oops, bug in filename of histogram file
+
+Revision 1.250  2001/08/07 15:05:07  middletn
+D.M. Changing the ToF database structure and adding the O16 run.db information.
+
+Revision 1.249  2001/08/07 14:55:47  middletn
+Directory /kits/A1/src/cvsroot/Cola/share/examples/rundb/ToF added to the repository
+
+Revision 1.248  2001/08/03 11:02:43  merkel
+option -O
+
+Revision 1.247  2001/08/03 10:52:46  merkel
+option -O
+
+Revision 1.246  2001/08/03 10:51:01  merkel
+C13 Target included
+
+Revision 1.245  2001/08/03 10:49:54  merkel
+threshold chiral loop correction for maid2000
+
+Revision 1.244  2001/08/03 10:47:09  merkel
+wrong order of libraries removed
+
+Revision 1.243  2001/08/03 10:35:58  merkel
+ugly stdout output removed
+
+Revision 1.242  2001/08/03 10:35:38  merkel
+Weight ...{
+  ...
+}
+introduced to .col file
+
+Revision 1.241  2001/08/02 12:13:26  distler
+removed obsolete files Energyloss.cc Energyloss.h Everlust.h
+
+Revision 1.240  2001/08/02 12:06:33  distler
+more masses removed
+
+Revision 1.239  2001/08/02 12:06:16  distler
+more comments
+
+Revision 1.238  2001/07/27 13:52:33  barneo
+fix growing memory problem wheh runnig Cola++ which could cause a crash. Wrong handle of the
+destructor of the TRACK objects in Hadron3 has been solved.
+
+Revision 1.237  2001/07/27 09:59:12  distler
+enabled energy loss correction for Hadron3
+handled floating point error in ToF.cc
+
+Revision 1.236  2001/07/27 09:13:12  distler
+changed dimension of ToF.RotateAngle to double[4] in tof.db
+the wrong dimension caused a strange error in Cola since other
+values (especially cutlowbeta) got overwritten.
+
+Revision 1.235  2001/07/26 17:40:51  distler
+change size of the collimator for hadron3
+
+Revision 1.234  2001/07/25 19:12:19  distler
+update of simulation code
+simple model of Hadron3 and Tof implemented
+
+Revision 1.233  2001/07/25 19:12:08  distler
+update of simulation code
+simple model of Hadron3 and Tof implemented
+
+Revision 1.232  2001/07/20 13:03:22  barneo
+One more fix in Cola++ because a problem to make ntuples again.
+
+Revision 1.231  2001/07/20 12:16:59  barneo
+Fix crashing problem in Cola++ because a wrong use of pointers in H3 code.
+Some improvements in Hadron3 code are commited as well.
+
+Revision 1.230  2001/07/18 09:32:58  middletn
+18/07/01
+D.M. An update to the tof.db file.
+
+Revision 1.229  2001/07/16 13:21:36  barneo
+Splitting Hadron3 code in two blocks of files: one for the tracking related code and
+another one for the rest.
+
+Revision 1.228  2001/07/16 09:39:05  barneo
+Optimising Hadron3 Detector code.
+
+Revision 1.227  2001/07/09 08:46:45  distler
+tried to fix SimulMIT - seems to be work in progress
+
+Revision 1.226  2001/07/08 21:33:16  distler
+new directory Simulation
+
+Revision 1.225  2001/07/08 21:33:04  distler
+new directory Detector
+
+Revision 1.224  2001/07/08 21:32:45  distler
+updated source code documentation
+
+Revision 1.223  2001/07/08 21:32:02  distler
+moved simulation files to directory ../Simulation
+
+Revision 1.222  2001/07/08 21:31:18  distler
+added directories Detector and Simulation
+
+Revision 1.221  2001/07/08 16:03:38  distler
+updated version of expression parser
+
+Revision 1.220  2001/07/08 16:03:33  distler
+updated version of expression parser
+
+Revision 1.219  2001/07/08 16:03:18  distler
+updated version of expression parser
+
+Revision 1.218  2001/07/08 12:26:08  distler
+Directory /kits/A1/src/cvsroot/Cola/Detector added to the repository
+
+Revision 1.217  2001/07/07 16:16:13  merkel
+Directory /kits/A1/src/cvsroot/Cola/Simulation added to the repository
+
+Revision 1.216  2001/07/03 16:42:04  barneo
+Redesigning of Hadron3 Detector is in progress. Optimising all analysis routines and
+implementing new features.
+
+Revision 1.215  2001/07/03 15:48:39  heim
+Now each time a new ToF output file is created instead of appending
+the new values.
+
+Revision 1.214  2001/07/03 15:04:19  heim
+New ToF output added (additional variable name tof_out)
+
+Revision 1.213  2001/07/03 14:01:22  heim
+debug output removed
+
+Revision 1.212  2001/07/03 12:35:23  heim
+Dimension of ToF.RotateAngle changed
+New valuesDi
+
+Revision 1.211  2001/07/03 12:34:25  heim
+<Down>
+Cuts for individual bars
+New ToF output
+Generation of ToF.ps suppressed
+
+Revision 1.210  2001/07/03 12:30:05  heim
+.
+
+Revision 1.209  2001/07/03 12:29:12  heim
+Dimension of ToF.RotateAngle changed from 4 to 128
+
+Revision 1.208  2001/07/03 12:25:09  heim
+ToF output file added
+03.07.2001
+
+Revision 1.207  2001/06/29 10:48:40  barneo
+Optimising Hadron3 Detector code and redesigning a few features on it.
+
+Revision 1.206  2001/06/28 18:18:50  distler
+Changed interface of ColaNtuple to cernlib,
+ can do without cernlib header files, now.
+Ntuples can be uses in ColaMIT as well.
+
+Revision 1.205  2001/06/26 11:47:01  barneo
+A few modifications in ascii2ntuple. However, since now it is possible to make
+ntuples in Cola++ directly this program becomes useless. It will be removed in
+the near future.
+
+Revision 1.204  2001/06/26 11:45:10  barneo
+General run.db file to analyse H2 and He3 data from the April 2000 experiment in
+Helium3.
+
+Revision 1.203  2001/06/26 11:43:11  barneo
+Ntuples in Cola. Commiting the feature to make hbook CWN ntuples with Cola++.
+Most of the code related with this feature is in the files ColaNtuple.*.
+
+Revision 1.202  2001/06/20 09:29:41  distler
+make and use static version of libmodel for now.
+
+Revision 1.201  2001/06/19 12:32:18  middletn
+19/6/01 D.M. Made a few changes to ToF.cc so that the existing neutral condition applied to events can be switched on and off when analysing data at all levels of the ToF detector, including fourvectors produced by ToF.
+
+Revision 1.200  2001/06/18 15:37:17  distler
+incompatibility in tof.db removed
+
+Revision 1.199  2001/06/18 15:29:14  distler
+obvious bug in ToF.cc removed
+scaler in sos are 24bit -> d.h
+
+Revision 1.198  2001/05/29 13:23:12  merkel
+PLU-Deadtime for Luminosity Calculation
+
+Revision 1.197  2001/05/22 18:21:27  cola
+Updated chamber library for OHIPS after measurement of chambers spacing.
+New OHIPS Matrix Elements are in OHIPS.2m.pbour.mx8.
+
+Revision 1.196  2001/05/17 12:12:05  barneo
+Data of timing calibrations in A1n4 Hadron3 database are improved with the latest result.
+
+Revision 1.195  2001/05/17 12:09:47  barneo
+Hadron3 database for A1 kinematics, o2 subset: A1o2. All calibrations numbers are included.
+
+Revision 1.194  2001/05/15 10:45:35  merkel
+Some rare floating point exception removed
+
+Revision 1.193  2001/05/14 17:50:51  sirca
+Better parameterisation of the energy loss for electrons and update
+of material thicknesses for the OOPS setup.
+
+Revision 1.192  2001/05/10 08:49:30  distler
+momentumx/y/z enabled. Now the prototyp is not violated.
+
+Revision 1.191  2001/05/09 22:35:16  sirca
+Opening files in maid2001.F would not work without the extended-source
+option for g77 (added -ffixed-line-length-none to FFLAGS in configure.in).
+Also, the Model header files were not included correctly in the ColaMIT
+portion of the tree.
+
+Revision 1.190  2001/05/09 13:53:44  merkel
+unneccessary warning removed
+
+Revision 1.189  2001/05/09 13:45:44  merkel
+small bug...
+
+Revision 1.188  2001/05/09 13:40:48  merkel
+Models are now in the model library Cola/Model
+we have Maid, ChPT included
+
+Revision 1.187  2001/05/07 16:07:15  middletn
+DM 7/5/01.
+Addition to stop Cola crashing when floating point exceptions are not ignored while running data.
+
+Revision 1.186  2001/05/03 11:20:08  distler
+configure changes due to check for mkstemp
+and HMBook check for ncurses/termcap
+
+Revision 1.185  2001/05/01 09:58:08  barneo
+I forgot to commit this file in my last update of Hadron3 source files. Sorry.
+
+Revision 1.184  2001/04/30 12:51:34  merkel
+Added h./Tof/npol to SQL-Database
+
+Revision 1.183  2001/04/27 11:32:14  barneo
+A couple of bugs in Hadron3 have been fix related with the Particle Identification.
+Debug information in Hadron3 is now permanent and customizable by a switch in the
+database. You will get tons on debug information not designed for non experts,
+so stay away of the switch.
+
+Revision 1.182  2001/04/26 16:52:58  middletn
+These are necessary changes for RedHat 7.0.
+We had to inculde stdlib.h and string.h
+Disabled fuctions momentumx/y/z in Functions.h
+
+Revision 1.181  2001/04/26 14:25:53  a1online
+Modified for Mezzo logfiles
+
+Revision 1.180  2001/04/20 12:54:19  barneo
+Fixed a Floating Exception Point in Hadron3 code
+
+Revision 1.179  2001/04/18 19:53:22  barneo
+Updating files involved in the development of Hadron3 detector. This update corresponds
+to the new Hadron3 version which substitutes the provisional version used during the
+experiment 3He(e,e'pn) April 2000. All main analysis routines are included.
+
+Revision 1.178  2001/04/18 19:38:18  barneo
+Updated to include compilation of ascii2ntuple
+
+Revision 1.177  2001/04/18 19:36:59  barneo
+Hadron3 database for A1 kinematics, n4 subset: A1n4. All calibrations numbers are included
+but it may change in the future for optimisation purposes.
+
+Revision 1.176  2001/04/18 19:32:01  barneo
+Directory /kits/A1/src/cvsroot/Cola/share/examples/rundb/Hadron3 added to the repository
+
+Revision 1.175  2001/04/18 19:31:04  barneo
+Converts an ascii output from Cola++ into a ntuple. It does not check format or relatad
+at all, so make sure you know what you do. It is a very tricky and stupid program.
+
+Revision 1.174  2001/04/11 14:02:33  merkel
+Lothar's MAID and Ulf's CHPT
+
+Revision 1.173  2001/04/05 10:38:38  distler
+!!! Attention SuSE 7.x users !!!
+cernlib, motif, and wxwin are part of the SuSE distribution
+or are available as rpm packages at
+    http://wwwa1.kph.uni-mainz.de/ftp/RPMS/i386/
+Questions? mailto:distler@kph.uni-mainz.de
+
+Revision 1.172  2001/04/02 11:15:03  merkel
+Spintransfer ->Generate.h
+
+Revision 1.171  2001/03/30 16:51:39  merkel
+spintrace included
+
+Revision 1.170  2001/03/30 16:49:31  merkel
+Some variables for Simulating Bethe-Heitler
+
+Revision 1.169  2001/03/30 12:29:54  baumannd
+Ambiguity between extype Coinc AB and Coinc ABC removed
+
+Revision 1.168  2001/03/29 18:48:02  ding
+Header file  d.h  for SpekD ('pion spectrometer') added.
+
+Revision 1.167  2001/03/29 18:05:21  distler
+ToF bugfix: path is now fpath
+
+Revision 1.166  2001/03/29 11:53:31  merkel
+Focalplane polarization
+
+Revision 1.165  2001/03/29 11:48:09  merkel
+Directory /kits/A1/src/cvsroot/Cola/Model added to the repository
+
+Revision 1.164  2001/03/29 11:45:58  merkel
+Introducing polarization for particles
+
+Revision 1.163  2001/03/29 11:44:49  merkel
+possible FPE
+
+Revision 1.162  2001/03/29 11:43:34  merkel
+.
+
+Revision 1.161  2001/03/29 11:42:54  merkel
+removing warnings...
+
+Revision 1.160  2001/03/28 18:42:41  distler
+merged latest version of ToF code
+not tested yet, but compiles without warnings
+tof.db can be found in Cola/share/examples/rundb/tof.db
+
+Revision 1.159  2001/03/22 10:33:01  kleinf
+Fixed bug in the momentum calculation, now the formula is right !
+
+Revision 1.158  2001/03/16 12:29:52  seimetz
+Extended vetoing: neighbour vetos included into software trigger when
+nPol.UseNVetos = 1 in run.db. MS
+
+Revision 1.157  2001/03/12 20:54:35  seimetz
+Define pulseheight for multiple hits. M. Seimetz
+
+Revision 1.156  2001/03/09 15:05:13  sirca
+OHIPS ToF corrections implemented the same way as on the OOPS side:
+by adjusting <t|t>, <t|x_fp> and <t|x_fp^2> coefficients from the run.db.
+
+Revision 1.155  2001/03/07 19:24:31  distler
+new sieve slit for the OHIPS post 2000 runs
+
+Revision 1.154  2001/03/07 02:06:59  distler
+gridfinder bugfix: signs for spectrometer angles were inconsistant
+especially for extended target it was plain wrong
+I checked all versions, this code was never ok!
+
+Revision 1.153  2001/03/06 19:43:23  seimetz
+Limits for cuts on magnetic field integral. M. Seimetz
+
+Revision 1.152  2001/03/06 16:33:30  seimetz
+Magnet field integral again (last time hopefully). M. Seimetz
+
+Revision 1.151  2001/03/06 13:01:34  seimetz
+Still the same... M. Seimetz
+
+Revision 1.150  2001/03/06 12:43:27  seimetz
+Error correction... M. Seimetz
+
+Revision 1.149  2001/03/06 12:33:47  seimetz
+Slight changes at input procedure for magnetic field integrals in
+npol.cc. M. Seimetz
+
+Revision 1.148  2001/03/03 01:05:25  cola
+hbook size increased to 32MB (was 16MB)
+CindyStream select timeout is 1/100 sec (was 1 sec)
+oops tdc error code is set for values larger than 1025 (was 2050)
+
+Revision 1.147  2001/02/28 03:49:21  distler
+update of drift time correction parameters
+major changes for ohips, minor changes for Mainz spectrometers
+extention for vdcOhipsPacket to initialize pre 2k vdc geometry
+
+Revision 1.146  2001/02/27 02:04:06  distler
+updated hmview: Cola starts with frozen counter windows
+updated oops1.h: noLAM items are signed short, now
+dcos2000 bugfix - end flags are handled correctly
+ColaMIT: counter windows and status line is updated every 10 seconds
+         or every 1000 events, whatever happens first
+
+Revision 1.145  2001/02/23 16:50:51  distler
+solved remaining rundb problem for ColaMIT by puting
+compiler switches in RunParser.y
+
+Revision 1.144  2001/02/22 16:13:12  distler
+bugfix in OOPStape.h: Uword32 scalers are handled correctly
+changed XDRcpy routine into 'little endian to host byte order' ltohl
+
+Revision 1.143  2001/02/16 16:58:14  kleinf
+Now Cola also gives the reconstructed coordinates at the front of the magnet.
+Therefore I changed a little bit the structure of the online-structure of the
+magnet and rearranged the reconstruction for the magnet in npol.cc
+
+PS. The last version of "npol.cc" and "include/online/online.h" were
+checked in by me as a1online - sorry little mistake
+
+Revision 1.142  2001/02/16 14:37:10  a1online
+Add variables for a "raw" multiplicity to online-structure and npol.cc.
+This multiplicity is not based on the hitCut (like the "normal" multiplicity),
+this multiplicity counts only the paddles where both ADCs and TDCs ar in the
+data stream without any cuts on them.
+
+Revision 1.141  2001/02/16 13:24:48  distler
+reinstalled ColaMIT/SQL.cc despite Simon's concerns
+move huge inline subroutine from chlib++.h to vdcPacket.cc
+
+Revision 1.140  2001/02/14 23:31:03  cola
+Insignificant change: 'cerr' debugging statements omitted.
+
+Revision 1.139  2001/02/14 15:40:11  cola
+Implemented pedestal subtraction for BIC charge integrators.
+
+Revision 1.138  2001/02/03 15:16:56  a1online
+Change in CnpolFrame::Reconstruct allows onl->ndethit to calculate doubles correctly
+Derek Glazier
+
+Revision 1.137  2001/01/30 18:36:19  sirca
+Eliminated (most of) the conflicts between Cola and ColaMIT caused by
+SQL prototypes being defined or included on false places.
+
+Revision 1.136  2001/01/30 16:08:32  seimetz
+In npol.cc: hit_cut=0 set also for incomplete events
+M. Seimetz
+
+Revision 1.135  2001/01/19 12:31:56  seimetz
+Replace pulseheight cuts by cuts on individual adc channels
+
+Revision 1.134  2001/01/17 12:48:41  seimetz
+In npol files: modified pedestal correction
+In rundatabase.h: include norad limit variables
+
+Revision 1.133  2001/01/15 20:25:10  kleinf
+Correct an error in last version. I forgot a "*\" to close a comment.
+
+Revision 1.132  2001/01/15 18:29:07  kleinf
+Add a new run.db-value for the Neutronpolarimeter (nPol.maxCoincTime).
+This value is not used in Cola source itself (at the moment),
+but can be used for cuts in a ".col" file.
+
+Revision 1.131  2000/12/28 13:42:51  kleinf
+Log Message:
+abcn structure for the neutron polarimeter
+
+Revision 1.130  2000/12/28 13:29:29  kleinf
+Add the cvs $Id-Tag to the npol sourefile npolxxx (hope it works now correct).
+
+Remove a comment in Tof.cc, in last version the line
+"plot *ToF::p = new plot("ToF.ps"); " was commented out - sorry my mistake
+
+Revision 1.129  2000/12/28 13:11:55  kleinf
+Include the source for the neutron polarimeter (npol)
+
+Revision 1.128  2000/12/18 13:59:23  merkel
+^ in hm introduced
+
+Revision 1.127  2000/12/16 05:40:40  distler
+fixed ColaMIT - fake SQL support, renamed event[56] to event_[56]
+
+Revision 1.126  2000/12/16 02:03:18  distler
+fixed files for new SuSE version
+
+Revision 1.125  2000/12/08 12:49:51  cola
+New Hadron3 definition is fully implemented in Cola++ and ready.
+
+Revision 1.124  2000/12/08 12:48:56  cola
+Final version of Hadron3 database in Cola++ is finished and ready.
+
+Revision 1.123  2000/12/08 12:47:14  cola
+New Hadron3 detector definition fully implemented. Ready to work.
+
+Revision 1.122  2000/12/08 12:46:36  cola
+New Hadron3 detector definition fully implemented. Ready to work.
+
+Revision 1.121  2000/11/21 16:06:04  merkel
+Now also with optimizer compilable.
+
+Revision 1.120  2000/11/21 12:38:55  cola
+New HADRON3 detector and new header file for the H3 module.
+
+Revision 1.119  2000/11/21 12:38:24  cola
+New HADRON3 detector, so new H3 module.
+
+Revision 1.118  2000/11/21 12:36:54  cola
+New HADRON3 detector. Section added to declare default values for H3.
+
+Revision 1.117  2000/11/21 12:31:51  cola
+New HADRON3 structure and database declarations. Now the H3 detector is fully defined.
+
+Revision 1.116  2000/11/08 17:37:47  merkel
+Spin transfer matrices for the focal plane polarimeter
+Based on sourcecode from Th. Pospischil
+
+Revision 1.115  2000/11/07 20:48:18  cola
+Added new scaler output. These new outputs are OOPSA - D and OHIPS
+prescaling factors. Also, the CB for ohips is calculated with
+two different scaler pairs, in order to monitor wheather prescaler
+is functioning properly.
+
+Revision 1.114  2000/09/26 03:27:45  sirca
+Changed the bin/content cursor position values of a histogram to %.7g
+(was %.4g).  This makes invoking "Histogram info" redundant if one only
+wants to look at the precise # of counts in a bin.
+
+Revision 1.113  2000/09/25 02:53:39  sirca
+Several rundb entries needed for the simulation code added and a collimator
+bug for OOPSD fixed.
+
+Revision 1.112  2000/09/24 22:41:23  cola
+Modified to accomodate the SimulMIT routines.
+
+Revision 1.111  2000/09/24 06:01:23  sirca
+Modifications for SimulMIT and corresponding sources.
+
+Revision 1.110  2000/09/24 05:35:51  cola
+Simulation code for OOPS (first commit).
+
+Revision 1.109  2000/09/24 05:32:55  cola
+Framework of the code for luminosity calculation for OOPS; does not work yet.
+
+Revision 1.108  2000/09/24 05:27:04  cola
+Online variables needed in the SimulMIT code added.
+
+Revision 1.107  2000/09/24 03:39:32  cola
+Improved the TOF correction by including quadratic terms in x_fp for OOPS
+spectrometers.  This is just a temporary solution, will need to do it in
+a more refined way.
+
+Revision 1.106  2000/09/17 14:15:59  distler
+changes for SuSE 7.0 support
+wxwin-1.67 is now part of the distribution
+
+Revision 1.105  2000/09/08 04:32:14  cola
+Changed data structure of event8.
+BeamTAG scaler is now at before LATCH1. Also, new valiable BeamTAGshort
+is created for this which is 16bits instead of 32bits.
+
+Revision 1.104  2000/09/01 14:09:00  merkel
+continued
+
+Revision 1.103  2000/09/01 13:47:39  merkel
+Make now more verbose for shared libraries
+
+Revision 1.102  2000/08/30 14:09:25  merkel
+BW/Color version of Option FIT_ERROR
+
+Revision 1.101  2000/08/24 19:06:32  cola
+Added a new scaler in event6.
+The new scaler is ohips-oops coincidence [inh] in counting room scalers.
+
+Revision 1.100  2000/08/22 01:46:35  sirca
+Mistake for OOPS-type reaction parsing corrected.  The reaction string
+was wrongly interpreted as a reaction involving OABC, not as three
+independent reactions OA, OB, OC.
+
+Revision 1.99  2000/08/17 23:55:32  cola
+Utilize spare1 and spare2 scaler channels for 'ohips read' and 'ohips read (CB)'.
+
+-Itaru N.
+
+Revision 1.98  2000/08/15 20:02:01  sirca
+Allow for OOPS quadruple 'coincidences' (i.e. measurements involving OHIPS
+and three OOPSes (e,e'XYZ)) in the Reaction parsing.  Not generalised to
+(e,e'XY)Z, (e,e'X)YZ or (e,e')XYZ.
+
+Revision 1.97  2000/08/15 19:57:57  sirca
+Allow for scales of the BIC current integrators to be input from the run.db.
+This also implies that run.db stuff has to be transferred to the StatPage,
+in addition to the usual &oops1.
+
+Revision 1.96  2000/08/12 21:06:51  cola
+Changed OHIPS scaler printout order. Now printed scaler channels are
+not necessarily aligned in the order of readout.
+
+Revision 1.95  2000/08/10 15:59:06  cola
+Added two new scalers to printOHIPSscaler.
+I.Nakagawa
+
+Revision 1.94  2000/08/07 02:00:37  sirca
+A very crude flight-path correction of OHIPS-OOPS coincidence timing
+introduced.  Two coefficients for t_ccorr = <t|x_fp> x_fp + <t|t> can
+be specified from the run.db.
+
+Revision 1.93  2000/08/07 01:58:07  sirca
+Added access to components of Momentum from .col files (using double
+momentumx, momentumy and momentumz).
+
+Revision 1.92  2000/07/27 05:28:53  sirca
+Minor adjustments of the foil thicknesses for energy loss calculation.
+
+Revision 1.91  2000/07/27 05:25:52  sirca
+Offsets and default drift velocity for OHIPS changed.
+
+Revision 1.90  2000/07/27 05:22:47  sirca
+Allow for O-A, O-B, O-C and O-D coincidence TDC calibration data to be
+entered from the run.db.  Introduced raw and corrected coincidence times
+as online variables.
+
+Revision 1.89  2000/07/11 21:54:33  sirca
+Foil thicknesses and material properties updated for OOPS/OHIPS setup.
+
+Revision 1.88  2000/07/10 14:48:35  a1online
+Recation strings separated by ';' will be made available for preprocessor
+in separated form ( #if reaction(...) )
+
+Revision 1.87  2000/06/28 20:55:10  sirca
+For electrons, I replaced the complicated Bethe-Bloch stuff
+by a simple formula since in our momentum range all electrons
+are MIP and the dE/dx just scales as density*Z/A.  The Z/A-dependence
+has been linearly interpolated between dE/dx = 1.08 for U and 1.94 for He.
+H and D remain as exceptions.
+
+Revision 1.86  2000/06/28 15:30:00  sirca
+Energy loss and target length stuff added for OOPS.
+
+Revision 1.85  2000/06/28 15:23:02  sirca
+Energy loss and target length stuff added for OOPS.
+
+Revision 1.84  2000/06/28 15:16:09  sirca
+Energy loss and target length stuff added for OOPS.
+
+Revision 1.83  2000/06/28 15:15:04  sirca
+Energy losses and target length stuff added for OOPS.
+
+Revision 1.82  2000/06/28 15:13:45  cola
+The offset for new VDCs are updated.
+Also wire positions are calculated with present wire spacing.
+
+Revision 1.81  2000/06/21 22:26:36  sirca
+Corrected a bug in OHIPS wire# inversion routine in DCOS 2000.
+
+Revision 1.80  2000/06/21 22:24:47  sirca
+Minor changes to statistic page output.
+
+Revision 1.79  2000/06/21 22:24:03  sirca
+Modified the way in which slope-related drift-time correction for OHIPS
+VDCs are initialised: they can now be read separately for each plane
+from the run.db.
+
+Revision 1.78  2000/06/21 22:19:54  sirca
+The coefficients of the polynomial of the slope-related drift-time
+correction for OHIPS VDCs can now be entered through run.db for both
+layers separately.
+
+Revision 1.77  2000/06/10 22:19:28  sirca
+Minor modification to handle event6 statistics page.
+
+Revision 1.76  2000/06/10 21:37:51  sirca
+Added LATCHtdc structure, BPM ADCs in event8 and added some scalers
+(also to accomodate BIC info) in event6.
+
+Revision 1.75  2000/06/10 21:13:43  sirca
+Minor update of oops_scaler_2000 event structure.
+
+Revision 1.74  2000/06/02 13:08:07  distler
+another Ndet update - new tdc connected
+
+Revision 1.73  2000/06/01 19:57:38  distler
+updated Ndet configuration used during Spring 2000 run
+
+Revision 1.72  2000/05/23 20:14:12  sirca
+Major revision due to significant changes in the OOPS data structure.
+Event #6 superseded event #5 (scaler event), DCOS part of event #8 updated.
+
+Revision 1.71  2000/05/23 20:12:05  sirca
+Minute change in printout of the statistics page (run name included).
+
+Revision 1.70  2000/05/23 20:11:17  sirca
+Small changes due to new event type #6 (superseded #5):
+Event #5: now oops1.old_scaler (was oops1.scaler)
+Event #6: now oops1.scaler
+
+Revision 1.69  2000/05/23 20:08:57  sirca
+Addition of new scaler event type #6 (superseded #5) to be printed out,
+tried to preserve backward compatibility using ct->itemOK() for event5.
+Since data structure changed significantly for Bates runs after May 2000,
+defined new structs generally recognised by the '_2000' in their name
+to increase readability.
+
+Revision 1.68  2000/05/23 20:05:16  sirca
+Addition of new scaler event type #6 (superseded #5), added new readouts
+for event type #8, enabled DCOS to perform two-crate readout.
+
+Revision 1.67  2000/05/23 20:02:42  sirca
+Addition of new scaler event type #6 (superseded #5), added new readouts
+for event type #8, enabled DCOS to perform two-crate readout.
+
+Revision 1.66  2000/05/19 12:57:43  merkel
+Bug workaround for ghostscript 5.50
+
+Revision 1.65  2000/05/18 23:03:55  distler
+make Cola work under SuSE 6.4
+
+Revision 1.64  2000/05/18 18:57:00  merkel
+Some bugs and strange things for S.u.S.E Linux 6.4 removed
+
+Revision 1.63  2000/04/23 16:12:22  a1online
+small fixes to get Hadron running again
+updated ToF.cc
+
+Revision 1.62  2000/04/23 14:16:12  a1online
+changes to the eepn Cola version that were scattered
+in different directories. I hope I got it all right.
+
+Revision 1.61  2000/04/23 11:52:25  distler
+Haralds fixes: ToF data structure, hadron structure, run database
+
+Revision 1.60  2000/04/16 22:08:26  a1online
+New data structure for TOF
+several bugfixes in Hadron3, Tof
+
+Revision 1.59  2000/04/13 17:37:12  merkel
+ToF Fourvector
+
+Revision 1.58  2000/04/12 15:06:03  merkel
+several small changes...
+GLOBALWEIGHT for .col files
+
+Revision 1.57  2000/04/12 14:49:07  merkel
+rundatabse for ToF
+
+Revision 1.56  2000/04/11 16:02:34  merkel
+.
+
+Revision 1.55  2000/04/11 15:27:09  merkel
+Sorry a tiny bug...
+
+Revision 1.54  2000/04/07 11:22:26  cola
+H3 names changed
+
+Revision 1.53  2000/04/06 17:51:23  cola
+H3 Fourvector accessible
+
+Revision 1.52  2000/04/06 16:10:36  cola
+Hadron3 raw data anlysis included bu Louk Lapikas
+Checkin by Harald Merkel
+
+Revision 1.51  2000/04/06 16:08:12  cola
+don't include <String.h>
+
+Revision 1.50  2000/04/06 14:25:07  cola
+Hadron3 included
+
+Revision 1.49  2000/03/22 09:13:50  weism
+Bugfix:
+  14 paddles in spectrometer B (not 15)
+
+Revision 1.48  2000/03/20 16:32:19  weism
+Added two histograms:
+	Spec. ?/[xs][12]-layer/Good Wires
+	Spec. ?/[xs][12]-layer/Bad Wires
+Modified histogram:
+	Spec. ?/[xs][12]-layer/Nr of Wire
+
+Revision 1.47  2000/03/08 13:23:05  weism
+Bugfix:
+  Different online variables are now used for the pulse height correction
+  and the energy calculation of the scintillators
+  (*.Energy.left_corr, *.Energy.right_corr)
+
+Revision 1.46  2000/03/06 22:35:22  weism
+New raw histograms:
+  drift time difference between two wires          "Cell Time"
+  reconstructed distance between two signal wires  "Width of Cell"
+  drift time spectrum for each dE/ToF paddle       "Paddle/?"
+
+New rundb variables:
+  relative paddle offset  [ABC].VDC.[xs][12].paddle
+  minimum drift time      [ABC].VDC.[xs][12].MinimumDrift
+
+New environment variables:
+  File name for the pedestal (cerenkov) files  PEDFILE_[ABC]
+
+Bug fixes:
+  online variables "x" and "slope" now contain the correct values
+  disables wires are no longer used in a comparison (when mode = +/-1)
+  missing pedestal files for the cerenkov no longer cause a segmentation fault
+
+Revision 1.45  2000/02/10 16:34:55  merkel
+bug in hmcat for last argument
+
+Revision 1.44  2000/02/09 15:47:02  merkel
+Radiation Correction without Peaking Approx.
+
+Revision 1.43  2000/02/09 15:24:24  friedric
+(FAKE) LOG-scale auch fuer 3d-plots (z-Achse)
+
+Revision 1.42  2000/02/03 13:01:28  friedric
+Radiation: Documentation, Comments updated & debugged
+Spence function: better evaluation
+
+Revision 1.41  2000/02/03 12:58:09  friedric
+Log scale: If more than 12 orders of magnitude, print only every third,
+and some other tiny changes
+
+Revision 1.40  2000/02/03 12:50:43  friedric
+irgendwas -4711
+
+Revision 1.39  2000/02/02 13:22:35  merkel
+Bug in logarithmic for empty histograms
+
+Revision 1.38  2000/02/02 12:48:13  merkel
+Some more Options for hmcat
+-C change Directory
+-o Output File
+-v Verbose
+
+Revision 1.37  2000/02/02 11:33:00  merkel
+move_dE_ToF now with run.db start values
+paddlecalibration is obsolete
+
+Revision 1.36  2000/01/26 16:47:01  merkel
+Makefile:     UniqRunDB in A1-Cola
+rundatabase : double entry D.momRes
+LumiSum:      Locale set to US
+
+Revision 1.35  2000/01/26 14:08:01  merkel
+continued...
+
+Revision 1.34  2000/01/26 13:40:00  merkel
+Some new classes of libpq++.h
+
+Revision 1.33  2000/01/24 15:39:14  groezing
+Added default output-filename to FILE-Command in case environment
+variable is not set.
+
+Revision 1.32  2000/01/20 14:20:40  friedric
+Snow-bug removed (density from run.db is now taken into account)
+
+Revision 1.31  2000/01/19 16:44:43  merkel
+Documentation
+
+Revision 1.30  2000/01/19 16:39:34  weism
+TDC single wire offsets
+
+Revision 1.29  2000/01/17 15:37:31  friedric
+Several modifications for the simulation concerning Bremsstrahlung treatment,
+Landau distribution, ColliB (now all four parts top, bottom, left, right
+also independently adjustable)
+
+Revision 1.28  2000/01/16 00:45:28  distler
+Y2K correction in Cola.cc
+enabled second vdc package of specC
+
+Revision 1.27  2000/01/14 15:29:42  friedric
+Better Landau distribution (gives correct values also for l>50, where the old
+Cola distr. dropped to zero. For the lH2 target, this meant no energylosses
+bigger than 2MeV were simulated; 2% error)
+
+Revision 1.26  2000/01/13 16:16:19  merkel
+Y2K, update of documentation in structs
+
+Revision 1.25  2000/01/03 18:06:46  friedric
+New hm application to add histograms in different his-files like hmcat,
+but with weights which must be specified in an extra file (first argument)
+
+Revision 1.24  2000/01/03 18:04:45  friedric
+Makefile.in: hmcatw included
+
+Revision 1.23  2000/01/03 12:45:40  ewald
+Enabled to set Length and Walllength of the Target Cryo.Cylinder via run.db. Removed a very small (bracket) error in Material.cc.
+
+Revision 1.22  1999/12/20 13:27:16  merkel
+Update for Suse 6.3
+
+Revision 1.21  1999/12/16 21:47:31  friedric
+necessary changes in the structure of Elements and Materials
+for the refinements for radiation treatment
+
+Revision 1.20  1999/12/16 21:45:44  friedric
+Some refinements concerning radiation, but not really nice
+(external radiation for compounds is a problem)
+
+Revision 1.19  1999/12/06 12:16:13  merkel
+Bug in hm2hbook for 2D-Histograms
+
+Revision 1.18  1999/12/04 06:12:21  a1online
+calibration constants for rundb
+
+Revision 1.17  1999/12/03 10:03:19  merkel
+"File" statement added to .col syntax
+
+Revision 1.16  1999/12/01 15:27:29  merkel
+SQL query by runname introduced (option -V for Lumi++)
+
+Revision 1.15  1999/12/01 10:47:58  merkel
+Compiler flags for less warnings
+
+Revision 1.14  1999/12/01 10:45:27  merkel
+Error Propagation improved
+
+Revision 1.13  1999/11/30 16:32:07  distler
+numbering for bars and stands in tofa1.h starts with one
+
+Revision 1.12  1999/11/30 15:37:55  distler
+changed tofa1.h to real C syntax
+
+Revision 1.11  1999/11/30 15:13:45  distler
+hadron3 and tofa1 structure added to abcn
+
+Revision 1.10  1999/11/24 13:48:23  groezing
+Removed bugs in Online.h since last commit on 22.11.99
+
+Revision 1.9  1999/11/23 17:01:44  friedric
+Some VDC fun
+
+Revision 1.8  1999/11/22 17:31:15  groezing
+Added FPP ConeTesT
+
+Revision 1.7  1999/11/22 17:28:19  groezing
+Added FPP Analyzing power calculation, update of comments (engl. version).
+
+Revision 1.6  1999/11/19 14:57:16  ewald
+Implemented a routine that calculates the ernergy loss in the spectrometer and returns the pathlength of the particle between exit spectrometer vaccum system and the detectors as well as the flight time for this path with reduced beta because of energy loss.
+
+Revision 1.5  1999/11/19 13:09:22  friedric
+Postscript files for VDC trajectories
+Set A/B/C.VDC.trackDir in the run.db to a directory name to store ps files.
+For example, A.VDC.trackDir="Atracks" (Directory Atracks/ must exist)
+will contain files event_1.ps, event_2.ps,... with the tracks of
+spec. A
+Careful with memory consumption! Use a filter (for example, on big VDC
+errors) first, or stop evaluating after 500 events or so.
+
+Revision 1.4  1999/11/16 17:12:50  distler
+additional cindyoutstream methods for aqua frontend
+to set event count and code in mecdas header
+
+Revision 1.3  1999/11/15 10:46:27  merkel
+Makefile for Spinor
+
+Revision 1.2  1999/11/12 11:38:44  distler
+updated libpg++ support for latest RedHat system.
+removed files Cola/ColaMIT/ReadRundb.cc Cola/ColaMIT/RunParser.y
+and linked ColaMIT rundb support to the Cola files.
+revised the ColaMIT/Makefile in order to include the right
+rundatabase.h file from ColaMIT
+
+Revision 1.1  1999/11/12 11:38:43  distler
+Initial revision
+

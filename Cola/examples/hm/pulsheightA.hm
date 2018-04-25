@@ -1,0 +1,21 @@
+zone 2 4 1
+Title "Pulsheight in Spectrometer A"
+gray "Pulsheight/Paddle dE1: dE - T_kin!"
+gray "Pulsheight/Paddle dE2: dE - T_kin!"
+gray "Pulsheight/Paddle dE3: dE - T_kin!"
+gray "Pulsheight/Paddle dE4: dE - T_kin!"
+gray "Pulsheight/Paddle dE5: dE - T_kin!"
+gray "Pulsheight/Paddle dE6: dE - T_kin!"
+gray "Pulsheight/Paddle dE7: dE - T_kin!"
+gray "Pulsheight/Paddle dE8: dE - T_kin!"
+gray "Pulsheight/Paddle dE9: dE - T_kin!"
+gray "Pulsheight/Paddle dE10: dE - T_kin!"
+gray "Pulsheight/Paddle dE11: dE - T_kin!"
+gray "Pulsheight/Paddle dE12: dE - T_kin!"
+gray "Pulsheight/Paddle dE13: dE - T_kin!"
+gray "Pulsheight/Paddle dE14: dE - T_kin!"
+gray "Pulsheight/Paddle dE15: dE - T_kin!"
+gray "Pulsheight/Paddle dE16: dE - T_kin!"
+close
+
+

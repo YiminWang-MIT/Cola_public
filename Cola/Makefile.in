@@ -1,0 +1,223 @@
+#								 -*-makefile-*-
+#
+# $Id: Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+.PHONY : all clean htmldoc psdoc veryclean distclean first
+
+srcdir	= 	@srcdir@
+VPATH	= 	@srcdir@
+
+-include	../Makefile.inc
+
+EXP	= 	abcn
+HASNDET =	1
+OUT     = 	online
+
+INCDIR	= 	$(srcdir)/include
+EXPDIR	= 	$(INCDIR)/$(EXP)
+EXPINCL	=	$(addprefix $(EXPDIR)/,$(EXP).log $(EXP).h \
+			a.h b.h c.h d.h detector.h hadron3.h ndet.h \
+			npolraw.h spectrometer.h statistics.h tofa1.h)
+OUTDIR	= 	$(INCDIR)/$(OUT)
+
+DOCSRC  =       Aqua_$(EXP).list Aqua_$(OUT).list \
+		$(wildcard $(srcdir)/doc/*.html)
+
+CXXFLAGS= 	$(OPTS) $(WARN)
+LDFLAGS	= 	$(OPTS) -L$(libdir)
+CPPFLAGS=	$(DEFS) -DHASNDET=$(HASNDET) -I. -I.. \
+		-I$(srcdir) -I$(topdir) -I$(EXPDIR) -I$(OUTDIR) \
+		-I$(incdir) -I$(incdir)/Aqua $(WX_CFLAGS)
+
+CPPFLAGS +=     $(ROOT_CFLAGS)
+
+NTPLIBS =	-L$(CERNLIB) -lpacklib -lkernlib $(FLIBS)
+
+BINARY  =
+ifeq ($(ISSTATIC),0)
+BINARY	+= 	Cola++ Lumi++
+endif
+BINARY	+= 	Simul++ UniqRunDB move_dE_ToF mpana tdc_offsets \
+		luminosity++
+TOOLS	=
+
+all :		$(BINARY) $(TOOLS) Elosstest landautest
+
+CXXSRC	=	Cerenkov.cc Cola.cc ColaNtuple.cc ConeTest.cc \
+		ExpressionParser.parse.cc Focus.cc \
+		Lumi++.cc Luminosity.cc Masses.cc Material.cc Parsermain.cc \
+		QuasiRandom.cc Radiation.cc Reactions.cc ReadRundb.cc \
+		RunParser.parse.cc SCINTraw.cc SQL.cc Simul.cc \
+		Targetlength.cc VDCraw.cc evaluate.cc hdcPacket.cc \
+		hdcPlane.cc ndet.cc npol.cc ppol.cc display.cc Aqua_$(OUT).cc \
+		Elosstest.cc landautest.cc MWPCK.cc TOFK.cc KaosK.cc \
+		KaosMatrixManager.cc PCAManager.cc luminosity++.cc
+
+AUXOBJ	=       Luminosity.o Masses.o Material.o Parsermain.o QuasiRandom.o \
+		Radiation.o ReactionParser.lex.o ReactionParser.parse.o \
+		Reactions.o ReadRundb.o SQL.o Targetlength.o evaluate.o \
+		VDCraw.o display.o ppol.o ConeTest.o MWPCK.o TOFK.o KaosK.o \
+		KaosMatrixManager.o PCAManager.o
+
+ANAOBJ	=	Cerenkov.o Focus.o SCINTraw.o \
+		hdcPacket.o hdcPlane.o ndet.o npol.o
+
+NTOBJ	=	ColaNtuple.o
+
+HEADER	= 	VDCraw.h hdcPlane.h hdcPacket.h ppol.h ConeTest.h ndet.h \
+		MWPCK.h TOFK.h KaosK.h KaosMatrixManager.h PCAManager.h
+
+Parsermain.o :  Parsermain.cc ExpressionParser.parse.cc
+ReadRundb.o : 	ReadRundb.cc  RunParser.parse.cc
+Reactions.o :   ReactionParser.parse.h
+man : 		man1 man1/Lumi++.1 man1/Simul++.1 man1/Cola++.1
+
+Cola++ :	Cola.o $(ANAOBJ) $(NTOBJ) $(AUXOBJ) @ROOTOBJ@ Aqua_$(OUT).o \
+		$(LIBDETECT)  $(LIBSIMREADER) $(LIBSIMUL) $(LIBCH) \
+		$(LIBMODEL) $(LIB4VEC) $(LIBHMVIEW) \
+		$(LIBHMBOOK)  $(LIBTMA) $(LIBAQUA_READER)
+		$(reportaction)
+		@ $(CXX) $(LDFLAGS) $^ -o $@ $(WX_LIBS) $(MOTIFLIBS) \
+		$(LIBS) $(PGLIBS) $(NTPLIBS) $(ROOT_LIBS) $(LDREADER) -lm
+		$(reportsuccess)
+
+Lumi++ :	Lumi++.o $(AUXOBJ) $(LIBCH) $(LIB4VEC) \
+		$(LIBHMVIEW) $(LIBSIMUL) $(LIBHMBOOK) $(LIBAQUA_READER)
+		$(reportaction)
+		@ $(CXX) $(LDFLAGS) $^ -o $@ $(WX_LIBS) $(MOTIFLIBS) \
+		$(LIBDETECT) $(LIBS) $(PGLIBS) $(LDREADER) -lm
+		$(reportsuccess)
+
+Simul++ :	Simul.o $(NTOBJ) $(AUXOBJ) Aqua_$(OUT).o \
+		$(LIBDETECT) $(LIBSIMUL) $(LIBCH) $(LIB4VEC) $(LIBHMVIEW) \
+		$(LIBHMBOOK) $(LIBMODEL) $(LIBAQUA_READER) $(LIBTMA)
+		$(reportaction)
+		@ $(CXX) $(LDFLAGS) $^ -o $@ $(WX_LIBS) $(MOTIFLIBS) \
+		$(NTPLIBS) $(ROOT_LIBS) $(LIBS) $(PGLIBS) $(LDREADER) \
+		$(GSLLIBS) -lm $(FLIBS) 
+		$(reportsuccess)
+
+BetheHeitler :	BetheHeitler.o $(NTOBJ) $(AUXOBJ) Aqua_$(OUT).o \
+		$(LIBDETECT) $(LIBSIMUL) $(LIBCH) $(LIB4VEC) $(LIBHMVIEW) \
+		$(LIBHMBOOK) $(LIBMODEL) $(LIBAQUA_READER) 
+		$(reportaction)
+		@ $(CXX) $(LDFLAGS) $^ -o $@ $(WX_LIBS) $(MOTIFLIBS) \
+		$(NTPLIBS) $(LIBS) $(PGLIBS) $(LDREADER) -lm $(FLIBS)
+		$(reportsuccess)
+
+CalcPolarisation : CalcPolarisation.o $(NTOBJ) $(AUXOBJ) Aqua_$(OUT).o \
+		$(LIBDETECT) $(LIBSIMUL) $(LIBCH) $(LIB4VEC) $(LIBHMVIEW) \
+		$(LIBHMBOOK) $(LIBMODEL) $(LIBAQUA_READER) $(LIBTMA)
+		$(reportaction)
+		@ $(CXX) $(LDFLAGS) $^ -o $@ $(WX_LIBS) $(MOTIFLIBS) \
+		$(NTPLIBS) $(LIBS) $(PGLIBS) $(LDREADER) -lm $(FLIBS)
+		$(reportsuccess)
+
+move_dE_ToF:	move_dE_ToF.o $(AUXOBJ) \
+		$(LIBCH) $(LIBSIMUL) $(LIB4VEC) $(LIBHMVIEW) $(LIBHMBOOK) \
+		$(LIBAQUA_READER)
+		$(reportaction)
+		@ $(CXX) $(LDFLAGS) $^ -o $@ $(LIBDETECT)\
+		$(WX_LIBS) $(MOTIFLIBS) $(PGLIBS) $(LIBS) $(LDREADER) -lm
+		$(reportsuccess)
+
+tdc_offsets:	tdc_offsets.o
+		$(reportaction)
+		@ $(CXX) $(LDFLAGS) $^ $(LDSHARE) $(LIBHMBOOK) $(LIBS) -lm -o $@
+		$(reportsuccess)
+
+Elosstest:	Elosstest.o Masses.o Material.o QuasiRandom.o
+		$(reportaction)
+		@ $(CXX) $(LDFLAGS) $^ $(LDSHARE) $(LIB4VEC) $(LIBS) -lm -o $@
+		$(reportsuccess)
+landautest:	landautest.o Masses.o Material.o QuasiRandom.o Radiation.o
+		$(reportaction)
+		@ $(CXX) $(LDFLAGS) $^ $(LDSHARE) $(LIB4VEC) $(LIBS) -lm -o $@
+		$(reportsuccess)
+
+luminosity++:	luminosity++.o $(LIBCH) $(LIB4VEC) \
+		$(LIBAQUA_READER)
+		$(reportaction)
+		@ $(CXX) $(LDFLAGS) $^ -o $@ \
+		$(LIBDETECT) $(LIBS) $(PGLIBS) $(LDREADER) -lm
+		$(reportsuccess)
+
+UniqRunDB.o: 	../ColaMIT/UniqRunDB.cc UniqRunDB.lex.h UniqRunDB.parse.h
+	$(reportaction)
+	@ $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+UniqRunDB.parse.cc UniqRunDB.parse.h : ../ColaMIT/UniqRunDB.y
+	$(reportaction)
+	@ $(BISONXX) -dvy $(BISONFLAGS) $^ -o $*.cc -h $*.h
+
+UniqRunDB.lex.cc UniqRunDB.lex.h : ../ColaMIT/UniqRunDB.l
+	$(reportaction)
+	@ $(FLEXXX) -8 $(FLEXFLAGS) -o$*.cc -h$*.h $<
+
+UniqRunDB :     UniqRunDB.o UniqRunDB.lex.o UniqRunDB.parse.o
+	        $(reportaction)
+		@ $(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+		$(reportsuccess)
+
+SQL.o :	SQL.cc
+	$(reportaction)
+	@ $(CXX) $(PGINCL) $(CPPFLAGS) $(CXXFLAGS) $(TARGET_ARCH) -c $< -o $@
+
+.SQL.depend :	SQL.cc
+	$(reportaction)
+	@ $(CXX) -MM $(PGINCL) $(CPPFLAGS) $^ > $@
+
+$(addprefix Aqua_$(EXP),.cc .h .list) :	$(EXPINCL) $(AQUACONFIG)
+	$(AQUACONFIG) --base $(EXPDIR) --exp $(EXP) --file $(EXP).log
+
+$(addprefix Aqua_$(OUT),.cc .h .list) :	$(OUTDIR)/$(OUT).h $(AQUACONFIG)
+	$(AQUACONFIG) --base $(OUTDIR) --exp $(OUT) --file $(OUT).h
+
+$(LIB4VEC) $(LIBCH) $(LIBHMBOOK) $(LIBHMVIEW) $(LIBTMA) $(LIBHBOOK):
+		$(MAKE) -C $(dir $@) $(notdir $@)
+
+htmldoc :
+		- cp -r $(srcdir)/doc/srcdoc srcdoc
+		- cd $(srcdir)/doc/srcdoc; \
+		  $(DOCXX) -B a1header.html \
+		           -d $(docdir)/ColaSourceDoc Sourcecode.dxx
+		- cp $(srcdir)/doc/srcdoc/html/*.gif $(docdir)/ColaSourceDoc
+
+psdoc :		htmldoc
+		- cd $(srcdir)/doc/srcdoc; \
+		$(DOCXX) -o $(docdir)/ColaSourceDoc/Cola++.tex \
+		         -eo a4paper -t Sourcecode.dxx
+		- TEXINPUTS=$$TEXINPUTS:$(srcdir)/../Doc/src/ \
+	          $(LATEX) $(docdir)/ColaSourceDoc/Cola++.tex
+		- TEXINPUTS=$$TEXINPUTS:$(srcdir)/../Doc/src/ \
+	          $(LATEX) $(docdir)/ColaSourceDoc/Cola++.tex
+		- $(DVIPS) -o $(docdir)/ColaSourceDoc/Cola++.ps Cola++.dvi
+
+install :	.install htmldoc
+.install:	$(BINARY) $(DOCSRC) $(bindir) $(libdir) $(docdir) $(mandir) man
+		$(foreach file,$(BINARY),$(INSTALL_PROGRAM) $(file) $(bindir);)
+		$(foreach file,$(TOOLS), $(INSTALL_PROGRAM) $(file) $(bindir);)
+		$(foreach file,$(DOCSRC), $(INSTALL_DATA)   $(file) $(docdir);)
+		$(foreach file,man1/*,    $(INSTALL_DATA)   $(file) $(mandir);)
+		$(INSTALL_PROGRAM) $(srcdir)/LumiSum $(bindir)
+		date > $@
+
+$(bindir) $(libdir) $(docdir) $(mandir) man1 : ; mkdir -p $@
+
+clean : ;	rm -rf *~ *.o core tmp $(PICDIR) nohup.out
+
+veryclean :	clean
+		rm -f Aqua_$(EXP).{cc,h,list} Aqua_$(OUT).{cc,h,list}
+		rm -f $(BINARY) $(TOOLS) .install .*.depend
+		rm -f *.parse.cc *.parse.h *.parse.output *.lex.cc *.lex.h
+		rm -f Cola++.1 Lumi++.1 Simul++.1
+		rm -rf man1 srcdoc
+
+distclean:	veryclean
+		rm -f Makefile
+
+.Reactions.depend :	ReactionParser.parse.cc
+.ReadRundb.depend :	RunParser.parse.cc ExpressionParser.parse.cc
+
+-include	$(CXXSRC:%.cc=.%.depend)

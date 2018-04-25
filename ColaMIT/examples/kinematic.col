@@ -1,0 +1,93 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/kinematic.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+
+
+#define PI      3.141592653589793
+#define radiant (PI/180)
+#define degree  (180/PI)
+
+#define mass_proton   0.93827231
+#define mass_deuteron 1.87561339
+#define mass_pi0      0.1349764
+#define mass_electron 0.00051099
+
+Fourvector Target       = { mass_proton } ;
+Fourvector Electron_in  = Beam ;
+Fourvector Electron_out = OHIPS(mass_electron) ;
+Fourvector ProtonA      = OOPS_A(mass_proton) ;
+Fourvector ProtonB      = OOPS_B(mass_proton) ;
+Fourvector vPhoton      = Electron_in - Electron_out ;
+
+Scalar pElectron   = 1000 * momentum (Electron_out) ;
+Scalar thElectron  = theta (Electron_out) * degree ;
+Scalar phiElectron = varphi (Electron_out) * degree ;
+
+Histogram "kinematic/electron momentum" \
+	pElectron("p?electron!", "MeV/c", 440.0, 540.0, 200);
+Histogram "kinematic/electron scattering angle" \
+	thElectron("[q]?electron!", "deg.", 28.0, 37.0, 180);
+Histogram "kinematic/electron out-of-plane angle" \
+	phiElectron("[f]?electron!", "deg.", -12.0, 12.0, 240);
+
+Scalar energytransfer   = 1000 * energy (vPhoton)
+Scalar momentumtransfer = 1000 * momentum (vPhoton)
+Scalar Q2               = (momentumtransfer^2 - energytransfer^2) * 1E-6
+
+Histogram "kinematic/energy transfer" \
+	energytransfer("E?transfer!", "MeV", 280.0, 380.0, 100) ;
+Histogram "kinematic/momentum transfer" \
+	momentumtransfer("p?transfer!", "MeV/c", 280.0, 380.0, 100) ;
+Histogram "kinematic/4momentum transfer" \
+	Q2("Q^2!", "GeV^2!/c^2!", 0.0, 0.2, 100) ;
+
+Fourvector pionA = Target + vPhoton - ProtonA ;
+Fourvector pqA = Rotate(ProtonA, vPhoton) ;
+Scalar theta_pqA = theta (pqA) * degree ;
+Scalar pProtonA   = 1000 * momentum (ProtonA) ;
+Scalar thProtonA  = theta (ProtonA) * degree ;
+Scalar phiProtonA = -varphi (ProtonA) * degree ;
+Scalar mmissA = 1000 * sqrt(energy(pionA)^2-momentum(pionA)^2) ;
+
+Histogram "kinematic/proton (A) momentum" \
+	pProtonA("p?proton! (A)", "MeV/c", 300.0, 700.0, 200);
+Histogram "kinematic/proton (A) scattering angle" \
+	thProtonA("[q]?proton! (A)", "deg.", 15.0, 50.0, 1000);
+Histogram "kinematic/proton (A) out-of-plane angle" \
+	phiProtonA("[f]?proton! (A)", "deg.", 0.0, 45.0, 225);
+Histogram "kinematic/theta pq (A)" \
+	theta_pqA("[q]?pq! (A)", "deg.", 0.0, 45.0, 90) ;
+Histogram "kinematic/missing mass (A)" \
+	mmissA("missing mass (A)", "MeV/c^2!", 50.0, 250.0, 400);
+
+Fourvector pionB = Target + vPhoton - ProtonB ;
+Fourvector pqB = Rotate(ProtonB, vPhoton) ;
+Scalar theta_pqB = theta (pqB) * degree ;
+Scalar pProtonB   = 1000 * momentum (ProtonB) ;
+Scalar thProtonB  = theta (ProtonB) * degree ;
+Scalar phiProtonB = -varphi (ProtonB) * degree ;
+Scalar mmissB = 1000 * sqrt(energy(pionB)^2-momentum(pionB)^2) ;
+
+Histogram "kinematic/proton (B) momentum" \
+	pProtonB("p?proton! (B)", "MeV/c", 300.0, 700.0, 200);
+Histogram "kinematic/proton (B) scattering angle" \
+	thProtonB("[q]?proton! (B)", "deg.", 15.0, 50.0, 1000);
+Histogram "kinematic/proton (B) out-of-plane angle" \
+	phiProtonB("[f]?proton! (B)", "deg.", 0.0, 45.0, 225);
+Histogram "kinematic/theta pq (B)" \
+	theta_pqB("[q]?pq! (B)", "deg.", 0.0, 45.0, 90) ;
+Histogram "kinematic/missing mass (B)" \
+	mmissB("missing mass (B)", "MeV/c^2!", 50.0, 250.0, 400);
+
+Cut ((1000.0<coinc2)&&(coinc2<1150.0)) {
+	Histogram "kinematic/tof cut/missing mass (A)" \
+		mmissA("missing mass (A)", "MeV/c^2!", 50.0, 250.0, 400);
+	Histogram "kinematic/tof cut/missing mass (B)" \
+		mmissB("missing mass (B)", "MeV/c^2!", 50.0, 250.0, 400);
+}

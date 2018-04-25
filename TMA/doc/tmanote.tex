@@ -1,0 +1,325 @@
+\documentstyle[11pt,a4,german,twoside]{kph_art}
+\begin{document}
+\date{14 April 1992}
+\title{
+        TraceMachine \\
+        Schnelle und Flexible Bahnr"uckrechnung \\
+        Interner Report
+}
+\author {Helmut Kramer\thanks{E-Mail:
+kramer@kph.uni-mainz.de} \\
+Institut f"ur Kernphysik, 
+Johannes Gutenberg-Universit"at,  Mainz, FRG
+}
+\maketitle
+\begin{abstract}
+Es wird ein  flexibler und effizienter Algorithmus
+zur Bahnr"uckrechnung in einem Spektrometer und dessen 
+Implementation {\tt TraceMachine}
+in der Sprache C vorgestellt. 
+Die Implementation f"uhrt beim Vergleich mit den herk"ommlichen  
+Verfahren bei einer realistischen Anwendungen auf einer RISC - Workstation 
+zu einem Geschwindigkeitsgewinn von einem
+Faktor 2.4.\\
+An Hand dieses Beispiels wird auch gezeigt, da"s der Einsatz
+einer modernen Sprache wie z.B. C, gegen"uber der traditionell in diesem
+Gebiet eingesetzen Sprache 
+FORTRAN\footnote{FORTRAN $ := $ FORTRAN77 oder VAX-FORTRAN} auch bei
+numerischen Aufgabestellungen Vorteile bringen kann. 
+FORTRAN bringt bei diesem Problem aus prinzipiellen Gr"unden 
+Limitierungen in der Wahl des Algorithmus und damit bzgl. Geschwindigkeit 
+und Speichereffizienz  mit sich.
+\end{abstract}
+\section{Problemstellung}
+Bei der On- und Offline Analyse der Streudaten aus den Experimenten an
+den gro"sen Spektrometern m"ussen die Targetkoordinaten aus den
+Fokalebenenkoordinaten bestimmt werden \cite{eo}. Die Abbildung
+ergibt sich durch L"osung  der Bewegungsgleichung von geladenen Teilchen
+im Spektrometerfeld und anschliesender Taylorentwicklung zu
+\begin{equation}
+        q_{tg}^{(i)} = 
+        \sum_{j,k,l,m}^{n_{x}, n_{y}, n_{\theta }, n_{\phi}}    
+         c_{jklm}^{(i)} x_{fp}^j y_{fp}^k \theta _{fp}^l \phi _{fp} ^m
+\label{taylor}
+\end{equation}
+wobei $ i $ die Targetkoordinaten durchl"auft,  also 
+$\{\delta _{tg} , y_{tg},\theta _{tg} , \phi _{tg} \}. $
+Diese Berechnung mu"s f"ur jedes Ereignis durchgef"uhrt werden. 
+Aus diesem Grund ist es notwendig, die Berechnung so effizient wie m"oglich 
+zugestalten. 
+Neben der Effizienz mu"s der Algorithmus  jedoch
+so flexibel sein, da"s auch ohne Neukompilation von Programmen
+die Werte der Transferkoeffizienten $ c_{jklm}^{(i)} $
+oder die Ordnung in der Taylorentwicklung ge"andert werden k"onnen.
+Da die nach meiner Ansicht bisher verwendeten 
+Implementierungen in beiderlei Hinsicht nicht befriedigend sind,  wurde
+ein neuer einfacher und dennoch effizienter Algorithmus erdacht und 
+implementiert.
+\section{Grundidee des Algorithmus}
+Auf Grund von Formel (\ref{taylor}) ist klar, da"s eine der 
+h"aufigsten Operationen,
+die bei der Berechnung von $ \vec{q}_{tg} $ angewandt wird, die 
+Multiplikation
+von m"oglicherweise sogar doppeltgenauen reellen Zahlen (float) ist. 
+Leider ist die (floating point) Multiplikation
+eine der rechenintensivsten Operationen (siehe Tabelle \ref{benchops}). 
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|c|c|c|}
+\hline
+Operation & DECstation & E6 without FPU  & 486DX/33\\
+          & in $\mu$s  & in $\mu$s  & in $\mu$s \\    
+\hline
+\tt  i = j + k   &     0.054  &       0.7   & 0.43 \\
+\tt  a = b + c   &     0.289  &      32.3   & 0.99 \\
+\tt  i = j * k   &     0.484  &      4.7    & 0.76 \\
+\tt  a = b * c   &     0.374  &     47.5    & 1.04 \\
+\tt  f = g * h   &     0.303  &      --     & --   \\
+\tt  a <- i      &     0.2    &      --     & --   \\
+\tt  *ip         &     0.012  &      0.06   & 0.04\\  
+\hline 
+\end{tabular}
+\end{center}
+\caption{
+  Aufgelistet sind die Rechenzeiten, die auf den beiden Testrechnern
+  und einem PC f"ur typische Operationen benoetigt werden. Die Variablen
+  sind in (C-Notation) vom Typ {\tt double a,b,c; float f,g,h; 
+   long i,j,k, *ip}.
+  In der Tabelle  steht {\tt <-} f"ur die (implizite) Umwandlung 
+  eines {\tt long} in einen
+  {\tt double}, wie sie z.B. bei einer Zuweisung n"otig werden kann.
+}
+\label{benchops}
+\end{table}
+Deshalb h"angt
+die Geschwindigkeit jedes R"uckrechnungsalgorithmus wesentlich von der Anzahl der
+anstehenden Multiplikationen ab. 
+Durch Ausnutzung von im Verlauf der Rechnung bereits gewonnener
+Ergebnisse kann diese Zahl verringert werden.
+\begin{itemize}
+\item 
+        Zun"achst ordnet man alle vorhandenen Transferkoeffizienten in
+        einer Tabelle (Transfermatrix) an. In einer Spalte stehen die 
+        Koeffizienten zu gleichen Potenzen $ (j,k,l,m)$  in 
+          $ x_{fp}^j y_{fp}^k \theta _{fp}^l \phi _{fp} ^{m}.$ 
+        In den Zeilen sind die Terme einer Targetkoordinate angeordnet.
+        L"auft man die Tabelle in vertikaler Richtung durch so mu"s man
+        jeden Term nur einmal auswerten. Dadurch kann man gegen"uber dem
+        "ublichen Verfahren bei dem reihenweise vorgegangen wird, die
+        Anzahl der Multiplikationen um maximal 75 \%  verringern.
+         
+\item
+        Eine weitere Einsparung ergibt sich, wenn man beachtet, da"s die
+        einzelnen Spalten Produkte aus Potenzen der Fokalebenenkoordinaten
+        von der Form $  x_{fp}^j y_{fp}^k \theta _{fp}^l \phi _{fp} ^m $
+        sind. Es ist deshalb sinnvoll alle ben"otigten Einzelpotenzen
+        $ x_{fp}^{(j) k}$  vorher zuberechnen, und in einer 
+        Tabelle (lookup-table) abzulegen.
+        Bei der sp"ateren Berechnung werden die Terme einfach aus der 
+        Tabelle abgerufen (lookup - Verfahren).
+\item
+        Selbst beim Aufbau der lookup-table kann man Zeit sparen, da sich
+        die Eintr"age f"ur die Potenzen einer Koordinate rekursiv ergeben
+        $ x_{fp}^{(j) k+1} = x_{fp}^{(j) k} x_{fp}^{(j)} $. 
+        Man berechnet deshalb die Eintr"age g"unstigerweise
+        in einer Schleife und vermeidet unn"otiges Potenzieren.
+%        Dies bringt insgesamt ein Zeitgewinn, weil sich dieser Vorgang f"ur 
+%        jede Koordinate, bzw. jedes Ereignis von neuem wiederholt
+%       ist der totale Zeitgewinn von Bedeutung.
+
+\end{itemize}
+
+\section{Zeiger und C}
+
+Die wesentlichen Merkmale des Algorithmus liegen eigentlich auf der
+Hand, wurden allerdings bisher in den mir bekannten Programmen zur
+Rekonstruktion nicht eingesetzt. Wo liegen die Probleme? 
+
+Traditionell werden
+numerische Probleme in der Physik in der Sprache FORTRAN implementiert.
+Das spaltenweise Durchlaufen der Koeffiziententabelle setzt nat"urlich
+vorraus, da"s man zu jedem Zeitpunkt "uber einen Verweis auf die jeweilige
+Targetkoordinate verf"ugt. Dies ist jedoch in FORTRAN nur indirekt "uber
+einen Index oder Indexvektor m"oglich. 
+Dieses Verfahren ist gegen"uber direkten Methoden mit Zeigern
+(pointer) langsam und f"uhrt zu recht un"ubersichtlichen und damit auch 
+fehleranf"alligen Code. 
+
+Au"serdem stellt sich das Problem der effizienten Speicherausnutzung.
+Da nicht alle $ c_{jklm}^{(i)} \neq 0$  (aus Glg.\ref{taylor}) und
+die jeweils maximalen Potenzen nicht notwendigerweise gleich sind,
+werden die einzelnen Spalten der Transfermatrix verschieden dicht 
+besetzt sein. Die Tabelle hat also L"ocher. Ohne dynamische 
+Speicherverwaltung, kommt es bei der gefordeten Flexibilit"at also zu 
+erheblicher
+Speicherverschwendung. Auch die lookup-table ist von variable Gr"o"se,
+ da die Ordnung der Taylorentwicklung varieren kann.
+FORTRAN sieht allerdings keinerlei M"oglichkeiten vor, dynamisch Speicher 
+einzubinden. 
+
+
+Jetzt ist klar, warum ein so einfacher Algorithmus bisher keine Anwendung
+fand. Zur Implementation kommt nur eine Sprache in
+Frage, die nicht mit den genannten Nachteilen ausgestattet ist. 
+C bietet, unter den Hochsprachen, die 
+meisten M"oglichkeiten zur Speicherarithmetik.
+
+\section{Implementation}
+
+\subsection{Aufbau der Transfertabelle}
+
+Der erste Schritt besteht darin die Transferkoeffizienten nach Potenzen
+zu orden, also eine Tranfermatrix aufzubauen. Dieser Schritt wurde
+von den eigentlichen Berechnungsroutinen getrennt und in einem speziellen
+Programm namens {\tt bundle} implementiert. Die Ausgabe dieses Programms
+wird als Datei abgelegt und von den Rekonstruktionsroutinen bei der
+Initialisierung eingelesen. 
+Das Abtrennen dieses Schrittes hat mehrere Vorteile:
+\begin{itemize}
+\item
+        Das Sortieren fuer ein gegebens Polynom wird nur einmal gemacht.
+\item
+        Der zum Sortieren ben"otigte Code mu"s nicht in die Analyse-Programme
+        eingebunden werden.
+        
+\item
+        Die Rekonstruktionsroutinen k"onnen davon ausgehen, da"s die
+        Parameterdatei syntaktisch in Ordnung ist.
+\end{itemize}
+
+Der eigentliche Sortieralgorithmus basiert auf einem Baumalgorithmus
+(``threaded trees'' \ref{schreiner} ),  die dazu notwendigen Routinen standen schon aus 
+einem anderen Projekt zur  Verf"ugung, so da"s die Implementierung sehr 
+schnell durchgef"uhrt werden konnte. 
+
+\subsection {Rekonstruktionsroutinen}
+
+Die eigentlichen Rekonstruktionsroutinen wurden objekt-basiert \cite{booch91}
+implementiert.
+Was hei"st das in diesem Zusammenhang? Mit welchem Objekttyp (Klasse) haben wir
+es zu tun?
+Ganz einfach. Zur R"uckrechnung brauchen wir ein Objekt, das uns bei
+gegebener Fokalebenenkoordinate die entsprechende Targetkoordinate 
+gem"a"s der Spektrometer-spezifischen Abbildungsvorschrift berechnen kann.
+Diese Eigenschaft und Funktionalit"at definiert einen bestimmten 
+Objekttyp (Klasse). Diese Klasse nennen wir {\tt TraceMachine}. 
+Im Gegensatz zur traditionellen Programmierweise, ist 
+der momentane Zustand (z.B. die Transfermatrix) immer Teil einer Objektinstanz 
+und nicht in globalen Variablen abgelegt. 
+Deshalb ist es leicht m"oglich mehrere solcher 
+Rekonstruktionsmaschinen innerhalb eines Programms zu halten, die 
+Organistion wird vom Compiler geleistet. 
+Diese Eigenschaft kann z.B. sehr sinnvoll sein, wenn man bei einer 
+Mehrfachkoinzidenz zwischen den Spektrometern die jeweiligen  Targetkoordinaten
+in einem Schritt bestimmen will. 
+Dies ist mit unserer Vorgehensweise leicht und elegant m"oglich.
+Aus dem Obigen ergeben sich im wesentlichen drei Aufgaben (Methoden), die
+nachfolgend mit der entsprechenden C-Routine aufgelistet sind:
+\begin{itemize}
+\item Konstruktion der Maschine ({\tt TMA\_new()})
+        \begin{itemize}
+                \item Einlesen der Parameterdatei
+                \item Allozierung des notwendigen Speichers
+                \item Verkettung der Daten 
+        \end{itemize}
+\item R"uckrechnung ({\tt TMA\_run})
+\item Vernichtung der Maschine ({\tt TMA\_del()})
+\end{itemize}
+Die hier beschriebene Aufspaltung legt den Schritt zu C++ nahe.
+
+\subsection{Schnittstellen}
+Bisher wurden zwei unterschiedliche Schnittstellen \cite{tmainfo}
+zur Verf"ugung gestellt. Aus der 
+Implementation ergibt sich nat"urlich eine Schnittstelle  zu C. Da jedoch
+ein Gro"steil der Software insbesondere im  Offline-Bereich in
+FORTRAN geschrieben wird, wurde auch f"ur eine Anbindung an FORTRAN gesorgt.
+
+\section{Performance}
+Es wurde bisher nur ein sehr einfacher Performance - Test durchgef"uhrt:
+
+Ein Programm  ({\tt trad.f}), das bisher zur R"uckrechnung verwendet wurde,
+und zwei Programme, die auf dem neuen Algorithmus beruhen {\tt tMachine.c} und 
+{\tt tMachineF.f}, wurden zur Berechnung von 100.000 Transformationen
+herangezogen. Der Unterschied zwischen den beiden neuen Programmen
+besteht darin, da"s das eine Programm aus C und das anderen aus FORTRAN 
+heraus die {\tt TraceMachine} benutzt.
+Zum Test wurden 100.000 zuf"allige Fokalebenenkoordinaten eingelesen, und mit 
+einem aus RAYTRACE \cite{mk} gewonnenem Polynom f"ur Spektrometer A 
+auf das Target zur"uckgerechnet. Hierbei ergaben sich die in 
+Tabelle \ref{bench} aufgelisteten Bruttozeiten.
+Um die Leerlast  festzustellen, wurden die Daten erneut, ohne jedoch die 
+R"uckrechnung auszuf"uhren, durch die Programme gepumpt.
+Die kompletten Testdaten sind Tabelle \ref{bench} zu entnehmen.
+
+Bei diesem, f"ur unsere Anwendung typischen Test, ergab sich  pro Ereignis 
+eine Steigerung in der Geschwindigkeit um einen Faktor $ 2.34 $. Der Gewinn 
+pro Ereignis ist mit $ \delta _{1} = 0.675 ms$ betr"achtlich, gemessen an 
+typischen Operationszeiten (siehe auch Tab. \ref{benchops}) auf dem 
+Testrechner. Auf einem Rechner ohne FPU, wie z.B. dem E6, d"urfte auf Grund
+der Ergebnisse in Tab. \ref{benchops} ein um mindestens einen Faktor 10
+gr"o"serer Zeitgewinn zu erwarten  sein.
+
+Der Unterschied in der Verarbeitungszeit $\delta _{2} = 0.016 ms$ 
+f"ur eine Koordinate zwischen {\tt tMachineF.f } und {\tt tMachine.c} kann
+damit erkl"art werden, da"s bei der FORTRAN - Anbindung noch eine zus"atzliche
+Funktion zur Schnittstellenumsetzung und das Kopieren von 16 Bytes
+notwendig ist. Das Verh"altnis von $\delta _1 /\delta _2$
+ macht nochmal den Zeitgewinn durch den neuen Algorithmus deutlich. 
+
+Auch bei den Tarazeiten ist eine Differenz zwischen den beiden neuen 
+Programmen vorhanden. Dieser ist
+auf die unterschiedlich gute I/O-Anbindung zur"uckzuf"uhren. 
+FORTRAN-I/O  unter UNIX ist also um  40 Prozent langsamer. 
+Bei unserem Test verschenkt man bereits 10 \% der gesamten Zeit.
+\begin{table}
+\begin{center}
+\begin{tabular}{|r|l|l|l|l|}
+\hline
+Programm & Brutto & Tara & Netto & Zeit pro Punkt \\
+         & in s   & in s & in s  & in ms \\
+\hline 
+{\tt trad.f}      &   149.3 &   31.5 & 117.8 &   1.178 \\
+{\tt tMachineF.f} &    80.8 &   28.1 &  51.9 &   0.519 \\
+{\tt tMachine.c}  &    71.2 &   20.9 &  50.3 &   0.503 \\
+\hline 
+\end{tabular}
+\end{center}
+\caption{
+        Die Tabelle zeigt die Zeiten, die zur 
+        R"uckrechnung und Einlesem (Brutto) bzw. nur zum 
+        Einlesen (Tara) von 100000 Koordinatenpunkten auf 
+        einer DECstation 5000/200 von den verschiedenen 
+        im Text beschriebenen Programmen ben"otigt wird. 
+        Weiterhin sind die daraus berechneten
+        Werte enthalten.
+        }
+\label{bench}
+\end{table}
+
+\section{Fazit}
+Der hier vorgestellte Algorithmus und dessen Implementation ist den
+bekannten Routinen "uberlegen. Der Zeitgewinn ist betr"achtlich. Ferner
+zeigt dieses kleine Projekt, da"s auch bei numerischen Aufgaben die 
+Verwendung der Programmiersprache C eine sinnvolle und hier sogar zwingende 
+Alternative darstellt. Der Qualit"atssprung in der Performance unter 
+Erhaltung von Flexibilit"at und Speichereffizienz ist mit FORTRAN nicht 
+m"oglich. 
+\\
+Ferner zeigte sich, da"s man bei der Verwendung von FORTRAN f"ur I/O-Aufgaben,
+ wie sie sich notwendigerweise immer bei der Analyse gro"ser Datenmengen 
+ergeben, unter UNIX erhebliche Zeitnachteile gegen"uber C in Kauf nehmen mu"s.
+
+\begin{thebibliography}{99}
+\bibitem{eo}
+E.A.J.M Offermann {\sl Vertex reconstruction}  Interne Notitz
+\bibitem{booch91} 
+G.Booch {\sl Object-Oriented Design}    Benjamin-Cummings 1991
+\bibitem{schreiner}
+A.T.Schreiner {\sl UNIX-Sprechstunde} Hanser-Verlag 1987
+\bibitem{tmainfo} 
+H.Kramer {\sl TMA - Using the TMA - vertex reconstruction software} 
+        EDV/KPH 1992
+\bibitem{mk} 
+M.Korn {\sl Private Mitteilung}
+\end{thebibliography}
+\end{document}

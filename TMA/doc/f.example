@@ -1,0 +1,46 @@
+@example
+      program tMachineF
+      
+      character *32 datafile
+      character *16 progname
+
+      integer TMA_new, tm
+      real fp(4)
+      real tg(4)
+
+c get the command line arguments
+      call getarg(0, progname)
+
+      if (iargc() .ne. 1) then
+         write(0, 10) progname
+ 10      format (' usage ', A, ' filename')
+         stop
+      endif
+
+      call getarg(1, datafile)
+
+c     Bereitstellen der Koordinatenrueckrechnungsmachine tm. Die aufbereiteten
+c     Matrixelemente befinden sich in der Datei  datafile
+
+      tm = TMA_new(datafile , 0)
+
+      if (tm .ne. 0) then
+         do while(1) 
+            read(5,*,end=100) (fp(i),i=1,4)
+
+c     Berechne fp -> tg
+            call TMA_run(tg, fp, tm)
+            write(6,*) (tg(i), i=1, 4)
+         end do
+ 100     continue
+
+c     Wirf die Maschine tm weg
+         call TMA_delete(tm)
+         stop
+      end if
+
+      write (0,1000) progname, " :: TMA_new failed ", datafile
+ 1000 format(' ', 3A)
+      end
+@end example      
+

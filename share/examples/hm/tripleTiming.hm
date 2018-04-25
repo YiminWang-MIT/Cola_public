@@ -1,0 +1,19 @@
+zone 1 3 1
+maximumx 70; minimumx -70; histogram "Time/Coincidence A[\331]B"
+maximumx 70; minimumx -70; histogram "Time/Coincidence C[\331]A"
+maximumx 70; minimumx -70; histogram "Time/Coincidence B[\331]C"
+title "Coincidence Time"
+zone 1 3 1
+maximumx 10; minimumx -10; histogram "Time/Coincidence A[\331]B"
+maximumx 10; minimumx -10; histogram "Time/Coincidence C[\331]A"
+maximumx 10; minimumx -10; histogram "Time/Coincidence B[\331]C"
+title "Timing Resolution"
+zone 1 3 1
+histogram "Time/Raw time A[\331]B"
+histogram "Time/Raw time C[\331]A"
+histogram "Time/Raw time B[\331]C"
+title "Raw Time"
+zone 1 2 1
+gray "Time/Coincidence AB-BC"
+title "Triple Coincidence Time"
+close

@@ -1,0 +1,272 @@
+// This is the Cola++ Run Database;
+// Timestamps mark the time of changes, not given values are taken from
+// previous settings.
+// Time format: [yymmddhhmmss] (as in run_xxxxxxxxxxxx)
+// 
+
+#define code2angleA(code) (-(code - 13382.0)/78.65)
+#define code2angleB(code) ( (code - 13451.0)/78.62)
+#define code2angleC(code) ( (code - 13348.9)/78.66)
+
+        Ebeam = 855.11
+        Setup = "Initial Setup"
+        Reaction = "undefined"
+        q2        = -0.06;            q2.Range = 0.02
+
+// Target
+        Target = "Cryo"
+// Trace Machine
+        Simul.CMS.Theta = {0, 90}
+        A.tma.file = "/users/kpha1/merkel/tma/qsdda180.mxl4"
+        B.tma.file = "/users/kpha1/merkel/tma/new/bclam495.mxl6"
+        C.tma.file = "/users/kpha1/merkel/tma/qsddc360.mxl2b"
+
+        A.tma.x = 37.4; A.tma.y = 1.2; A.tma.theta = 785.00; A.tma.phi =  4.2
+        B.tma.x = 21.0; B.tma.y = 1.0; B.tma.theta = 839.20; B.tma.phi = -1.2
+        C.tma.x = 11.6; C.tma.y = 0.1; C.tma.theta = 773.56; C.tma.phi =  4.0
+
+// VDC
+        A.VDC.TDC = {432, 427, 421, 416};        A.VDC.Driftvelocity = 0.039
+        B.VDC.TDC = {460, 458, 457, 455};        B.VDC.Driftvelocity = 0.0375
+        C.VDC.TDC = {2490, 2490, 2487, 2489};    C.VDC.Driftvelocity = 0.013
+
+        A.collimator = "21msr"
+        B.collimator = "5.6msr"
+        C.collimator = "22.5msr"
+
+// Coincidence TDC 
+        TDC_Resolution = 0.050
+        use_AB_TDC = 2;        use_AC_TDC = 0;        use_BC_TDC = 0
+        ABTime = 0;            BCTime = 0;            ACTime = 0
+        A.scint.use_dE = 1;    B.scint.use_dE = 0;    C.scint.use_dE = 0
+        CoincidenceTime = 42.7
+
+// Wobbler
+        Wobbler.x = 3;         Wobbler.y = 3
+        A.Wobbler.dx = 0;      A.Wobbler.x0 = 0
+        A.Wobbler.dy = 0;      A.Wobbler.y0 = 0
+
+        B.Wobbler.dx = 29.925; B.Wobbler.x0 = -127
+        B.Wobbler.dy = 29.925; B.Wobbler.y0 = -128
+
+        C.Wobbler.dx = 46.2;   C.Wobbler.x0 = -127
+        C.Wobbler.dy = 23.1;   C.Wobbler.y0 = -128
+
+// Walk and paddle offsets
+        A.scint.walk = {0, 0, 0}
+        B.scint.walk = {0, 0, 0}
+        C.scint.walk = {0, 0, 0}
+
+        A.scint.dE  = { 15.0, 26.5, 38.0, 82.0, 37.0, 40.2, 67.7, 44.0, 
+                        20.1,  1.5,-11.7,-47.5,-16.1, -3.4, -2.0}
+        A.scint.dE.Left = {65, 65.8-1.4, 65.8-1.4, 61.4-1.3, 65-2, 
+                          65-2.5, 65-3.5, 61.4+0.2,
+	                62.8, 62.3, 62.9+0.1, 64.6, 62.6, 62.95-0.2, 58.6-3.4}
+
+        A.scint.ToF = {  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                         0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0}
+        B.scint.dE  = { 70.0, 29.7, 18.6, 30.9,  9.0, 28.4,  7.8, 28.6,
+                        25.4, 14.2,-11.5,-15.9,  1.7, 25.2}
+        B.scint.ToF = { 69.0, 59.0, 58.0, 68.2, 71.3, 90.4, 74.0, 39.0,
+                        70.0,  7.0, 52.0,  8.0, 62.0,  0.0}
+        C.scint.dE  = {  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                         0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0}
+        C.scint.ToF = {-24.3,-63.3,-45.8,-33.6,  6.9,  9.9, 22.7, 38.7,
+                        46.0, 56.0, 66.3, 87.7, 86.8, 90, 90}
+
+        A.angle = 45.48;        A.momentum = 261.001 
+        B.angle = 18.494;       B.momentum = 679.38
+        C.angle = 0;            C.momentum = 0
+
+// Cerenkov
+
+        A.Cerenkov.pedestal = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        A.Cerenkov.scale =    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+        A.Cerenkov.offset =   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+	B.Cerenkov.pedestal = { 278, 257, 258, 279, 284 }
+        B.Cerenkov.scale =    {1, 1, 1, 1, 1}
+        B.Cerenkov.offset =   {0, 0, 0, 0, 0}
+
+        C.Cerenkov.pedestal = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        C.Cerenkov.scale =    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+        C.Cerenkov.offset =   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+///////////////////////////////////////////////////////////////////////////////
+[960210010651]	
+	use_AB_TDC = 2
+        Setup = "0-3"
+
+        B.Wobbler.dx = 10 // Something's wrong with the wobbler!!!
+	B.Wobbler.x0 = -127
+        B.Wobbler.dy = 10
+	B.Wobbler.y0 = -128
+
+        B.Wobbler.dx = -35.925; 	B.Wobbler.x0 = -127
+        B.Wobbler.dy = -35.925; 	B.Wobbler.y0 = -128
+
+        Wobbler.x = 2.5 	// mm 	amplitude for simulation
+	Wobbler.y = 2.5
+
+        q2 = -0.05		// q² =  -0.05 ± 0.01 GeV²/c²
+        q2.Range = 0.02
+        Reaction = "H(e,B:e'A:p)pi0"
+
+	A.tma.file = "/users/kpha1/merkel/calclength/qsdda180.mxl6"
+        A.tma.x = 37.4; 
+	A.tma.y = 1.2; 
+        A.tma.theta = 785.00; A.tma.phi =  4.2
+        A.tma.phi =  0
+        A.tma.y = -10; 
+
+        B.VDC.TDC = {439, 438, 437, 433}
+        B.VDC.Driftvelocity = 0.0375
+
+	A.scint.walk = {-211.4, -21.0, -21.0}  // Final timing
+	B.scint.walk = { -83.6, -14.4, -15.7}
+	C.scint.walk = { -13.0, -21.0, -21.0}
+
+        A.scint.dE       = {  5.0,  5.2,  5.6,  7.4,  4.8,
+	                      5.0,  6.6,  5.8,  4.6,  4.2,
+                              3.8,  2.6,  4.9,  6.4,  5.3}
+
+	A.scint.dE.Left  = { 62.1, 62.6, 62.7, 58.5, 61.8, 
+		    	     61.0, 60.0, 60.1, 61.3, 60.2,
+		    	     60.8, 62.1, 60.7, 60.2, 60.2}
+
+        B.scint.ToF      = { -3.0,  1.0,  0.2,  0.1,  0.8, 
+		   	      3.0,  3.8,  1.9,  0.1,  2.3, 
+		             -2.3,  0.0, -2.1,  1.3}
+
+	A.scint.ToF      = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	A.scint.ToF.Left = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+
+        A.scint.use_dE = 1	// Trigger time defined by dE layer
+	use_AB_TDC = 2		// TDC Channel 2 used for trigger time
+
+	CoincidenceTime = 193 	// ns 
+
+	Ebeam = 855.11          // MeV
+	A.angle = 44.6		// °
+ 	A.momentum = 240.0 	// MeV/c
+	B.angle = 16.82		// °
+	B.momentum = 662.339+1.5// MeV/c  1 MeV shift due to saturation
+
+[960217001125]
+        Ebeam = 330.11
+        Setup = "1-3"
+        Reaction = "H(e,C:e'A:p)pi0"
+
+        A.angle = 28.6986       // °
+        A.momentum = 240.011 	// Mev/c
+        C.angle = 58.5062    	// °
+        C.momentum = 144.003 	// Mev/c
+
+        q2 = -0.05          	// q² =  -0.05 ± 0.01 GeV²/c²
+        q2.Range = 0.02
+
+        Wobbler.x = 2.5		// mm        
+        Wobbler.y = 2.5		// mm
+        TDC_Resolution = 0.050 	// ns/count
+        Target.Length = 48     	// mm
+        Target.Angle = 0
+        Target = "Cryo"
+        A.tma.file = "/users/kpha1/merkel/calclength/qsdda180.mxl6"
+        C.tma.file = "/users/kpha1/merkel/tma/qsddc360.mxl2b"
+        use_AB_TDC = 2
+        use_AC_TDC = 4
+        use_BC_TDC = 0
+        A.VDC.TDC = {432, 427, 421, 416}
+        C.VDC.TDC = {2490, 2490, 2487, 2489}
+        A.VDC.Driftvelocity = 0.039
+        C.VDC.Driftvelocity = 0.013
+
+        A.tma.x = 37.4;		A.tma.y = 1.2
+        A.tma.theta = 785;	A.tma.phi = 4.2
+
+        A.scint.walk = {-211.4+157, -21, -21}
+
+        A.scint.dE = {4.4, 5.2, 5.6, 7.4, 4.8, 
+		      5.0, 6.6, 5.8, 4.6, 4.2, 
+		      3.8, 2.6, 4.4, 5.3, 5.3}
+
+        A.scint.dE.Left = {62.1, 62.6, 64.0, 57.9, 61.3,
+                           61.0, 59.9, 59.9, 62.3, 61.8,
+		           61.8, 64.1, 61.5, 60.0, 59.2}
+
+        A.scint.ToF = { 0.0,  0.0, -1.3,  0.6,  0.5,
+			0.0,  0.1,  0.2, -1.0, -1.6,
+	               -1.0, -2.0, -0.8,  0.2,  1.0}
+
+        A.scint.use_dE = 1
+
+        C.tma.x = 11.6;  C.tma.y = 0.1; C.tma.theta = 773.56; C.tma.phi = 4
+        C.scint.walk = {-23, -21, -21}
+
+        C.scint.dE = { 0.1, -5.0, -5.1, -5.2, -3.2,
+		      -2.2, -0.2,  0.9,  1.8, -2.2,
+		       0.4,  1.0,  0.9,  2.2, 0.2}
+
+        C.scint.ToF = {0.9, -6.4, -5.0, -5.5, -2.5,
+		      -2.7, -0.9,  0.3,  1.0,  0.2,
+		      -0.7, -0.9,  0.7, -0.2,  0.0}
+ 
+        C.scint.ToF.Left = {85.6, 85.6, 85.6, 85.6, 85.6,
+			    85.6, 85.6, 85.6, 85.6, 85.6,
+			    85.6, 85.6, 85.6, 85.6, 85.6}
+
+        C.scint.use_dE = 0
+
+        CoincidenceTime = -118
+        ACTime = 0
+
+[960501000000]
+	Setup = "0.5-3"
+
+	B.Cerenkov.pedestal = { 113, 102, 99, 112, 117 }
+        Reaction = "H(e,B:e'A:p)pi0"
+
+	q2 = -0.05 		// q² =  -0.05 ± 0.01 GeV²/c²
+        q2.Range = 0.02
+
+	Ebeam = 435.0		// MeV
+	A.angle = 35.70 	// °
+	A.momentum = 233.1	// MeV/c
+        B.angle = 38.59		// °
+	B.momentum = 263.7	// MeV/c
+
+        B.Wobbler.dx = -29.925; 	B.Wobbler.x0 = -127
+        B.Wobbler.dy = -29.925; 	B.Wobbler.y0 = -128
+        Wobbler.x = 2.5		// mm        
+        Wobbler.y = 4.5		// mm
+
+	A.tma.file = "/users/kpha1/merkel/calclength/qsdda180.mxl6"
+        A.VDC.TDC = {432, 427, 421, 416}
+        B.VDC.TDC = {439, 438, 437, 433}
+        B.VDC.Driftvelocity = 0.0375
+
+        A.scint.use_dE = 1
+	use_AB_TDC = 1
+	CoincidenceTime = 194.5
+
+        A.scint.walk    = {-211.4, -21, -21}
+        A.scint.dE      = {4.4, 4.0, 4.4, 6.1, 3.9, 
+		           4.2, 5.6, 4.8, 3.9, 3.5, 
+	                   3.1, 1.8, 3.9, 5.5, 6.3}
+        A.scint.dE.Left = {62.1, 62.6, 62.7, 58.5, 61.8, 
+			   61.0, 60.0, 60.1, 61.3, 60.2, 
+                           60.8, 62.1, 60.7, 60.2, 60.2}
+	B.scint.ToF     = {-3.0,  1.0,  4.2,  3.5,  3.8, 
+			    4.0,  4.9,  3.9,  0.1,  2.3,
+               	           -2.3,  0.0, -2.1,  1.3}
+
+
+
+
+
+
+
+
+
+

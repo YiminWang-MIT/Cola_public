@@ -1,0 +1,46 @@
+#								 -*-makefile-*-
+#
+# $Id: Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+.PHONY : all clean lib veryclean distclean
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../../Makefile.inc
+
+# -O3
+# -xP                core-duo
+# -xT                core2-duo
+# -ip                interprocedure optimization
+# -parallel -openmp
+
+@USE_IFORT_FCFLAGS@	+= -O3 -ip -72 -complex-limited-range -ipo -static \
+	   -no-prec-div -fp-model fast=2 -ftz -no-fp-port -scalar-rep -ssp
+@USE_GFORTRAN_FCFLAGS@	+= -O2
+
+PROGS	= bf11 bs11j3 bs11t32j3
+
+all:	$(PROGS)
+
+bf11:		bf11.f bcommon.f
+	$(FC) $(FCFLAGS) -o $@ $^
+
+bs11j3:		bs11.f bcommon.f
+	$(FC) $(FCFLAGS) -o $@ $^
+
+bs11t32j3:	bs11t32.f bcommon.f
+	$(FC) $(FCFLAGS) -o $@ $^
+
+clean :
+	rm -rf *~ *.o
+
+veryclean :	clean
+	rm -f $(PROGS)
+
+distclean:	veryclean
+	rm -f Makefile
+
+#install:	$(PROGS)
+#	mv $(PROGS) ../bin

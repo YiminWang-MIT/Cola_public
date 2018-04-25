@@ -1,0 +1,34 @@
+#								 -*-makefile-*-
+#
+# $Id: Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+.PHONY : all clean lib veryclean distclean
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../../../Makefile.inc
+
+CXXFLAGS= $(OPTS) $(WARN)
+LDFLAGS	= $(OPTS)
+CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(incdir) -I$(incdir)/Aqua  -I$(topdir)/Cola/include/abcn
+
+target	= EventSimTest
+
+all:	evsim 
+
+evsim:	$(target)
+
+$(target): EventSimTest.cc ../libeventsimreader.a $(LIBAQUA_READER)
+	$(CXX) $(CPPFLAGS) $^ -o $@ $(LDREADER)
+
+clean :
+	rm -rf *~ *.o
+
+veryclean :	clean
+	rm -f $(library) $(QSPIN)
+
+distclean:	veryclean
+	rm -f Makefile
+

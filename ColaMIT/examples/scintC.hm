@@ -1,0 +1,39 @@
+#
+zone 2 4 1
+SetFillRGB 1.0 1.0 0.5
+Title "OOPS C: scintillator ADC"
+Histogram "OOPS C/scintillator/1/adc/left"
+Histogram "OOPS C/scintillator/1/adc/right"
+Histogram "OOPS C/scintillator/2/adc/left"
+Histogram "OOPS C/scintillator/2/adc/right"
+Histogram "OOPS C/scintillator/3/adc/left"
+Histogram "OOPS C/scintillator/3/adc/right"
+
+zone 2 4 1
+SetFillRGB 1.0 1.0 0.5
+Title "OOPS C: scintillator TDC"
+Histogram "OOPS C/scintillator/1/tdc/left"
+Histogram "OOPS C/scintillator/1/tdc/right"
+Histogram "OOPS C/scintillator/2/tdc/left"
+Histogram "OOPS C/scintillator/2/tdc/right"
+Histogram "OOPS C/scintillator/3/tdc/left"
+Histogram "OOPS C/scintillator/3/tdc/right"
+
+zone 2 4 1
+SetFillRGB 1.0 1.0 0.5
+Title "OOPS C: scintillator ADC average"
+Histogram "OOPS C/scintillator/1/adc/average"
+Histogram "OOPS C/scintillator/2/adc/average"
+Histogram "OOPS C/scintillator/3/adc/average"
+
+zone 2 4 1
+SetFillRGB 1.0 1.0 0.5
+Title "OOPS C: scintillator TDC sums and differences"
+Histogram "OOPS C/scintillator/1/tdc/sum"
+Histogram "OOPS C/scintillator/1/tdc/diff"
+Histogram "OOPS C/scintillator/2/tdc/sum"
+Histogram "OOPS C/scintillator/2/tdc/diff"
+Histogram "OOPS C/scintillator/3/tdc/sum"
+Histogram "OOPS C/scintillator/3/tdc/diff"
+
+close

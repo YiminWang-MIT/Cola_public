@@ -1,0 +1,105 @@
+.\"  -*- nroff -*-
+.\"
+.\" Cola++.1.in
+.TH Cola++ 1 "October 15, 1998" "Cola++" "Cola Data Analysis"
+
+.SH NAME
+Cola++ \- Cola analysis main program
+
+.SH SYNOPSIS
+.B Cola++ [-xdzvVtTiq]
+[\c
+.BI \-f \ inputfile\fR\c
+]
+[\c
+.BI \-o \ outputfile\fR\c
+]
+[\c
+.BI \-C \ directory\fR\c 
+]
+[\c 
+.BI \-s \ events-to-skip\fR\c
+]
+[\c
+.BI \-n \ number-of-events\fR\c
+]
+
+.SH DESCRIPTION 
+.LP
+.B Cola++
+(Cola analysis main program), a program for analysis of electron scattering
+data. For details please use the online documentation at the A1 WWW site
+http://wwwa1.kph.uni-mainz.de/A1.
+
+.ne 5
+.SH OPTIONS
+.TP
+.B \-f \fIinputfile\fR
+Data to be analysed. File has to be in MECDAS data format. <stdin> if not 
+specified or "-".
+.TP
+.B \-o \fIoutputfile\fR
+Writen data when Cola++ is used as filter. <stdout> if not specified or "-".
+.TP
+.B \-O \fhistfile\fR
+Histogram file to be written at the end of the analysis.
+.TP
+.B \-C \fIdirectory\fR   
+Change to \fIdirectory\fR before doing anything.
+.TP
+.B \-d         
+Don't start X11 Histogramviewer.
+.TP
+.B \-v         
+Verbose output of the \fIrun.db\fR contents.
+.TP
+.B \-V         
+Print version and exit.
+.TP
+.B \-q         
+Quiet output: suppress comment lines in \fIrun.db\fR and \fI*.col\fR files
+.TP
+.B \-z         
+Decompress input and compress output with gzip.
+.TP
+.B \-n \fInumber of events\fR     
+Terminate after \fInumber of events\fR  events.
+.TP
+.B \-s \fInumber of events\fR     
+Ignore first \fInumber of events\fR events.
+.TP
+.B \-i         
+Ignore Floating Point Exceptions(default: use signalhandler).
+.TP
+.B \-x         
+Core dump on 'Floating point exception'.
+.TP
+.B \-t \fItime\fR    
+Use \fItime\fR as start time to read run.db, Format: 'yymmddhhmmss'
+.TP
+.B \-T         
+Try to extract start time from filename to read run.db.
+
+.SH FILES
+.TP
+.B \fI./Online.col\fR or \fI./col/Online.col\fR
+Definition of physical quantities of interest and histograms.
+.TP
+.B \fI./run.db\fR
+Database of setup information, like spectrometer angles, momenta, etc.
+.TP
+.B \fI./Online.his\fR
+Histogram output file
+.TP
+.B \fI./Luminosity.out\fR
+Output file containing the luminosity information (textfile).
+.TP
+.B \fI./Online.cnt\fR
+Counter information
+
+.SH AUTHORS
+Harald Merkel, Michael O. Distler, Ingo Ewald, Jan Friedrich, Marco Kahrau,
+Pascal Merle, Thomas Pospischil, Axel Wagner
+
+.SH  SEE ALSO
+.BR Simul++ (1), Lumi++ (1)

@@ -1,0 +1,89 @@
+#								 -*-makefile-*-
+#
+# $Id: Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+.PHONY : all clean lib veryclean distclean
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../Makefile.inc
+
+EXP	= abcn
+CXXFLAGS= $(DEFS) $(OPTS) $(WARN) -fno-strict-aliasing
+LDFLAGS	= $(OPTS) $(GSLLIBS)
+CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(incdir) -I.. $(GSLINCL)
+
+libobjs	= CK_RungeKutta.o Colli.o Dipol.o FringeFall.o Generate.o \
+	  GridInterpolation.o Matrix3D.o Multipol.o deForestCC1.o \
+	  qspinColli.o qspinSpectrometer.o simDetector.o simSpectrometer.o \
+          simSpecwithTrace.o simSpecEventSim.o simSiliconDetector.o \
+	  spinTransfer.o DSpectrometerA.o DSpectrometerB.o DipolB.o ran1.o \
+	  SimDecay.o SimParticle.o TriplePol.o SimDecay_wrapper.o \
+	  DSpectrometerKAOS.o KAOSfield.o Inclusive.o \
+	  simChamber.o simKAOS.o DM_QED.o BicubicInterpolation.o \
+	  ISRFit.o
+library	= libsimul.a 
+
+QSPIN	= qspinSpecA qspinOOPS qspinOHIPS
+GRIDTRACE = gridt
+
+.PHONY:	qspin 
+
+all:	lib 
+#SimDecay
+
+lib:	$(library)
+
+$(library) :	$(libobjs)
+	@ ar -crv $@ $^
+	$(RANLIB) $@
+
+qspin : $(QSPIN)
+
+gridtrace : $(GRIDTRACE)
+
+gridtrace.o : gridtrace.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+
+gridt : gridtrace.o $(library)
+	$(CXX) $(LDFLAGS)  -o $@ $^
+
+qspinSpecA.o :	qspin.cc
+	$(CXX) $(CPPFLAGS) -DSPECA $(CXXFLAGS) -c -o $@ $<
+
+qspinSpecA :	qspinSpecA.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^
+
+qspinOOPS.o :	qspin.cc
+	$(CXX) $(CPPFLAGS) -DOOPS $(CXXFLAGS) -c -o $@ $<
+
+qspinOOPS :	qspinOOPS.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^
+
+qspinOHIPS.o :	qspin.cc
+	$(CXX) $(CPPFLAGS) -DOHIPS $(CXXFLAGS) -c -o $@ $<
+
+qspinOHIPS :	qspinOHIPS.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^
+
+SimDecay_wrapper.o : SimDecay_wrapper.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+
+SimDecay :	SimDecay_wrapper.o $(library)
+	$(CXX) $(LDFLAGS) ../FourVector/FourVector.o ../Cola/Masses.cc -o $@ $^
+
+BicubicTest : BicubicTest.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^
+
+clean :
+	rm -rf *~ *.o
+
+veryclean :	clean
+	rm -f $(library) $(QSPIN)
+
+distclean:	veryclean
+	rm -f Makefile
+
+-include $(libobjs:%.o=.%.depend)

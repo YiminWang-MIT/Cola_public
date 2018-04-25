@@ -1,0 +1,50 @@
+#								 -*-makefile-*-
+#
+# $Id: Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+srcdir	= 	@srcdir@
+VPATH	= 	@srcdir@
+
+include		../Makefile.inc
+
+CPPFLAGS =      -I.. -I$(srcdir)/.. -I$(srcdir) -I$(incdir) \
+		$(WX_CFLAGS) $(DEFS)
+CXXFLAGS = 	$(OPTS) $(WARN)
+LDFLAGS	 = 	$(OPTS) -L$(libdir) $(LDSHARE)
+LDLIBS   =	$(WX_LIBS) $(MOTIFLIBS) $(LIBS) -lm
+BINARY	 = 	Printlog++ Printmezzo
+CXXSRC	 = 	Printlog.cc Printmezzo.cc
+DOCSRC   =      $(srcdir)/doc/*.html
+
+all :		$(BINARY)
+
+Printlog++ : 	Printlog.o $(LIBHMVIEW) $(LIBHMBOOK)
+		$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+		$(reportsuccess)
+
+Printmezzo : 	Printmezzo.o $(LIBHMVIEW) $(LIBHMBOOK)
+		$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+		$(reportsuccess)
+
+
+$(LIBHMBOOK) :
+	$(MAKE) -C $(dir $@) $(notdir $@)
+
+install :	.install
+.install:	$(bindir) $(docdir) $(BINARY)
+		$(foreach file, $(BINARY) $(srcdir)/rundb-setup,\
+		  $(INSTALL_PROGRAM) $(file) $(bindir);)
+		$(foreach file, $(DOCSRC), $(INSTALL_DATA) $(file) $(docdir);)
+		date > $@
+
+$(bindir) $(docdir) : 
+		mkdir -p $@
+
+clean :	
+		rm -f *~ *.o core
+veryclean :	clean
+		rm -f $(BINARY) nohup.out
+
+-include 	$(CXXSRC:%.cc=.%.depend)
+

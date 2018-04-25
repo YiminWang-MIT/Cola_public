@@ -1,0 +1,44 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/OOPSfocalplane.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for OOPS
+//
+
+// required definitions
+//
+// spec  :  name of the spectrometer in event configuration oops1
+// title :  first part of the histogram title
+//
+
+Histogram title"[D]E1 vs. [D]E2" \
+spec.1.energyLoss("[D]E1", "a.u.", 0.5, 1024.5, 128) \
+spec.2.energyLoss("[D]E2", "a.u.", 0.5, 1024.5, 128)
+Histogram title"[D]E1 vs. [D]E3" \
+spec.1.energyLoss("[D]E1", "a.u.", 0.5, 1024.5, 128) \
+spec.3.energyLoss("[D]E3", "a.u.", 0.5, 1024.5, 128)
+Histogram title"[D]E2 vs. [D]E3" \
+spec.2.energyLoss("[D]E2", "a.u.", 0.5, 1024.5, 128) \
+spec.3.energyLoss("[D]E3", "a.u.", 0.5, 1024.5, 128)
+
+Scalar spec.focal.x  = @online.spec.focal.x
+Scalar spec.focal.th = @online.spec.focal.th
+Scalar spec.focal.y  = @online.spec.focal.y
+Scalar spec.focal.ph = @online.spec.focal.ph
+
+Histogram title"x (disp.)"     spec.focal.x("x", "mm", -250.0, 250.0, 500) ;
+Histogram title"[q] (disp.)"   spec.focal.th("[q]", "mrad", \
+					     -300.0, 300.0, 300) ;
+Histogram title"y (non-disp.)" spec.focal.y("y", "mm", -300.0, 300.0, 600) ;
+Histogram title"[f] (non-disp.)"   spec.focal.ph("[f]", "mrad", \
+						 -300.0, 300.0, 300) ;
+
+Histogram title"[q] vs. x"   spec.focal.x("x", "mm", -100.0, 100.0, 100) \
+	spec.focal.th("[q]", "mrad", -120.0, 120.0, 100) ;
+Histogram title"[q] vs. [f]" spec.focal.th("[q]","mrad",-200.0,200.0,100) \
+                             spec.focal.ph("[f]","mrad",-200.0,200.0,100) ;

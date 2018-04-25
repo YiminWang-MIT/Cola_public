@@ -1,0 +1,37 @@
+// 
+// Puls height and paddle-timing
+//
+
+// include with     #define title        to set histogram-path 
+
+"   Timecal.col"
+
+#define Spectrometer A
+#define sp title"PH Spec. A/"
+#include "Timecal_spec.col"
+#undef Spectrometer
+
+#define Spectrometer B
+#define sp title"PH Spec. B/"
+#include "Timecal_spec.col"
+#undef Spectrometer
+
+#define Spectrometer C
+#define sp title"PH Spec. C/"
+#include "Timecal_spec.col"
+#undef Spectrometer
+
+#undef title
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,33 @@
+#								 -*-makefile-*-
+# Created 1996 by	Michael O. Distler, Harald Merkel,
+#			Institut für Kernphysik,
+#			Johannes Gutenberg-Universität Mainz
+#
+# $Header: https://wwwa1.kph.uni-mainz.de/svn/Cola/trunk/Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+# Cola Makefile
+#
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	Makefile.inc
+@SET_MAKE@
+
+SRCS	= Makefile.in Makefile.inc.in acconfig.h configure.in
+SCRIPTS	= __COLA__ configure install-sh config.h.in
+
+AUXDIRS = @AUXDIRS@
+LIBDIRS	= @LIBDIRS@
+SUBDIRS	= @SUBDIRS@
+
+.PHONY : all aux doc lib install uninstall clean veryclean distclean
+
+all doc install uninstall clean veryclean distclean :
+	export i; for i in $(LIBDIRS) $(SUBDIRS); do $(MAKE) -C $$i/ $@; done
+
+aux :
+	export i; for i in $(AUXDIRS); do $(MAKE) -C $$i/   ; done
+
+lib :
+	export i; for i in $(LIBDIRS); do $(MAKE) -C $$i/ $@; done

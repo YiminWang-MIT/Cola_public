@@ -1,0 +1,77 @@
+#
+# Makefile.in: Makefile fuer die Cindy++ Analyse
+#
+
+srcdir     = @srcdir@
+VPATH      = @srcdir@
+
+SHELL      = /bin/sh
+CC         = @CC@
+CXX        = @CXX@
+CPP        = @CPP@
+CINDY      = @CINDY@
+PWD       := $(shell pwd)
+
+EXPERIMENT = ab940223
+PASSONE    = pass1
+
+A1         = /usr/local/a1
+KPH        = /usr/local/mecdas
+
+ifeq ($(ARCH),alpha-dec-osf1)
+static     = -static
+endif
+
+DEFS       = @DEFS@
+OPTS       = @OPTS@
+LIBS       = -lcindy -lio -lgen @LIBS@
+CPPFLAGS   = $(DEFS) -I$(srcdir) \
+             -I$(srcdir)/$(EXPERIMENT) -I$(srcdir)/$(PASSONE) \
+             -I$(A1)/include -I$(KPH)/include
+CXXFLAGS   = $(OPTS) -Wall -O2
+LDFLAGS    = $(OPTS) $(static) -L$(A1)/lib -L$(KPH)/lib
+BINARY     = Analyse Decode ECSdecode Filter PassOne
+CXXSRC     = Analyse.cc Decode.cc ECSdecode.cc Filter.cc PassOne.cc
+
+.PHONY:      all clean veryclean
+
+all:         $(BINARY)
+
+Analyse:     Analyse.o $(EXPERIMENT).o
+	$(CXX) $(LDFLAGS) -o $@ $^ -lch++ $(LIBS) -lm
+
+Decode:      Decode.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+ECSdecode:   ECSdecode.o
+	$(CXX) $(LDFLAGS) -o $@ $^ -lopcT $(LIBS)
+
+Filter:      Filter.o $(EXPERIMENT).o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+PassOne:     PassOne.o $(EXPERIMENT).o $(PASSONE).o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(EXPERIMENT).o:  $(EXPERIMENT).cc
+$(EXPERIMENT).cc: $(srcdir)/$(EXPERIMENT)/$(EXPERIMENT).h
+	(cd $(srcdir)/$(EXPERIMENT); \
+	$(CINDY) -i $*.h -e $* -s $(PWD)/$@ -p $(PWD)/$*.list)
+
+$(PASSONE).o:  $(PASSONE).cc
+$(PASSONE).cc: $(srcdir)/$(PASSONE)/$(PASSONE).h
+	(cd $(srcdir)/$(PASSONE); \
+	$(CINDY) -x -i $*.h -e $* -s $(PWD)/$@ -p $(PWD)/$*.list)
+
+clean:
+	rm -f *~ *.o core
+	rm -f $(EXPERIMENT).list $(EXPERIMENT).cc
+	rm -f $(PASSONE).list $(PASSONE).cc
+
+veryclean: clean
+	rm -rf $(BINARY) `hfind` tmp
+	-test -f shm && hfree shm
+        
+.depend:   $(CXXSRC) $(EXPERIMENT).cc $(PASSONE).cc
+	$(CXX) -M $(CPPFLAGS) $^ > $@
+
+include .depend

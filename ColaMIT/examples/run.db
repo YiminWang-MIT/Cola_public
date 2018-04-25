@@ -1,0 +1,537 @@
+// This is the Cola++ Run Database;
+// Timestamps mark the time of changes,
+// not given values are taken from previous settings.
+// Time format: [yymmddhhmmss] (as in run_xxxxxxxxxxxx)
+//
+///////////////////////////////////////////////////////////////////////////////
+
+// calculate OHIPS momentum [MeV/c] from dipol current [A]
+#define OHIPSmomentum(I)  (77.82*(I/160.256+0.061))
+
+// calculate OOPS momentum [MeV/c] from dipol current [A]
+#define OOPSmomentum(I)  (I*0.64)
+
+OOPSA.hdc.1.x.ini = "/usr/local/oops/share/hdc/960814/OOPS_A_CH_1_X.ini"
+OOPSA.hdc.1.y.ini = "/usr/local/oops/share/hdc/960814/OOPS_A_CH_1_Y.ini"
+OOPSA.hdc.2.x.ini = "/usr/local/oops/share/hdc/960814/OOPS_A_CH_2_X.ini"
+OOPSA.hdc.2.y.ini = "/usr/local/oops/share/hdc/960814/OOPS_A_CH_2_Y.ini"
+OOPSA.hdc.3.x.ini = "/usr/local/oops/share/hdc/960814/OOPS_A_CH_3_X.ini"
+OOPSA.hdc.3.y.ini = "/usr/local/oops/share/hdc/960814/OOPS_A_CH_3_Y.ini"
+
+OOPSB.hdc.1.x.ini = "/usr/local/oops/share/hdc/960814/OOPS_B_CH_1_X.ini"
+OOPSB.hdc.1.y.ini = "/usr/local/oops/share/hdc/960814/OOPS_B_CH_1_Y.ini"
+OOPSB.hdc.2.x.ini = "/usr/local/oops/share/hdc/960814/OOPS_B_CH_2_X.ini"
+OOPSB.hdc.2.y.ini = "/usr/local/oops/share/hdc/960814/OOPS_B_CH_2_Y.ini"
+OOPSB.hdc.3.x.ini = "/usr/local/oops/share/hdc/960814/OOPS_B_CH_3_X.ini"
+OOPSB.hdc.3.y.ini = "/usr/local/oops/share/hdc/960814/OOPS_B_CH_3_Y.ini"
+
+OOPSC.hdc.1.x.ini = "/usr/local/oops/share/hdc/960814/OOPS_C_CH_1_X.ini"
+OOPSC.hdc.1.y.ini = "/usr/local/oops/share/hdc/960814/OOPS_C_CH_1_Y.ini"
+OOPSC.hdc.2.x.ini = "/usr/local/oops/share/hdc/960814/OOPS_C_CH_2_X.ini"
+OOPSC.hdc.2.y.ini = "/usr/local/oops/share/hdc/960814/OOPS_C_CH_2_Y.ini"
+OOPSC.hdc.3.x.ini = "/usr/local/oops/share/hdc/960814/OOPS_C_CH_3_X.ini"
+OOPSC.hdc.3.y.ini = "/usr/local/oops/share/hdc/960814/OOPS_C_CH_3_Y.ini"
+
+OOPSA.tma.initfile = "/usr/local/oops/share/matrix/oopsa.mx"
+OOPSB.tma.initfile = "/usr/local/oops/share/matrix/oopsb.mx"
+OOPSC.tma.initfile = "/usr/local/oops/share/matrix/oopsc.mx"
+OOPSD.tma.initfile = "/usr/local/oops/share/matrix/oopsd.mx"
+OHIPS.tma.initfile = "/usr/local/oops/share/matrix/ohips.mx0"
+
+// focal plane parameters
+// used for the transformation of chamber coordinates to focal plane coord.
+// param 1-3 (x) param 4-6 (theta)
+OOPSA.fp.param = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+OOPSB.fp.param = { 7.0, 0.0, 1.35, 0.0, 0.0, 0.0 };
+OOPSC.fp.param = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+OOPSD.fp.param = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+OHIPS.fp.param = { -241.2, 198.7, 1.4077, 778.3, 0.1583, 0.0 };
+
+[960701235256]
+	Reaction = "C12(e,O:e')C12"
+	Setup = "calibration" 
+	Ebeam = 800.0
+
+[960729233555]
+	Ebeam = 660.0
+
+[960814115229]
+	Ebeam = 660.0
+	OOPSA.angle = 90.0
+	OOPSA.oop.angle = 0.0
+	OOPSA.momentum = OOPSmomentum(500.0)
+	OOPSC.angle = 60.0
+	OOPSC.oop.angle = 0.0
+	OOPSC.momentum = OOPSmomentum(500.0)
+
+[960814120948]
+	// run 467 OOPS A + C
+	// target C50
+	Setup = "scintillator tuning"
+
+[960814145953]
+	// run 468
+	Setup = "HDC efficiency HV 2400V"
+
+[960814160339]
+	// run 469
+	Setup = "HDC efficiency HV 2300V"
+
+[960814161912]
+	// run 470
+	Setup = "HDC efficiency HV 2350V"
+
+[960814163120]
+	// run 471
+	Setup = "HDC efficiency HV 2450V"
+
+[960814164444]
+	// run 472
+	Setup = "HDC efficiency HV 2500V"
+
+[960814165821]
+	// run 473
+	Setup = "HDC efficiency HV 2550V"
+
+[960814171116]
+	// run 474
+	Setup = "HDC efficiency HV 2600V"
+
+[960814173429]
+	// run 475  C100 target
+	Setup = "Luminosity Study"
+
+[960814174754]
+	// run 476  C200 target
+	Setup = "Luminosity Study"
+
+[960814180123]
+	// run 477  C15 target
+	Setup = "Luminosity Study"
+
+[960814181432]
+	// run 478  empty target
+	Setup = "Luminosity Study"
+
+[960814192514]
+	// run 479  empty target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960814193929]
+	// run 480  C200 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960814195105]
+	// run 481  C200 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960814202424]
+	// run 483  C100 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960814204143]
+	// run 484  C50 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960814210459]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960815040801]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960815042809]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960815044257]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960815051758]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960815054422]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960815064349]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960815071906]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960815073520]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960815082213]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960816100243]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960816100700]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960816102248]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960816110740]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960816120148]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960816121656]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960816123808]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960816131711]
+	// run 485  C15 target - no shielding blocks
+	Setup = "Luminosity Study"
+
+[960816134619]
+	Ebeam = 660.0
+
+[960816140137]
+	Ebeam = 660.0
+
+[960816141613]
+	Ebeam = 660.0
+
+[960816143335]
+	Ebeam = 660.0
+
+[960816144723]
+	Ebeam = 660.0
+
+[960816150233]
+	Ebeam = 660.0
+
+[960816153415]
+	Ebeam = 660.0
+
+[960816171234]
+	// run501
+	OHIPS.angle=33.375
+	OHIPS.momentum=OHIPSmomentum(1340.9)
+
+[960816172938]
+	Ebeam = 660.0
+
+[960816182908]
+	// run502
+	OHIPS.momentum=OHIPSmomentum(1354.02)
+
+[960816182927]
+	Ebeam = 660.0
+
+[960816190723]
+	Ebeam = 660.0
+
+[960816191953]
+ 	// run503
+	OHIPS.momentum=OHIPSmomentum(1367.4)
+
+[960816194523]
+	Ebeam = 660.0
+
+[960816202747]
+	Ebeam = 660.0
+
+[960816210656]
+	Ebeam = 660.0
+
+[960816214013]
+	Ebeam = 660.0
+
+[960816215458]
+	// run508
+	OHIPS.momentum=OHIPSmomentum(1327.5)
+
+[960816221456]
+	Ebeam = 660.0
+
+[960816222216]
+	// run509
+	OHIPS.momentum=OHIPSmomentum(1327.5)
+
+[960816225758]
+	// run511
+	OHIPS.momentum=OHIPSmomentum(1314.4)
+
+[960816230508]
+	Ebeam = 660.0
+
+[960816232655]
+	// run513
+	OHIPS.momentum=OHIPSmomentum(1314.4)
+
+[960817004246]
+	Ebeam = 660.0
+
+[960817005036]
+	// run514
+	OHIPS.momentum=OHIPSmomentum(1301.0)
+
+[960817014355]
+	Ebeam = 660.0
+
+[960817023057]
+	Ebeam = 660.0
+
+[960817031303]
+	Ebeam = 660.0
+
+[960817032531]
+	Ebeam = 660.0
+
+[960817041327]
+	Ebeam = 660.0
+
+[960817045255]
+	Ebeam = 660.0
+
+[960817060048]
+	Ebeam = 660.0
+
+[960817060800]
+	Ebeam = 660.0
+
+[960817061613]
+	Ebeam = 660.0
+
+[960817062505]
+	Ebeam = 660.0
+
+[960817063336]
+	Ebeam = 660.0
+
+[960817064257]
+	Ebeam = 660.0
+
+[960817070405]
+	Ebeam = 660.0
+
+[960817074813]
+	Ebeam = 660.0
+
+[960817075710]
+	Ebeam = 660.0
+
+[960817080753]
+	Ebeam = 660.0
+
+[960817081812]
+	Ebeam = 660.0
+
+[960817082430]
+	Ebeam = 660.0
+
+[960817083104]
+	Ebeam = 660.0
+
+[960817084346]
+	Ebeam = 660.0
+
+[960817085216]
+	Ebeam = 660.0
+
+[960817085617]
+	Ebeam = 660.0
+
+[960817090436]
+	Ebeam = 660.0
+
+[960817091148]
+	Ebeam = 660.0
+
+[960817093906]
+	Ebeam = 660.0
+
+[960817094910]
+	Ebeam = 660.0
+
+[960817103438]
+	Ebeam = 660.0
+
+[960817104137]
+	Ebeam = 660.0
+
+[960817104627]
+	Ebeam = 660.0
+
+[960817112836]
+	Ebeam = 660.0
+
+[960817113756]
+	Ebeam = 660.0
+
+[960817114554]
+	Ebeam = 660.0
+
+[960817115853]
+	Ebeam = 660.0
+
+[960817122318]
+	Ebeam = 660.0
+
+[960818035336]
+	Ebeam = 660.0
+
+[960818041128]
+	Ebeam = 660.0
+
+[960818044918]
+	Ebeam = 660.0
+
+[960818053019]
+	Ebeam = 660.0
+
+[960818055808]
+	Ebeam = 660.0
+
+[960818061415]
+	Ebeam = 660.0
+
+[960818070352]
+	Ebeam = 660.0
+
+[960818070647]
+	Ebeam = 660.0
+
+[960818072104]
+	Ebeam = 660.0
+
+[960818075817]
+	Ebeam = 660.0
+
+[960818095905]
+	Ebeam = 660.0
+
+[960818101201]
+	Ebeam = 660.0
+
+[960818102640]
+	Ebeam = 660.0
+
+[960818103614]
+	Ebeam = 660.0
+
+[960818104718]
+	Ebeam = 660.0
+
+[960818110020]
+	Ebeam = 660.0
+
+[960818111729]
+	Ebeam = 660.0
+
+[960818114731]
+	Ebeam = 660.0
+
+[970125235256]		
+	Setup = "oops961205" 
+	Ebeam = 800.0
+	OOPSA.hdc.1.x.ini="/usr/local/oops/share/hdc/970201/OOPS_A_CH_1_X.ini"
+	OOPSA.hdc.1.y.ini="/usr/local/oops/share/hdc/970201/OOPS_A_CH_1_Y.ini"
+	OOPSA.hdc.2.x.ini="/usr/local/oops/share/hdc/970201/OOPS_A_CH_2_X.ini"
+	OOPSA.hdc.2.y.ini="/usr/local/oops/share/hdc/970201/OOPS_A_CH_2_Y.ini"
+	OOPSA.hdc.3.x.ini="/usr/local/oops/share/hdc/970201/OOPS_A_CH_3_X.ini"
+	OOPSA.hdc.3.y.ini="/usr/local/oops/share/hdc/970201/OOPS_A_CH_3_Y.ini"
+	OOPSB.hdc.1.x.ini="/usr/local/oops/share/hdc/970201/OOPS_B_CH_1_X.ini"
+	OOPSB.hdc.1.y.ini="/usr/local/oops/share/hdc/970201/OOPS_B_CH_1_Y.ini"
+	OOPSB.hdc.2.x.ini="/usr/local/oops/share/hdc/970201/OOPS_B_CH_2_X.ini"
+	OOPSB.hdc.2.y.ini="/usr/local/oops/share/hdc/970201/OOPS_B_CH_2_Y.ini"
+	OOPSB.hdc.3.x.ini="/usr/local/oops/share/hdc/970201/OOPS_B_CH_3_X.ini"
+	OOPSB.hdc.3.y.ini="/usr/local/oops/share/hdc/970201/OOPS_B_CH_3_Y.ini"
+
+[980101000001]
+	Setup = "NDelta" 	
+	Ebeam = 600.0
+
+	OOPSB.hdc.1.x.ini="/usr/local/oops/share/hdc/980116/OOPS_B_CH_1_X.ini"
+	OOPSB.hdc.1.y.ini="/usr/local/oops/share/hdc/980116/OOPS_B_CH_1_Y.ini"
+	OOPSB.hdc.2.x.ini="/usr/local/oops/share/hdc/980116/OOPS_B_CH_2_X.ini"
+	OOPSB.hdc.2.y.ini="/usr/local/oops/share/hdc/980116/OOPS_B_CH_2_Y.ini"
+	OOPSB.hdc.3.x.ini="/usr/local/oops/share/hdc/980116/OOPS_B_CH_3_X.ini"
+	OOPSB.hdc.3.y.ini="/usr/local/oops/share/hdc/980116/OOPS_B_CH_3_Y.ini"
+
+[980119120000]
+	OHIPS.fp.param = { -40.0, 0.0, 0.32, 783.193, 0.15976, 0.0 };
+
+[980120210000]
+	OOPSC.hdc.1.x.ini="/usr/local/oops/share/hdc/980120/OOPS_C_CH_1_X.ini"
+	OOPSC.hdc.1.y.ini="/usr/local/oops/share/hdc/980120/OOPS_C_CH_1_Y.ini"
+	OOPSC.hdc.2.x.ini="/usr/local/oops/share/hdc/980120/OOPS_C_CH_2_X.ini"
+	OOPSC.hdc.2.y.ini="/usr/local/oops/share/hdc/980120/OOPS_C_CH_2_Y.ini"
+	OOPSC.hdc.3.x.ini="/usr/local/oops/share/hdc/980120/OOPS_C_CH_3_X.ini"
+	OOPSC.hdc.3.y.ini="/usr/local/oops/share/hdc/980120/OOPS_C_CH_3_Y.ini"
+
+
+[980123131500]
+	OOPSA.hdc.1.x.ini="/usr/local/oops/share/hdc/980123/OOPS_A_CH_1_X.ini"
+	OOPSA.hdc.1.y.ini="/usr/local/oops/share/hdc/980123/OOPS_A_CH_1_Y.ini"
+	OOPSA.hdc.2.x.ini="/usr/local/oops/share/hdc/980123/OOPS_A_CH_2_X.ini"
+	OOPSA.hdc.2.y.ini="/usr/local/oops/share/hdc/980123/OOPS_A_CH_2_Y.ini"
+	OOPSA.hdc.3.x.ini="/usr/local/oops/share/hdc/980123/OOPS_A_CH_3_X.ini"
+	OOPSA.hdc.3.y.ini="/usr/local/oops/share/hdc/980123/OOPS_A_CH_3_Y.ini"
+
+	OOPSA.tma.initfile = "/home/oops/Cola/matrix/oopsa.mx"
+
+	Setup = "OOPS A commissioning" 	
+	Ebeam = 598.37
+	OOPSA.angle     = -48.92
+	OOPSA.oop.angle = 0.0
+	OOPSA.momentum  = OOPSmomentum(1.016*800)  // 514.355 MeV/c
+	
+
+[980125120000]
+	OHIPS.tma.initfile = "/usr/local/oops/share/matrix/ohips.short.mx0"
+	OHIPS.fp.param = { -40.0, 0.0, 0.5, 783.193, 0.15976, 0.0 };
+
+[980130000000]
+	Setup = "NDelta - 1170 MeV" 	
+	Ebeam = 820.0
+	OOPSA.angle     = -45.54
+	OOPSA.oop.angle = 12.0
+	OOPSA.momentum  = OOPSmomentum(0.992*800)  // 503.717 MeV/c
+	OOPSB.angle     = -20.99
+	OOPSB.oop.angle = 12.0
+	OOPSB.momentum  = OOPSmomentum(0.992*800)  // 503.717 MeV/c
+	OOPSC.angle     = 74.0
+	OOPSC.oop.angle = 0.0
+	OOPSC.momentum  = OOPSmomentum(776.0)
+	OHIPS.angle     = 32.56
+	OHIPS.momentum  = OHIPSmomentum(1005.48)   // 493 MeV/c
+
+[980220000000]
+	Setup = "NDelta - 1155 MeV" 	
+	Ebeam = 820.0
+	OOPSA.angle     = -45.54
+	OOPSA.oop.angle = 12.0
+	OOPSA.momentum  = OOPSmomentum(0.837*800)  // 428.135 MeV/c
+	OOPSB.angle     = -20.99
+	OOPSB.oop.angle = 12.0
+	OOPSB.momentum  = OOPSmomentum(0.837*800)  // 428.135 MeV/c
+	OOPSC.angle     = 75.795
+	OOPSC.oop.angle = 0.0
+	OOPSC.momentum  = OOPSmomentum(776.0)
+	OHIPS.angle     = 22.99
+	OHIPS.momentum  = OHIPSmomentum(1104.05)   // 540.87 MeV/c
+

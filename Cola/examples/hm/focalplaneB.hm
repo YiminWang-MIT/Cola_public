@@ -1,0 +1,25 @@
+zone 2 3 1
+SetFillRGB 0.5 0.5 1.0
+Histogram "Spec. B/Focal Plane/x (disp.)"
+Histogram "Spec. B/Focal Plane/y"
+Histogram "Spec. B/Focal Plane/[q] (disp.)"
+Histogram "Spec. B/Focal Plane/[f]"
+Gray      "Spec. B/Focal Plane/x-y"
+Gray      "Spec. B/Focal Plane/[q]-[f]"
+Title "Spectrometer B: Focal Plane coordinates"
+zone 2 3 1
+Histogram "Spec. B/Focal Plane/[D]x (disp.)"
+Histogram "Spec. B/Focal Plane/[D]y"
+Histogram "Spec. B/Focal Plane/[D][q] (disp.)"
+Histogram "Spec. B/Focal Plane/[D][f]"
+Title "Spectrometer B: Focal Plane coordinates (Errors)"
+zone 2 3 1
+Histogram "Spec. B/Target/[F]_0!"
+Histogram "Spec. B/Target/[Q]_0!"
+Histogram "Spec. B/Target/[D]p"
+Histogram "Spec. B/Target/y_0!"
+zone 1 3 3
+Gray "Spec. B/Target/[F]_0!-[Q]_0!"
+Title "Spectrometer B: Target coordinates"
+
+close

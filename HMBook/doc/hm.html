@@ -1,0 +1,92 @@
+<HR>
+<H1> <center>Help for Histoman</center></H1>
+<HR>
+Histoman is the histogram viewer macro packet of the 
+<A Href=hmbook.html>HMBook software packet</a>.
+<H2> Command List: </H2>
+<UL>
+<li> Output file:
+ <UL>
+  <LI> <B>PLOTFILE "filename"</B> <br>open a file for grafics output
+  <LI> <B>PIPE</B> <br>open a postscript interpreter (Ghostscript) 
+	           as output device (Default)
+  <LI> <B>CLOSE<br></B> close output file or postscript interpreter
+ </UL>
+<li> Histogram file and histogram handling:
+ <UL>
+<LI> <B>READFILE "filename"</B><BR> open a histogram file
+<LI> <B>LIST, DIR, LS</B><BR> list the existing histograms
+<LI> <B>DELETE histogramnumber</B><BR> Delete a histogram
+</ul>
+<LI> Histogram plotting
+  <ul>
+	<LI> <B>HISTOGRAM "histogramtitle" </B> <br>
+	     <B>HISTOGRAM histogramnumber </B> <br> plot as a histogram
+        <LI> <B>FUNCTION histogramnumber/title<br></B>plot 1-D histogram as function
+        <LI> <B>DATAERROR histogramnumber/title</B><br>plot 1-D histogram as data points with error bars
+	<LI> <B>GRAY histogramnumber/title</B><br>plot 2-D histogram as grayscale plot
+	<LI> <B>LEGO histogramnumber/title</B><br>plot 2-D histogram as lego plot
+	<LI> <B>BOX histogramnumber/title</B><br>plot 2-D histogram as box plot
+	<LI> <B>SCATTER histogramnumber/title</B> <br>plot 2-D histogram as lego plot
+	<LI> <B>SURFACE histogramnumber/title</B> <br>plot 2-D histogram as surface 
+	<LI> <B>MINIMUMX</B> <br>set maximum for x axis for next plot
+	<LI> <B>MINIMUMY</B> <br>etc.
+	<LI> <B>MINIMUMZ</B>
+	<LI> <B>MAXIMUMX</B>
+	<LI> <B>MAXIMUMY</B>
+	<LI> <B>MAXIMUMZ</B>
+	<LI> <B>SAME</B> <br>draw next histogram into same frame
+        <LI> <B>EXPLAIN "comment"</B> <br>a comment line for last histogram
+ </ul>
+<li> Page layout
+<ul>
+	<LI> <B>ZONE frames_in_x frames_in_y [first_frame]</B> <br>divide page into zones
+	<LI> <B>TITLE "titleline"</B> <br>plot a title line for this page
+	<LI> <B>SETOPTION option value</B> <br>set an option, e.g. fontsize, margins etc. See <a href= hmbookoptions.html> this table of options.</a>
+</ul>
+<li> Misc.
+<ul>
+<LI> <B>HELP</B> <br>this help
+<LI> <B>WAIT</B> <br>wait
+<LI> <B>QUIT, EXIT, Q</B> <br>end program
+</UL>
+</ul>
+<h2> Arithmetic operations between histograms (bin for bin):</h2>
+Syntax:
+<pre>
+
+command:		@HISTOGRAMNUMBER = arithmetic_expression
+
+arithmetic_expression : (arithmetic_expression)
+ 	                or arithmetic_expression + arithmetic_expression
+ 	                or arithmetic_expression - arithmetic_expression
+ 	                or arithmetic_expression / arithmetic_expression
+ 	                or arithmetic_expression * arithmetic_expression
+	                histogram_id
+
+histogram_id : 	        @HISTOGRAMNUMBER
+	                or "Histogramtitle"
+</pre>
+Use the command LIST to see the assigned histogram numbers. Only
+histogram numbers between 0 and 999 are allowed. Of course, arithmetic
+operations between histograms are only defined if the histograms are
+booked with the same bounderies and numbers of bins.
+<p>
+Example:
+<Pre>
+@99  =  (@1 +@3)/(@3-@5*@123) 
+@127 = "Cross Section" / "Phase Space"
+Histogram 99
+DataError 127
+</Pre>
+
+<HR>
+<i>
+Harald Merkel 
+<A Href=mailto:merkel@a1.kph.uni-mainz.de>Merkel@A1.KPh.Uni-Mainz.De</a>
+</i>
+
+
+
+
+

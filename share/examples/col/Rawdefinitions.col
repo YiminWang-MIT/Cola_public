@@ -1,0 +1,59 @@
+// Harald Merkel, 
+// A1 Collaboration, Institut fuer Kernpysik, Universitaet Mainz
+// Jan. 25, 1996
+//
+// This include file defines the rawdata histograms
+// use with: #define Spectrometer A
+//	     #define sp "Spec. A/"
+//           #include "rawdata.col"
+//           ...
+//
+#define spc(var)  Spectrometer.var
+#define spec @online.Spectrometer 
+Scalar spc(phi0)   = spec.target.ph / 1000 * degree
+Scalar spc(theta0) = spec.target.th / 1000 * degree
+Scalar spc(deltap) = spec.target.dp
+Scalar spc(y0)     = spec.target.y0 * 10
+Scalar spc(len)    = spec.target.len
+Scalar spc(fp.x)     = spec.x
+Scalar spc(fp.y)     = spec.y
+Scalar spc(fp.theta) = spec.theta / 1000 * degree
+Scalar spc(fp.phi)   = spec.phi   / 1000 * degree
+Scalar spc(fp.len)   = spec.len
+Scalar spc(fp.dx)     = spec.dx
+Scalar spc(fp.dy)     = spec.dy
+Scalar spc(fp.dtheta) = spec.dtheta / 1000 * degree
+Scalar spc(fp.dphi)   = spec.dphi   / 1000 * degree
+Scalar spc(dE.Energy)  = sqrt(spec.dE.Energy.left*spec.dE.Energy.right)
+Scalar spc(ToF.Energy) = sqrt(spec.ToF.Energy.left*spec.ToF.Energy.right)
+Scalar spc(Energy)     = (spc(ToF.Energy) + spc(dE.Energy))/2
+Scalar spc(dE.paddle)  = spec.dE.paddle
+Scalar spc(ToF.paddle) = spec.ToF.paddle
+Scalar spc(vdc).x1.time  = -1
+Scalar spc(vdc).x1.wire  = -1
+Scalar spc(vdc).x1.error = spec.x1.error
+Scalar spc(vdc).x1.multi = spec.x1.multi
+Scalar spc(vdc).s1.time  = -1
+Scalar spc(vdc).s1.wire  = -1
+Scalar spc(vdc).s1.error = spec.s1.error
+Scalar spc(vdc).s1.multi = spec.s1.multi
+Scalar spc(vdc).x2.time  = -1
+Scalar spc(vdc).x2.wire  = -1
+Scalar spc(vdc).x2.error = spec.x2.error
+Scalar spc(vdc).x2.multi = spec.x2.multi
+Scalar spc(vdc).s2.time  = -1
+Scalar spc(vdc).s2.wire  = -1
+Scalar spc(vdc).s2.error = spec.s2.error
+Scalar spc(vdc).s2.multi = spec.s2.multi
+#undef Spectrometer
+#undef sp
+#undef adcrange
+#undef drifttimerange
+
+
+
+
+
+
+
+

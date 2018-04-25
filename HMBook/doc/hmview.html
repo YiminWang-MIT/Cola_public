@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+   <TITLE> HMView, The Histogram viewer of HMBook </TITLE>
+   <META HTTP-EQUIV="Author"   CONTENT="Harald Merkel">
+   <META HTTP-EQUIV="Charset"  CONTENT="iso-8859-1">
+</HEAD>
+<BODY>
+<HR>
+<H1 ALIGN=CENTER>Help for HMView</H1>
+<HR>
+HMView is a histogram browser for <A HREF="hmbook.html">HMBook</A>.
+This document describes the usage of the histogram viewer.
+<P>
+The purpose of this program is, to have a quick presentation of your
+histograms, not to create pretty output. For this you should use the HMBook
+interpreter <A HREF="hm.html">HistoMan</A>.
+<P>
+If you need more help for the <B>Cindy++ Online Analysis (Cola++)</B>
+click <A HREF="Cola++.html">here</A>.
+<HR>
+<H3>Contents:</H3>
+<UL>
+<LI><A HREF="#menucommands">Menu commands</A> </LI>
+<LI><A HREF="#mouse">Mouse usage</A> </LI>
+<LI><A HREF="#select">Select a Histogram</A> </LI>
+<LI><A HREF="#options">Options</A> </LI>
+<LI><A HREF="#display">Coordinate display</A> </LI>
+<LI><A HREF="#configuration">Configuration hints</A></LI>
+</UL>
+<HR>
+<H3><A NAME="menucommands"></A>Menu commands:</H3>
+<UL>
+<LI><B>File</B></LI>
+<UL>
+<P> </P>
+<LI><B>New Frame<BR>
+</B>Create a new window to display several histograms at a time.</LI>
+<LI><B>Load Histogram File<BR>
+</B>Loads a histogram file. This command is only visible when the viewer
+is not started as subprocess. In that case only histograms in the memory
+are available. </LI>
+<LI><B>Save Histogram File<BR>
+</B>Saves a histogram file in HMBook format. It can be reloaded by <B>hmview</B>
+or <A HREF="hm.html">HistoMan</A> </LI>
+
+<LI><B>Export Histogram File<BR>
+</B>If you have problems with this viewer you can use PAW to display the
+histograms written by this command. </LI>
+
+<LI><B>Quit<BR>
+</B>Stop it.<BR>
+</LI>
+</UL>
+
+<LI><B>Histogram</B></LI>
+
+<UL>
+<P> </P>
+
+<LI><B>Zoom<BR>
+</B>With this option you can change the resolution of the ghostscript interpreter.
+A larger number magnifies the picture. This button might be slow, since
+the ghostscript interpreter has to be killed and restarted again. There
+might be terrible results like core dumps, since there are still some unresolved
+problems with wxwin when a child process is killed. <BR>
+See &quot;<A HREF="#mouse">Mouse Usage</A>&quot; for how to zoom a range
+of a histogram. </LI>
+
+<LI><B>Update<BR>
+</B>A timer can be set up for an automatical update. </LI>
+
+<LI><B>Info<BR>
+</B>Some statistical information about the current histogram. </LI>
+
+<LI><B>Save Current Histogram (*.eps)<BR>
+</B>Save this picture as Encapsulated Postscript File. This file can be
+printed at any postscript printer or can be included, e.g. in TeX documents.
+</LI>
+
+<LI><B>Save Current Histogram (*.ascii)<BR>
+</B>Save this current histogram as ASCII&nbsp;file. </LI>
+
+<LI><B>Print Current Histogram<BR>
+</B>Print the current histogram via &quot;lpr&quot;. To select a different
+printer you have to set the environment variable &quot;PRINTER&quot; before
+executing the viewer.<BR>
+</LI>
+</UL>
+
+<LI><B>Fit</B></LI>
+
+<UL>
+<LI><B>User Defined Fit<BR>
+</B>Give a function, and the number of paramters for this. You can write
+a function in C style, with <BR>
+<TT>&quot;p[0], p[1],...&quot; </TT>as parameters and &quot;<TT>x&quot;
+</TT>as variable</LI>
+
+<LI><B>Standarad Fit<BR>
+</B>Some predefined functions.<BR>
+</LI>
+</UL>
+
+<LI><B>Macro</B> </LI>
+
+<UL>
+<LI><B>Execute Macro<BR>
+</B>This command saves the histograms in a temporary file and executes
+a HistoMan macro file for this. The result is a Postscript file which is
+presented by calling Ghostview. This might take a while!<BR>
+</LI>
+</UL>
+
+<LI><B>Help</B></LI>
+
+<UL>
+<LI><B>Help<BR>
+</B>You found that.</LI>
+
+<LI><B>About<BR>
+</B>I did this. </LI>
+</UL>
+</UL>
+
+<P>
+<HR></P>
+
+<H3><A NAME="mouse"></A>Mouse usage:</H3>
+
+<UL>
+<LI><B>Left Mouse Button<BR>
+</B>Select a horizontal range for one dimensional histograms. Go to the
+start point of the desired range, press the left mouse button, select the
+range and release the mouse button again. The Range is not invert, only
+the starting point is marked with a line. For two dimensional histograms
+you can select of course the two dimensional range<BR>
+</LI>
+
+<LI><B>Middle Mouse Button<BR>
+</B>Restore the full range of the histogram, as before any mouse actions.
+Also useful as &quot;update&quot; button.<BR>
+</LI>
+
+<LI><B>Right Mouse Button<BR>
+</B>Single click: Set the vertical maximum of the current one dimensional
+histogram.<BR>
+Drag region: Select the vertical range for a one dimensional hiostogram.</LI>
+</UL>
+
+<P>
+<HR></P>
+
+<H3><A NAME="select"></A>Select a histogram:</H3>
+
+<P>The button &quot;Histogram List&quot; displays a list of all histograms
+in memory. A double click or a single click and &quot;Ok&quot; selects
+a histogram. The label of the button is set to the current name of the
+histogram. </P>
+
+<P>In front of the name is a hint, if the histogram is one dimensional
+or two dimensional. 
+<HR></P>
+
+<H3><A NAME="options"></A>Options:</H3>
+
+<LI><B>Histogram Style<BR>
+</B>There are different styles for histogram representation available:
+</LI>
+
+<UL>
+<LI><B>1-dimensional histograms</B>: </LI>
+
+<UL>
+<LI><B>Histogram</B>: <BR>
+Standard representation of a histogram </LI>
+
+<LI><B>Line</B>: <BR>
+Representation as a function, a line connects the bins. </LI>
+
+<LI><B>Data/Error:</B> <BR>
+Representation as datapoints with statistical error.<BR>
+</LI>
+</UL>
+
+<LI><B>2-dimensional histograms</B>: </LI>
+
+<UL>
+<LI><B>Grayscale</B>: <BR>
+Each bin is represented by a grayscale rectangle. </LI>
+
+<LI><B>Lego</B>: <BR>
+The histogram is plotted as lego plot or manhattan plot. </LI>
+
+<LI><B>Scatter</B>: <BR>
+The scatter plot is the most ugly choice. In each bin the corresponding
+number of entries is plot by random dots. Never use this choice to plot
+a histogram which is filled with a weight. Keep in mind, that the position
+of each point is not the exact position of an entry! </LI>
+
+<LI><B>Box</B>: <BR>
+Each bin is represented by a rectangular. The size of the rectangle is
+proportional to the entries for each bin. </LI>
+
+<LI><B>Surface</B>: <BR>
+I like that one. But this might take a while and gives an ugly result,
+if you have to much bins in each direction!</LI>
+</UL>
+</UL>
+
+<P>
+<HR></P>
+
+<H3><A NAME="display"></A>Coordinate Display: </H3>
+
+<P>In the upper left corner of the window you see a display of coordinates.
+If you move the cursor across the histogram, these coordinates correspond
+to the cross hairs position. The field &quot;Bin&quot; displays the contents
+of the actual bin. If you choose a 2-dimensional histogram and select a
+3-D view like Lego or Surface, the meaning of the cross hairs stays as
+for a 2-D representation (Gray, Box, Scatter). </P>
+
+<P>The label of the coordinates are taken from the booking information
+of the histogram. They might be unreadable sometimes. </P>
+
+<HR>
+<A NAME="configuration">
+<H3>Configuration hints</H3>
+
+<P>This program is writen with the wxWindows toolkit, which is based on
+MOTIF. So you can use MOTIF&nbsp;resources to change the appearance of
+your histogram browser:</P>
+
+<P>For example in your file .Xresources:</P>
+<pre>
+*Form.background:                       grey67
+*TransientShell*Dialog.background:      grey67
+*Command.background:		        grey77
+*MenuButton.background:                 grey77
+*SimpleMenu*background:                 grey77
+*ScrollbarBackground:                   grey67
+*ScrollbarForeground:                   grey37
+*Scrollbar*background:                  grey77
+*Scrollbar*pointerColor:                black
+*Scrollbar*pointerColorBackground:      white
+*beNiceToColormap:                      False
+
+*fontList: 	       -*-helvetica-bold-r-normal-*-16-*-*-*-*-*-iso8859-1
+*XmTextField.fontList: -*-fixed-bold-r-*-*-15-*-*-*-*-*-iso8859-1
+*XmText.fontList:      -*-fixed-bold-r-*-*-15-*-*-*-*-*-iso8859-1
+*XmList*fontList:      -*-helvetica-bold-r-normal-*-14-*-*-*-*-*-iso8859-1
+</pre>
+<P>
+<HR><I>Last update: April 2nd, 1998<BR>
+Harald Merkel (<A HREF="mailto:Merkel@KPh.Uni-Mainz.De">Merkel@KPh.Uni-Mainz.De)</A>
+</I></P>
+
+</BODY>
+</HTML>

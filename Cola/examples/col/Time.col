@@ -1,0 +1,111 @@
+"Time.col using:"
+
+#define PI      3.141592653589793
+#define radiant (PI/180)
+#define degree  (180/PI)
+
+#define RawOn
+#define V_LIGHT 29.9792458     // cm/ns
+
+//-----------------------------------------------------------------------------
+// Include rawdata histograms
+//-----------------------------------------------------------------------------
+
+#define SPECA
+#ifdef RawOn
+"   for Spek A"
+#define title ""
+#include "rawdata.col"
+#else
+#include "rawdefs.col"
+#endif
+#define AcceptA @online.A.target.dp>-5 \
+		&& @online.A.target.dp<15 \
+                && abs(@online.A.target.ph)<75 \
+		&& abs(@online.A.target.th)<75 
+#undef SPECA
+//-----------------------------------------------------------------------------
+#define SPECB
+#ifdef RawOn
+"   for Spek B"
+#define title ""
+#include "rawdata.col"
+#else
+#include "rawdefs.col"
+#endif
+#define AcceptB -8.0<abs(@online.B.target.dp) \
+        && abs(@online.B.target.dp)<8.5 \
+	&& abs(@online.B.target.ph)<20 \
+	&& abs(@online.B.target.th)<70 
+#undef SPECB
+//-----------------------------------------------------------------------------
+#define SPECC
+#ifdef RawOn
+"   for Spek C"
+#define title ""
+#include "rawdata.col"
+#else
+#include "rawdefs.col"
+#endif
+#define AcceptC @online.C.target.dp>-10 \
+		&& @online.C.target.dp<25 \
+		&& abs(@online.C.target.ph)<75 \
+		&& abs(@online.C.target.th)<75
+#undef SPECC
+
+//-----------------------------------------------------------------------------
+// Vertexkoordinaten
+//-----------------------------------------------------------------------------
+
+Scalar vertexx = @online.Vertex.x 
+Scalar vertexy = @online.Vertex.y
+Scalar vertexz = @online.Vertex.z
+Scalar targetx = @online.Vertex.x 
+Scalar targety = @online.Vertex.y
+Scalar targetz = @online.Vertex.z
+Scalar targetAx = @online.A.vertex.x
+// + @Target.Offset.x
+Scalar targetAy = @online.A.vertex.y
+// + @Target.Offset.y
+Scalar targetAz = @online.A.vertex.z
+// + @Target.Offset.z
+Scalar targetBx = @online.B.vertex.x
+// + @Target.Offset.x
+Scalar targetBy = @online.B.vertex.y
+// + @Target.Offset.y
+Scalar targetBz = @online.B.vertex.z
+// + @Target.Offset.z
+Scalar targetCx = @online.C.vertex.x
+// + @Target.Offset.x
+Scalar targetCy = @online.C.vertex.y
+// + @Target.Offset.y
+Scalar targetCz = @online.C.vertex.z
+// + @Target.Offset.z
+Scalar deltaz            = (@online.A.vertex.z - @online.B.vertex.z)/2
+
+//-----------------------------------------------------------------------------
+// Access to Particles and Setup:
+//-----------------------------------------------------------------------------
+
+#define mass_proton   0.93827231
+#define mass_deuteron 1.87561339
+#define mass_pi0      0.1349764
+#define mass_electron 0.00051099
+#define mass_c12      11.178
+#define mass_piplus   0.139569
+#define mass_target mass_c12
+
+Fourvector Electron_in  = Beam		              // predefined function
+Fourvector Proton1      = Spectrometer("A")           // predefined function
+Fourvector Proton2      = Spectrometer("C")           // predefined function
+Fourvector Target       = {mass_target}               // Carbon-12
+Fourvector Electron_out = Spectrometer("B")           // predefined function
+
+Scalar events = @online.nr
+
+//-----------------------------------------------------------------------------
+// And now the Histograms 
+//-----------------------------------------------------------------------------
+
+#define title ""
+#include "Timecal.col"

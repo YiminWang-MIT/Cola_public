@@ -1,0 +1,57 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/coinc.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+
+
+Scalar coinc1 = @oops1.det.coincidence.tdc[1]
+Scalar coinc2 = @oops1.det.coincidence.tdc[2]
+Scalar coinc3 = @oops1.det.coincidence.tdc[3]
+Scalar coinc4 = @oops1.det.coincidence.tdc[4]
+Scalar coinc5 = @oops1.det.coincidence.tdc[5]
+Scalar coinc6 = @oops1.det.coincidence.tdc[6]
+Scalar coinc7 = @oops1.det.coincidence.tdc[7]
+Scalar coinc8 = @oops1.det.coincidence.tdc[8]
+
+Histogram "coincidence/tdc 1" \
+          coinc1("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+Histogram "coincidence/tdc 2" \
+          coinc2("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+Histogram "coincidence/tdc 3" \
+          coinc3("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+Histogram "coincidence/tdc 4" \
+          coinc4("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+Histogram "coincidence/tdc 5" \
+          coinc5("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+Histogram "coincidence/tdc 6" \
+          coinc6("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+Histogram "coincidence/tdc 7" \
+          coinc7("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+Histogram "coincidence/tdc 8" \
+          coinc8("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+
+#define OOPSA_OHIPS_COINC 65
+#define OOPSB_OHIPS_COINC 66
+
+Cut (datatype == OOPSA_OHIPS_COINC) {
+    Histogram "coincidence/OOPSA and OHIPS/tdc 1" \
+	coinc1("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+    Histogram "coincidence/OOPSA and OHIPS/tdc 2" \
+	coinc2("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+    Histogram "coincidence/OOPSA and OHIPS/tdc 3" \
+	coinc3("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+}
+
+Cut (datatype == OOPSB_OHIPS_COINC) {
+    Histogram "coincidence/OOPSB and OHIPS/tdc 1" \
+	coinc1("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+    Histogram "coincidence/OOPSB and OHIPS/tdc 2" \
+	coinc2("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+    Histogram "coincidence/OOPSB and OHIPS/tdc 3" \
+	coinc3("time of flight", "50ps", -0.5, 4095.5, 4096) ;
+}

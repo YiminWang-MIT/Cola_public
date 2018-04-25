@@ -1,0 +1,120 @@
+#								-*-makefile-*-
+# Created 1993 by	Michael O. Distler,
+#			Institut fuer Kernphysik,
+#			Johannes Gutenberg-Universitaet Mainz
+#
+# $Header: https://wwwa1.kph.uni-mainz.de/svn/Cola/trunk/Chamber/Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+# Makefile fuer die chamber library.
+#
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../Makefile.inc
+
+incprefix= $(incdir)/Chamber
+
+CFLAGS	= $(OPTS) -O2 $(WARN)
+CXXFLAGS= $(OPTS) -O2 $(WARN)
+CPPFLAGS= $(DEFS) -I$(srcdir) -I$(srcdir)/.. -I.. -I.
+LDFLAGS	= $(OPTS) -L.
+
+CXXSRC	= HDCoops.cc chtest.cc chtest2.cc hdcInit.cc number.cc \
+	  ohipstest.cc oopstest.cc vdcDispatch.cc vdcLikelihood.cc \
+	  vdcPacket.cc vdcPlane.cc vdcRegression.cc vdcSetup.cc
+CXXGEN	= hdcInitLEX.cc hdcInitYACC.cc
+SSRC	= chlib.dxx Makefile.in bottom.html
+
+SUBDIR	= $(notdir $(srcdir))
+libobjs	= HDCoops.o hdcInit.o hdcInitLEX.o hdcInitYACC.o vdcDispatch.o \
+	  vdcLikelihood.o vdcPacket.o vdcPlane.o vdcRegression.o vdcSetup.o
+library	= libch++.a
+TESTBIN	= chtest chtest2 ohipstest oopstest
+
+VERSION	= 3.2
+shlib	= $(SHARED_LIB).$(VERSION)
+
+all :	$(TESTBIN)
+
+lib :	$(BUILD_LIBS)
+
+chtest :	chtest.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS) -lm
+
+chtest2 :	chtest2.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS) -lm
+
+ohipstest :	ohipstest.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS) -lm
+
+oopstest :	oopstest.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ -lm
+
+number :	number.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS) -lm
+
+$(library) : $(libobjs)
+	@ ar -crv $@ $^
+	$(RANLIB) $@
+
+$(shlib) $(SHARED_LIB) :	$(addprefix $(PICDIR)/,$(libobjs))
+	$(link_shlib)
+
+hdcInitYACC.cc hdcInitYACC.h :	hdcInit.y
+	$(BISONXX) -dvy $(BISONFLAGS) -o $*.cc -h $*.h $<
+
+hdcInitLEX.cc hdcInitLEX.h :	hdcInit.l
+	$(FLEXXX) $(FLEXFLAGS) -o$*.cc -h$*.h $<
+
+hdcInit : hdcInit.cc hdcInitYACC.o hdcInitLEX.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -DNEVER -o $@ $^ $(LIBS) -lm
+
+doc :	$(htmldir)/index.html $(texdir)/Chamber.ps
+
+$(htmldir)/index.html:	chlib++.h chlib.dxx HDCoops.h bottom.html
+	@test -d $(htmldir) || mkdir $(htmldir)
+	(cd $(dir $<); $(DOCXX) -B bottom.html \
+	 -d $(shell pwd)/$(htmldir) $(notdir $<))
+
+$(texdir)/Chamber.tex:	chlib++.h chlib.dxx HDCoops.h
+	@test -d $(texdir) || mkdir $(texdir)
+	(cd $(dir $<); $(DOCXX) -t -o $(shell pwd)/$@ $(notdir $<))
+
+$(texdir)/Chamber.dvi:	$(texdir)/Chamber.tex
+	@test -f $(texdir)/$(DOCXXSTY) || \
+	    ln -s $(shell cd $(srcdir)/../Doc/src;pwd)/$(DOCXXSTY) $(texdir)
+	(cd $(texdir);$(LATEX) $(notdir $<);$(LATEX) $(notdir $<))
+
+$(texdir)/Chamber.ps:	$(texdir)/Chamber.dvi
+	$(DVIPS) -o $@ $^
+
+install :	.install
+.install :	chlib++.h HDCoops.h hdcInit.h hdcInitYACC.h hdcInitLEX.h \
+		$(BUILD_LIBS) $(htmldir)/index.html $(texdir)/Chamber.ps
+	-@$(foreach dir,$(exec_prefix) $(libdir) $(incdir) $(incprefix) \
+		$(docdir) $(docdir)/Chamber,test -d $(dir) || mkdir $(dir);)
+	$(INSTALL_DATA) $(library) $(libdir)/$(library)
+	$(install_shlib)
+	$(foreach inc,$(addprefix $(srcdir)/,chlib++.h HDCoops.h hdcInit.h) \
+		hdcInitYACC.h hdcInitLEX.h,\
+		$(INSTALL_DATA) $(inc) $(incprefix);)
+	$(foreach doc,$(wildcard $(htmldir)/* $(texdir)/*.ps $(texdir)/*.tex),\
+		$(INSTALL_DATA) $(doc) $(docdir)/Chamber;)
+	date > $@
+
+clean :
+	rm -f *~ *.o $(TESTBIN) core $(PICDIR)/*.o
+
+veryclean :	clean
+	rm  -f $(BUILD_LIBS) libch++.so .install .release
+	rm  -f $(CXXGEN) hdcInitLEX.h hdcInitYACC.h hdcInitYACC.output
+	rm -rf $(PICDIR) $(htmldir) $(texdir)
+
+distclean :	veryclean
+	rm -f Makefile .depend
+
+.depend :	$(CXXSRC) $(CXXGEN)
+	$(CC) -M $(CPPFLAGS) $^ | sed -e 's-^.*\.o-$(PICDIR)/& &-' > $@
+
+-include .depend

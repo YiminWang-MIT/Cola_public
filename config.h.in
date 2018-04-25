@@ -1,0 +1,157 @@
+/* config.h.in.  Generated from configure.in by autoheader.  */
+
+/* install documentation here */
+#undef DOCDIR
+
+/* pointer type for select statement */
+#undef FDSETPTR
+
+/* your ghostscript program is found in */
+#undef GHOSTSCRIPT
+
+/* your ghostview program is found in */
+#undef GHOSTVIEW
+
+/* your c preprocessor is found in */
+#undef GNUCPP
+
+/* your program is found in */
+#undef GNUTAR
+
+/* your gzip program is found in */
+#undef GZIP
+
+/* Define to 1 if you have the <bsd/bsd.h> header file. */
+#undef HAVE_BSD_BSD_H
+
+/* Define to 1 if you have the <bstring.h> header file. */
+#undef HAVE_BSTRING_H
+
+/* Define if C++ compiler accepts "#include <string>" */
+#undef HAVE_CXX_STRING_HEADER
+
+/* Define if GNU scientific library is available. */
+#undef HAVE_GSL
+
+/* Define to 1 if you have the <g++/osfcn.h> header file. */
+#undef HAVE_G___OSFCN_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <istream> header file. */
+#undef HAVE_ISTREAM
+
+/* Define to 1 if you have the `bsd' library (-lbsd). */
+#undef HAVE_LIBBSD
+
+/* Define to 1 if you have the `fl' library (-lfl). */
+#undef HAVE_LIBFL
+
+/* Define to 1 if you have the `g++' library (-lg++). */
+#undef HAVE_LIBG__
+
+/* Define to 1 if you have the `nsl' library (-lnsl). */
+#undef HAVE_LIBNSL
+
+/* Define if libpq++.h is available. */
+#undef HAVE_LIBPQPP_H
+
+/* Define if libpq++.H is available. */
+#undef HAVE_LIBPQPP_HH
+
+/* Define to 1 if you have the `socket' library (-lsocket). */
+#undef HAVE_LIBSOCKET
+
+/* Define to 1 if you have the `ucb' library (-lucb). */
+#undef HAVE_LIBUCB
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the `mkstemp' function. */
+#undef HAVE_MKSTEMP
+
+/* Define to 1 if you have the <ostream> header file. */
+#undef HAVE_OSTREAM
+
+/* Define if libpq++.a is available. */
+#undef HAVE_PGSQL
+
+/* Define if pg_config.h is available and needed. */
+#undef HAVE_PG_CONFIG_H
+
+/* Define to 1 if you have the <readline/history.h> header file. */
+#undef HAVE_READLINE_HISTORY_H
+
+/* Define to 1 if you have the <readline/readline.h> header file. */
+#undef HAVE_READLINE_READLINE_H
+
+/* Define to 1 if you have the <regex.h> header file. */
+#undef HAVE_REGEX_H
+
+/* Define if root tools are available. */
+#undef HAVE_ROOTTOOLS
+
+/* Define to 1 if you have the <sqlca.h> header file. */
+#undef HAVE_SQLCA_H
+
+/* Define to 1 if you have the <stddef.h> header file. */
+#undef HAVE_STDDEF_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/time.h> header file. */
+#undef HAVE_SYS_TIME_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define if wxwin toolkit is available */
+#undef HAVE_WXWIN
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* your web browser is found in */
+#undef WWWBROWSER
+
+/* Define to 1 if the X Window System is missing or not being used. */
+#undef X_DISPLAY_MISSING
+
+/* Needed by wxwin toolkit */
+#undef wx_motif

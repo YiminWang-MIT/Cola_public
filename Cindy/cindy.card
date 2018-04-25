@@ -1,0 +1,32 @@
+#
+# Created 1995 by	Michael O. Distler,
+#			Institut fuer Kernphysik,
+#			Johannes Gutenberg-Universitaet Mainz
+#
+# $Header: /tmp/cvsroot/Cola/Cindy/cindy.card,v 4.6 1997-07-09 20:39:45 distler Exp $
+#
+# test card
+#
+
+SpecA
+	angle	40.0
+	refMom	.360
+	peak0	.345
+	delta0	.005
+	min0 .5
+	max0 .6
+	flag0 0
+	bins0 123
+
+SPECB
+	ANGLE +45.0
+	REFMOM 400.
+	PEAK1 1.2
+	DELTA1 .2
+	MIN1 .5
+	MAX1 .6
+	FLAG1 1
+	BINS1 456
+
+specc	angle	-50.0	refmom	4.4e2	peak2	10.	delta2	1.
+	min2	.5	max2	.6	flag2	2	bins2	7890

@@ -1,0 +1,16 @@
+#
+zone 2 5 1
+SetFillRGB 0.5 1.0 1.0
+Title "Beam"
+Histogram "beam/helicity"
+Histogram "beam/timeslot"
+Histogram "beam/toroid/bt1"
+Histogram "beam/toroid/bt2"
+Histogram "beam/position/molx"
+Histogram "beam/position/moly"
+Histogram "beam/position/tgtx"
+Histogram "beam/position/tgty"
+Histogram "beam/halo/halo1"
+Histogram "beam/halo/halo2"
+
+close

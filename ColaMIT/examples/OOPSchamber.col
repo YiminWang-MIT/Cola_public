@@ -1,0 +1,87 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/OOPSchamber.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for OOPS drift chambers
+//
+
+// required definitions
+//
+// spec  :  name of the spectrometer in event configuration oops1
+// nr    :  number of the chamber (1, 2, or 3)
+// title :  first part of the histogram title
+//
+
+Scalar spec.nr.x.adc    = @oops1.det.spec.chamber[nr].x.adc
+Scalar spec.nr.x.top    = @oops1.det.spec.chamber[nr].x.top
+Scalar spec.nr.x.bottom = @oops1.det.spec.chamber[nr].x.bottom
+Scalar spec.nr.x.error  = @online.spec.x.chamber[nr].error
+Scalar spec.nr.x.diff   = @online.spec.x.chamber[nr].difftime
+Scalar spec.nr.x.wire   = @online.spec.x.chamber[nr].diffwire
+Scalar spec.nr.x.drift  = @online.spec.x.chamber[nr].drifttime
+Scalar spec.nr.x.dist   = @online.spec.x.chamber[nr].driftdist
+Scalar spec.nr.x.good   = @online.spec.x.chamber[nr].goodness
+Scalar spec.nr.x.coord  = @online.spec.x.chamber[nr].coord
+
+Scalar spec.nr.y.adc    = @oops1.det.spec.chamber[nr].y.adc
+Scalar spec.nr.y.left   = @oops1.det.spec.chamber[nr].y.left
+Scalar spec.nr.y.right  = @oops1.det.spec.chamber[nr].y.right
+Scalar spec.nr.y.error  = @online.spec.y.chamber[nr].error
+Scalar spec.nr.y.diff   = @online.spec.y.chamber[nr].difftime
+Scalar spec.nr.y.wire   = @online.spec.y.chamber[nr].diffwire
+Scalar spec.nr.y.drift  = @online.spec.y.chamber[nr].drifttime
+Scalar spec.nr.y.dist   = @online.spec.y.chamber[nr].driftdist
+Scalar spec.nr.y.good   = @online.spec.y.chamber[nr].goodness
+Scalar spec.nr.y.coord  = @online.spec.y.chamber[nr].coord
+
+Histogram title"x/adc" spec.nr.x.adc("odd - even", "", 82.5, 2047.5, 1965) ;
+Histogram title"x/top" spec.nr.x.top("delay line", "", 0.5, 2047.5, 2047) ;
+Histogram title"x/bottom" spec.nr.x.bottom("delay line","",0.5,2047.5,2047) ;
+Histogram title"x/error code" spec.nr.x.error("", "", -0.5, 31.5, 32) ;
+
+Cut (spec.nr.x.error==0) {
+    Histogram title"x/drift"\
+	spec.nr.x.drift("drift time", "ns", -100.0, 250.0, 512) ;
+    Histogram title"x/top-bottom (time)"\
+	spec.nr.x.diff("top - bottom", "ns", -50.0, 50.0, 400) ;
+    Histogram title"x/top-bottom (wire)"\
+	spec.nr.x.wire("top - bottom", "wire#", -13.0, 13.0, 400) ;
+    Histogram title"x/coord" spec.nr.x.coord("x coordinate", "mm", \
+					     -150.0, 150.0, 300) ;
+    Histogram title"x/distance" spec.nr.x.dist("drift distance", "mm", \
+					       -1.5, 1.5, 512) ;
+    Histogram title"x/goodness" spec.nr.x.good("Goodness", "bit", \
+					       -0.5, 31.5, 32) ;
+}
+
+Histogram title"y/adc" spec.nr.y.adc("odd - even", "", 82.5, 2047.5, 1965) ;
+Histogram title"y/left" spec.nr.y.left("delay line", "", 0.5, 2047.5, 2047) ;
+Histogram title"y/right" spec.nr.y.right("delay line", "", 0.5, 2047.5, 2047) ;
+Histogram title"y/error code" spec.nr.y.error("", "", -0.5, 31.5, 32) ;
+
+Cut (spec.nr.y.error==0) {
+    Histogram title"y/drift"\
+	spec.nr.y.drift("drift time", "ns", -100.0, 250.0, 512) ;
+    Histogram title"y/right-left (time)"\
+	spec.nr.y.diff("right - left", "ns", -100.0, 100.0, 800) ;
+    Histogram title"y/right-left (wire)"\
+	spec.nr.y.wire("right - left", "wire#", -26.0, 26.0, 800) ;
+    Histogram title"y/coord" spec.nr.y.coord("y coordinate", "mm", \
+					     -150.0, 150.0, 300) ;
+    Histogram title"y/distance" spec.nr.y.dist("drift distance", "mm", \
+					       -1.5, 1.5, 512) ;
+    Histogram title"y/goodness" spec.nr.y.good("Goodness", "bit", \
+					       -0.5, 31.5, 32) ;
+}
+
+Cut ( @online.spec.y.multi == 3 ) && ( @online.spec.y.multi == 3 ) {
+    Histogram title"x/coord (cut)" spec.nr.x.coord("x coordinate", "mm", \
+						   -150.0, 150.0, 300) ;
+    Histogram title"y/coord (cut)" spec.nr.y.coord("y coordinate", "mm", \
+						   -150.0, 150.0, 300) ;
+}

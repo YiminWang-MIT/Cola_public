@@ -1,0 +1,10 @@
+export LS_COLORS=$LS_COLORS'*.col=01;32:*.db=01;32:*.his=01;32:'
+export CVSROOT=:pserver:$USER@a1ipinull1.kph.uni-mainz.de:/kits/A1/src/cvsroot
+
+
+
+
+
+
+
+

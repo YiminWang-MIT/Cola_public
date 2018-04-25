@@ -1,0 +1,163 @@
+#                                                                -*-makefile-*-
+# Created 1993-96 by  Michael O. Distler,
+#                     Institut fuer Kernphysik,
+#                     Johannes Gutenberg-Universitaet Mainz
+# Updated 1997 by     Michael O. Distler,
+#                     M.I.T., Laboratory for Nuclear Science
+#
+# $Header: https://wwwa1.kph.uni-mainz.de/svn/Cola/trunk/Cindy/Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+# Makefile for the cindy compiler and for cindy library
+#
+
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+
+include		../Makefile.inc
+
+incprefix	= $(incdir)/Cindy
+
+BINARY	= Cindy++ Decode Extract Coinc
+
+CFLAGS	= $(OPTS) -O2 $(WARN)
+CXXFLAGS= $(OPTS) -O2 $(WARN)
+LDFLAGS	= $(OPTS) -L.
+
+CPPFLAGS= $(DEFS) -I. -I.. -I$(srcdir) -I$(srcdir)/..
+CXXSRC	= Card.cc Cindy.cc CindyBase.cc CindyCard.cc CindyCoinc.cc \
+	  CindyDecode.cc CindyExtract.cc CindyInfo.cc CindyItem.cc \
+	  CindyNode.cc CindyStream.cc CindyTree.cc CindyXDR.cc proctest.cc
+GENSRC	= CindyYACC.cc CindyLEX.cc CindyCardYACC.cc CindyCardLEX.cc
+CSRC	= inttest.c
+SSRC	= Cindy.y Cindy.l CindyCard.y CindyCard.l \
+	  Makefile.in cindy.card cindy.dxx
+INC	= CindyCompiler.h CindyNode.h CindyXDR.h header.h \
+	  Cindy++.h CindyStream.h CindyCard.h CindyCoinc.h
+INSTINC	= Cindy++.h CindyCard.h CindyCardLEX.h CindyCardYACC.h
+TESTBIN	= Info Card
+AUXBIN	= proctest inttest
+
+ifeq ($(ISSHARED),1)
+BINARY += Cindy++.shared
+endif
+
+SUBDIR	= $(notdir $(srcdir))
+libobjs	= CindyNode.o CindyBase.o CindyTree.o CindyStream.o \
+	  CindyYACC.o CindyCardYACC.o CindyLEX.o CindyCardLEX.o \
+	  CindyItem.o CindyXDR.o CindyCard.o
+library	= libcindy.a
+
+VERSION	= 4.20
+shlib	= $(SHARED_LIB).$(VERSION)
+
+all:	$(BINARY) $(TESTBIN)
+
+lib :	$(BUILD_LIBS)
+
+Cindy++ :	Cindy.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+Cindy++.shared :	Cindy.o $(shlib)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $< -lcindy $(LIBS)
+
+CindyYACC.cc CindyYACC.h :	Cindy.y arch.h
+	$(BISONXX) -dvy $(BISONFLAGS) -o $*.cc -h $*.h $<
+
+CindyLEX.cc CindyLEX.h :	Cindy.l
+	$(FLEXXX) $(FLEXFLAGS) -o$*.cc -h$*.h $<
+
+CindyCardYACC.cc CindyCardYACC.h :	CindyCard.y
+	$(BISONXX) -dvy $(BISONFLAGS) -o $*.cc -h $*.h $<
+
+CindyCardLEX.cc CindyCardLEX.h :	CindyCard.l
+	$(FLEXXX) $(FLEXFLAGS) -i -o$*.cc -h$*.h $<
+
+$(library) :	$(libobjs)
+	@ ar -crv $@ $^
+	$(RANLIB) $@
+
+$(shlib) $(SHARED_LIB) :	$(addprefix $(PICDIR)/,$(libobjs))
+	$(link_shlib)
+
+Info:	CindyInfo.o CindyStream.o CindyXDR.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+Extract:	CindyExtract.o $(BUILD_LIBS)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $< $(LIBCINDY) $(LIBS)
+
+Card:		Card.o CindyCard.o CindyCardYACC.o CindyCardLEX.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+inttest:	inttest.c
+	$(CC) $(CFLAGS) -DINTTEST -o $@ $<
+
+proctest:	proctest.cc
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+doc :	$(htmldir)/Cindy.html $(texdir)/Cindy.ps
+
+$(htmldir)/Cindy.html:	Cindy++.h cindy.dxx
+	@test -d $(htmldir) || mkdir $(htmldir)
+	(cd $(dir $<); $(DOCXX) -d $(shell pwd)/$(htmldir) $(notdir $<))
+
+$(texdir)/Cindy.tex:	Cindy++.h cindy.dxx
+	@test -d $(texdir) || mkdir $(texdir)
+	(cd $(dir $<); $(DOCXX) -t -o $(shell pwd)/$@ $(notdir $<))
+
+$(texdir)/Cindy.dvi:	$(texdir)/Cindy.tex
+	@test -f $(texdir)/$(DOCXXSTY) || \
+	    ln -s $(shell cd $(srcdir)/../Doc/src;pwd)/$(DOCXXSTY) $(texdir)
+	(cd $(texdir);$(LATEX) $(notdir $<);$(LATEX) $(notdir $<))
+
+$(texdir)/Cindy.ps:	$(texdir)/Cindy.dvi
+	$(DVIPS) -o $@ $^
+
+Coinc :	CindyCoinc.o $(BUILD_LIBS)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $< $(LIBCINDY) $(LIBS)
+
+Decode:	CindyDecode.o $(BUILD_LIBS)
+	$(CXX) $(LDFLAGS) $(LDSHARE) -o $@ $< $(LIBCINDY) $(LIBS)
+
+install:	.install
+.install:	$(INSTINC) $(BUILD_LIBS) $(BINARY) \
+		$(htmldir)/Cindy.html $(texdir)/Cindy.ps
+	-@$(foreach dir,$(exec_prefix) $(libdir) $(bindir) $(incprefix) \
+		$(docdir) $(docdir)/Cindy,test -d $(dir) || mkdir $(dir);)
+	$(INSTALL_DATA) $(library) $(libdir)/$(library)
+	$(install_shlib)
+	$(foreach file,Cindy++.h CindyCard.h EventDispatch.h,\
+	  $(INSTALL_DATA) $(srcdir)/$(file) $(incprefix)/$(file);)
+	$(foreach file,CindyCardLEX.h CindyCardYACC.h,\
+	  $(INSTALL_DATA) $(file) $(incprefix)/$(file);)
+	$(foreach file,$(BINARY),$(INSTALL_PROGRAM) $(file) $(bindir)/$(file);)
+	if test -f $(libdir)/$(shlib);then \
+		if test -f $(bindir)/Cindy++.shared;then \
+			mv $(bindir)/Cindy++.shared $(bindir)/Cindy++;fi;fi
+	$(foreach doc,$(wildcard $(htmldir)/* $(texdir)/*.ps $(texdir)/*.tex),\
+		$(INSTALL_DATA) $(doc) $(docdir)/Cindy;)
+	date > $@
+
+clean:
+	rm -f *~ *.o core $(TESTBIN) $(AUXBIN)
+	rm -rf tmp special configuration*.sh $(PICDIR)
+	rm -f *YACC.cc *LEX.cc *YACC.h *LEX.h
+
+veryclean:	clean
+	rm  -f $(BUILD_LIBS) $(BINARY) $(SHARED_LIB)
+	rm  -f Cindy*YACC.output .install .release
+	rm  -f Cindy.{txt,ps,info} Cindy*.{html,rtf}
+	rm  -f qwertz.ps qwertz*.{html,rtf} nohup.out
+	rm -rf $(htmldir) $(texdir)
+
+distclean:	veryclean
+	rm -f Makefile Cindy*LEX.* Cindy*YACC.* arch.h .depend
+
+arch.h:	inttest.c
+	$(CC) -o archtest $<
+	./archtest > $@
+	rm -f archtest
+
+.depend:	$(CSRC) $(CXXSRC) $(GENSRC)
+	$(CC) -M $(CPPFLAGS) $^ | sed -e 's-^.*\.o-$(PICDIR)/& &-' > $@
+
+-include .depend

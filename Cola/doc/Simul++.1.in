@@ -1,0 +1,94 @@
+.\"  -*- nroff -*-
+.\"
+.\" Simul++.1.in
+.TH Simul++ 1 "October 15, 1998" "Simul++" "Cola Data Analysis"
+
+.SH NAME
+Simul++ \- Cola analysis Simulation program
+
+.SH SYNOPSIS
+.B Simul++ [-dvix] -e \fIevents\fR \fIsetup\fR 
+[\c
+.BI \-s \ events-to-skip\fR\c
+]
+[\c
+.BI \-n \ events-to-normalize\fR\c 
+]
+[\c 
+.BI \-Q \ charge\fR\c
+]
+[\c
+.BI \-C \ directory\fR\c
+]
+[\c
+.BI \-o \ output-histogram-file\fR\c
+]
+
+.SH DESCRIPTION 
+.LP
+.B Simul++
+(Cola analysis simulation program), a program for phase space calculation and 
+simulation. For details please use the online documentation at the A1 WWW site
+http://wwwa1.kph.uni-mainz.de/A1.
+
+.ne 5
+.SH OPTIONS
+.TP
+.B \-e \fIevents\fR
+Total number of events.
+.TP
+.B \-s \fIevents to skip\fR
+Skip \fIevents to skip\fR events. Use this option to divide simulation in
+several parts.
+.TP
+.B \-n \fIevents to normalize\fR
+Event number for normalization. Use this option together with -s 
+to divide simulation in several parts:
+
+Simul++          -e 50 -n 100 "Setup" -o p1.his
+
+Simul++ -s 50000 -e 50 -n 100 "Setup" -o p2.his
+
+hmcat p1.his p2.his all.his
+
+.TP
+.B \-v
+Verbose output, especially to investigate current run.db settings
+.TP
+.B \-C \fIdirectory\fR   
+Change to \fIdirectory\fR before doing anything.
+.TP
+.B \-d         
+Don't start X11 Histogramviewer.
+.TP
+.B \-q         
+Quiet output: suppress comment lines in \fIrun.db\fR and \fI*.col\fR files
+.TP
+.B \-i         
+Ignore Floating Point Exceptions(default: use signalhandler).
+.TP
+.B \-x         
+Core dump on 'Floating point exception'.
+
+
+.SH FILES
+.TP
+.B \fI./Simulation.col\fR or \fI./col/Simulation.col\fR
+Definition of physical quantities of interest and histograms.
+.TP
+.B \fI./run.db\fR
+Database of setup information, like spectrometer angles, momenta, etc.
+.TP
+.B \fI./Simulation.his\fR
+Histogram output file. May be overrided by option -o.
+.TP
+.B \fI./Simulation.cnt\fR
+Counter information.
+
+.SH AUTHORS
+Harald Merkel, Michael O. Distler, Ingo Ewald, Jan Friedrich, Marco Kahrau,
+Pascal Merle, Thomas Pospischil, Axel Wagner
+
+.SH  SEE ALSO
+.BR Cola++ (1), Lumi++ (1)
+

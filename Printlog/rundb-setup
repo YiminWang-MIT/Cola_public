@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Harald Merkel, A1-Collaboration, Institut fuer Kernphysik, Universitaet Mainz
+# 
+# The Shellscript extracts the begin and end of an setup by examining the
+# "run.db" file. 
+#
+# Use e.g.
+#       Printlog++ `rundb-setup setupname`
+# 
+#
+cat run.db | awk -v setup=$1 '                    \
+/\[*\]/ { gsub(/\[||\]/,"",$1); b = $1;}          \
+/Setup/&&quatsch==1 {printf " -e %s", b;exit}     \
+/Setup/ { gsub(/Setup||=||"|| ||	/,"",$0); \
+          if (setup==$0)                          \
+          { printf "-b %s",b;                     \
+            quatsch=1;                            \
+          }                                       \
+        }                                         \
+END {printf "\n"; exit} '

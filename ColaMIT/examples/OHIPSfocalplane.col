@@ -1,0 +1,72 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/OHIPSfocalplane.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Histograms for OHIPS
+//
+
+// required definitions
+//
+// spec  :  name of the spectrometer in event configuration oops1
+// title :  first part of the histogram title
+//
+
+Histogram title"[D]E1 vs. [D]E2" \
+spec.scint.1.energyLoss("[D]E1", "a.u.", 2.5, 1533.5, 192) \
+spec.scint.2.energyLoss("[D]E2", "a.u.", 2.5, 1533.5, 192)
+Histogram title"[D]E1 vs. [D]E3" \
+spec.scint.1.energyLoss("[D]E1", "a.u.", 2.5, 1533.5, 192) \
+spec.scint.3.energyLoss("[D]E3", "a.u.", 2.5, 1533.5, 192)
+Histogram title"[D]E2 vs. [D]E3" \
+spec.scint.2.energyLoss("[D]E2", "a.u.", 2.5, 1533.5, 192) \
+spec.scint.3.energyLoss("[D]E3", "a.u.", 2.5, 1533.5, 192)
+
+Scalar spec.chamber.x  = @online.spec.chamber.x
+Scalar spec.chamber.th = @online.spec.chamber.th
+Scalar spec.chamber.y  = @online.spec.chamber.y
+Scalar spec.chamber.ph = @online.spec.chamber.ph
+
+Scalar spec.chamber.dx  = @online.spec.chamberError.x
+Scalar spec.chamber.dth = @online.spec.chamberError.th
+Scalar spec.chamber.dy  = @online.spec.chamberError.y
+Scalar spec.chamber.dph = @online.spec.chamberError.ph
+
+Histogram htitle"chamber/x (disp.)" \
+          spec.chamber.x("x", "mm", -400.0, 200.0, 300) ;
+Histogram htitle"chamber/[q] (disp.)" \
+          spec.chamber.th("[q]", "mrad", -1572.0, 1572.0, 300) ;
+Histogram htitle"chamber/y (non-disp.)" \
+          spec.chamber.y("y", "mm", -150.0, 150.0, 600) ;
+Histogram htitle"chamber/[f] (non-disp.)" \
+          spec.chamber.ph("[f]", "mrad", -1572.0, 1572.0, 300) ;
+Histogram htitle"chamber/[q] vs. x" \
+          spec.chamber.x("x", "mm", -400.0, 200.0, 300) \
+          spec.chamber.th("[q]","mrad", 680.0, 880.0, 100) ;
+
+Histogram htitle"chamber/sigma x"   \
+          spec.chamber.dx("[s]_x!", "mm", 0.0, 2.0, 100) ;
+Histogram htitle"chamber/sigma [q]" \
+          spec.chamber.dth("[s]_[q]!", "mrad", 0.0, 10.0, 100) ;
+Histogram htitle"chamber/sigma y"   \
+          spec.chamber.dy("[s]_y!", "mm", 0.0, 2.0, 100) ;
+Histogram htitle"chamber/sigma [f]" \
+          spec.chamber.dph("[s]_[f]!", "mrad", 0.0, 20.0, 100) ;
+
+Scalar spec.focal.x  = @online.spec.focal.x
+Scalar spec.focal.th = @online.spec.focal.th
+Scalar spec.focal.y  = @online.spec.focal.y
+Scalar spec.focal.ph = @online.spec.focal.ph
+
+Histogram title"x (disp.)"       spec.focal.x("x", "mm", -800.0, 800.0, 400) ;
+Histogram title"[q] (disp.)"     spec.focal.th("[q]", "mrad", \
+					       -100.0, 100.0, 400) ;
+Histogram title"y (non-disp.)"   spec.focal.y("y", "mm", -50.0, 50.0, 400) ;
+Histogram title"[f] (non-disp.)" spec.focal.ph("[f]", "mrad", \
+					       -50.0, 50.0, 400) ;
+Histogram title"[q] vs. x"       spec.focal.x("x", "mm", -800.0, 800.0, 400) \
+				 spec.focal.th("[q]","mrad",-60.0, 60.0,100) ;

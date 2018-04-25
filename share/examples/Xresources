@@ -1,0 +1,34 @@
+*Form.background:                       grey67
+*TransientShell*Dialog.background:      grey67
+*Command.background:            	grey77
+*MenuButton.background:         	grey77
+*SimpleMenu*background:         	grey77
+*ScrollbarBackground:           	grey67
+*ScrollbarForeground:           	grey37
+*Scrollbar*background:          	grey77
+*Scrollbar*pointerColor:        	black
+*Scrollbar*pointerColorBackground:      white
+*beNiceToColormap:              	False
+
+*fontList: 		 -*-helvetica-bold-r-normal-*-16-*-*-*-*-*-iso8859-1
+*XmTextField.fontList:   -*-helvetica-bold-r-normal-*-14-*-*-*-*-*-iso8859-1
+*XmText.fontList:        -*-helvetica-bold-r-normal-*-14-*-*-*-*-*-iso8859-1
+*XmList*fontList:        -*-helvetica-bold-r-normal-*-14-*-*-*-*-*-iso8859-1
+
+*customization:         -color
+*foreground:		Black
+*highlight:    	        Red
+*highlightColor:	Red
+
+
+
+
+
+
+
+
+
+
+
+
+

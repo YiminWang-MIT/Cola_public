@@ -1,0 +1,3 @@
+#include "abcn.h"
+
+struct abcn	abcn;

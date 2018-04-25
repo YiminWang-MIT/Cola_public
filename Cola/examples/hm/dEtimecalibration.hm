@@ -1,0 +1,42 @@
+zone 2 4 1
+Histogram "Time/Coincidence time/Paddle 1: dE
+Histogram "Time/Coincidence time/Paddle 2: dE
+Histogram "Time/Coincidence time/Paddle 3: dE
+Histogram "Time/Coincidence time/Paddle 4: dE
+Histogram "Time/Coincidence time/Paddle 5: dE
+Histogram "Time/Coincidence time/Paddle 6: dE
+Histogram "Time/Coincidence time/Paddle 7: dE
+Histogram "Time/Coincidence time/Paddle 8: dE
+title "dE Paddles"
+Histogram "Time/Coincidence time/Paddle 9: dE
+Histogram "Time/Coincidence time/Paddle 10: dE
+Histogram "Time/Coincidence time/Paddle 11: dE
+Histogram "Time/Coincidence time/Paddle 12: dE
+Histogram "Time/Coincidence time/Paddle 13: dE
+Histogram "Time/Coincidence time/Paddle 14: dE
+Histogram "Time/Coincidence time/Paddle 15: dE
+Histogram "Time/Coincidence time/Paddle 16: dE
+title "dE Paddles"
+Histogram "Time/Coincidence time/Paddle 1: ToF
+Histogram "Time/Coincidence time/Paddle 2: ToF
+Histogram "Time/Coincidence time/Paddle 3: ToF
+Histogram "Time/Coincidence time/Paddle 4: ToF
+Histogram "Time/Coincidence time/Paddle 5: ToF
+Histogram "Time/Coincidence time/Paddle 6: ToF
+Histogram "Time/Coincidence time/Paddle 7: ToF
+Histogram "Time/Coincidence time/Paddle 8: ToF
+title "Tof Paddles"
+Histogram "Time/Coincidence time/Paddle 9: ToF
+Histogram "Time/Coincidence time/Paddle 10: ToF
+Histogram "Time/Coincidence time/Paddle 11: ToF
+Histogram "Time/Coincidence time/Paddle 12: ToF
+Histogram "Time/Coincidence time/Paddle 13: ToF
+Histogram "Time/Coincidence time/Paddle 14: ToF
+Histogram "Time/Coincidence time/Paddle 15: ToF
+Histogram "Time/Coincidence time/Paddle 16: ToF
+title "ToF Paddles"
+close
+
+
+
+

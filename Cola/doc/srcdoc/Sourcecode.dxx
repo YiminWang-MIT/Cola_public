@@ -1,0 +1,68 @@
+//@name Cola++
+//@memo    The A1 analysis package.
+//@version 1.0
+//@author  Michael O. Distler, Harald Merkel, et.al\\[1cm]
+/** @name General */
+//@{
+  //@Include: ../../../Cola/include/online/online.h
+  //@Include: ../../../Cola/rundatabase.h
+  //@Include: ../../../Cola/Focus.h
+//@}
+//@Include: ../../../FourVector/FourVector.h
+/** @name Chamber library */
+//@{
+  //@Include: ../../../Chamber/chlib.dxx
+//@}
+/** @name TMA: backtracing matrices */
+//@{
+  //@Include: ../../../TMA/FastTM.h
+//@}
+
+//@Include: ../../../Cola/Luminosity.h
+//@Include: ../../../Cola/Material.h
+//@Include: ../../../Cola/Masses.h
+//@Include: ../../../Cola/Reactions.h
+/** @name Detector components
+*/
+//@{
+  //@Include: ../../../Cola/Cerenkov.h
+  //@Include: ../../../Cola/VDCraw.h
+//@}
+/** @name Histograms, Cuts and Expression Evaluation
+*/
+//@{
+  /** @name HMBook Histogram Package */
+  //@{
+     //@Include: ../../../HMBook/hmbook.h
+  //@}	
+  /** @name HMPlot Plotting Package */
+  //@{
+     //@Include: ../../../HMBook/hmplot.h
+  //@}	
+  /** @name Structure of the evaluation tree */
+  //@{ 
+    //@Include: ../../../Cola/evaluate.h
+  //@}
+  /** @name Objects of the evaluation tree */
+  //@{ 
+    //@Include: ../../../Cola/ExpressionParser.y
+    //@Include: ../../../Cola/ColaScalar.h
+  //@}
+//@}
+/** @name Simulation
+*/
+//@{
+  //@Include: ../../../Cola/Radiation.h
+  //@Include: ../../../Cola/QuasiRandom.h
+  /** @name Collimator 
+  */
+  //@{ 
+  //@Include: ../../../Simulation/Colli.h
+  //@}
+  //@Include: ../../../Simulation/spinTransfer.h
+//@}
+
+
+
+
+

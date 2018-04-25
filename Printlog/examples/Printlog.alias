@@ -1,0 +1,107 @@
+beamdump/water/flow/1		03 Beam/Beamdump/Water-FLow-1 		l/h
+beamdump/water/flow/2		03 Beam/Beamdump/Water-FLow-1 		l/h
+beam/cavity/1/temp		03 Beam/Cavities/Temperature-Cavity-1	^o!C
+beam/cavity/2/temp		03 Beam/Cavities/Temperature-Cavity-2	^o!C
+beam/cavity/1/x			03 Beam/Cavities/Cavity-x		mm
+beam/cavity/1/y			03 Beam/Cavities/Cavity-y		mm
+beam/energy			03 Beam/Energy 				MeV
+beam/cavity/1/current		01 Beam/Current-Cavity1 		[m]A
+beam/cavity/2/current		01 Beam/Current-Cavity2 		[m]A
+
+target/cryo/press/1/events	04 Target/Cryo/Pressure-1 		mbar
+target/cryo/press/2/events	04 Target/Cryo/Pressure-2 		mbar
+target/cryo/temp/1		01 Target/Cryo/Loop-Temperature-1 	K
+target/cryo/temp/2		01 Target/Cryo/Loop-Temperature-2 	K
+target/cryo/tempctrl/temp	08 Target/Cryo/Cell-Temperature		K
+target/angle			01 Target/Angle 			^o!
+target/height			01 Target/Height 			V
+
+speca/magnet/d1/water/flow	03 SpecA/Magnet/Water/D1-flow		l/h
+speca/magnet/d2/water/flow	03 SpecA/Magnet/Water/D2-flow		l/h
+speca/magnet/quad/water/flow	03 SpecA/Magnet/Water/Qaad-flow		l/h
+speca/magnet/sext/m/water/flow	03 SpecA/Magnet/Water/Sext-flow		l/h
+speca/magnet/sext/a/water/flow	03 SpecA/Magnet/Water/Sext(aux)-flow	l/h
+speca/magnet/d1/water/temp	03 SpecA/Magnet/Water/D1-Temp		^o!C
+speca/magnet/d2/water/temp	03 SpecA/Magnet/Water/D2-Temp		^o!C
+speca/magnet/quad/water/temp	03 SpecA/Magnet/Water/Quad-Temp		^o!C
+speca/magnet/sext/a/water/temp	03 SpecA/Magnet/Water/Sext(aux)-Temp	^o!C
+speca/magnet/sext/m/water/temp	03 SpecA/Magnet/Water/Sext-Temp		^o!C
+speca/magnet/d1/hall		03 SpecA/Magnet/Hall-Probe 		T
+speca/magnet/d1/nmr		03 SpecA/Magnet/NMR-1 			T
+speca/magnet/d1/nmr		07 SpecA/Magnet/NMR-2 			T
+speca/vdc/hv1/cathode/i/get	03 SpecA/VDC/HV1/Current 		[m]A
+speca/vdc/hv1/cathode/u/get	03 SpecA/VDC/HV1/Voltage 		V
+speca/vdc/hv2/cathode/i/get	03 SpecA/VDC/HV2/Current 		[m]A
+speca/vdc/hv2/cathode/u/get	03 SpecA/VDC/HV2/Voltage 		V
+speca/vdc/preamp/threshold/get	03 SpecA/VDC/Threshold 			mV
+speca/vdc/gas/ar/flow/get	03 SpecA/VDC/Argon 			ml/min
+speca/vdc/gas/aralc/flow/get	03 SpecA/VDC/Argon-Alcohol 		ml/min
+speca/vdc/gas/iso/flow/get	03 SpecA/VDC/Isobutan 			ml/min
+speca/trigger/discr/cher	01 SpecA/Trigger/Threshold-Cerenkov	mV
+speca/trigger/discr/de_l	01 SpecA/Trigger/Threshold-dE-left	mV
+speca/trigger/discr/de_r	01 SpecA/Trigger/Threshod-dE-right	mV
+speca/trigger/discr/tof_l	01 SpecA/Trigger/Threshold-dE-right	mV
+speca/trigger/discr/tof_r	01 SpecA/Trigger/Threshold-ToF-right	mV
+speca/angle			35 SpecA/Angle				^o!
+speca/colli			33 SpecA/Collimator-Position		mm
+
+specb/magnet/d1/water/flow	03 SpecB/Magnet/Water/D1-flow		l/h
+specb/magnet/cplate/water/flow	03 SpecB/Magnet/Water/cplae-flow 	l/h
+specb/magnet/d1/water/temp	03 SpecB/Magnet/Water/D1-Temp		^o!C
+specb/magnet/d1/hall		03 SpecB/Magnet/Hall-Probe 		T
+specb/magnet/d1/nmr		03 SpecB/Magnet/NMR-1 			T
+specb/magnet/d1/nmr		07 SpecB/Magnet/NMR-2 			T
+specb/vdc/hv1/cathode/i/get	03 SpecB/VDC/HV1/Current 		[m]A
+specb/vdc/hv1/cathode/u/get	03 SpecB/VDC/HV1/Voltage 		V
+specb/vdc/hv2/cathode/i/get	03 SpecB/VDC/HV2/Current 		[m]A
+specb/vdc/hv2/cathode/u/get	03 SpecB/VDC/HV2/Voltage 		V
+specb/vdc/preamp/threshold/get	03 SpecB/VDC/Threshold 			mV
+specb/vdc/gas/ar/flow/get	03 SpecB/VDC/Argon 			ml/min
+specb/vdc/gas/aralc/flow/get	03 SpecB/VDC/Argon-Alcohol 		ml/min
+specb/vdc/gas/iso/flow/get	03 SpecB/VDC/Isobutan 			ml/min
+specb/trigger/discr/cher	01 SpecB/Trigger/Threshold-Cerenkov	mV
+specb/trigger/discr/de_l	01 SpecB/Trigger/Threshold-dE-left	mV
+specb/trigger/discr/de_r	01 SpecB/Trigger/Threshod-dE-right	mV
+specb/trigger/discr/tof_l	01 SpecB/Trigger/Threshold-dE-right	mV
+specb/trigger/discr/tof_r	01 SpecB/Trigger/Threshold-ToF-right	mV
+specb/angle			35 SpecB/Angle				^o!
+specb/colli/bottom		33 SpecB/Collimator-Position-bottom	mrad
+specb/colli/top			33 SpecB/Collimator-Position-top	mrad
+specb/colli/left		33 SpecB/Collimator-Position-left	mrad
+specb/colli/right		33 SpecB/Collimator-Position-right	mrad
+             
+specc/magnet/d1/water/flow	03 SpecC/Magnet/Water/D1-flow		l/h
+specc/magnet/d2/water/flow	03 SpecC/Magnet/Water/D2-flow		l/h
+specc/magnet/quad/water/flow	03 SpecC/Magnet/Water/Qaad-flow		l/h
+specc/magnet/sext/m/water/flow	03 SpecC/Magnet/Water/Sext-flow		l/h
+specc/magnet/sext/a/water/flow	03 SpecC/Magnet/Water/Sext(aux)-flow	l/h
+specc/magnet/d1/water/temp	03 SpecC/Magnet/Water/D1-Temp		^o!C
+specc/magnet/d2/water/temp	03 SpecC/Magnet/Water/D2-Temp		^o!C
+specc/magnet/quad/water/temp	03 SpecC/Magnet/Water/Quad-Temp		^o!C
+specc/magnet/sext/a/water/temp	03 SpecC/Magnet/Water/Sext(aux)-Temp	^o!C
+specc/magnet/sext/m/water/temp	03 SpecC/Magnet/Water/Sext-Temp		^o!C
+specc/magnet/d1/hall		03 SpecC/Magnet/Hall-Probe 		T
+specc/magnet/d1/nmr		03 SpecC/Magnet/NMR-1 			T
+specc/magnet/d1/nmr		07 SpecC/Magnet/NMR-2 			T
+specc/vdc/hv1/cathode/i/get	03 SpecC/VDC/HV1/Current 		[m]A
+specc/vdc/hv1/cathode/u/get	03 SpecC/VDC/HV1/Voltage 		V
+specc/vdc/hv2/cathode/i/get	03 SpecC/VDC/HV2/Current 		[m]A
+specc/vdc/hv2/cathode/u/get	03 SpecC/VDC/HV2/Voltage 		V
+specc/vdc/preamp/threshold/get	03 SpecC/VDC/Threshold 			mV
+specc/vdc/gas/ar/flow/get	03 SpecC/VDC/Argon 			ml/min
+specc/vdc/gas/aralc/flow/get	03 SpecC/VDC/Argon-Alcohol 		ml/min
+specc/vdc/gas/iso/flow/get	03 SpecC/VDC/Isobutan 			ml/min
+specc/trigger/discr/cher	01 SpecC/Trigger/Threshold-Cerenkov	mV
+specc/trigger/discr/de_l	01 SpecC/Trigger/Threshold-dE-left	mV
+specc/trigger/discr/de_r	01 SpecC/Trigger/Threshod-dE-right	mV
+specc/trigger/discr/tof_l	01 SpecC/Trigger/Threshold-dE-right	mV
+specc/trigger/discr/tof_r	01 SpecC/Trigger/Threshold-ToF-right	mV
+specc/angle			35 SpecC/Angle				^o!
+specc/colli			33 SpecC/Collimator-Position		mm
+
+
+
+
+
+
+

@@ -1,0 +1,17 @@
+//
+// the guy to blame:
+//
+// Michael O. Distler                        mailto:distler@mit.edu
+// MIT, Lab for Nuclear Science, 26-402B     tel.   (617) 253-6997
+// Cambridge, MA 02139                       fax    (617) 258-5440
+//
+// $Header: /tmp/cvsroot/Cola/ColaMIT/examples/counter.col,v 2.1 2002-03-05 03:50:06 distler Exp $
+//
+// Counters for N->Delta run
+//
+
+Counter event3  = @oops1.clear.scaler != 0
+Counter event5  = @oops1.scaler.ohips.event5 != 0
+Counter event8  = @oops1.det.latch1 >= 0
+Counter event10 = @oops1.beam.helicity != 0
+Counter event13 = @oops1.target.bottom.pressure > 0.0

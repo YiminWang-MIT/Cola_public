@@ -1,0 +1,109 @@
+delta 107
+ 1 0 0 0T          No.  2: <  x^ 1 * theta^ 0 * y^ 0 * phi^ 0 >
+ 2 0 0 0T          No.  3: <  x^ 2 * theta^ 0 * y^ 0 * phi^ 0 >
+ 3 0 0 0T          No.  4: <  x^ 3 * theta^ 0 * y^ 0 * phi^ 0 >
+ 4 0 0 0T          No.  5: <  x^ 4 * theta^ 0 * y^ 0 * phi^ 0 >
+ 5 0 0 0T          No.  6: <  x^ 5 * theta^ 0 * y^ 0 * phi^ 0 >
+ 0 1 0 0T          No.  7: <  x^ 0 * theta^ 1 * y^ 0 * phi^ 0 >
+ 1 1 0 0T          No.  8: <  x^ 1 * theta^ 1 * y^ 0 * phi^ 0 >
+ 2 1 0 0T          No.  9: <  x^ 2 * theta^ 1 * y^ 0 * phi^ 0 >
+ 3 1 0 0T          No. 10: <  x^ 3 * theta^ 1 * y^ 0 * phi^ 0 >
+ 4 1 0 0T          No. 11: <  x^ 4 * theta^ 1 * y^ 0 * phi^ 0 >
+ 5 1 0 0T          No. 12: <  x^ 5 * theta^ 1 * y^ 0 * phi^ 0 >
+ 0 2 0 0T          No. 13: <  x^ 0 * theta^ 2 * y^ 0 * phi^ 0 >
+ 1 2 0 0T          No. 14: <  x^ 1 * theta^ 2 * y^ 0 * phi^ 0 >
+ 2 2 0 0T          No. 15: <  x^ 2 * theta^ 2 * y^ 0 * phi^ 0 >
+ 3 2 0 0T          No. 16: <  x^ 3 * theta^ 2 * y^ 0 * phi^ 0 >
+ 4 2 0 0T          No. 17: <  x^ 4 * theta^ 2 * y^ 0 * phi^ 0 >
+ 5 2 0 0T          No. 18: <  x^ 5 * theta^ 2 * y^ 0 * phi^ 0 >
+ 0 3 0 0T          No. 19: <  x^ 0 * theta^ 3 * y^ 0 * phi^ 0 >
+ 1 3 0 0T          No. 20: <  x^ 1 * theta^ 3 * y^ 0 * phi^ 0 >
+ 2 3 0 0T          No. 21: <  x^ 2 * theta^ 3 * y^ 0 * phi^ 0 >
+ 3 3 0 0T          No. 22: <  x^ 3 * theta^ 3 * y^ 0 * phi^ 0 >
+ 4 3 0 0T          No. 23: <  x^ 4 * theta^ 3 * y^ 0 * phi^ 0 >
+ 5 3 0 0T          No. 24: <  x^ 5 * theta^ 3 * y^ 0 * phi^ 0 >
+ 0 4 0 0T          No. 25: <  x^ 0 * theta^ 4 * y^ 0 * phi^ 0 >
+ 1 4 0 0T          No. 26: <  x^ 1 * theta^ 4 * y^ 0 * phi^ 0 >
+ 2 4 0 0T          No. 27: <  x^ 2 * theta^ 4 * y^ 0 * phi^ 0 >
+ 3 4 0 0T          No. 28: <  x^ 3 * theta^ 4 * y^ 0 * phi^ 0 >
+ 4 4 0 0T          No. 29: <  x^ 4 * theta^ 4 * y^ 0 * phi^ 0 >
+ 5 4 0 0T          No. 30: <  x^ 5 * theta^ 4 * y^ 0 * phi^ 0 >
+ 0 5 0 0T          No. 31: <  x^ 0 * theta^ 5 * y^ 0 * phi^ 0 >
+ 1 5 0 0T          No. 32: <  x^ 1 * theta^ 5 * y^ 0 * phi^ 0 >
+ 2 5 0 0T          No. 33: <  x^ 2 * theta^ 5 * y^ 0 * phi^ 0 >
+ 3 5 0 0T          No. 34: <  x^ 3 * theta^ 5 * y^ 0 * phi^ 0 >
+ 4 5 0 0T          No. 35: <  x^ 4 * theta^ 5 * y^ 0 * phi^ 0 >
+ 5 5 0 0T          No. 36: <  x^ 5 * theta^ 5 * y^ 0 * phi^ 0 >
+ 0 0 2 0T          No. 37: <  x^ 0 * theta^ 0 * y^ 2 * phi^ 0 >
+ 1 0 2 0T          No. 38: <  x^ 1 * theta^ 0 * y^ 2 * phi^ 0 >
+ 2 0 2 0T          No. 39: <  x^ 2 * theta^ 0 * y^ 2 * phi^ 0 >
+ 3 0 2 0T          No. 40: <  x^ 3 * theta^ 0 * y^ 2 * phi^ 0 >
+ 4 0 2 0T          No. 41: <  x^ 4 * theta^ 0 * y^ 2 * phi^ 0 >
+ 5 0 2 0T          No. 42: <  x^ 5 * theta^ 0 * y^ 2 * phi^ 0 >
+ 0 1 2 0T          No. 43: <  x^ 0 * theta^ 1 * y^ 2 * phi^ 0 >
+ 1 1 2 0T          No. 44: <  x^ 1 * theta^ 1 * y^ 2 * phi^ 0 >
+ 2 1 2 0T          No. 45: <  x^ 2 * theta^ 1 * y^ 2 * phi^ 0 >
+ 3 1 2 0T          No. 46: <  x^ 3 * theta^ 1 * y^ 2 * phi^ 0 >
+ 4 1 2 0T          No. 47: <  x^ 4 * theta^ 1 * y^ 2 * phi^ 0 >
+ 5 1 2 0T          No. 48: <  x^ 5 * theta^ 1 * y^ 2 * phi^ 0 >
+ 0 2 2 0T          No. 49: <  x^ 0 * theta^ 2 * y^ 2 * phi^ 0 >
+ 1 2 2 0T          No. 50: <  x^ 1 * theta^ 2 * y^ 2 * phi^ 0 >
+ 2 2 2 0T          No. 51: <  x^ 2 * theta^ 2 * y^ 2 * phi^ 0 >
+ 3 2 2 0T          No. 52: <  x^ 3 * theta^ 2 * y^ 2 * phi^ 0 >
+ 4 2 2 0T          No. 53: <  x^ 4 * theta^ 2 * y^ 2 * phi^ 0 >
+ 5 2 2 0T          No. 54: <  x^ 5 * theta^ 2 * y^ 2 * phi^ 0 >
+ 0 3 2 0T          No. 55: <  x^ 0 * theta^ 3 * y^ 2 * phi^ 0 >
+ 1 3 2 0T          No. 56: <  x^ 1 * theta^ 3 * y^ 2 * phi^ 0 >
+ 2 3 2 0T          No. 57: <  x^ 2 * theta^ 3 * y^ 2 * phi^ 0 >
+ 3 3 2 0T          No. 58: <  x^ 3 * theta^ 3 * y^ 2 * phi^ 0 >
+ 4 3 2 0T          No. 59: <  x^ 4 * theta^ 3 * y^ 2 * phi^ 0 >
+ 5 3 2 0T          No. 60: <  x^ 5 * theta^ 3 * y^ 2 * phi^ 0 >
+ 0 4 2 0T          No. 61: <  x^ 0 * theta^ 4 * y^ 2 * phi^ 0 >
+ 1 4 2 0T          No. 62: <  x^ 1 * theta^ 4 * y^ 2 * phi^ 0 >
+ 2 4 2 0T          No. 63: <  x^ 2 * theta^ 4 * y^ 2 * phi^ 0 >
+ 3 4 2 0T          No. 64: <  x^ 3 * theta^ 4 * y^ 2 * phi^ 0 >
+ 4 4 2 0T          No. 65: <  x^ 4 * theta^ 4 * y^ 2 * phi^ 0 >
+ 5 4 2 0T          No. 66: <  x^ 5 * theta^ 4 * y^ 2 * phi^ 0 >
+ 0 5 2 0T          No. 67: <  x^ 0 * theta^ 5 * y^ 2 * phi^ 0 >
+ 1 5 2 0T          No. 68: <  x^ 1 * theta^ 5 * y^ 2 * phi^ 0 >
+ 2 5 2 0T          No. 69: <  x^ 2 * theta^ 5 * y^ 2 * phi^ 0 >
+ 3 5 2 0T          No. 70: <  x^ 3 * theta^ 5 * y^ 2 * phi^ 0 >
+ 4 5 2 0T          No. 71: <  x^ 4 * theta^ 5 * y^ 2 * phi^ 0 >
+ 5 5 2 0T          No. 72: <  x^ 5 * theta^ 5 * y^ 2 * phi^ 0 >
+ 0 0 4 0T          No. 73: <  x^ 0 * theta^ 0 * y^ 4 * phi^ 0 >
+ 1 0 4 0T          No. 74: <  x^ 1 * theta^ 0 * y^ 4 * phi^ 0 >
+ 2 0 4 0T          No. 75: <  x^ 2 * theta^ 0 * y^ 4 * phi^ 0 >
+ 3 0 4 0T          No. 76: <  x^ 3 * theta^ 0 * y^ 4 * phi^ 0 >
+ 4 0 4 0T          No. 77: <  x^ 4 * theta^ 0 * y^ 4 * phi^ 0 >
+ 5 0 4 0T          No. 78: <  x^ 5 * theta^ 0 * y^ 4 * phi^ 0 >
+ 0 1 4 0T          No. 79: <  x^ 0 * theta^ 1 * y^ 4 * phi^ 0 >
+ 1 1 4 0T          No. 80: <  x^ 1 * theta^ 1 * y^ 4 * phi^ 0 >
+ 2 1 4 0T          No. 81: <  x^ 2 * theta^ 1 * y^ 4 * phi^ 0 >
+ 3 1 4 0T          No. 82: <  x^ 3 * theta^ 1 * y^ 4 * phi^ 0 >
+ 4 1 4 0T          No. 83: <  x^ 4 * theta^ 1 * y^ 4 * phi^ 0 >
+ 5 1 4 0T          No. 84: <  x^ 5 * theta^ 1 * y^ 4 * phi^ 0 >
+ 0 2 4 0T          No. 85: <  x^ 0 * theta^ 2 * y^ 4 * phi^ 0 >
+ 1 2 4 0T          No. 86: <  x^ 1 * theta^ 2 * y^ 4 * phi^ 0 >
+ 2 2 4 0T          No. 87: <  x^ 2 * theta^ 2 * y^ 4 * phi^ 0 >
+ 3 2 4 0T          No. 88: <  x^ 3 * theta^ 2 * y^ 4 * phi^ 0 >
+ 4 2 4 0T          No. 89: <  x^ 4 * theta^ 2 * y^ 4 * phi^ 0 >
+ 5 2 4 0T          No. 90: <  x^ 5 * theta^ 2 * y^ 4 * phi^ 0 >
+ 0 3 4 0T          No. 91: <  x^ 0 * theta^ 3 * y^ 4 * phi^ 0 >
+ 1 3 4 0T          No. 92: <  x^ 1 * theta^ 3 * y^ 4 * phi^ 0 >
+ 2 3 4 0T          No. 93: <  x^ 2 * theta^ 3 * y^ 4 * phi^ 0 >
+ 3 3 4 0T          No. 94: <  x^ 3 * theta^ 3 * y^ 4 * phi^ 0 >
+ 4 3 4 0T          No. 95: <  x^ 4 * theta^ 3 * y^ 4 * phi^ 0 >
+ 5 3 4 0T          No. 96: <  x^ 5 * theta^ 3 * y^ 4 * phi^ 0 >
+ 0 4 4 0T          No. 97: <  x^ 0 * theta^ 4 * y^ 4 * phi^ 0 >
+ 1 4 4 0T          No. 98: <  x^ 1 * theta^ 4 * y^ 4 * phi^ 0 >
+ 2 4 4 0T          No. 99: <  x^ 2 * theta^ 4 * y^ 4 * phi^ 0 >
+ 3 4 4 0T          No.100: <  x^ 3 * theta^ 4 * y^ 4 * phi^ 0 >
+ 4 4 4 0T          No.101: <  x^ 4 * theta^ 4 * y^ 4 * phi^ 0 >
+ 5 4 4 0T          No.102: <  x^ 5 * theta^ 4 * y^ 4 * phi^ 0 >
+ 0 5 4 0T          No.103: <  x^ 0 * theta^ 5 * y^ 4 * phi^ 0 >
+ 1 5 4 0T          No.104: <  x^ 1 * theta^ 5 * y^ 4 * phi^ 0 >
+ 2 5 4 0T          No.105: <  x^ 2 * theta^ 5 * y^ 4 * phi^ 0 >
+ 3 5 4 0T          No.106: <  x^ 3 * theta^ 5 * y^ 4 * phi^ 0 >
+ 4 5 4 0T          No.107: <  x^ 4 * theta^ 5 * y^ 4 * phi^ 0 >
+ 5 5 4 0T          No.108: <  x^ 5 * theta^ 5 * y^ 4 * phi^ 0 >
+

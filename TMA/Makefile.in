@@ -1,0 +1,79 @@
+#								 -*-makefile-*-
+# Created 1996 by	Michael O. Distler, Harald Merkel,
+#			Institut für Kernphysik,
+#			Johannes Gutenberg-Universität Mainz
+#
+# $Header: https://wwwa1.kph.uni-mainz.de/svn/Cola/trunk/TMA/Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+srcdir  = @srcdir@
+VPATH   = @srcdir@
+
+include ../Makefile.inc
+
+CPPFLAGS = 	-I. -I$(srcdir) $(DEFS)
+CXXFLAGS = 	$(OPTS) -O2 $(WARN)
+CFLAGS  = 	$(OPTS) -O2 $(WARN)
+LDFLAGS = 	$(OPTS) -L.
+
+SOURCE =	transandlook.cc FastTM.cc ftmInit.cc ftmTest.cc kinkor.c \
+		TraceMachine.c TraceMachineC.cc TraceMachineF.c\
+		baseTM.cc SplineTM.cc
+GENSRC =	ftmInitYACC.cc ftmInitLEX.cc
+HEADER =	FastTM.h TraceMachine.h baseTM.h \
+		SplineTM.h transandlook.h
+DOC =		Makefile TMA.html bench2.txt c.example f.example \
+		tma.dvi tma.fn tma.fns tma.info tma.ps tma.texinfo tma.toc \
+		tmanote.dvi tmanote.log tmanote.ps tmanote.tex
+library =	libtma.a
+
+all lib :	$(library)
+
+test :		ftmInitTest ftmTest
+
+$(library) : 	transandlook.o FastTM.o baseTM.o SplineTM.o \
+		ftmInit.o ftmInitYACC.o ftmInitLEX.o \
+		TraceMachine.o TraceMachineC.o TraceMachineF.o kinkor.o
+		@ ar -cvr $@ $^
+		$(RANLIB) $@
+
+ftmInitYACC.cc ftmInitYACC.h :	ftmInit.y
+	$(BISONXX) -dvy $(BISONFLAGS) -o $*.cc -h $*.h $<
+
+ftmInitLEX.cc ftmInitLEX.h :	ftmInit.l
+	$(FLEXXX) $(FLEXFLAGS) -o$*.cc -h$*.h $<
+
+ftmInitTest : ftmInit.cc ftmInitYACC.o ftmInitLEX.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OPTS) -DPARSERTEST -o $@ $^ $(LIBS)
+
+ftmTest : ftmTest.o $(library)
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+install :	.install
+.install :	$(library) $(HEADER)
+	test -d $(libdir)         || mkdir $(libdir) 
+	test -d $(docdir)         || mkdir $(docdir)
+	test -d $(incdir)         || mkdir $(incdir)
+	test -d $(incdir)/TMA     || mkdir $(incdir)/TMA
+	$(INSTALL_DATA) $(library) $(libdir)
+	$(foreach inc,$(addprefix $(srcdir)/,$(HEADER)),\
+		$(INSTALL_DATA) $(inc) $(incdir)/TMA;)
+	$(foreach doc,$(addprefix $(srcdir)/doc/,$(DOC)),\
+		$(INSTALL_DATA) $(doc) $(docdir);)
+	date > $@
+ 
+clean : 
+	rm -f *~ *.o core
+
+veryclean :     clean
+	rm -f $(library) ftmInitTest ftmTest nohup.out
+	rm -f ftmInitYACC.cc ftmInitYACC.h ftmInitYACC.output
+	rm -f ftmInitLEX.cc ftmInitLEX.h
+
+distclean:	veryclean
+	rm -f Makefile .depend .install
+
+.depend :	$(SOURCE) $(GENSRC)
+	$(CC) -M $(CPPFLAGS) $^ > $@
+
+-include .depend

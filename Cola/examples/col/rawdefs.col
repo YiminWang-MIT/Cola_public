@@ -1,0 +1,109 @@
+// Harald Merkel, 
+// A1 Collaboration, Institut fuer Kernpysik, Universitaet Mainz
+// Jan. 25, 1996
+//
+// This include file defines the rawdata histograms
+// use with: #define SPECA, SPECB, SPECC
+//           #include "rawdefs.col"
+//           ...
+//
+
+#ifdef SPECA
+#define Spectrometer A
+#define spectrometer a
+#endif
+
+#ifdef SPECB
+#define Spectrometer B
+#define spectrometer b
+#endif
+
+#ifdef SPECC
+#define Spectrometer C
+#define spectrometer c
+#endif
+
+#define spc(var)  Spectrometer.var
+#define spec @online.Spectrometer 
+Scalar spc(Vertexx) = spec.vertex.x
+Scalar spc(Vertexy) = spec.vertex.y
+Scalar spc(Vertexz) = spec.vertex.z
+Scalar spc(phi0)   = spec.target.ph / 1000 * degree
+Scalar spc(theta0) = spec.target.th / 1000 * degree
+Scalar spc(deltap) = spec.target.dp
+Scalar spc(y0)     = spec.target.y0 * 10
+Scalar spc(len)    = spec.target.len
+Scalar spc(fp.x)     = spec.x
+Scalar spc(fp.y)     = spec.y
+Scalar spc(fp.theta) = spec.theta / 1000 * degree
+Scalar spc(fp.phi)   = spec.phi   / 1000 * degree
+Scalar spc(fp.dx)     = spec.dx
+Scalar spc(fp.dy)     = spec.dy
+Scalar spc(fp.dtheta) = spec.dtheta / 1000 * degree
+Scalar spc(fp.dphi)   = spec.dphi   / 1000 * degree
+Scalar spc(x_scint)    = spec.x_scint
+Scalar spc(y_scint)    = spec.y_scint
+Scalar spc(dE.Energy)  = sqrt(spec.dE.Energy.left*spec.dE.Energy.right)
+Scalar spc(ToF.Energy) = sqrt(spec.ToF.Energy.left*spec.ToF.Energy.right)
+Scalar spc(Energy)     = (spc(ToF.Energy) + spc(dE.Energy))/2
+Scalar spc(dE.paddle)  = spec.dE.paddle
+Scalar spc(ToF.paddle) = spec.ToF.paddle
+Scalar spc(vdc).x1.time  = -1
+Scalar spc(vdc).x1.wire  = -1
+Scalar spc(vdc).x1.error = spec.x1.error
+Scalar spc(vdc).x1.multi = spec.x1.multi
+Scalar spc(vdc).s1.time  = -1
+Scalar spc(vdc).s1.wire  = -1
+Scalar spc(vdc).s1.error = spec.s1.error
+Scalar spc(vdc).s1.multi = spec.s1.multi
+Scalar spc(vdc).x2.time  = -1
+Scalar spc(vdc).x2.wire  = -1
+Scalar spc(vdc).x2.error = spec.x2.error
+Scalar spc(vdc).x2.multi = spec.x2.multi
+Scalar spc(vdc).s2.time  = -1
+Scalar spc(vdc).s2.wire  = -1
+Scalar spc(vdc).s2.error = spec.s2.error
+Scalar spc(vdc).s2.multi = spec.s2.multi
+
+Scalar spc(Cerenkov.sum) = spec.Cerenkov.sum
+Scalar spc(Cerenkov.hit) = spec.Cerenkov.hit
+
+//-----------------------------------------------------------------------------
+// Singles Time Of Flight
+//-----------------------------------------------------------------------------
+Scalar spc(singleTime) = spec.singlecorr
+Scalar spc(rawsingle)  = spec.single_tdc
+
+#define cer(ch) @.spectrometer.det.trigger.cerenkov.mirror[ch].energy
+
+Scalar spc(mirror0)  = cer(0)
+Scalar spc(mirror1)  = cer(1)
+Scalar spc(mirror2)  = cer(2)
+Scalar spc(mirror3)  = cer(3)
+Scalar spc(mirror4)  = cer(4)
+#ifndef SPECB
+Scalar spc(mirror5)  = cer(5)
+Scalar spc(mirror6)  = cer(6)
+Scalar spc(mirror7)  = cer(7)
+Scalar spc(mirror8)  = cer(8)
+Scalar spc(mirror9)  = cer(9)
+Scalar spc(mirror10) = cer(10)
+Scalar spc(mirror11) = cer(11)
+#endif
+
+#undef cer
+
+#undef Spectrometer
+#undef spectrometer
+#undef sp
+#undef adcrange
+#undef drifttimerange
+
+#undef SPECA
+#undef SPECB
+#undef SPECC
+
+
+
+
+

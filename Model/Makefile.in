@@ -1,0 +1,79 @@
+#								 -*-makefile-*-
+# $Id: Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+# maid      = maid2000
+# maidphase = piN.dat
+maid      = maid2001
+maidphase = piN_new.dat
+kmaid     = kmaid
+
+srcdir	= 	@srcdir@
+VPATH	= 	@srcdir@
+
+-include	../Makefile.inc
+
+incprefix = $(incdir)/Model
+CXXSRC  =       maidtest.cc maidcall.cc Model.cc ChPTpwaves.cc ChPTswaves.cc \
+                DeuteronBreakup.cc ChPT_VCS.cc
+CXXFLAGS= 	$(OPTS) $(WARN)
+LDFLAGS	= 	$(OPTS) -L. -L$(libdir)
+LDLIBS  =       $(LDSHARE) $(LIBS) -lhmbook -lm
+CPPFLAGS=       -I. -I.. -I$(srcdir) -I$(srcdir)/.. -I$(incdir) $(DEFS)
+TOOLS	=	maidtest kmaidtest emkhyptest
+library =       libmodel.a
+VERSION	=	1.8
+shlib   =       $(SHARED_LIB).$(VERSION)
+libobjs =       maidcall.o $(maid).o $(kmaid).o Model.o ChPTpwaves.o ChPTswaves.o \
+                DeuteronBreakup.o ChPT_VCS.o
+HEADER  =       $(srcdir)/Model.h
+
+all :		lib $(TOOLS)
+
+lib :		$(library)
+
+$(library) :	$(libobjs)
+		@ ar -crv $@ $^
+		$(RANLIB) $@
+		$(reportsuccess)
+
+$(shlib) $(SHARED_LIB) :	$(addprefix $(PICDIR)/,$(libobjs))
+		$(link_shlib)
+
+maidtest:       maidtest.o $(library) $(LIBHMBOOK)
+		$(CXX) maidtest.o -o $@ \
+			$(LDFLAGS) -lmodel $(LDLIBS) -lm $(FLIBS)
+
+kmaidtest:      kmaidtest.o $(library) $(LIBHMBOOK)
+		$(CXX) kmaidtest.o -o $@ \
+			$(LDFLAGS) -lmodel $(LDLIBS) -lm $(FLIBS)
+
+emkhyptest:     emkhyptest.o $(library) $(LIBHMBOOK)
+		$(CXX) emkhyptest.o -o $@ \
+			$(LDFLAGS) $(LDLIBS) -lm
+
+$(maid).o:	$(maid).F
+		$(F77) $(FFLAGS) $(TARGET_ARCH) $(FPIC) \
+			-DpiNphases=\'$(sharedir)/$(maidphase)\' -c $< -o $@
+
+$(kmaid).o:	$(kmaid).f
+		$(F77) $(FFLAGS) $(TARGET_ARCH) $(FPIC) \
+			-c $< -o $@
+
+
+install : 	all $(libdir) $(bindir) $(sharedir) $(incprefix)
+		$(INSTALL_DATA) $(library) $(libdir)
+		$(INSTALL_DATA) $(srcdir)/$(maidphase) $(sharedir)
+		$(foreach file,$(TOOLS), $(INSTALL_PROGRAM) $(file) $(bindir);)
+		$(foreach file,$(HEADER),$(INSTALL_DATA) $(file) $(incprefix);)
+
+$(libdir) $(bindir) $(sharedir) $(incprefix) : ; test -d $@ || mkdir -p $@
+
+clean:
+		rm -fv *~ Multipoles.ps '#'*'#' 
+		rm -fv Multipoles.his $(libobjs) $(TOOLS) $(library) maidtest.o kmaidtest.o emkhyptest.o
+veryclean : 	clean
+		rm -fv $(CXXSRC:%.cc=.%.depend)
+
+-include 	$(CXXSRC:%.cc=.%.depend)
+

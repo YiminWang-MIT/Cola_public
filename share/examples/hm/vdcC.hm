@@ -1,0 +1,43 @@
+#
+# This macro displays the status of the wirechambers in Spectrometer C
+# Created 4.1.1996 by Harald Merkel
+#
+zone 2 3 1
+SetFillRGB 0.5 1.0 0.5
+
+Title "Spectrometer C: X1 Layer"
+Histogram "Spec. C/x1-layer/Drift Time"
+Histogram "Spec. C/x1-layer/Nr of Wire"
+Histogram "Spec. C/x1-layer/Error"
+Histogram "Spec. C/x1-layer/Multiplicity"
+@999 = "Spec. C/x1-layer/Efficiency" / "Spec. C/x1-layer/Tagged Wire"
+MaximumX 450; MaximumY 110.0; Histogram 999
+
+zone 2 3 1
+Title "Spectrometer C: S1 Layer"
+Histogram "Spec. C/s1-layer/Drift Time"
+Histogram "Spec. C/s1-layer/Nr of Wire"
+Histogram "Spec. C/s1-layer/Error"
+Histogram "Spec. C/s1-layer/Multiplicity"
+@999 = "Spec. C/s1-layer/Efficiency" / "Spec. C/s1-layer/Tagged Wire"
+MaximumX 450; MaximumY 110.0; Histogram 999
+
+zone 2 3 1
+Title "Spectrometer C: X2 Layer"
+Histogram "Spec. C/x2-layer/Drift Time"
+Histogram "Spec. C/x2-layer/Nr of Wire"
+Histogram "Spec. C/x2-layer/Error"
+Histogram "Spec. C/x2-layer/Multiplicity"
+@999 = "Spec. C/x2-layer/Efficiency" / "Spec. C/x2-layer/Tagged Wire"
+MaximumX 450; MaximumY 110.0; Histogram 999
+
+zone 2 3 1
+Title "Spectrometer C: S2 Layer"
+Histogram "Spec. C/s2-layer/Drift Time"
+Histogram "Spec. C/s2-layer/Nr of Wire"
+Histogram "Spec. C/s2-layer/Error"
+Histogram "Spec. C/s2-layer/Multiplicity"
+@999 = "Spec. C/s2-layer/Efficiency" / "Spec. C/s2-layer/Tagged Wire"
+MaximumX 450; MaximumY 110.0; Histogram 999
+
+close

@@ -1,0 +1,87 @@
+Scalar ccounts = coincidenceTime / 0.050     //(50psec/count) 
+
+#define timehisto(nr,nrs) Histogram @online.A.dE.paddle==nr && \
+				    @online.A.ToF.paddle==nr\
+	                  "Time/Paddle dE==ToF/Channel "nrs \
+			  ccounts("t_AB!","ns", -200.0, 200.0, 160)
+Cut abs(MissingMass-mass_pi0*1000) <5
+{ timehisto( 1, "1");timehisto( 2, "2");timehisto( 3, "3");timehisto( 4, "4")
+  timehisto( 5, "5");timehisto( 6, "6");timehisto( 7, "7");timehisto( 8, "8")
+  timehisto( 9, "9");timehisto(10,"10");timehisto(11,"11");timehisto(12,"12")
+  timehisto(13,"13");timehisto(14,"14");timehisto(15,"15")
+}
+#undef timehisto
+
+#define timehisto(nr,nrs) Histogram @online.A.dE.paddle==nr && \
+				    @online.A.ToF.paddle==nr-1\
+	                  "Time/Paddle dE==ToF-1/Channel "nrs \
+			  ccounts("t_AB!","ns", -200.0, 200.0, 160)
+Cut abs(MissingMass-mass_pi0*1000) <5
+{ timehisto( 1, "1");timehisto( 2, "2");timehisto( 3, "3");timehisto( 4, "4")
+  timehisto( 5, "5");timehisto( 6, "6");timehisto( 7, "7");timehisto( 8, "8")
+  timehisto( 9, "9");timehisto(10,"10");timehisto(11,"11");timehisto(12,"12")
+  timehisto(13,"13");timehisto(14,"14");timehisto(15,"15")
+}
+#undef timehisto
+
+#define timehisto(nr,nrs) Histogram @online.A.dE.paddle==nr && \
+				    @online.A.ToF.paddle==nr+1\
+	                  "Time/Paddle dE==ToF+1/Channel "nrs \
+			  ccounts("t_AB!","ns", -200.0, 200.0, 160)
+Cut abs(MissingMass-mass_pi0*1000) <5
+{ timehisto( 1, "1");timehisto( 2, "2");timehisto( 3, "3");timehisto( 4, "4")
+  timehisto( 5, "5");timehisto( 6, "6");timehisto( 7, "7");timehisto( 8, "8")
+  timehisto( 9, "9");timehisto(10,"10");timehisto(11,"11");timehisto(12,"12")
+  timehisto(13,"13");timehisto(14,"14");timehisto(15,"15")
+}
+#undef timehisto
+
+#define timehisto(nr,nrs) Histogram @online.A.dE.paddle==nr \
+	                  "Time/Paddle A/dE "nrs \
+			  ccounts("t_AB!","ns", -200.0, 200.0, 160)
+Cut abs(MissingMass-mass_pi0*1000) <5
+{ timehisto( 1, "1");timehisto( 2, "2");timehisto( 3, "3");timehisto( 4, "4")
+  timehisto( 5, "5");timehisto( 6, "6");timehisto( 7, "7");timehisto( 8, "8")
+  timehisto( 9, "9");timehisto(10,"10");timehisto(11,"11");timehisto(12,"12")
+  timehisto(13,"13");timehisto(14,"14");timehisto(15,"15")
+}
+#undef timehisto
+
+#define timehisto(nr,nrs) Histogram @online.A.ToF.paddle==nr \
+	                  "Time/Paddle A/ToF "nrs \
+			  ccounts("t_AB!","ns", -200.0, 200.0, 160)
+Cut abs(MissingMass-mass_pi0*1000) <5
+{ timehisto( 1, "1");timehisto( 2, "2");timehisto( 3, "3");timehisto( 4, "4")
+  timehisto( 5, "5");timehisto( 6, "6");timehisto( 7, "7");timehisto( 8, "8")
+  timehisto( 9, "9");timehisto(10,"10");timehisto(11,"11");timehisto(12,"12")
+  timehisto(13,"13");timehisto(14,"14");timehisto(15,"15")
+}
+#undef timehisto
+//----------------------------------------------------------------------------
+#define timehisto(nr,nrs) Histogram @online.B.ToF.paddle==nr \
+	                  "Time/Paddle B/ToF "nrs \
+			  ccounts("t_AB!","ns", -200.0, 200.0, 160)
+Cut abs(MissingMass-mass_pi0*1000) <5
+{ timehisto( 1, "1");timehisto( 2, "2");timehisto( 3, "3");timehisto( 4, "4")
+  timehisto( 5, "5");timehisto( 6, "6");timehisto( 7, "7");timehisto( 8, "8")
+  timehisto( 9, "9");timehisto(10,"10");timehisto(11,"11");timehisto(12,"12")
+  timehisto(13,"13");timehisto(14,"14")
+}
+#undef timehisto
+//----------------------------------------------------------------------------
+//#define timehisto(nr,nrs) Histogram @online.A.dE.paddle==nr \
+//	                  "Time/ADC/Paddle A:dE "nrs \
+//			  A.dE.Energy ("E_dE!", adcrangeA)
+//Cut abs(MissingMass-mass_pi0*1000) <5 && abs(coincidenceTime) < 3
+//{ timehisto( 1, "1");timehisto( 2, "2");timehisto( 3, "3");timehisto( 4, "4")
+//  timehisto( 5, "5");timehisto( 6, "6");timehisto( 7, "7");timehisto( 8, "8")
+//  timehisto( 9, "9");timehisto(10,"10");timehisto(11,"11");timehisto(12,"12")
+//  timehisto(13,"13");timehisto(14,"14");timehisto(15,"15");timehisto(16,"16")
+//}
+//#undef timehisto
+
+
+
+
+
+

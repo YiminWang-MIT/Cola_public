@@ -1,0 +1,105 @@
+STAND                : 25.07.95
+
+EINHEITEN            : cm, mrad und %
+
+OFFSETS              : vor Aufruf von tma von Koordinaten abziehen
+
+Koordintatensystem   : Kammersystem
+                       (Matrixelemente sind auch im TRANSPORT-System
+                        erhaeltlich, Koordinatensystem dreht sich hier
+                        mit dem Zentralstrahl, bisher nur Spektrometer A)
+
+		       Impulsablage bezieht sich auf den Referenzimpuls!!!
+
+	     	     : Bahnl"angenkorrekturen aus gemessenen Zeitspektren
+                       von Michael Distler und neue tma-Routinen, die die
+                       Bahnl"angen als 5 ten Wert (d,th0,y0,ph0,L) liefern.
+ 		       Die alten Matrixfiles bleiben f"ur eine Weile noch
+                       erhalten (in der Directory "old"). Die Analysesoft-
+                       ware l"auft mit den neuen Files ohne "Anderung nach
+                       erneutem Linken mit der neuen tma-Software von 
+		       Helmut Kramer.
+
+
+
+MATRIXFILES F"UR tma 
+====================
+
+
+SPEKTROMETER A
+--------------
+
+
+qsdda180.mx6         : Punkttarget gemessen 180 MeV 09.10.92,
+                       y0-Elemente aus RAYTRACE,
+                       Winkelmatrixelemente sind mit denen von 495 MeV
+                       vom 16.10.92 identisch
+
+qsdda495.mx3         : Punkttarget gemessen 495 MeV 16.10.92 und 04.11.92, 
+                       y0-Elemente aus RAYTRACE
+qsdda495.mx4         : Punkttarget gemessen 495 MeV 16.10.92 und 04.11.92,
+                       y0-Elemente aus RAYTRACE,
+                       im Vergleich zu mx3 zus"atzliche theta-Elemente
+
+qsdda600.mx9         : Punkttarget gemessen 600 MeV 26.10.92, 
+                       y0-Elemente aus RAYTRACE
+
+qsdda180.mxl4        : Langes Target 180 MeV 03.08.93
+
+qsdda495.mxl2        : Langes Target 495 MeV 27.08.93
+
+
+Offsetdaten
+
+qsdda.off            : Koordinatenoffsets des Sollstrahls SpekA
+
+
+
+
+SPEKTROMETER B
+--------------
+
+bclam.mx             : RAYTRACE gerechnet Punkttarget
+bclam.mxl            : RAYTRACE gerechnet langes Target
+
+
+bclam495.mx1         : Messung Punkttarget 495 MeV 16.07.93
+                       Eignet sich auch fuer 600 MeV.
+
+bclam495.mxl6        : Messung Langes Target 495 MeV 16.07.93
+                       F"ur y0 kleiner +/- 1.8 cm geeignet. 
+                       Aus den vier Testruns mit Ta-Stack und den
+                       Punkttargetruns bestimmt. Eignet sich auch f"ur
+                       600 MeV.
+bclam495.mxl9	     : Verbesserte Version von bclam495.mxl6                 
+                       
+bclam600.mx1         : Messung Punkttarget 600 MeV
+
+bclam750.mx1         : Messung Punkttarget 750 MeV
+                       (vorl"aufige Version, verbesserungsw"urdig)
+
+
+Kammeroffset           
+
+bclam.off            : Koordinatenoffsets des Sollstrahls SpekB
+
+
+SPEKTROMETER C
+--------------
+
+qsddc.mxl	      : RAYTRACE gerechnet langes Target (+/-1cm)
+
+qsddc360.mx1	      : Messung Punkttarget 03.04.95 (y0==0!!!)
+
+qsddc360.mxl1	      : Messung ausgedehntes Target (+/- 2cm)
+
+qsddc360.mxl2	      : wie qsddc360.mxl1, jedoch mit Bahnl"angen von MOD
+
+
+
+
+
+
+
+
+

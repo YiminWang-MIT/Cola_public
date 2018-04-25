@@ -1,0 +1,66 @@
+.\"  -*- nroff -*-
+.\"
+.\" Simul++.1.in
+.TH Lumi++ 1 "October 15, 1998" "Lumi++" "Cola Data Analysis"
+
+.SH NAME
+Lumi++ \- Cola analysis luminosity calculation
+
+.SH SYNOPSIS
+.B Lumi++ [-vqzy] -e
+[\c
+.BI \-f \ inputfile\fR\c
+]
+[\c
+.BI \-o \ outputfile\fR\c
+]
+[\c
+.BI \-n \ number-of-events\fR\c
+]
+
+.SH DESCRIPTION 
+.LP
+.B Lumi++
+(Cola analysis luminosity calculation), a program for luminosity
+calculation. This program sums up all counters to calculate the
+ luminosity of a single run file.
+For details please use the online documentation at the A1 WWW site
+http://wwwa1.kph.uni-mainz.de/A1.
+
+.ne 5
+.SH OPTIONS
+.TP
+.B \-f \fIinputfile\fR
+Data to be analysed. File has to be in MECDAS data format. <stdin> if not 
+specified or "-".
+.TP
+.B \-n \fIevents\fR
+Total number of events.
+.TP
+.B \-o \fIluminosity\fR
+This ASCII file contains a table with the luminostity information.
+.TP
+.B \-v
+Verbose output, especially to investigate current run.db settings
+.TP
+.B \-q         
+Quiet output: suppress comment lines in \fIrun.db\fR.
+.TP
+.B \-z         
+Decompress input with gzip.
+.TP
+.B \-y         
+Enable VDC trippoff control.
+
+.SH FILES
+.TP
+.B \fI./run.db\fR
+Database of setup information, like spectrometer angles, momenta, etc.
+
+.SH AUTHORS
+Harald Merkel, Michael O. Distler, Ingo Ewald, Jan Friedrich, Marco Kahrau,
+Pascal Merle, Thomas Pospischil, Axel Wagner
+
+.SH  SEE ALSO
+.BR Cola++ (1), Simul++ (1)
+

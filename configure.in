@@ -1,0 +1,533 @@
+dnl
+dnl Created 1996-2014 by  Michael O. Distler
+dnl                       Harald Merkel
+dnl
+dnl                       A1 Collaboration
+dnl                       Institut für Kernphysik,
+dnl                       Johannes Gutenberg-Universität Mainz
+dnl
+dnl $Id: configure.in 2680 2016-11-24 13:42:48Z merkel $
+dnl
+dnl Input for GNU autoconf
+dnl       and GNU autoheader
+dnl
+AC_REVISION($Revision: 2680 $)
+dnl
+AC_INIT(__COLA__)
+AC_CONFIG_HEADER(config.h)
+AC_SUBST(host)
+AC_CANONICAL_HOST
+dnl ---------------------------------------------------------------------------
+dnl do not change AC_HELP_STRING to AS_HELP_STRING
+dnl use autoconf version >= 2.59 !!! e.g.:
+dnl autoconf-2.59;autoheader-2.59
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(cola,
+    AC_HELP_STRING([--enable-cola],[build Mainz A1 Cola version]),
+    [test "$enableval" = yes && buildcola=1])
+AC_ARG_ENABLE(colaMIT,
+    AC_HELP_STRING([--enable-colaMIT],[build MIT      Cola version]),
+    [test "$enableval" = yes && buildmit=1])
+AC_ARG_ENABLE(colaJLab,
+    AC_HELP_STRING([--enable-colaJLab],[build JLab     Cola version]),
+    [test "$enableval" = yes && buildjlab=1])
+
+AC_ARG_ENABLE(roottools,
+    AC_HELP_STRING([--enable-roottools],[compile with root]),
+    [test "$enableval" = yes && buildroot=1])
+
+AC_SUBST(ROOTOBJ)
+if test -n ""$buildroot; then
+  ROOTOBJ=RootTools.o
+  AC_DEFINE(HAVE_ROOTTOOLS,1,[Define if root tools are available.])
+fi
+
+if test -z ""$buildcola -a -z ""$buildmit -a -z ""$buildjlab; then
+   buildcola=1
+dnl    AC_MSG_ERROR(You have to enable at least one Cola version - exiting)
+dnl    exit
+fi
+dnl ---------------------------------------------------------------------------
+AC_PREFIX_DEFAULT(/usr/local/a1)
+AC_SUBST(OPTS)
+AC_SUBST(ISSHARED)
+AC_SUBST(ISSTATIC)
+ISSHARED=0
+ISSTATIC=0
+AC_ARG_ENABLE(shared,
+    AC_HELP_STRING([--enable-shared],[link with shared libraries]),
+    [test "$enableval" = yes && ISSHARED=1])
+AC_ARG_ENABLE(static,
+    AC_HELP_STRING([--enable-static],[link with static libraries]),
+    [test "$enableval" = yes && ISSTATIC=1])
+
+CFLAGS_GDB=" -g"
+CFLAGS_PROF=""
+AC_ARG_ENABLE(gdb,
+    AC_HELP_STRING([--disable-gdb],[compile and link without debug option]),
+    [test "$enableval" = no && CFLAGS_GDB=""])
+AC_ARG_ENABLE(profiling,
+    AC_HELP_STRING([--enable-profiling],[compile and link with gprof options]),
+    [test "$enableval" = yes && CFLAGS_PROF=" -pg"])
+OPTS="$OPTS -O2$CFLAGS_GDB$CFLAGS_PROF"
+
+TRADITIONAL="-P -x c"
+AC_ARG_ENABLE(cxxcpp,
+    AC_HELP_STRING([--enable-cxxcpp],
+                   [use features of C++ instead of C preprocessor]),
+    [TRADITIONAL="-P -x c++"])
+
+if test $ISSHARED = 1 -a $ISSTATIC = 1 ;then
+	AC_MSG_ERROR(you must not enable shared and static)
+fi
+
+test $ISSTATIC = 1 && OPTS="$OPTS -static"
+
+dnl ---------------------------------------------------------------------------
+
+AC_SUBST(LIBDIRS)
+AC_SUBST(SUBDIRS)
+AC_SUBST(AUXDIRS)
+LIBDIRS="Chamber Cindy Detector FourVector"
+test -z ""$buildcola || SUBDIRS="Cola Printlog"
+test -z ""$buildmit  || SUBDIRS=$SUBDIRS" ColaMIT"
+test -z ""$buildjlab || SUBDIRS=$SUBDIRS" ColaJLab"
+SUBDIRS=$SUBDIRS" dmaini tests"
+
+dnl ---------------------------------------------------------------------------
+dnl find all programs
+dnl ---------------------------------------------------------------------------
+test ""$prefix      = "NONE" && prefix=$ac_default_prefix
+test ""$exec_prefix = "NONE" && exec_prefix=$prefix
+test -n ""$CC  || CC=gcc
+test -n ""$CXX || CXX=g++ && CCC=$CXX
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_CXX
+AC_PROG_F77
+AC_PROG_FC([ifort gfortran])
+AX_GCC_ARCHFLAG([no])
+AC_SUBST(USE_IFORT_FCFLAGS)
+AC_SUBST(USE_GFORTRAN_FCFLAGS)
+USE_IFORT_FCFLAGS="ifortFCFLAGS"
+USE_GFORTRAN_FCFLAGS="gfortranFCFLAGS"
+test x$FC = xifort && USE_IFORT_FCFLAGS="FCFLAGS"
+test x$FC = xgfortran && USE_GFORTRAN_FCFLAGS="FCFLAGS"
+AC_PROG_INSTALL
+AC_PROG_RANLIB
+AC_PROG_YACC
+AC_PROG_MAKE_SET
+AC_ISC_POSIX
+AC_SUBST(BISONFLAGS)
+AC_PATH_PROG(AQUACONFIG,AquaConfig,[:],$exec_prefix/bin:$PATH)
+AC_PATH_PROG(BISONXX,Bison++,../Bison/Bison++,$exec_prefix/bin:$PATH)
+if test ""$BISONXX = "../Bison/Bison++" ;then
+  AUXDIRS="Bison"
+  BISONFLAGS='-S $(srcdir)/../Bison/bison.cc -H $(srcdir)/../Bison/bison.h'
+fi
+newdocxx=`pwd`/Doc/doc++
+AC_PATH_PROG(DOCXX,doc++, $newdocxx, $PATH:$exec_prefix/bin:/usr/local/bin)
+test $DOCXX = $newdocxx && AUXDIRS="$AUXDIRS Doc"
+AC_SUBST(FLEXFLAGS)
+AC_PATH_PROG(FLEXXX,  Flex++,  ../Flex/Flex++,   $exec_prefix/bin:$PATH)
+if test ""$FLEXXX = "../Flex/Flex++" ;then
+  AUXDIRS="$AUXDIRS Flex"
+  FLEXFLAGS='-S$(srcdir)/../Flex/flexskel.cc -H$(srcdir)/../Flex/flexskel.h'
+fi
+AC_CHECK_PROG(GNUCPP,      	gcc, 		gcc -E ${TRADITIONAL})
+AC_DEFINE_UNQUOTED(GNUCPP, 	"${GNUCPP}",
+	[your c preprocessor is found in])
+AC_CHECK_PROG(GHOSTSCRIPT, 	gs, [gs], [:])
+AC_DEFINE_UNQUOTED(GHOSTSCRIPT, "${GHOSTSCRIPT}",
+	[your ghostscript program is found in])
+AC_CHECK_PROG(GZIP,        	gzip, [gzip], [:])
+AC_DEFINE_UNQUOTED(GZIP, 	"${GZIP}",
+	[your gzip program is found in])
+AC_CHECK_PROGS(FIND,       	gnufind gfind find, [:])
+AC_CHECK_PROGS(GHOSTVIEW, 	gv ghostview, [:])
+AC_DEFINE_UNQUOTED(GHOSTVIEW,   "${GHOSTVIEW}",
+	[your ghostview program is found in])
+AC_CHECK_PROGS(GNUTAR,        	gnutar gtar tar, [:])
+AC_DEFINE_UNQUOTED(GNUTAR,   	"${GNUTAR}",
+	[your  program is found in])
+AC_CHECK_PROGS(WWWBROWSER,  	netscape xmosaic mosaic arena, [:])
+AC_DEFINE_UNQUOTED(WWWBROWSER,  "${WWWBROWSER}",
+	[your web browser is found in])
+dnl ---------------------------------------------------------------------------
+AC_ARG_WITH(latex,
+	[  --with-latex=DIR        use the latex binary found in DIR])
+AC_PATH_PROG(DVIPS,dvips,[:],
+	$with_latex:$PATH:/usr/local/bin:$exec_prefix/bin)
+AC_PATH_PROGS(LATEX,latex2e latex,[:],
+	$with_latex:$PATH:/usr/local/bin:$exec_prefix/bin)
+
+dnl ---------------------------------------------------------------------------
+dnl Check libraries
+dnl ---------------------------------------------------------------------------
+
+AC_SUBST(X_LIBS)
+AC_SUBST(X_CFLAGS)
+AC_PATH_XTRA
+
+AC_SUBST(READLINE_LIBS)
+AC_SUBST(READLINE_INCL)
+AC_SUBST(NCURSES_LIBS)
+AC_CHECK_LIB(bsd,      main)
+dnl what is libelf needed for?
+dnl AC_CHECK_LIB(elf,      main)
+AC_CHECK_LIB(fl,       yy_flex_realloc)
+AC_CHECK_LIB(socket,   accept)
+AC_CHECK_LIB(nsl,      gethostname)
+AC_CHECK_LIB(ucb,      main)
+AC_CHECK_LIB(ncurses,  tgetstr, [LIBNCURSES=-lncurses])
+AC_CHECK_LIB(termcap,  tgetstr, [LIBTERMCAP="-L/usr/lib/termcap -ltermcap"],
+	[], -L/usr/lib/termcap)
+test -z "$LIBTERMCAP" || NCURSES_LIBS="$LIBTERMCAP"
+test -z "$LIBNCURSES" || NCURSES_LIBS="$LIBNCURSES"
+AC_CHECK_LIB(readline, readline, [READLINE_LIBS=""],
+	[READLINE_LIBS=-L../readline AUXDIRS="$AUXDIRS readline"],
+	$NCURSES_LIBS)
+
+AC_MSG_CHECKING(for GNU scientific library ...)
+AC_SUBST(GSL_INCL)
+AC_SUBST(GSL_LIBS)
+AC_CHECK_PROG(GSLCONFIG, gsl-config, true, false)
+if $GSLCONFIG;then
+    GSL_INCL=`gsl-config --cflags`
+    GSL_LIBS=`gsl-config --libs`
+    AC_DEFINE(HAVE_GSL,1,[Define if GNU scientific library is available.])
+fi
+
+AC_SUBST(PG_INCL)
+AC_SUBST(PG_LIBS)
+AC_CHECK_PROG(PGCONFIG, pg_config, true, false)
+if $PGCONFIG;then
+    PG_INCDIR=`pg_config --includedir`
+    PG_LIBDIR=`pg_config --libdir`
+    test -f $PG_INCDIR/pg_config.h && AC_DEFINE(HAVE_PG_CONFIG_H,1,
+      [Define if pg_config.h is available and needed.])
+fi
+
+AC_MSG_CHECKING(for postgres header files and libraries...)
+test -f /usr/include/pgsql/libpq++.h     && PG_INCL="-I/usr/include/pgsql"
+test -f /usr/lib/include/libpq++.h       && PG_INCL="-I/usr/lib/include"
+test -f /usr/lib/pgsql/include/libpq++.h && PG_INCL="-I/usr/lib/pgsql/include"
+test -f /usr/include/libpq++.h		 && PG_INCL="-I/usr/include"
+if test -f $PG_INCDIR/libpq++.h;then
+   PG_INCL="-I$PG_INCDIR"
+else
+   PG_INCL="-I$PG_INCDIR $PG_INCL"
+fi
+
+if test -n "$PG_INCL"; then
+    AC_DEFINE(HAVE_LIBPQPP_H,1,[Define if libpq++.h is available.])
+else
+  test -f /usr/include/pgsql/libpq++.H     &&PG_INCL="-I/usr/include/pgsql"
+  test -f /usr/lib/include/libpq++.H       &&PG_INCL="-I/usr/lib/include"
+  test -f /usr/lib/pgsql/include/libpq++.H &&PG_INCL="-I/usr/lib/pgsql/include"
+  test -f /usr/local/pqxx/include/pqxx/all.h &&PG_INCL="-I/usr/local/pqxx/include"
+  test -n "$PG_INCL" && AC_DEFINE(HAVE_LIBPQPP_HH,1,
+                                  [Define if libpq++.H is available.])
+  if test -z "$PG_INCL"; then
+	test -f /usr/include/pgsql/libpq++/pgdatabase.h && \
+		PG_INCL="-I/usr/include/pgsql/libpq++ -I/usr/include/pgsql"
+        test -f /usr/lib/pgsql/include/libpq++/pgdatabase.h && \
+                PG_INCL="-I/usr/lib/pgsql/include/libpq++"
+        test -f /usr/include/libpq++/pgdatabase.h && \
+                PG_INCL="-I/usr/include/libpq++"
+  fi
+fi
+
+if test -n "$PG_INCL"; then
+	AC_MSG_RESULT(found)
+else
+	AC_MSG_RESULT(no)
+fi
+
+dnl postgres 7.0.2 header files need this
+dnl check whether "#include <string>" works on this C++ compiler
+AC_MSG_CHECKING([for include <string> in C++])
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE([#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+], [], [AC_DEFINE(HAVE_CXX_STRING_HEADER,1,
+                  [Define if C++ compiler accepts "#include <string>"])
+        AC_MSG_RESULT(yes)],
+[AC_MSG_RESULT(no)])
+AC_LANG_C
+
+AC_CHECK_LIB(des, crypt, LIBDES=-ldes)
+AC_CHECK_LIB(pq++, main,
+  AC_DEFINE(HAVE_PGSQL,1,[Define if libpq++.a is available.])
+  PG_LIBS="-lpq++ -lpq $LIBDES",,-lpq -lstdc++ $LIBDES)
+
+dnl strings.h:   includes rindex() on hpux
+dnl g++/osfcn.h: is included in flexskel.cc
+AC_CHECK_HEADERS(bsd/bsd.h bstring.h g++/osfcn.h regex.h stddef.h \
+		 stdlib.h string.h strings.h sys/time.h sqlca.h)
+AC_CHECK_HEADERS(readline/readline.h readline/history.h,[],
+	[READLINE_INCL="-I${srcdir}/.."])
+AC_LANG_CPLUSPLUS
+AC_CHECK_HEADERS(istream ostream)
+AC_LANG_C
+
+xm_libs=$x_libraries
+AC_ARG_WITH(motif,
+    AC_HELP_STRING([--with-motif=DIR],[use the Motif package found in DIR]),
+    if test $withval != "no" -a $withval != "yes";then
+      [X_CFLAGS="$X_CFLAGS -I$withval/include"]
+      [X_LIBS="$X_LIBS -L$withval/lib"]
+      [xm_libs=$withval/lib]
+    fi)
+
+AC_CHECK_PROG(MOTIFCONFIG, motif-config, true, false)
+if $MOTIFCONFIG;then
+    X_CFLAGS="$X_CFLAGS -I"`motif-config -I`
+    X_LIBS="$X_LIBS -L"`motif-config -L`
+fi
+
+
+AC_SUBST(LIBMOTIF)
+LIBMOTIF="$xm_libs/libXm.a"
+test $ISSHARED = 1 -o -z "$xm_libs" && LIBMOTIF="-lXm"
+AC_CHECK_LIB(Xpm, main,
+	[LIBMOTIF="$LIBMOTIF -lXpm"], [], [$X_LIBS -lX11])
+AC_CHECK_LIB(Xp, XpGetContext,
+	[LIBMOTIF="$LIBMOTIF -lXp"], [], [$X_LIBS -lXext -lX11])
+
+test -z "$AUXDIRS" && AUXDIRS="."
+
+AC_CHECK_FUNCS(mkstemp)
+
+dnl ---------------------------------------------------------------------------
+dnl find some useful files and directories
+dnl ---------------------------------------------------------------------------
+AC_MSG_CHECKING(for WXWin (an X11-Toolkit))
+AC_SUBST(HAVE_WXWIN)
+AC_SUBST(WXINC)
+AC_SUBST(WXLIB)
+HAVE_WXWIN=0
+WXINC='${includedir}'
+WXLIB='${libdir}'
+AC_ARG_WITH(wxwin,
+    AC_HELP_STRING([--with-wxwin=DIR],[use the WXWin package found in DIR]),
+    test $withval != "no" -a $withval != "yes" && WXWIN="${withval}")
+
+if test -z ""${WXWIN} ; then
+   test -f ${exec_prefix}/lib/libwx_motif.a && WXWIN=${exec_prefix}
+   test -d /usr/local/a1/wxwin              && WXWIN=/usr/local/a1/wxwin
+   test -d ~wxwin                           && WXWIN=~wxwin
+   test -d /kits/WXWIN-1.66                 && WXWIN=/kits/WXWIN-1.66
+   test -d /usr/local/a1/share/wxwin        && WXWIN=/usr/local/a1/share/wxwin
+   test -d /usr/local/wxwin/lib             && WXWIN=/usr/local/wxwin
+   test -f /usr/lib/libwx_motif.a           && WXWIN=/usr
+   test -f /usr/X11R6/lib/libwx_motif.a     && WXWIN=/usr/X11R6
+fi
+
+if test -d $WXWIN/include -a -f $WXWIN/lib/libwx_motif.a ; then
+   HAVE_WXWIN=1
+   AC_DEFINE(HAVE_WXWIN,$HAVE_WXWIN,[Define if wxwin toolkit is available])
+   AC_DEFINE(wx_motif,1,[Needed by wxwin toolkit])
+   WXINC=$WXWIN/include
+   WXLIB=$WXWIN/lib
+else
+   WXWIN="no"
+fi
+
+dnl SuSE 7.0 wxwin.rpm plus -mod- wxmotif.rpm installed
+if test -d /usr/include/wxwin -a -f /usr/X11R6/lib/libwx_motif.a ; then
+   HAVE_WXWIN=1
+   AC_DEFINE(HAVE_WXWIN,$HAVE_WXWIN,[Define if wxwin toolkit is available])
+   AC_DEFINE(wx_motif,1,[Needed by wxwin toolkit])
+   WXINC=/usr/include/wxwin
+   WXLIB=/usr/X11R6/lib
+   WXWIN=/usr/X11R6
+fi
+
+AC_MSG_RESULT(${WXWIN})
+dnl ---------------------------------------------------------------------------
+AC_MSG_CHECKING(for CERN libraries)
+AC_SUBST(CERNLIB)
+AC_ARG_WITH(cernlib,
+    AC_HELP_STRING([--with-cernlib=DIR],[use the cern libraries found in DIR]),
+    [CERNLIB="${withval}"])
+if test -z ""${CERNLIB} ; then
+   test -d /kits/asis/pc_linux098/cern/pro/lib \
+                                 && CERNLIB=/kits/asis/pc_linux098/cern/pro/lib
+   test -d /usr/local/cernlib/pro/lib \
+                                 && CERNLIB=/usr/local/cernlib/pro/lib
+   test -d /cern/pro/lib         && CERNLIB=/cern/pro/lib
+   test -f /usr/lib/libpacklib.a && CERNLIB=/usr/lib
+fi
+AC_MSG_RESULT(${CERNLIB})
+test -z ""${CERNLIB} || LIBDIRS=$LIBDIRS" HBook"
+LIBDIRS=$LIBDIRS" HMBook Model Simulation Simulation/EventSim TMA"
+
+dnl ---------------------------------------------------------------------------
+AC_SUBST(ROOT_CFLAGS)
+AC_SUBST(ROOT_LIBS)
+AC_SUBST(ROOT_GLIBS)
+AC_SUBST(ROOTLIB)
+AC_CHECK_PROG(ROOT_CONFIG, root-config, true, false)
+if $ROOT_CONFIG && test -n ""$buildroot;then
+   ROOT_CFLAGS=`root-config --cflags`
+   ROOT_LIBS=`root-config --libs`
+   ROOT_GLIBS=`root-config --glibs`
+   ROOTLIB="1"
+fi
+
+dnl ---------------------------------------------------------------------------
+AC_SUBST(FLIBS)
+AC_SUBST(LDSHARE)
+AC_SUBST(SHARED_EXT)
+AC_SUBST(SHFLAGS)
+AC_SUBST(WARN)
+
+SHARED_EXT='so'
+WARN='-Wall -Wno-write-strings'
+
+AC_DEFINE_UNQUOTED(DOCDIR, "${prefix}/doc", [install documentation here])
+
+dnl ---------------------------------------------------------------------------
+dnl special treatments 
+dnl ---------------------------------------------------------------------------
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE([#include <sys/time.h>]
+               [#include <sys/types.h>]
+               [#include <unistd.h>],
+               [select(2,(fd_set *)1,(fd_set *)0,(fd_set *)0,(timeval *)0)],
+               FDSETPTR="fd_set *", FDSETPTR="int *")
+AC_DEFINE_UNQUOTED(FDSETPTR,$FDSETPTR,[pointer type for select statement])
+AC_LANG_RESTORE
+
+dnl Do not use "-falign-loops=2 -falign-jumps=2 -falign-functions=2"
+dnl for intel architecture. The gcc default is probably a better choice.
+case "$host" in
+i*86-*linux*|x86_64-*linux*|armv*l-*linux*)
+	AC_CHECK_LIB(f2c, main, FLIBS="-lf2c", , "-static")
+	AC_CHECK_LIB(g2c, main, FLIBS="-lg2c", , "-static")
+       test x$FC = xgfortran && FLIBS=$FLIBS" -lgfortran"
+dnl AC_CHECK_LIB(gfortran, _gfortran_set_args, FLIBS=$FLIBS" -lgfortran", , "-static")
+	LDSHARE='-Xlinker --disable-new-dtags -Xlinker -rpath -Xlinker $(libdir)'
+	LIBMOTIF="$LIBMOTIF -lXext -lXmu -lXt -lX11 -lSM -lICE"
+	SHFLAGS='-Wl,-soname,$(basename $(shlib))'
+	FFLAGS="$FFLAGS -ffixed-line-length-none"
+	;;
+i386-unknown-freebsd*)
+	AC_CHECK_LIB(f2c, main, FLIBS="-lf2c")
+	AC_CHECK_LIB(gfortran, main, FLIBS=$FLIBS" -lgfortran", , "-static")
+	LIBMOTIF="$LIBMOTIF -lXext -lXmu -lXt -lX11 -lSM -lICE -lcompat"
+	OPTS="$OPTS -m486 -malign-loops=2 -malign-jumps=2 -malign-functions=2"
+	SHFLAGS='-Wl,-soname,$(basename $(shlib))'
+	WARN='-Wall -ansi -pedantic'
+	;;
+sparc-sun-solaris2)
+	FFLAGS="-u"
+	FLIBS="-L/opt/SUNWspro/SC2.0.1 -lF77 -lM77"
+	LDSHARE='-R$(libdir)'  
+	LIBMOTIF="-L/usr/dt/lib $LIBMOTIF -lX11 -lXt"
+	SHFLAGS='-h $(shlib)'
+	WARN='-Wall -ansi -pedantic'
+	X_CFLAGS="$X_CFLAGS -I/usr/dt/include"
+	X_LIBS="$X_LIBS -L/usr/dt/lib -R/usr/dt/lib"
+	;;
+sparc-sun-solaris2.*)
+	FFLAGS="-u"
+	FLIBS="-lF77 -lM77"
+	test -d /opt/SUNWspro/SC2.0.1/lib && \
+	    FLIBS="-L/opt/SUNWspro/SC2.0.1/lib -lF77 -lM77"
+	test -d /opt/SUNWspro/SC3.0.1/lib && \
+	    FLIBS="-L/opt/SUNWspro/SC3.0.1/lib -lF77 -lM77 -lsunmath"
+	test -d /mit/sunsoft/arch/$ATHENA_SYS/lib && \
+	    FLIBS="-L/mit/sunsoft/arch/$ATHENA_SYS/lib -lF77 -lM77 -lsunmath"
+	LDSHARE='-R$(libdir)'
+	SHFLAGS='-h $(basename $(shlib))'
+	WARN='-Wall -pedantic'
+	X_CFLAGS="$X_CFLAGS -I/usr/dt/include"
+	X_LIBS="$X_LIBS -L/usr/dt/lib -R/usr/dt/lib"
+	LIBMOTIF="$LIBMOTIF -lXmu"
+	;;
+alpha-dec-osf*)
+	AC_CHECK_LIB(g++, main)
+	FFLAGS="-u"
+	FLIBS="-lUfor -lfor -lutil -lFutil -lots"
+	LDSHARE='-Xlinker -rpath -Xlinker $(dir $(LIBGCC)):$(libdir)'
+	LIBMOTIF="$LIBMOTIF -lXt -lX11 -ldnet_stub"
+	WARN='-Wall -ansi -pedantic'
+	;;
+mips-dec-ultrix*)
+	FFLAGS="-u"
+	FLIBS="-lUfor -lfor -lutil -li -lots"
+	;;
+*-hp-hpux9*)
+	AC_MSG_WARN(Think about upgrading to HP-UX 10.20!)
+	FFLAGS="-u +ppu"
+	FLIBS="-L/usr/lib/pa1.1 -L/lib/pa1.1 -lf"
+	LDSHARE='-Xlinker +b -Xlinker $(libdir)'
+	LIBMOTIF="-L/usr/local/X/Motif1.2/lib -lXm -lXt -lX11"
+	SHARED_EXT='sl'
+	SHFLAGS="-fPIC"
+	WARN='-Wall -ansi -pedantic'
+	X_CFLAGS="$X_CFLAGS -I/usr/local/X/Motif1.2/include"
+	;;
+*-hp-hpux10.20)
+	FFLAGS="-u +ppu"
+	FLIBS="-lf"
+	LDSHARE='-Xlinker +b -Xlinker $(libdir)'
+	LIBMOTIF="-L/usr/lib/Motif1.2 -lXm -lXt -lX11"
+	SHARED_EXT='sl'
+	SHFLAGS="-fPIC"
+	WARN="-Wall -ansi -pedantic"
+	OPTS="$OPTS -D_HPUX_SOURCE"
+	X_CFLAGS="$X_CFLAGS -I/usr/include/Motif1.2"
+	;;
+*-*-irix[[56]]*)
+	FFLAGS="-u"
+	FLIBS="-lftn"
+	LIBMOTIF="$LIBMOTIF -lXt -lX11"
+	SHFLAGS='-Wl,-soname,$(basename $(shlib))'
+	WARN='-Wall -pedantic'
+	LDSHARE='-Xlinker -rpath -Xlinker $(libdir)'
+	;;
+*)
+	echo "unknown architecture"
+	exit
+	;;
+esac
+
+AC_CONFIG_SUBDIRS(Bison Doc Flex readline)
+AC_OUTPUT(Makefile
+	  Makefile.inc
+	  Chamber/Makefile
+	  Cindy/Makefile
+	  Cola/Makefile
+	  ColaIASA/Makefile
+	  ColaJLab/Makefile
+	  ColaMIT/Makefile
+	  Detector/Makefile
+	  FourVector/Makefile
+	  HBook/Makefile
+	  HMBook/Makefile
+	  HMBook/setup.py
+	  Model/Makefile
+	  Printlog/Makefile
+	  Simulation/Makefile
+	  Simulation/EventSim/Makefile
+	  Simulation/EventSim/tests/Makefile
+	  Simulation/Golak/Makefile
+	  TMA/Makefile
+	  dmaini/Makefile
+	  tests/Makefile
+	  tests/Eloss/Makefile)
+test -z ""${CERNLIB} && \
+        AC_MSG_WARN(CERN libraries not found. Using only HMBook.)
+test -e ${exec_prefix}/lib/libaqua.${SHARED_EXT} -a \
+	-e ${exec_prefix}/lib/libreader.${SHARED_EXT} || \
+        AC_MSG_WARN(Aqua libraries not found. Cola will not compile without them.)
+test $ISSTATIC = 1 && \
+	AC_MSG_WARN([make will not compile a static version of Cola
+        (and other analysis programs). Simul should work, though.])
+test "$AUXDIRS" = "." || \
+	AC_MSG_WARN(run 'make aux' first to compile necessary tools)

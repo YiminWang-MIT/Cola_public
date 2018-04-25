@@ -1,0 +1,9 @@
+#
+zone 2 2 1
+SetFillRGB 1.0 1.0 1.0
+Title "statistics"
+Histogram "statistics/latch1"
+Histogram "statistics/latch2"
+Histogram "statistics/datatype"
+
+close

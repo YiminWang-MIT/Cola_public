@@ -1,0 +1,38 @@
+/**@name ColaJLab
+ *
+ * \begin{center}
+ *   {\Large {\bf Cindy Online Analysis - Jefferson Lab version}}
+ * \end{center}
+ *
+ * This is our first attempt to use the doc++ source code documentation
+ * system for the Jefferson Lab version of Cola++. This is far from beeing
+ * complete, but we hope it already helps to find some documentation.
+ *
+ * @memo     Cindy Online Analysis - Jefferson Lab version
+ * @version  1.0
+ * @author   Michael O. Distler and
+ *           Harald Merkel
+ */
+//@{
+/**@name Introduction
+ * introduction
+ */
+
+/**@name Programs
+ * @memo tools and debuging programs
+ */
+
+//@{
+//@Include: ../../ColaJLab/codatest.cc
+//@}
+
+/**@name Classes
+ * @memo class definitions and member functions
+ */
+
+//@{
+//@Include: ../../ColaJLab/codafile.h
+//@Include: ../../ColaJLab/HallAfile.h
+//@}
+
+//@}
