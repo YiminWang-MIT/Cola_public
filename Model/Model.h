@@ -36,7 +36,7 @@ enum modeltype {
   He3nr,       TripleLabHe3, He3fast,       TriplePol,
   Inclusive,   kMaid,        DMBoson,       DMQEDBackground,ElasticCryogens,
   DMProton,    Mott,         ElasticNitrogen, ElasticNuclearPA, ElasticHavar,
-  ElasticPolElectronPolProton
+  ElasticPolElectronPolProton, ElasticRadiative
 };
 
 extern "C" double mymaid_(int *iso, double *w, double *q2, double *costheta,

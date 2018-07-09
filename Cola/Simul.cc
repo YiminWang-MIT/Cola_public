@@ -573,6 +573,10 @@ Simul::Simul()
     iselastic=true;
     rundb.Target.internalRadiation = 0; // done by generator
     generator = new generateBremsstrahlung(Reaction, sime, sim1, &rundb.sim);
+  } else if (ModelType == ElasticRadiative) {//Yimin Wang 2018/07/09 
+    iselastic=true;
+    rundb.Target.internalRadiation = 0; // done by generator
+    generator = new generateElasticRadiative(Reaction, sime, sim1, &rundb.sim);
   } else if (ModelType == ElasticDipole) {
     iselastic=true;
     generator = new generateElasticProton(Reaction, sime, sim1, &rundb.sim);
@@ -1424,7 +1428,7 @@ void help(char *argv[])
     "                       DMBoson, DMQEDBackground, DMProton, ElasticCryogens\n"
     "                       Elastic, EtaMaid, He3nr, He3fast, Inclusive, ElasticHavar\n"
     "                       kMaid, ElasticDeuteron, ElasticNitrogen, ElasticNuclearPA, Mott\n"
-    "                       ElasticPolElectronPolProton\n"
+    "                       ElasticPolElectronPolProton, ElasticRadiative\n"
     "                       default: Isotropic\n"
     "-C,   --directory=DIR  change to directory before doing anything\n"
     "-i,   --ignore         ignore floating point exceptions\n"
@@ -1510,6 +1514,7 @@ int main(int argc, char *argv[])
       //      if(!strcmp(optarg, "Isotropic"))    {break;}
       if(!strcmp(optarg, "Elastic"))      {ModelType = Elastic;       break;}
       if(!strcmp(optarg, "ElasticProton")){ModelType = ElasticProton; break;}
+      if(!strcmp(optarg, "ElasticRadiative")){ModelType = ElasticRadiative; break;}
       if(!strcmp(optarg, "ElasticDipole")){ModelType = ElasticDipole; break;}
       if(!strcmp(optarg, "ElasticPolElectronPolProton")){ModelType = ElasticPolElectronPolProton; break;}
       if(!strcmp(optarg, "ElasticNucleus")){ModelType = ElasticNucleus; break;}
