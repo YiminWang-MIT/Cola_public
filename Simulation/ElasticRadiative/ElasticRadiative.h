@@ -7,7 +7,6 @@
  */
 
 #include "../Generate.h"
-#include <TFile.h>
 
 #include "Math/GSLIntegrator.h"
 #include "Math/GSLMCIntegrator.h"
