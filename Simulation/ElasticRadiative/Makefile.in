@@ -1,0 +1,39 @@
+#								 -*-makefile-*-
+#
+# $Id: Makefile.in 2616 2015-01-08 12:53:44Z distler $
+#
+
+.PHONY : all clean lib veryclean distclean
+
+srcdir	= @srcdir@
+VPATH	= @srcdir@
+
+include	../../Makefile.inc
+
+EXP	= abcn
+CXXFLAGS= $(OPTS) $(WARN) -fno-strict-aliasing
+LDFLAGS	= $(OPTS)
+CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(topdir)/Cola/include -I$(incdir) -I.. -I../.. -I.
+
+libobjs	= radiative_tests.o radiative_helpers.o radGenTest.o ElasticRadiative.o
+library	= libElasticRadiative.a
+
+
+all:	lib
+
+lib:	$(library)
+
+$(library) :	$(libobjs)
+	@ ar -crv $@ $^
+	$(RANLIB) $@
+
+clean :
+	rm -rf *~ *.o
+
+veryclean :	clean
+	rm -f $(library) $(QSPIN)
+
+distclean:	veryclean
+	rm -f Makefile
+
+-include $(libobjs:%.o=.%.depend)

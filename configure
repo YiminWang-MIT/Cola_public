@@ -7917,7 +7917,12 @@ esac
 
 subdirs="$subdirs Bison Doc Flex readline"
 
-ac_config_files="$ac_config_files Makefile Makefile.inc Chamber/Makefile Cindy/Makefile Cola/Makefile ColaIASA/Makefile ColaJLab/Makefile ColaMIT/Makefile Detector/Makefile FourVector/Makefile HBook/Makefile HMBook/Makefile HMBook/setup.py Model/Makefile Printlog/Makefile Simulation/Makefile Simulation/EventSim/Makefile Simulation/EventSim/tests/Makefile Simulation/Golak/Makefile TMA/Makefile dmaini/Makefile tests/Makefile tests/Eloss/Makefile"
+ac_config_files="$ac_config_files Makefile Makefile.inc Chamber/Makefile
+Cindy/Makefile Cola/Makefile ColaIASA/Makefile ColaJLab/Makefile
+ColaMIT/Makefile Detector/Makefile FourVector/Makefile HBook/Makefile
+HMBook/Makefile HMBook/setup.py Model/Makefile Printlog/Makefile
+Simulation/Makefile Simulation/EventSim/Makefile Simulation/EventSim/tests/Makefile 
+Simulation/ElasticRadiative/Makefile Simulation/Golak/Makefile TMA/Makefile dmaini/Makefile tests/Makefile tests/Eloss/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

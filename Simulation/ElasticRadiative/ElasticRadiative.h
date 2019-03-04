@@ -12,8 +12,10 @@
 #include "Math/GSLMCIntegrator.h"
 #include "Math/Interpolator.h"
 
-#include "radiative_helpers.hpp"
+#include "radiative_helpers.h"
 
+class Gamma;
+class Sigma;
 class OneIndex;
 class TLorentzVector;
 
@@ -40,9 +42,9 @@ private:
   bool useKellyFF;
 
   // Classes needed for the five-fold differential cross section
-  Gamma * pGamma;
   IFourMat * pI4;
   Sigma * pSigma;
+  Gamma * pGamma;
   
   // Objects needed for every event
   TLorentzVector p1,p2,p3,p4,k,kMod;
@@ -67,6 +69,7 @@ private:
   double d_p4_p4(double E4);
 
   // Integrators
+  
   ROOT::Math::GSLIntegrator *i_p1_p2;
   ROOT::Math::GSLIntegrator *i_p1_p3;
   ROOT::Math::GSLIntegrator *i_p1_p4;
@@ -94,11 +97,11 @@ private:
 
   class Btilde {
     private:
-      const GeneratorRadiative& g;
+      const generateElasticRadiative& g;
       const TLorentzVector& v1;
       const TLorentzVector& v2;
     public:
-      Btilde(const GeneratorRadiative& parent, 
+      Btilde(const generateElasticRadiative& parent, 
           const TLorentzVector& i1, const TLorentzVector& i2) 
         : g(parent), v1(i1), v2(i2) {};
       double operator() (double x) const;
@@ -106,9 +109,9 @@ private:
 
   class intSampletoKcut {
     private:
-      const GeneratorRadiative& g;
+      const generateElasticRadiative& g;
     public:
-      intSampletoKcut(const GeneratorRadiative& parent)
+      intSampletoKcut(const generateElasticRadiative& parent)
         : g(parent) {};
       double operator() (const double *x) const;
   };
@@ -146,7 +149,7 @@ public:
     usePointProtonFF = false;
     useKellyFF = false;
 
-    pGamma = new Gamma();
+    //pGamma = new Gamma();
     pI4 = new IFourMat();
     pSigma = new Sigma();
   };

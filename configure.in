@@ -516,6 +516,7 @@ AC_OUTPUT(Makefile
 	  Simulation/Makefile
 	  Simulation/EventSim/Makefile
 	  Simulation/EventSim/tests/Makefile
+	  Simulation/ElasticRadiative/Makefile
 	  Simulation/Golak/Makefile
 	  TMA/Makefile
 	  dmaini/Makefile

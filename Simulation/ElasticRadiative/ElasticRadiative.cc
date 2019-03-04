@@ -1,8 +1,6 @@
 #include "Generate.h"
 #include "ElasticRadiative.h"
 
-#include "radiative_helpers.hpp"
-
 #include "TLorentzVector.h"
 #include "TF1.h"
 #include "Math/WrappedMultiTF1.h"
@@ -705,6 +703,7 @@ void generateElasticRadiative::Initialize()
   ROOT::Math::Functor wf_sample(f_sample,2);
 
   // Create the integrators
+  
   i_p1_p2 = new ROOT::Math::GSLIntegrator(ROOT::Math::IntegrationOneDim::kADAPTIVE);
   i_p1_p3 = new ROOT::Math::GSLIntegrator(ROOT::Math::IntegrationOneDim::kADAPTIVE);
   i_p1_p4 = new ROOT::Math::GSLIntegrator(ROOT::Math::IntegrationOneDim::kADAPTIVE);

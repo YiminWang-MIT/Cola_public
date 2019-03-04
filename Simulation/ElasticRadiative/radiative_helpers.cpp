@@ -1,4 +1,4 @@
-#include "radiative_helpers.hpp"
+#include "radiative_helpers.h"
 #include <iostream>
 
 /********************************************************************
