@@ -104,6 +104,7 @@ LIBHMVIEW	= ../HMBook/libhmview.a
 LIBMODEL	= ../Model/libmodel.a
 LIBSIMUL	= ../Simulation/libsimul.a
 LIBSIMREADER    = ../Simulation/EventSim/libeventsimreader.a
+LIBELASTICRADIATIVE = ../Simulation/ElasticRadiative/libElasticRadiative.a
 LIBDETECT	= ../Detector/libdetector.a
 LIBAQUA_SETUP	= $(libdir)/libaqua.$(SHARED_EXT) \
 		  $(libdir)/libsetup.$(SHARED_EXT)

@@ -7546,7 +7546,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${CERNLIB}" >&5
 $as_echo "${CERNLIB}" >&6; }
 test -z ""${CERNLIB} || LIBDIRS=$LIBDIRS" HBook"
-LIBDIRS=$LIBDIRS" HMBook Model Simulation Simulation/EventSim TMA"
+LIBDIRS=$LIBDIRS" HMBook Model Simulation Simulation/EventSim Simulation/ElasticRadiative TMA"
 
 
 
@@ -8633,6 +8633,7 @@ do
     "Simulation/Makefile") CONFIG_FILES="$CONFIG_FILES Simulation/Makefile" ;;
     "Simulation/EventSim/Makefile") CONFIG_FILES="$CONFIG_FILES Simulation/EventSim/Makefile" ;;
     "Simulation/EventSim/tests/Makefile") CONFIG_FILES="$CONFIG_FILES Simulation/EventSim/tests/Makefile" ;;
+    "Simulation/ElasticRadiative/Makefile") CONFIG_FILES="$CONFIG_FILES Simulation/ElasticRadiative/Makefile" ;;
     "Simulation/Golak/Makefile") CONFIG_FILES="$CONFIG_FILES Simulation/Golak/Makefile" ;;
     "TMA/Makefile") CONFIG_FILES="$CONFIG_FILES TMA/Makefile" ;;
     "dmaini/Makefile") CONFIG_FILES="$CONFIG_FILES dmaini/Makefile" ;;

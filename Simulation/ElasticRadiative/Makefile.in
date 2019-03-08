@@ -11,11 +11,11 @@ VPATH	= @srcdir@
 include	../../Makefile.inc
 
 EXP	= abcn
-CXXFLAGS= $(OPTS) $(WARN) -fno-strict-aliasing
-LDFLAGS	= $(OPTS)
-CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(topdir)/Cola/include -I$(incdir) -I.. -I../.. -I.
+CXXFLAGS= $(OPTS) $(WARN) -fno-strict-aliasing $(ROOT_CFLAGS)
+LDFLAGS	= $(ROOT_LIBS) $(OPTS)
+CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(topdir)/Cola/include -I$(incdir) -I.. -I../.. -I. 
 
-libobjs	= radiative_tests.o radiative_helpers.o radGenTest.o ElasticRadiative.o
+libobjs	= radiative_helpers.o ElasticRadiative.o
 library	= libElasticRadiative.a
 
 

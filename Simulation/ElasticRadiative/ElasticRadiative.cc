@@ -1,11 +1,6 @@
-#include "Generate.h"
 #include "ElasticRadiative.h"
 
 #include "TLorentzVector.h"
-#include "TF1.h"
-#include "Math/WrappedMultiTF1.h"
-#include "Math/Functor.h"
-#include "Math/Interpolator.h"
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -18,173 +13,8 @@
 double 
 generateElasticRadiative::generateEvent(double helicity)
 {
-  double E0 = Reaction->electronIn.energy();
-  FourVector In = FourVector(E0,0,0,Reaction->electronIn.momentum());
-  // Set the electronOut FourVector with momentum = 1
-  generateLabAngles(&Reaction->electronOut,1,sime->getAngle(), sime->getOop(), 
-		    dcte,sime->getDphi());
-  
-  double theta = Reaction->electronOut.theta();
-  double phi   = Reaction->electronOut.phi();
-
-
-  double ct    = cos(theta), st = sin(theta);
-  // energy of the outgoing electron in elastic scattering
-  
-  double Ep    = (-(E0 + m_proton)*(m_e_sqr+E0*m_proton)
-		  + (m_e_sqr-E0*E0)*ct*sqrt(m_proton*m_proton-m_e_sqr*st*st))/
-    ((E0*E0-m_e_sqr)*ct*ct-(E0+m_proton)*(E0+m_proton));
-
-  // Set the electronOut FourVector
-  Reaction->electronOut.initPolar(Ep, sqrt(Ep*Ep-m_e_sqr), theta, phi);
-  Reaction->Out1 = In - Reaction->electronOut + *Reaction->getTarget();
-  double q2 = (In-Reaction->electronOut).square();
-
-  // correction to elastic electron scattering at the proton side as in Physical Review C, Volume 62, 025501, QED radiative corrections to virtual Compton scattering (M. Vanderhaeghen); p. 36 Eq. A74-A76. The energy loss is generated like on p. 19 only the term with Delta Es is used, the rest is assumed to be constant in the regime of interest. For Eq. A74 it is used: exp(deltaR)=(2*DeltaEs/Q/sqrt(x))**(4*alpha/pi*log(eta)); it is DeltaEs1=Q*sqrt(x)/2*random**(1/(4*alpha/pi*log(eta))); for Eq. A76 it is used: exp(deltaR)=(2*DeltaEs/MN)**(2*alpha/pi*(ENprime/pNprime*log(x)-1)); it is DeltaEs=MN/2*random**(1/(2*alpha/pi*(ENprime/pNprime*log(x)-1))); DeltaEs=DeltaEs+DeltaEs1; Eprime=-DeltaEs/eta+Ep (Eq. A48)
-
-  double random = halton[4]();
-  double eta = E0/Ep;
-  double rho = sqrt(fabs(q2) + 4*m_proton*m_proton);
-  double x = pow(sqrt(fabs(q2)) + rho,2)/(4*pow(m_proton,2));
-  double t = 4*alpha/M_PI*log(eta);
-  double DeltaEs = pow(fabs(q2)*x,0.5)/2*securePow(random,1./t);
-  t = 2*alpha/M_PI*(Reaction->Out1.energy()/Reaction->Out1.momentum()*log(x)-1);
-  DeltaEs+=m_proton/2*securePow(random,1./t);
-  double Eprime = -DeltaEs/eta+Ep;
-  if(Eprime <= m_electron) // make sure that there is any energy for the electron left
-    {
-      Eprime = m_electron+1e-10;
-    }
-
-  // Out1 is the excited proton
-  Reaction->electronOut.initPolar(Eprime, sqrt(Eprime*Eprime-m_e_sqr), theta, phi);
-
-  /*double Eproton = Reaction->Out1.energy();  
-  double beta4 = Reaction->Out1.momentum()/Eproton;
-  double tproton = 4 * log(E0/Ep) + log((1+beta4) / (1-beta4)) / beta4 - 2;*/
-  // Internal radiative corrections for outgoing electron
-  
-  t =alpha/M_PI*(2*(log(fabs(q2)/m_e_sqr)-1));// + (protonContrib?0*tproton:0)); this part does not make any difference for 1M events, but it is not sure, if we can use the generation for the energy loss the same way, if we include the proton part.
-  if ( t <= 0 ) return 0.0; // if t<=0 ,then q2 < m_e_sqr and then the formula is not valid any more
-  //  cout <<"protonContrib:"<<protonContrib<<" "<<tproton<<" "<<log(fabs(q2)/m_e_sqr)-1<<endl;
-  class Momentum P_Spin;
-  class FourVector photon;
-  
-  double EBH,k;
-  double dPhotonNorm;
-
-  FourVector eoutsave = Reaction->electronOut;
-
-  Reaction->electronOut=eoutsave;
-
-  random = halton[2]();
-
-  dPhotonNorm = 1.0;
-  if ((BHmin != 0) && (BHmax != 0)) {
-    double min =  pow(BHmin/Ep,t);
-    double max =  pow(BHmax/Ep,t);
-    random = min + random*(max - min);
-    dPhotonNorm = (max - min);
-  }
-  double cutoff = securePow(RadCutOff,t);
-  if (random<cutoff) return 0;
-
-  // Energy loss because internal radiative corrections
-  k = (Ep-m_electron)*securePow(random, 1.0/t);// the maximum energy the electron can lose is Ep-m_electron, if it would be more, than the mass of the electron would be smaller than m_electron
-  double kk = k;  // store the real value of k
-  if (k<1e-10)  k=1e-10; // k is the energy loss we put in the Bethe-Heitler calculation
-  if ( kk == 0 ) return 0; // the weight would be 0 anway but some calculation does not work when kk == 0
-
-  Reaction->electronOut -= k;
-
-
-  k = Ep - Reaction->electronOut.energy(); // to minimize roundoff error
-
-  double weight = 1.0;
-
-  theta= Reaction->electronOut.getP()* Reaction->electronIn.getP();
-  theta/=Reaction->electronOut.getP().abs()* Reaction->electronIn.getP().abs();
-  theta=acos(theta);
-
-
-  generateBetheHeitlerPeak BH(In, Reaction->electronOut);
-
-  P_Spin=Momentum();
-
-  bool lowerlimit;
-  EBH=k;
-  photon = BH.generate(weight,&lowerlimit,&EBH,&helicity,&P_Spin);
-  double w2 = k/t/EBH;//  kk/t*securePow(kk/(Ep-m_electron),-t)/EBH: this is the correct factor, but k/t/EBH seems to work better;  kk/t*securePow(kk/(Ep-m_electron),-t) is correcting for the distribution with which the radiative tail is generated; /EBH is giving back the missing photon momentum
-  if (weight<0){
-    invbh++;
-    if (invbh %100 ==0)   printf("Warning, Invalid BH.generate %i\n",invbh);
-    return 0; // invalid event, very rare case 
-  }
-
-  // Out1 is now the final proton
-  Reaction->Out1 = In + *Reaction->getTarget()-Reaction->electronOut - photon;
-  
-  Reaction->Out1 = Reaction->Out1.setSpin(P_Spin);
-
-
-  /*
-  
- //--- Now we need to consider, that the second order correction to the BH
-  // and not to elastic are needed. Since Generator a priori considers the
-  // elastic correction, we need to correct for the ratio:
-  
-  double deltaR = RealBHCorrection(Reaction->electronIn, Reaction->electronOut, Reaction->target, Reaction->Out1, photon2);
-  RadiativeCorrection = exp(deltaR); // -- this is correction factor
-  //cout<<"Correction: "<< RadiativeCorrection<< " Photon2 " << photon2.energy() << " real " << exp(deltaReal) << " Eprime " << Reaction->electronOut.energy() << " Photon " << photon.energy() << endl;
-  //cout << Reaction->electronOut.energy() << " " << RadiativeCorrection << endl;
-  weight *= RadiativeCorrection;
-*/
-  
-  //--- For the complete higher order corrections some terms need to be added to 
-  // the weight. With approx. random generator, we consider only part of the 
-  // higher order correction. To get the complete exp(deltaR) correction, we 
-  // need additional eta^(t/2) term. Of course, the VertexCorrection method still 
-  // needs to be considered, to account for the part of the correction, that
-  // does not depend on energy of emitted photon.
-  /*
-  if (protonContrib) {    
-    //--- Missing terms for the whole Vanderhaeghen type higher order proton correction
-    // are calculated using this function!
-    double protonCorr = protonVertexCorrectionVanderhaeghen(Reaction->electronIn, Reaction->electronOut,  Reaction->Out1);
-    //cout<<"Proton Correction: "<<Reaction->electronOut.energy()<<",  "<<protonCorr<<endl;  
-    if (protonCorr>1.1) cout <<"pVC: "<<protonCorr<<endl;
-    weight *= protonCorr;    
-  }
-  */
-  
-  
-  // correction to Bethe-Heitler Diagrams as in Physical Review C, Volume 62, 025501, QED radiative corrections to virtual Compton scattering (M. Vanderhaeghen); p. 14 Eq. 58 and following. The energy loss is generated like on p. 19 only the term with Delta Es is used, the rest is assumed to be constant in the regime of interest.
-  random = halton[3]();
-  q2 = (In-Reaction->electronOut).square();
-  double ktimesqprime = In * photon;
-  double kprimetimesqprime = Reaction->electronOut * photon;
-  double EtildeEtildeprimesqrt = securePow(4*(In.energy()-fabs(q2)/2/m_proton-ktimesqprime/m_proton)*(Reaction->electronOut.energy()+fabs(q2)/2/m_proton-kprimetimesqprime/m_proton),0.5); // = ( 4* Etilde * Etildeprime * Mm1**2 / MN**2)**0.5
-  t =2*alpha*alpha/M_PI*(log(fabs(q2)/m_e_sqr)-1);  //  alpha*alpha because it is second order correction
-  if ( t <= 0 ) return 0.0; // if t<=0 ,then q2 < m_e_sqr and then the formula is not valid any more
-  k = EtildeEtildeprimesqrt * securePow(random, 1.0/t); // = (Mm1**2-MN**2)/MN; assume softphoton = l *(Reaction->electronOut.momentum.abs(),Reaction->electronOut.momentum()); it is Mm1**2-MN**2 = 2*Reaction->Out1 * softphoton => l = (Mm1**2-MN**2) / (2*Reaction->Out1*(Reaction->electronOut.momentum.abs(),Reaction->electronOut.momentum())) = k * MN / (2*Reaction->Out1*(Reaction->electronOut.momentum.abs(),Reaction->electronOut.momentum())), therefore the new electron out is: Reaction->electronOut-= l*Reaction->electronOut.momentum.abs()
-  
-  FourVector photon2 = FourVector(Reaction->electronOut.momentum(),Reaction->electronOut.getP());// this is just used for the calculation and not the soft photon
-  if( (k * m_proton / 2 / (Reaction->Out1*photon2)*(Reaction->electronOut.momentum())) < Reaction->electronOut.energy() - m_electron - 1e-10) // make sure that there is still energy for the electron left
-    {
-      Reaction->electronOut-=(k * m_proton / 2 / (Reaction->Out1*photon2)*(Reaction->electronOut.momentum()));
-      }
-      //cout << k/2. << " " << Reaction->Out1*photon2 << " " << (Reaction->Out1.energy())*(photon2.energy()) - (Reaction->Out1.momentum())*(photon2.momentum()) << " " << EtildeEtildeprimesqrt << endl;
-      
-
-  double we=weight*w2;
-  if (!(we>=0))
-    {
-      we=0;
-      //cout <<"Error:"<< weight<<" "<<w2<<endl;//" "<<w3<<endl;
-    }
-  return we*dPhotonNorm;
-//}
-
+  //need to fix this
+  double qrndNumbers[5]={0.1,0.2,0.3,0.4,0.5};
 //need to merge this with generate Event
 //int generateElasticRadiative::generateEvent(GeneratorEvent *ev)
 //{
@@ -204,8 +34,9 @@ generateElasticRadiative::generateEvent(double helicity)
   //std::cout << "New event\n";
   //std::cout << "\tBeam charge is: " << beamCharge << "\n";
 
-  //build theta:
-  double cosTheta, theta;
+  //build theta: don't need this if the q2 is fixed
+  double cosTheta=0, theta=0;
+  /*
   switch (thetaDistribution)
     {
     case 1: // Rutherford
@@ -230,7 +61,7 @@ generateElasticRadiative::generateEvent(double helicity)
     theta=acos(cosTheta);
 	break;
       }
-    }
+    }*/
 
   //build phi
   double r=qrndNumbers[1];
@@ -334,6 +165,7 @@ generateElasticRadiative::generateEvent(double helicity)
 //     Set the multiple event weights
 //   *****************************************************************
 
+  /*
   // Set dipole weight
   double lep_dipole, mix_dipole, had_dipole;
   bremMatrixElement(lep_dipole,mix_dipole,had_dipole, 0, 0);
@@ -383,134 +215,8 @@ generateElasticRadiative::generateEvent(double helicity)
   double matElement_Jan_GMl = lep_Jan_GMl+mix_Jan_GMl+had_Jan_GMl;
   ev->weight.set_extra("method1_Jan_GMl", phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan_GMl * kinFactor * jacobian * calcElasticCorr(el));
 
-  if (usePointProtonFF)
-  {
-    // Set point proton weight
-    double lep_pp, mix_pp, had_pp;
-    bremMatrixElement(lep_pp,mix_pp,had_pp, -1, -1);
-    double matElement_pp = lep_pp+mix_pp+had_pp;
-    ev->weight.set_extra("method1_pp", phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_pp * kinFactor * jacobian * calcElasticCorr(el));
-  }
-
-  if (useKellyFF)
-  {
-    // Set Kelly parameterization FF weight
-    double lep_Kelly, mix_Kelly, had_Kelly;
-    bremMatrixElement(lep_Kelly,mix_Kelly,had_Kelly, 2, 2);
-    double matElement_Kelly = lep_Kelly+mix_Kelly+had_Kelly;
-    ev->weight.set_extra("method1_Kelly", phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Kelly * kinFactor * jacobian * calcElasticCorr(el));
-  }
-
-  // ** Mo+Tsai weight calculation **
-  // Z^0 deltaE-dependent part (from electron)
-  double aExpMoTsai = aExp;
-  double aWeightMoTsai = pow(el.eta(), -2.*aExpMoTsai);
-  // Z^1 deltaE-dependent part (from proton)
-  double bExpMoTsai = bExp;
-  double bWeightMoTsai = pow(el.eta(), -2.*bExpMoTsai);
-  // Z^2 deltaE-dependent part (from proton)
-  double cExpMoTsai = alpha/M_PI*(el.E4()/el.p4()*log((el.E4()+el.p4())/mP) - 1.);
-  double cWeightMoTsai = pow(beamEnergy/mP, 2*cExpMoTsai);
-
-  double moTsaiWeight = aWeightMoTsai * bWeightMoTsai * cWeightMoTsai;
-  double moTsaiT = 2.*(aExpMoTsai+bExpMoTsai+cExpMoTsai);
-  ev->weight.set_extra("method1_moTsai", phaseweight * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian
-		       * calcElasticCorrMoTsai(el) * moTsaiWeight * pow(maxDeltaE,t) * pow(el.E3()-me,-moTsaiT) * pow(deltaE,moTsaiT - t));
-
-  // ** Meister+Yennie weight calculation **
-  // Z^0 deltaE-dependent part (from electron)
-  double aExpMeisYen = aExpMoTsai;
-  double aWeightMeisYen = pow(el.eta(), aExpMeisYen);
-  // Z^1 deltaE-dependent part (from proton)
-  double bExpMeisYen = bExpMoTsai;
-  double bWeightMeisYen = pow(sqrt(el.eta())*beamEnergy/el.E4(), bExpMeisYen);
-  // Z^2 deltaE-dependent part (from proton)
-  double cExpMeisYen = cExpMoTsai;
-  double cWeightMeisYen = pow(beamEnergy*beamEnergy/mP/el.E4(), 2*cExpMeisYen);
-
-  double meisYenWeight = aWeightMeisYen * bWeightMeisYen * cWeightMeisYen;
-  double meisYenT = 2.*(aExpMeisYen+bExpMeisYen+cExpMeisYen);
-  ev->weight.set_extra("method1_meisYen", phaseweight * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian
-		       * calcElasticCorrMeisYen(el) * meisYenWeight * pow(maxDeltaE,t) * pow(el.E3()-me,-meisYenT) * pow(deltaE,meisYenT-t));
-
-  // Vacuum polarization weights
-  double corr_wo_vpol = calcElasticCorr(el)/exp((2.*alpha/M_PI)*(-5./9. + TMath::Log(el.Q2()/(me*me))/3.));
-  double factor_vpolLep = corr_wo_vpol/pow(1.-(getVpolLep(el.Q2(), me) + getVpolLep(el.Q2(), 105.658) + getVpolLep(el.Q2(), 1776.82))/2.,2);
-  double factor_vpolFull = corr_wo_vpol/pow(1.-(inter_vpol->Eval(el.Q2()))/2.,2);
-  ev->weight.set_extra("method1_vpolLep", phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * factor_vpolLep);
-  ev->weight.set_extra("method1_vpolFull", phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * factor_vpolFull);
-
-  // ** Non-exponentiated weight calculations **
-  // Kinematics are approximately elastic, use soft photon
-
-  // To divide out the sampling distribution
-  double otherWeight = weightSoftFrac*kweight*phaseweight*pow(maxDeltaE/deltaE,t);
-  /*
-  // Method 2 -- k cut
-  double weight2_MTj;
-  double weight2_MoT;
-  double weight2_vpol; // MTj but with vacuum polarization from data
-  double weight2_soft;
-  double weight2_dipole;
-  double weight2_Born;
-  if (momk < k_cut)
-  {
-    double elastic_corr_MoT = inter_brem_ee->Eval(cosTheta)
-                             -beamCharge*inter_brem_ep->Eval(cosTheta)
-                             +inter_brem_pp->Eval(cosTheta)
-                             +inter_virt->Eval(cosTheta);
-    double elastic_corr_MTj = elastic_corr_MoT-beamCharge*inter_prime->Eval(cosTheta);
-    double elastic_corr_vpol = elastic_corr_MTj -(2.*alpha/M_PI)*(-5./9. + TMath::Log(el.Q2()/(me*me))/3.) + inter_vpol->Eval(el.Q2()); // Subtract off e polarization term, add in total polarization from data
-
-    double bornweight = bornCrossSection(el, 1, 1)/inter_sample->Eval(theta)*phaseweight;
-    weight2_MTj = bornweight*(1.+elastic_corr_MTj);
-    weight2_MoT = bornweight*(1.+elastic_corr_MoT);
-    weight2_vpol = bornweight*(1.+elastic_corr_vpol);
-    weight2_soft = weight2_MTj;
-    weight2_dipole = bornCrossSection(el, 0, 0)*(1.+elastic_corr_MTj)/inter_sample->Eval(theta)*phaseweight;
-    weight2_Born = bornCrossSection(el, 1, 1)/inter_sample->Eval(theta)*phaseweight;
-  }
-  // Use inelastic calculation
-  else {
-    weight2_MTj = cmSqMeVSq * matElement_Jan * kinFactor * jacobian * otherWeight;
-    weight2_MoT = weight2_MTj;
-    weight2_vpol = weight2_MTj;
-    weight2_soft = momk * softFactor * bornCrossSection(el, 1, 1) * jacobian * otherWeight;
-    weight2_dipole = cmSqMeVSq * matElement_dipole * kinFactor * jacobian * otherWeight;
-    weight2_Born = 0;
-  }
-  ev->weight.set_extra("method2", weight2_MTj);
-  ev->weight.set_extra("method2_moTsai", weight2_MoT);
-  ev->weight.set_extra("method2_vpol", weight2_vpol);
-  ev->weight.set_extra("method2_soft", weight2_soft);
-  ev->weight.set_extra("method2_dipole", weight2_dipole);
-  ev->weight.set_extra("method2_Born", weight2_Born);
-
-  // Method 3 - DeltaE cut
-  double weight3, weight3_soft, weight3_exp, weight3_Born;
-  if (deltaE<method3_deltaE_cut)
-  {
-    // Integral over deltaE and photon angles of sampling distribution
-    double sampleintegral = softFraction*pow(method3_deltaE_cut/maxDeltaE,t)+(1.-softFraction)*method3_deltaE_cut*(beamEnergy-maxDeltaE)/(maxDeltaE*(beamEnergy-method3_deltaE_cut));
-
-    weight3 = bornCrossSection(el, 1, 1)*(1.+getMTjDelta(el, method3_deltaE_cut))/sampleintegral*phaseweight;
-    weight3_soft = weight3;
-    weight3_Born = bornCrossSection(el, 1, 1)/sampleintegral*phaseweight;
-  }
-  else
-  {
-    weight3 = cmSqMeVSq * matElement_Jan * kinFactor * jacobian * otherWeight;
-    weight3_soft = momk * softFactor * bornCrossSection(el, 1, 1) * jacobian * otherWeight;
-    weight3_Born = 0;
-  }
-
-  ev->weight.set_extra("method3", weight3);
-  ev->weight.set_extra("method3_soft", weight3_soft);
-  ev->weight.set_extra("method3_Born", weight3_Born);
-  */
-  // ***************************************************************** 
-
-  // Create and pushback the Generator Particles
+  //fix this
+  
   GeneratorParticle e,p;
   e.particle=ev->lepton_prescatter.particle;
   e.momentum = p3;
@@ -527,7 +233,9 @@ generateElasticRadiative::generateEvent(double helicity)
   kParticle.particle="gamma";
   kParticle.momentum = k;
   ev->particles.push_back(kParticle);
-  return 3;
+  return 3;*/
+
+  return phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_dipole * kinFactor * jacobian * calcElasticCorr(el);
 }
 
 
@@ -683,288 +391,8 @@ void generateElasticRadiative::Initialize()
   p1.SetXYZM(0,0,TMath::Sqrt(beamEnergy*beamEnergy-me*me),me);
   p2.SetXYZM(0.,0.,0.,mP);
   //E1 = beamEnergy;
-
-  // Functions to be integrated over the "elastic" region
-  Btilde f_p1_p2(*this, p1, p2);
-  Btilde f_p1_p3(*this, p1, p3);
-  Btilde f_p1_p4(*this, p1, p4);
-  Btilde f_p2_p3(*this, p2, p3);
-  Btilde f_p2_p4(*this, p2, p4);
-  Btilde f_p3_p4(*this, p3, p4);
-  intSampletoKcut f_sample(*this);
-
-  // Wrap the functions
-  ROOT::Math::Functor1D wf_p1_p2(f_p1_p2);
-  ROOT::Math::Functor1D wf_p1_p3(f_p1_p3);
-  ROOT::Math::Functor1D wf_p1_p4(f_p1_p4);
-  ROOT::Math::Functor1D wf_p2_p3(f_p2_p3);
-  ROOT::Math::Functor1D wf_p2_p4(f_p2_p4);
-  ROOT::Math::Functor1D wf_p3_p4(f_p3_p4);
-  ROOT::Math::Functor wf_sample(f_sample,2);
-
-  // Create the integrators
-  
-  i_p1_p2 = new ROOT::Math::GSLIntegrator(ROOT::Math::IntegrationOneDim::kADAPTIVE);
-  i_p1_p3 = new ROOT::Math::GSLIntegrator(ROOT::Math::IntegrationOneDim::kADAPTIVE);
-  i_p1_p4 = new ROOT::Math::GSLIntegrator(ROOT::Math::IntegrationOneDim::kADAPTIVE);
-  i_p2_p3 = new ROOT::Math::GSLIntegrator(ROOT::Math::IntegrationOneDim::kADAPTIVE);
-  i_p2_p4 = new ROOT::Math::GSLIntegrator(ROOT::Math::IntegrationOneDim::kADAPTIVE);
-  i_p3_p4 = new ROOT::Math::GSLIntegrator(ROOT::Math::IntegrationOneDim::kADAPTIVE);
-  i_sample = new ROOT::Math::GSLMCIntegrator(ROOT::Math::IntegrationMultiDim::kVEGAS);
-
-  i_p1_p2->SetFunction(wf_p1_p2); // To calculate B(p1, p2, k_cut)
-  i_p1_p2->SetRelTolerance(IntTol);
-
-  i_p1_p3->SetFunction(wf_p1_p3); // To calculate B(p1, p3, k_cut)
-  i_p1_p3->SetRelTolerance(IntTol);
-
-  i_p1_p4->SetFunction(wf_p1_p4); // To calculate B(p1, p4, k_cut)
-  i_p1_p4->SetRelTolerance(IntTol);
-
-  i_p2_p3->SetFunction(wf_p2_p3); // To calculate B(p2, p3, k_cut)
-  i_p2_p3->SetRelTolerance(IntTol);
-
-  i_p2_p4->SetFunction(wf_p2_p4); // To calculate B(p2, p4, k_cut)
-  i_p2_p4->SetRelTolerance(IntTol);
-
-  i_p3_p4->SetFunction(wf_p3_p4); // To calculate B(p3, p4, k_cut)
-  i_p3_p4->SetRelTolerance(IntTol);
-
-  i_sample->SetFunction(wf_sample);
-  ROOT::Math::IntegratorMultiDimOptions sample_opts = i_sample->Options();
-  sample_opts.SetNCalls(100000); // Increase for precomputing values
-  i_sample->SetOptions(sample_opts);
-
-  // Create the interpolators
-  const int vpolInterPoints = 7186;
-  inter_vpol = new ROOT::Math::Interpolator(vpolInterPoints , ROOT::Math::Interpolation::kCSPLINE);
-  inter_brem_ee = new ROOT::Math::Interpolator(InterpolPoints, ROOT::Math::Interpolation::kCSPLINE);
-  inter_brem_ep = new ROOT::Math::Interpolator(InterpolPoints, ROOT::Math::Interpolation::kCSPLINE);
-  inter_brem_pp = new ROOT::Math::Interpolator(InterpolPoints, ROOT::Math::Interpolation::kCSPLINE);
-  inter_virt = new ROOT::Math::Interpolator(InterpolPoints, ROOT::Math::Interpolation::kCSPLINE);
-  inter_prime = new ROOT::Math::Interpolator(InterpolPoints, ROOT::Math::Interpolation::kCSPLINE);
-
-  double x_cosTheta[InterpolPoints];
-  double y_brem_ee[InterpolPoints];
-  double y_brem_ep[InterpolPoints];
-  double y_brem_pp[InterpolPoints];
-  double y_virt[InterpolPoints];
-  double y_prime[InterpolPoints];
-
-  for (int i = 0; i < InterpolPoints; i++)
-  {
-    // Theta angle for the lepton:
-    double cosTheta = cosThetaMin + cosThetaDelta - i*cosThetaDelta/(InterpolPoints - 1);
-    double theta = acos(cosTheta);
-
-    // Generate elastic kinematic variables
-    ElasticKinematics el(beamEnergy, theta);
-
-    double E3 = el.E3();
-    double mom3 = sqrt(E3*E3 - me*me);
-
-    p3.SetXYZM(mom3*sin(theta),0,mom3*cosTheta,me);
-    p4 = p1 + p2 - p3;
-    double E4 = p4.E();
-
-    x_cosTheta[i] = cosTheta;
-
-    // Bremsstrahlung correction from the lepton term
-    y_brem_ee[i] = -2.*alpha*(d_p1_p1()-2.*d_p1_p3()+d_p3_p3(E3));
-    // Bremsstrahlung correction from the interference term
-    y_brem_ep[i] = 4.*alpha*(d_p1_p2()-d_p1_p4()-d_p2_p3()+d_p3_p4());
-    // Bremsstrahlung correction from the proton term
-    y_brem_pp[i] = -2.*alpha*(d_p2_p2()-2.*d_p2_p4()+d_p4_p4(E4));
-    // Approach of Maximon & Tjon to the TPE diagrams (J. Arrington, et al., arXiv:1105.0951):    
-    y_prime[i] =-(alpha/M_PI)*(TMath::Log(beamEnergy/E3)*TMath::Log(el.Q2()*el.Q2()/(4.*mP*mP*beamEnergy*E3)) + 2.*TMath::DiLog(1. - 0.5*mP/beamEnergy) - 2.*TMath::DiLog(1. - 0.5*mP/E3));
-    // Virtual photon polarization with just e+ and e- in loop
-    y_virt[i] = (2.*alpha/M_PI)*(-5./9. + TMath::Log(el.Q2()/(me*me))/3.) + 
-      (alpha/M_PI)*(3.*TMath::Log(el.Q2()/(me*me))/2. - 2.);
-  }
-
-  // Vacuum polarization -- From Fedor Ignatov's calculation, as used in ESEPP
-  FILE *fvpol = fopen(Form("%s/.darklight/shared/generators/vpol.dat", getenv("COOKERHOME")),"r"); // Opening the file "vpol.dat"
-  if (fvpol == NULL) { std::cerr << "Can't open file \"vpol.dat\"!" << std::endl; }
-  int np_vpol = 0;
-  char str_vpol[128];
-  double s[vpolInterPoints];
-  double rep[vpolInterPoints]; // Re(P(-s))
-
-  while (!feof(fvpol)) // Reading from the file "vpol.dat"
-  {
-    str_vpol[0] = 0;
-    fgets(str_vpol, 128, fvpol);
-    if (feof(fvpol) || strlen(str_vpol) == 0) break; // The end or empty string
-
-    if (str_vpol[0] != '/')
-    {
-      sscanf(str_vpol, "%lf %lf", &s[np_vpol], &rep[np_vpol]);
-      rep[np_vpol] *= 2.;
-      s[np_vpol] *= 1000000; // Convert to MeV^2
-      np_vpol++;
-    }
-  }
-  if (np_vpol!=vpolInterPoints)
-    std::cerr << "Something went wrong reading \"vpol.dat\"! " << std::endl;
-
-  fclose(fvpol); // Closing the file "vpol.dat"
-  inter_vpol->SetData(np_vpol, s, rep); // Interpolating
-
-
-  // Integrate over the deltaE and photon angle sampling distributions
-  int sampleInterPoints;
-  bool usePreComp = ((int)(beamEnergy+0.5)==2010&&cosThetaMin<0.999&&(cosThetaMin+cosThetaDelta)>-0.5&&k_cut>0.9999&&k_cut<1.0001&&softFraction>0.499&&softFraction<0.501&&!useDeltaECut);
-  if (usePreComp)
-    sampleInterPoints = 600;
-  else 
-  {
-    sampleInterPoints = (125.*(thetaMax-thetaMin));
-    if (sampleInterPoints<3)
-      sampleInterPoints = 3;
-  }
-
-  //disable method 2 weight calculation
-  sampleInterPoints=3;
-  
-  inter_sample = new ROOT::Math::Interpolator(sampleInterPoints, ROOT::Math::Interpolation::kCSPLINE);
-  double x_sample[sampleInterPoints];
-  double y_sample[sampleInterPoints];
-
-  if (usePreComp) // Load precomputed integral
-  {
-    FILE *intdata = NULL;
-    if (beamCharge==1)
-      intdata = fopen(Form("%s/.darklight/shared/generators/sampleintegral_pos.dat", getenv("COOKERHOME")),"r");
-    else if (beamCharge==-1)
-      intdata = fopen(Form("%s/.darklight/shared/generators/sampleintegral_ele.dat", getenv("COOKERHOME")),"r");
-    else
-      std::cerr << "beamCharge is set to " << beamCharge << ". We don't recognize this." << std::endl;
-
-    if (intdata == NULL) { std::cerr << "Can't open file sampleintegral data file!" << std::endl; }
-
-    int np_sample = 0;
-    char str_sample[256];
-
-    while (!feof(intdata))
-    {
-      str_sample[0] = 0;
-      char * fgetsResult = fgets(str_sample, 256, intdata);
-      if (feof(intdata) || strlen(str_sample) == 0) break; // The end or empty string
-      
-      sscanf(str_sample, "%lf %lf", &x_sample[np_sample], &y_sample[np_sample]);
-      np_sample++;
-    }
-    if (np_sample!=sampleInterPoints)
-      std::cerr << "Something went wrong reading \"sampleintegral.dat\"! " << std::endl;
-  }
-  else // Calculate numerically
-  {
-    std::cout << "Computing the Method 2 sample integral numerically" << std::endl;
-    for (int i = 0; i < sampleInterPoints; i++)
-    {
-      // Theta angle for the lepton:
-      interTheta = thetaMin + i*(thetaMax - thetaMin)/(sampleInterPoints-1);
-
-      // Generate elastic kinematic variables
-      ElasticKinematics el(beamEnergy, interTheta);
-
-      x_sample[i] = interTheta;
-
-      // Sampling distribution integrated over all photon angles and k up to k_cut
-      double intstart[2] = {-1., 0.};
-      double intend[2] = {1., 2*M_PI};
-      inter_elE = el.E3();
-
-      // Z^0 deltaE-dependent part (from electron)
-      double aExp = alpha/M_PI*(log(el.Q2()/(me*me)) - 1.);
-
-      // Z^1 deltaE-dependent part (from proton)
-      double bExp = -2.*alpha/M_PI*beamCharge*log(el.eta());
-
-      // Z^2 deltaE-dependent part (from proton)
-      double cExp = alpha/M_PI*(el.E4()*log(el.x())/el.p4() - 1.);
-
-      // Calculate t (5.16 in Jan's thesis)
-      inter_t = 2.*(aExp + bExp + cExp);
-      inter_maxDeltaE = el.E3() - me; // it can't lose more energy than its own mass.
-      if ((useDeltaECut)&&(deltaECut < (el.E3()-me)))
-        {
-          inter_maxDeltaE = deltaECut;
-        }
-      y_sample[i] = i_sample->Integral(intstart, intend);
-    }
-  }
-
-  // Interpolate:
-  inter_brem_ee->SetData(InterpolPoints, x_cosTheta, y_brem_ee); // Lepton term
-  inter_brem_pp->SetData(InterpolPoints, x_cosTheta, y_brem_pp); // Proton term
-  inter_brem_ep->SetData(InterpolPoints, x_cosTheta, y_brem_ep); // Interference term
-  inter_virt->SetData(InterpolPoints, x_cosTheta, y_virt); // Virtual photon correction
-  inter_prime->SetData(InterpolPoints, x_cosTheta, y_prime); // TPE contribution by Maximon & Tjon
-  inter_sample->SetData(sampleInterPoints, x_sample, y_sample); // Sampling distribution
-
-  // Interpolate Jan's form factor fits (from global cross section and polarized data)
-  FILE *ffdata = fopen(Form("%s/.darklight/shared/generators/ff_splinefits.dat", getenv("COOKERHOME")),"r");
-  if (ffdata == NULL) { std::cout << "Can't open file \"ff_splinefits.dat\"!" << std::endl; }
-
-  inter_splineGE = new ROOT::Math::Interpolator(1000, ROOT::Math::Interpolation::kCSPLINE);
-  inter_splineGEupper = new ROOT::Math::Interpolator(1000, ROOT::Math::Interpolation::kCSPLINE);
-  inter_splineGElower = new ROOT::Math::Interpolator(1000, ROOT::Math::Interpolation::kCSPLINE);
-  inter_splineGM = new ROOT::Math::Interpolator(1000, ROOT::Math::Interpolation::kCSPLINE);
-  inter_splineGMupper = new ROOT::Math::Interpolator(1000, ROOT::Math::Interpolation::kCSPLINE);
-  inter_splineGMlower = new ROOT::Math::Interpolator(1000, ROOT::Math::Interpolation::kCSPLINE);
-
-  // Values stored in the data file
-  double qsq[1001], ge_val[1001], ge_stat_err[1001], ge_sys_up[1001], ge_sys_down[1001], gm_val[1001], gm_stat_err[1001], gm_sys_up[1001], gm_sys_down[1001];
-  
-  // Set the values at Q^2=0
-  qsq[0] = 0;
-  ge_val[0] = 1;
-  ge_stat_err[0] = 0;
-  ge_sys_up[0] = 0;
-  ge_sys_down[0] = 0;
-  gm_val[0] = 1;
-  gm_stat_err[0] = 0;
-  gm_sys_up[0] = 0;
-  gm_sys_down[0] = 0;
-
-  int np_ff = 1;
-  char str_ff[256];
-
-  // Read the data file
-  while (!feof(ffdata))
-  {
-    str_ff[0] = 0;
-    char * fgetsResult = fgets(str_ff, 256, ffdata);
-    if (feof(ffdata) || strlen(str_ff) == 0) break; // The end or empty string
-    
-    sscanf(str_ff, "%lf %lf %lf %lf %lf %lf %lf %lf %lf", &qsq[np_ff], &ge_val[np_ff], 
-	   &ge_stat_err[np_ff], &ge_sys_up[np_ff], &ge_sys_down[np_ff], &gm_val[np_ff], 
-	   &gm_stat_err[np_ff], &gm_sys_up[np_ff], &gm_sys_down[np_ff]);
-    qsq[np_ff] *= 1000000; // Convert to MeV^2
-    np_ff++;
-  }
-
-  // Calculate GE and GM bands
-  double ge_up[1001], ge_down[1001], gm_up[1001], gm_down[1001];
-
-  for (int q=0; q<np_ff; q++)
-  {
-    ge_up[q] = ge_val[q] + sqrt(pow(ge_stat_err[q],2) + pow(ge_sys_up[q],2));
-    ge_down[q] = ge_val[q] - sqrt(pow(ge_stat_err[q],2) + pow(ge_sys_down[q],2));
-    gm_up[q] = gm_val[q] + sqrt(pow(gm_stat_err[q],2) + pow(gm_sys_up[q],2));
-    gm_down[q] = gm_val[q] - sqrt(pow(gm_stat_err[q],2) + pow(gm_sys_down[q],2));
-  }
-
-  fclose(ffdata);
-  
-  inter_splineGE->SetData(np_ff, qsq, ge_val);
-  inter_splineGEupper->SetData(np_ff, qsq, ge_up);
-  inter_splineGElower->SetData(np_ff, qsq, ge_down);
-  inter_splineGM->SetData(np_ff, qsq, gm_val);
-  inter_splineGMupper->SetData(np_ff, qsq, gm_up);
-  inter_splineGMlower->SetData(np_ff, qsq, gm_down);
-
+  //
+  ElasticKinematics el(beamEnergy, theta);
 }
 
 void generateElasticRadiative::bremMatrixElement(double &lep, double &mix, double &had, int FFTypeE, int FFTypeM)
@@ -1217,6 +645,7 @@ double generateElasticRadiative::dipoleFormFactor(double QSq)
 
 double generateElasticRadiative::electricFormFactor(double QSq, int formFactorType)
 {
+  /* fix this
   // Point-like proton
   if (formFactorType==-1)
     return 1.;
@@ -1244,13 +673,14 @@ double generateElasticRadiative::electricFormFactor(double QSq, int formFactorTy
   // Jan spline fit lower error
   if (formFactorType==4)
     return inter_splineGElower->Eval(QSq);
-
+*/
   std::cerr << "The index '" << formFactorType << "' does not correspond to a form factor type!" << std::endl;
   return 1.;
 }
 
 double generateElasticRadiative::magneticFormFactor(double QSq, int formFactorType)
 {
+  /* fix this
   // Point-like proton
   if (formFactorType==-1)
     return muP;
@@ -1280,7 +710,8 @@ double generateElasticRadiative::magneticFormFactor(double QSq, int formFactorTy
     return muP*inter_splineGMlower->Eval(QSq);
 
   std::cerr << "The index '" << formFactorType << "' does not correspond to a form factor type!" << std::endl;
-  return muP;
+  return muP;*/
+  return 1;
 }
 
 void generateElasticRadiative::fillProtonCurrent(OneIndex &current, const TLorentzVector &photon, int FFTypeE, int FFTypeM)
@@ -1301,87 +732,4 @@ double generateElasticRadiative::bornCrossSection(const ElasticKinematics &e, in
   double gM =  magneticFormFactor(e.Q2(), FFTypeM);
   const double csMott = constantFactor*e.E3()*e.E3()*e.E3()*(1.+cos(e.theta()))/(e.Q2()*e.Q2()*beamEnergy);
   return csMott* (e.eps()*gE*gE + e.tau()*gM*gM) / (e.eps()*(1.+e.tau()) );
-}
-
-// Integrate over P(deltaE) and P(Omega_gamma)
-double generateElasticRadiative::intSampletoKcut::operator()(const double *x) const
-{
-  double cosThetaK = x[0];
-  double phiK = x[1];
-
-  double E1 = g.beamEnergy;
-  double cosTheta = cos(g.interTheta);
-  double cosThetaEK = cosTheta*cosThetaK+sin(g.interTheta)*sin(acos(cosThetaK))*cos(phiK);
-  double k = g.k_cut;
-
-  // Calculate deltaE for this k_cut
-  double inelasticE = (g.mP*(E1-k)-E1*k*(1.-cosThetaK))/(g.mP+E1*(1.-cosTheta)-k*(1.-cosThetaEK));
-  double deltaE_k = g.inter_elE-inelasticE;
-
-  // deltaE integral
-  double deltaEint = g.softFraction*pow(deltaE_k/g.inter_maxDeltaE,g.inter_t)+(1-g.softFraction)*deltaE_k*(E1-g.inter_maxDeltaE)/(g.inter_maxDeltaE*(E1-deltaE_k));
-  // Photon angle part of integrand
-  double avgE3 = (g.inter_elE+inelasticE)/2.;
-  double ksample = (g.photonDirFcn(cosThetaK,E1) + g.photonDirFcn(cosThetaEK,avgE3))/2.;
-
-  return deltaEint*ksample;
-}
-
-double generateElasticRadiative::Btilde::operator()(double x) const
-{
-  TLorentzVector p_x = x*v1+(1.-x)*v2;
-  return (TMath::Log(4.*g.k_cut*g.k_cut/(p_x*p_x)) + (p_x.E())*TMath::Log((p_x.E() - (p_x.Vect()).Mag())/(p_x.E() + (p_x.Vect()).Mag()))/((p_x.Vect()).Mag()))/(p_x*p_x);
-}
-
-double generateElasticRadiative::d_p1_p1() // B(p1, p1, k_cut)
-{
-  return 0.5*(TMath::Log(2.*k_cut/me) + 
-	      beamEnergy*TMath::Log(me/(beamEnergy + TMath::Sqrt(beamEnergy*beamEnergy - me*me)))
-	      /TMath::Sqrt(beamEnergy*beamEnergy - me*me)
-	      )/M_PI;
-}
-
-double generateElasticRadiative::d_p1_p2() // B(p1, p2, k_cut)
-{
-  return (p1*p2)*i_p1_p2->Integral(0., 1.)/(4.*M_PI);
-}
-
-double generateElasticRadiative::d_p1_p3() // B(p1, p3, k_cut)
-{
-  return (p1*p3)*i_p1_p3->Integral(0., 1.)/(4.*M_PI);
-}
-
-double generateElasticRadiative::d_p1_p4() // B(p4, p4, k_cut)
-{
-  return (p1*p4)*i_p1_p4->Integral(0., 1.)/(4.*M_PI);
-}
-
-double generateElasticRadiative::d_p2_p2() // B(p2, p2, k_cut)
-{
-  return (TMath::Log(2.*k_cut/mP) - 1.)/(2.*M_PI);
-}
-
-double generateElasticRadiative::d_p2_p3() // B(p2, p3, k_cut)
-{
-  return (p2*p3)*i_p2_p3->Integral(0., 1.)/(4.*M_PI);
-}
-
-double generateElasticRadiative::d_p2_p4() // B(p2, p4, k_cut)
-{
-  return (p2*p4)*i_p2_p4->Integral(0., 1.)/(4.*M_PI);
-}
-
-double generateElasticRadiative::d_p3_p3(double E3) // B(p3, p3, k_cut)
-{
-  return 0.5*(TMath::Log(2.*k_cut/me) + E3*TMath::Log(me/(E3 + TMath::Sqrt(E3*E3 - me*me)))/TMath::Sqrt(E3*E3 - me*me))/M_PI;
-}
-
-double generateElasticRadiative::d_p3_p4() // B(p3, p4, k_cut)
-{
-  return (p3*p4)*i_p3_p4->Integral(0., 1.)/(4.*M_PI);
-}
-
-double generateElasticRadiative::d_p4_p4(double E4) // B(p4, p4, k_cut)
-{
-  return 0.5*(TMath::Log(2.*k_cut/mP) + E4*TMath::Log(mP/(E4 + TMath::Sqrt(E4*E4 - mP*mP)))/TMath::Sqrt(E4*E4 - mP*mP))/M_PI;
 }

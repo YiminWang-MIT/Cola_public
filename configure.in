@@ -362,7 +362,7 @@ if test -z ""${CERNLIB} ; then
 fi
 AC_MSG_RESULT(${CERNLIB})
 test -z ""${CERNLIB} || LIBDIRS=$LIBDIRS" HBook"
-LIBDIRS=$LIBDIRS" HMBook Model Simulation Simulation/EventSim TMA"
+LIBDIRS=$LIBDIRS" HMBook Model Simulation Simulation/EventSim TMA Simulation/ElasticRadiative"
 
 dnl ---------------------------------------------------------------------------
 AC_SUBST(ROOT_CFLAGS)
@@ -391,8 +391,7 @@ AC_DEFINE_UNQUOTED(DOCDIR, "${prefix}/doc", [install documentation here])
 
 dnl ---------------------------------------------------------------------------
 dnl special treatments 
-dnl ---------------------------------------------------------------------------
-AC_LANG_SAVE
+dnl ---------------------------------------------------------------------------AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_TRY_COMPILE([#include <sys/time.h>]
                [#include <sys/types.h>]

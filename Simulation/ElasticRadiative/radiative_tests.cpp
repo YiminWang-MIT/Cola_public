@@ -1,9 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-#include "TFile.h"
-#include "TH2.h"
-#include "gsl/gsl_rng.h"
 
 #include "radiative.h"
 

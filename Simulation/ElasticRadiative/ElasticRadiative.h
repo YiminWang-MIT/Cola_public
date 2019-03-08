@@ -6,13 +6,8 @@
  * 2019/01/12
  */
 
-#include "../Generate.h"
-
-#include "Math/GSLIntegrator.h"
-#include "Math/GSLMCIntegrator.h"
-#include "Math/Interpolator.h"
-
 #include "radiative_helpers.h"
+#include "../Generate.h"
 
 class Gamma;
 class Sigma;
@@ -25,6 +20,7 @@ class generateElasticRadiative : public eventGenerator{
 protected:
   double BHmin, BHmax, RadCutOff;
 private:
+  double beamEnergy, beamCharge;
   double cosThetaMin,cosThetaDelta,thetaMin,thetaMax; // Lepton angle range
   double phiRange; 
   double phaseweight;
@@ -42,9 +38,9 @@ private:
   bool useKellyFF;
 
   // Classes needed for the five-fold differential cross section
-  IFourMat * pI4;
-  Sigma * pSigma;
-  Gamma * pGamma;
+  IFourMat *pI4;
+  Sigma *pSigma;
+  Gamma *pGamma;
   
   // Objects needed for every event
   TLorentzVector p1,p2,p3,p4,k,kMod;
@@ -57,72 +53,9 @@ private:
   double k_cut;
   double method3_deltaE_cut;
 
-  double d_p1_p1();
-  double d_p1_p2();
-  double d_p1_p3();
-  double d_p1_p4();
-  double d_p2_p2();
-  double d_p2_p3();
-  double d_p2_p4();
-  double d_p3_p3(double E3);
-  double d_p3_p4();
-  double d_p4_p4(double E4);
-
-  // Integrators
-  
-  ROOT::Math::GSLIntegrator *i_p1_p2;
-  ROOT::Math::GSLIntegrator *i_p1_p3;
-  ROOT::Math::GSLIntegrator *i_p1_p4;
-  ROOT::Math::GSLIntegrator *i_p2_p3;
-  ROOT::Math::GSLIntegrator *i_p2_p4;
-  ROOT::Math::GSLIntegrator *i_p3_p4;
-  ROOT::Math::GSLMCIntegrator *i_sample;
-
-  // Interpolators
-  ROOT::Math::Interpolator *inter_vpol;
-  ROOT::Math::Interpolator *inter_brem_ee;
-  ROOT::Math::Interpolator *inter_brem_ep;
-  ROOT::Math::Interpolator *inter_brem_pp;
-  ROOT::Math::Interpolator *inter_virt;
-  ROOT::Math::Interpolator *inter_prime;
-  ROOT::Math::Interpolator *inter_sample;
-
-  // Interpolators for Jan's form factor fits
-  ROOT::Math::Interpolator *inter_splineGE;
-  ROOT::Math::Interpolator *inter_splineGEupper;
-  ROOT::Math::Interpolator *inter_splineGElower;
-  ROOT::Math::Interpolator *inter_splineGM;
-  ROOT::Math::Interpolator *inter_splineGMupper;
-  ROOT::Math::Interpolator *inter_splineGMlower;
-
-  class Btilde {
-    private:
-      const generateElasticRadiative& g;
-      const TLorentzVector& v1;
-      const TLorentzVector& v2;
-    public:
-      Btilde(const generateElasticRadiative& parent, 
-          const TLorentzVector& i1, const TLorentzVector& i2) 
-        : g(parent), v1(i1), v2(i2) {};
-      double operator() (double x) const;
-  };
-
-  class intSampletoKcut {
-    private:
-      const generateElasticRadiative& g;
-    public:
-      intSampletoKcut(const generateElasticRadiative& parent)
-        : g(parent) {};
-      double operator() (const double *x) const;
-  };
-
-  // Arrays for interpolation:
-  double s[10000];
-  double rep[10000];
 public:
   virtual ~generateElasticRadiative() { ; }
-  generateElasticRadiative(reaction *r, simDetectorBase *Sime, 
-			 simDetectorBase *Sim1, SIMUL *rundb) {
+  generateElasticRadiative(reaction *r, simDetectorBase *Sime, simDetectorBase *Sim1, SIMUL *rundb) {
     //ignore skip and seed at this moment
     Label      = "d[W]'";
     Unit       = "[m]b";
@@ -137,8 +70,6 @@ public:
     RadCutOff  = rundb->RadiationCutOff;
 
     
-    //need to change the next two lines
-    //also look for generator base file
     mP = m_proton; //getMass("proton");
     me = m_electron; //getMass("e-");
     alpha = 7.2973525698E-3;
@@ -149,7 +80,10 @@ public:
     usePointProtonFF = false;
     useKellyFF = false;
 
-    //pGamma = new Gamma();
+    beamCharge=1;
+    beamEnergy=100;//fix this
+
+    pGamma = new Gamma();
     pI4 = new IFourMat();
     pSigma = new Sigma();
   };
@@ -201,15 +135,6 @@ public:
 
   double getVpolLep(double Q2, double mass); // vacuum polarization from a lepton
 
-  // Test Functions
-  void test1();
-  void test2();
-  double test_integral(double thetaE, double phiE, double deltaE, ElasticKinematics &el); 
-  // returns d\sigma / d\Omega_e d\Delta_e in units of cm^2 / sr / MeV
-  void test3();
-  double test_born(double thetaE); // returns d\sigma / d\Omega_e in units of cm^s / sr
-  void test4();
-  void test5();
 };
 
 #endif
