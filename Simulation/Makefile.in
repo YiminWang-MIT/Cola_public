@@ -11,14 +11,14 @@ VPATH	= @srcdir@
 include	../Makefile.inc
 
 EXP	= abcn
-CXXFLAGS= $(DEFS) $(OPTS) $(WARN) -fno-strict-aliasing
-LDFLAGS	= $(OPTS) $(GSLLIBS)
-CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(incdir) -I.. $(GSLINCL)
+CXXFLAGS= $(DEFS) $(OPTS) $(WARN) -fno-strict-aliasing $(ROOT_CFLAGS)
+LDFLAGS	= $(OPTS) $(GSLLIBS) $(ROOT_LIBS)
+CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(incdir) -I.. $(GSLINCL) -I$(ROOT_LIBS)
 
 libobjs	= CK_RungeKutta.o Colli.o Dipol.o FringeFall.o Generate.o \
 	  GridInterpolation.o Matrix3D.o Multipol.o deForestCC1.o \
 	  qspinColli.o qspinSpectrometer.o simDetector.o simSpectrometer.o \
-          simSpecwithTrace.o simSpecEventSim.o simSiliconDetector.o \
+		simSpecwithTrace.o simSpecEventSim.o simSiliconDetector.o \
 	  spinTransfer.o DSpectrometerA.o DSpectrometerB.o DipolB.o ran1.o \
 	  SimDecay.o SimParticle.o TriplePol.o SimDecay_wrapper.o \
 	  DSpectrometerKAOS.o KAOSfield.o Inclusive.o \

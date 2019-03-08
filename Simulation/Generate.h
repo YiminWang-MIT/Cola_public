@@ -19,6 +19,7 @@
 #include "PWIA.h"
 #include "Cola/Radiation.h"
 #include "GridInterpolation.h"
+#include "ElasticRadiative/radiative.h"
 #include "DM_QED.h"
 #include <cstdlib>
 
@@ -115,6 +116,29 @@ public:
     dphie      = calc_dphie();
     Ex         = rundb->excitation;
     Gamma = 1;
+  };
+  
+  double generateEvent(double helicity);
+  double integrationVolume() { return 4 * sime->getDphi() * dcte; }
+};
+
+class generateElasticRadiative : public eventGenerator {
+private:
+  GeneratorRadiative* gen;
+public:
+  virtual ~generateElasticRadiative() { ; }
+  generateElasticRadiative(reaction *r, simDetectorBase *Sime, simDetectorBase *Sim1,
+		  SIMUL *rundb)
+  { 
+    Label      = "d[W]'";
+    Unit       = "sr";
+    Reaction   = r; sime=Sime; sim1=Sim1;
+    targetmass = Reaction->getTarget()->getMass();
+    dcte       = sin(sime->getDtheta());
+    dphie      = calc_dphie();
+    Ex         = rundb->excitation;
+    Gamma = 1;
+    gen = new GeneratorRadiative(0,0);
   };
   
   double generateEvent(double helicity);

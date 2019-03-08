@@ -25,7 +25,6 @@
 #include "Simulation/simSpecwithTrace.h"   // Class for spectrometer with trace
 #include "Simulation/simSiliconDetector.h" // Class for silicon detector
 #include "Simulation/simKAOS.h"            // Class for Kaos spectrometer
-#include "Simulation/ElasticRadiative/ElasticRadiative.h" //Stand alone radiative generator
 #include "fpu.h"
 #if defined(__GNU_LIBRARY__)
 #  include <getopt.h>

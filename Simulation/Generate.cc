@@ -346,8 +346,25 @@ double generateDMBoson::generateEvent(double)
   // + BHBackground(E0, E, theta, mA, 0.1, costhetaDecay)) * jacobian;
 }
 
-double 
-generateElastic::generateEvent(double helicity)
+double generateElastic::generateEvent(double helicity)
+{
+  //std::cerr << "generateElastic" << std::endl;
+  double E0 = Reaction->electronIn.energy();
+  generateLabAngles(&Reaction->electronOut,1,sime->getAngle(), sime->getOop(), 
+		    dcte,sime->getDphi());
+  
+  double theta = Reaction->electronOut.theta();
+  double phi   = Reaction->electronOut.phi();
+  double Ep    = (E0-Ex-Ex*Ex/2/targetmass)/(1+E0/targetmass*(1-cos(theta)));
+
+  Reaction->electronOut.initPolar(energy(m_electron, Ep), Ep, theta, phi);   
+  Reaction->Out1 = Reaction->electronIn - Reaction->electronOut 
+    + *Reaction->getTarget();
+  
+  return 1;
+}
+
+double generateElasticRadiative::generateEvent(double helicity)
 {
   //std::cerr << "generateElastic" << std::endl;
   double E0 = Reaction->electronIn.energy();

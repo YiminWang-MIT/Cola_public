@@ -11,8 +11,8 @@ VPATH	= @srcdir@
 include	../../Makefile.inc
 
 EXP	= abcn
-CXXFLAGS= $(OPTS) $(WARN) -fno-strict-aliasing
-LDFLAGS	= $(OPTS)
+CXXFLAGS= $(OPTS) $(WARN) -fno-strict-aliasing $(ROOT_CFLAGS)
+LDFLAGS	= $(OPTS) $(ROOT_LIBS)
 CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(topdir)/Cola/include -I$(incdir) -I.. -I../..
 
 # libobjs	= EventSimReader.o  Generator.o SimSpek.o ../Colli.o ../Dipol.o ../FringeFall.o ../Generate.o ../Matrix3D.o ../Multipol.o ../deForestCC1.o ../qspinColli.o ../qspinSpectrometer.o ../simDetector.o ../simSpectrometer.o ../simSpecwithTrace.o ../spinTransfer.o

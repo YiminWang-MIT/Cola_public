@@ -13,7 +13,7 @@ include	../../Makefile.inc
 EXP	= abcn
 CXXFLAGS= $(OPTS) $(WARN) -fno-strict-aliasing $(ROOT_CFLAGS)
 LDFLAGS	= $(ROOT_LIBS) $(OPTS)
-CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(topdir)/Cola/include -I$(incdir) -I.. -I../.. -I. 
+CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(topdir)/Cola/include -I$(incdir) -I.. -I../.. -I.  -I$(ROOT_LIBS)
 
 libobjs	= base.o dlrawtree.o generatortree.o radiative_helpers.o radiative.o
 library	= libElasticRadiative.a

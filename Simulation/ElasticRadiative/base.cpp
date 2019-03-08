@@ -1,13 +1,9 @@
 #include "base.h"
 #include "assert.h"
 #include <iostream>
-#include "slowctrl.h"
-#include "DaLiGenVertex.h"
 #include "gsl/gsl_rng.h"
 #include "gsl/gsl_qrng.h"
 #include "gsl/gsl_cdf.h"
-
-#include "CLHEP/Units/PhysicalConstants.h"
 
 struct rng:public gsl_rng{};
 struct qrng:public gsl_qrng{};
@@ -40,9 +36,6 @@ GeneratorBase::GeneratorBase(int num_halton_dim, unsigned int skip,unsigned long
   updatedNums = qrndNumbers;
 
   // the default vertex distribution is the simulation distribution
-  vertexDist = 0;
-  inputVertexGen=new DaLiGenVertex((char *)"ztrap_1.0_24.0_1.0_-7.0", (char *)"delta");
-  //inputVertexGen=new DaLiGenVertex((char *)"xyz_0.0_0.0_-20.0", (char *)"delta");
 }
 
 GeneratorBase::~GeneratorBase()
@@ -98,7 +91,6 @@ int GeneratorBase::generate(GeneratorEvent * eventinfo)
 
   applyWidthAndDivergence();
 
-  generateVertex(eventinfo);
 
   int value = generateEvent(eventinfo);
   handleBeamGeometry(eventinfo);
@@ -155,10 +147,6 @@ void GeneratorBase::setTargetDensity(double maxdens)
   targetDensity=maxdens;
 }
 
-void GeneratorBase::setVertexDist(int dist)
-{
-  vertexDist = dist;
-}
 
 void GeneratorBase::applyWidthAndDivergence()
 {
@@ -203,15 +191,6 @@ void GeneratorBase::generateUniformXY(double r1, double r2, double &x, double &y
   y = 9. * z * sin(theta);
 }
 
-void GeneratorBase::generateVertex(GeneratorEvent *ev)
-{
-  ev->lepton_prescatter.particle=(beamCharge==-1) ? "e-" : "e+";
-  ev->lepton_prescatter.momentum = TLorentzVector(0.,0.,sqrt(beamEnergy*beamEnergy - CLHEP::electron_mass_c2*CLHEP::electron_mass_c2), beamEnergy);
-  G4ThreeVector vx=inputVertexGen->NextVertex();
-  ev->vertex.SetXYZ(vx.x(),vx.y(),vx.z());
-
-}
-
 void GeneratorBase::handleBeamGeometry(GeneratorEvent *ev)
 {
   // first, rotate the beam axis.
@@ -224,23 +203,20 @@ void GeneratorBase::handleBeamGeometry(GeneratorEvent *ev)
       it->momentum.Transform(beamRotation);
 }
 
-void GeneratorBase::setVertexGenerator(char *allParamZ,char *allParamT){
-  delete inputVertexGen;
-  inputVertexGen=new DaLiGenVertex(allParamZ, allParamT);
-  printf("%s %s\n", allParamZ, allParamT);
-}
-
 //static!
 double GeneratorBase::getMass(std::string particle)
 {
   if (particle=="e+" || particle=="e-")
-    return  CLHEP::electron_mass_c2/CLHEP::MeV;
+    return 0.510998910;
+      //    return  CLHEP::electron_mass_c2/CLHEP::MeV;
   
   if (particle=="proton" )
-    return  CLHEP::proton_mass_c2/CLHEP::MeV;
+    return 938.272013;
+    //return  CLHEP::proton_mass_c2/CLHEP::MeV;
   
   if (particle=="neutron" )
-    return  CLHEP::neutron_mass_c2/CLHEP::MeV;
+    return 939.56536;
+    //return  CLHEP::neutron_mass_c2/CLHEP::MeV;
 
   if (particle=="mu-" || particle=="mu+")
     return 105.6584;
