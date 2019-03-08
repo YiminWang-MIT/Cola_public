@@ -15,7 +15,7 @@ CXXFLAGS= $(OPTS) $(WARN) -fno-strict-aliasing $(ROOT_CFLAGS)
 LDFLAGS	= $(ROOT_LIBS) $(OPTS)
 CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(topdir)/Cola/include -I$(incdir) -I.. -I../.. -I. 
 
-libobjs	= radiative_helpers.o ElasticRadiative.o
+libobjs	= base.o dlrawtree.o generatortree.o radiative_helpers.o radiative.o
 library	= libElasticRadiative.a
 
 
