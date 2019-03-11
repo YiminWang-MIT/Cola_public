@@ -634,6 +634,7 @@ ROOT_CONFIG
 ROOTLIB
 ROOT_GLIBS
 ROOT_LIBS
+ROOT_SUPLIBS
 ROOT_CFLAGS
 CERNLIB
 WXLIB
@@ -7594,6 +7595,7 @@ if $ROOT_CONFIG && test -n ""$buildroot;then
    ROOT_CFLAGS=`root-config --cflags`
    ROOT_LIBS=`root-config --libs`
    ROOT_GLIBS=`root-config --glibs`
+   ROOT_SUPLIBS='-lMathMore'
    ROOTLIB="1"
 fi
 

@@ -6,7 +6,7 @@
 #include "Math/Interpolator.h"
 
 #include "base.h"
-#include "radiative_helpers.hpp"
+#include "radiative_helpers.h"
 
 class OneIndex;
 class TLorentzVector;

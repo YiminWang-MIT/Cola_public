@@ -1,11 +1,11 @@
 #include "radiative.h"
-#include "radiative_helpers.hpp"
+#include "radiative_helpers.h"
 
-#include "TLorentzVector.h"
-#include "TF1.h"
-#include "Math/WrappedMultiTF1.h"
-#include "Math/Functor.h"
-#include "Math/Interpolator.h"
+#include <TLorentzVector.h>
+#include <TF1.h>
+#include <Math/WrappedMultiTF1.h>
+#include <Math/Functor.h>
+#include <Math/Interpolator.h>
 #include <iostream>
 #include <iomanip>
 #include <fstream>

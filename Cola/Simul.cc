@@ -10,6 +10,7 @@
 #include "config.h"                  // Created by autoconf
 
 #include "Simulation/Generate.h"          // Event Generator
+#include "Simulation/ElasticRadiative/radiative.h"          // Event Generator
 #include "Simulation/TriplePol.h"         // TriplePol model
 #ifdef __ColaMIT__
 #include "ColaMIT/Simul.h"

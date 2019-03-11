@@ -25,7 +25,7 @@ DOCSRC  =       Aqua_$(EXP).list Aqua_$(OUT).list \
 		$(wildcard $(srcdir)/doc/*.html)
 
 CXXFLAGS= 	$(OPTS) $(WARN)
-LDFLAGS	= 	$(OPTS) -L$(libdir)
+LDFLAGS	= 	$(OPTS) -L$(libdir) -lMathMore
 CPPFLAGS=	$(DEFS) -DHASNDET=$(HASNDET) -I. -I.. \
 		-I$(srcdir) -I$(topdir) -I$(EXPDIR) -I$(OUTDIR) \
 		-I$(incdir) -I$(incdir)/Aqua $(WX_CFLAGS)
@@ -89,12 +89,12 @@ Lumi++ :	Lumi++.o $(AUXOBJ) $(LIBCH) $(LIB4VEC) \
 		$(LIBDETECT) $(LIBS) $(PGLIBS) $(LDREADER) -lm
 		$(reportsuccess)
 
-Simul++ :	Simul.o $(NTOBJ) $(AUXOBJ) Aqua_$(OUT).o \
+Simul++ :	Simul.o $(NTOBJ) $(AUXOBJ) @ROOTOBJ@ Aqua_$(OUT).o \
 		$(LIBDETECT) $(LIBSIMUL) $(LIBCH) $(LIB4VEC) $(LIBHMVIEW) \
-		$(LIBHMBOOK) $(LIBMODEL) $(LIBAQUA_READER) $(LIBTMA)
-		$(reportaction)
+		$(LIBHMBOOK) $(LIBMODEL) $(LIBAQUA_READER) $(LIBTMA) $(LIBELASTICRADIATIVE) 
+		$(reportaction) 
 		@ $(CXX) $(LDFLAGS) $^ -o $@ $(WX_LIBS) $(MOTIFLIBS) \
-		$(NTPLIBS) $(ROOT_LIBS) $(LIBS) $(PGLIBS) $(LDREADER) \
+		$(NTPLIBS) $(ROOT_LIBS) $(ROOT_SUPLIBS) $(LIBS) $(PGLIBS) $(LDREADER) \
 		$(GSLLIBS) -lm $(FLIBS) 
 		$(reportsuccess)
 

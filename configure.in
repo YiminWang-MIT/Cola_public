@@ -367,6 +367,7 @@ LIBDIRS=$LIBDIRS" HMBook Model Simulation Simulation/EventSim TMA Simulation/Ela
 dnl ---------------------------------------------------------------------------
 AC_SUBST(ROOT_CFLAGS)
 AC_SUBST(ROOT_LIBS)
+AC_SUBST(ROOT_SUPLIBS)
 AC_SUBST(ROOT_GLIBS)
 AC_SUBST(ROOTLIB)
 AC_CHECK_PROG(ROOT_CONFIG, root-config, true, false)
@@ -374,6 +375,7 @@ if $ROOT_CONFIG && test -n ""$buildroot;then
    ROOT_CFLAGS=`root-config --cflags`
    ROOT_LIBS=`root-config --libs`
    ROOT_GLIBS=`root-config --glibs`
+   ROOT_SUPLIBS='-lMathMore'
    ROOTLIB="1"
 fi
 
