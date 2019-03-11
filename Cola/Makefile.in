@@ -95,7 +95,7 @@ Simul++ :	Simul.o $(NTOBJ) $(AUXOBJ) @ROOTOBJ@ Aqua_$(OUT).o \
 		$(reportaction) 
 		@ $(CXX) $(LDFLAGS) $^ -o $@ $(WX_LIBS) $(MOTIFLIBS) \
 		$(NTPLIBS) $(ROOT_LIBS) $(ROOT_SUPLIBS) $(LIBS) $(PGLIBS) $(LDREADER) \
-		$(GSLLIBS) -lm $(FLIBS) 
+		$(GSLLIBS) -lm $(FLIBS) -lMathMore
 		$(reportsuccess)
 
 BetheHeitler :	BetheHeitler.o $(NTOBJ) $(AUXOBJ) Aqua_$(OUT).o \
