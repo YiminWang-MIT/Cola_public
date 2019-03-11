@@ -16,7 +16,6 @@ class GeneratorParticle:public DLRTBase
     GeneratorParticle();
     ~GeneratorParticle();
 
-    ClassDef(GeneratorParticle,1);
 };
 
 // Handles multiple weights for each event
@@ -38,7 +37,6 @@ class GeneratorWeights:public DLRTBase
     void set_extra_weights(std::map<std::string, double> weights);
     void clear();
 
-    ClassDef(GeneratorWeights,1);
 };
 
 class GeneratorEvent:public DLRTBase
@@ -50,7 +48,6 @@ class GeneratorEvent:public DLRTBase
     std::vector<GeneratorParticle> particles;
     GeneratorEvent();
     ~GeneratorEvent();
-    ClassDef(GeneratorEvent,2);
 };
 
 #endif

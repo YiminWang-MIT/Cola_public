@@ -68,7 +68,6 @@ void GeneratorWeights::clear(){
 GeneratorWeights::~GeneratorWeights()
 {}
 
-ClassImp(GeneratorWeights);
 
 GeneratorEvent::GeneratorEvent()
 {
@@ -77,7 +76,6 @@ GeneratorEvent::GeneratorEvent()
 GeneratorEvent::~GeneratorEvent()
 {}
 
-ClassImp(GeneratorEvent);
 
 GeneratorParticle::GeneratorParticle()
 {}
@@ -85,5 +83,4 @@ GeneratorParticle::GeneratorParticle()
 GeneratorParticle::~GeneratorParticle()
 {}
 
-ClassImp(GeneratorParticle);
 

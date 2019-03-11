@@ -21,7 +21,6 @@ class DLRTBase: public TObject
  public:
   DLRTBase();
   virtual ~DLRTBase();
-  ClassDef(DLRTBase,1);
 };
 
 /**
@@ -37,7 +36,6 @@ class DLRTRunInfo:public DLRTBase
 		UInt_t nrOfEvents;
 		DLRTRunInfo();
 		virtual ~DLRTRunInfo();
-		ClassDef(DLRTRunInfo,1);
 };
 
 // Per event info 
@@ -54,7 +52,6 @@ class DLRTEventInfo:public DLRTBase
 		double weight;
 		DLRTEventInfo();
 		virtual ~DLRTEventInfo();
-		ClassDef(DLRTEventInfo,1);
 };
 
 
@@ -70,7 +67,6 @@ class DLRTtrigger:public DLRTBase
   unsigned int orand_trigger_cnt;
   DLRTtrigger();
   virtual ~DLRTtrigger();
-  ClassDef(DLRTtrigger,1);
 };
 
 
@@ -86,7 +82,6 @@ class DLRTBinaryBlob:public DLRTBase
   UChar_t *data; //[size]
   DLRTBinaryBlob();
   virtual ~DLRTBinaryBlob();
-  ClassDef(DLRTBinaryBlob,1);
 };
 
 
@@ -98,7 +93,6 @@ class DLRTGEM:public DLRTBase
   std::vector<unsigned short> data[16];
   DLRTGEM ();
   virtual ~DLRTGEM();
-  ClassDef(DLRTGEM,1);
 };
 
 
@@ -113,7 +107,6 @@ class DLRTTDC: public DLRTBase
   std::vector<unsigned int> errors;
   DLRTTDC();
   virtual ~DLRTTDC();
-  ClassDef(DLRTTDC,1);
 };
 
 
@@ -133,7 +126,6 @@ class DLRTSlowData:public DLRTBase
   std::vector<DLRTSlowData::slowStruct> slowData;
   DLRTSlowData();
   virtual ~DLRTSlowData();
-  ClassDef(DLRTSlowData,1);
 };
 
 /**
@@ -146,7 +138,6 @@ class DLRTIndex2Name: public DLRTBase
   std::map<unsigned short, std::string> index2name;
   DLRTIndex2Name();
   virtual ~DLRTIndex2Name();
-  ClassDef(DLRTIndex2Name,1);
 }; 
 
 
