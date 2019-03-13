@@ -27,6 +27,7 @@ GeneratorRadiative::GeneratorRadiative(int skip,unsigned long int seed):Generato
   pSigma = new Sigma();
 }
 
+
 void GeneratorRadiative::setThetaRange(double thetamin,double thetamax)
 {
   thetaMin=thetamin*M_PI/180.;
@@ -57,6 +58,7 @@ void GeneratorRadiative::setPushPhoton(bool push)
 {
   pushPhoton = push;
 }
+
 
 void GeneratorRadiative::setThetaDistribution(int d)
 {
@@ -464,6 +466,7 @@ void GeneratorRadiative::Initialize()
 
 int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
 {
+  double cosTheta=cos(theta);
   /****************************************************************
   A quick note about the weight:
   There are the following factors that need to be included in order of their inclusion
@@ -481,6 +484,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   //std::cout << "\tBeam charge is: " << beamCharge << "\n";
 
   //build theta:
+  /*
   double cosTheta, theta;
   switch (thetaDistribution)
     {
@@ -517,7 +521,8 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
       r-=0.5;
     }
   double phi=side+phiRange*4*(r-0.25);
-
+*/
+  //Took phi and theta from outside
   // Generate elastic kinematic variables
   ElasticKinematics el(beamEnergy, theta);
 
@@ -544,7 +549,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
       weightDeltaE *= pow(maxDeltaE/(el.E3()-me),t);
     }
   double deltaE;
-  r = qrndNumbers[2];
+  double r = qrndNumbers[2];
   if (r<softFraction)
     {
       r = (r/softFraction);
@@ -637,6 +642,9 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   ev->weight = phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * calcElasticCorr(el);
   ev->weight.set_extra("method1_Jan_soft", phaseweight * weightDeltaE * weightSoftFrac * kweight * momk * softFactor * bornCrossSection(el, 1, 1) * jacobian * calcElasticCorr(el));
 
+  return ev->weight.get_default();
+
+  /*
   // GE: Upper error
   double lep_Jan_GEu, mix_Jan_GEu, had_Jan_GEu;
   bremMatrixElement(lep_Jan_GEu,mix_Jan_GEu,had_Jan_GEu, 3, 1);
@@ -715,6 +723,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   double factor_vpolFull = corr_wo_vpol/pow(1.-(inter_vpol->Eval(el.Q2()))/2.,2);
   ev->weight.set_extra("method1_vpolLep", phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * factor_vpolLep);
   ev->weight.set_extra("method1_vpolFull", phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * factor_vpolFull);
+  */
 
   // ** Non-exponentiated weight calculations **
   // Kinematics are approximately elastic, use soft photon
@@ -785,7 +794,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   ev->weight.set_extra("method3_Born", weight3_Born);
   */
   // ***************************************************************** 
-
+  
   // Create and pushback the Generator Particles
   GeneratorParticle e,p;
   e.particle=ev->lepton_prescatter.particle;
@@ -796,14 +805,13 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   p.momentum = p4;
   ev->particles.push_back(p);
 
-  if (!pushPhoton)
-    return 2;
-
-  GeneratorParticle kParticle;
-  kParticle.particle="gamma";
-  kParticle.momentum = k;
-  ev->particles.push_back(kParticle);
-  return 3;
+  if (pushPhoton){
+    GeneratorParticle kParticle;
+    kParticle.particle="gamma";
+    kParticle.momentum = k;
+    ev->particles.push_back(kParticle);
+  }
+  
 }
 
 void GeneratorRadiative::bremMatrixElement(double &lep, double &mix, double &had, int FFTypeE, int FFTypeM)

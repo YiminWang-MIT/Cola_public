@@ -20,6 +20,7 @@
 #include "Cola/Radiation.h"
 #include "GridInterpolation.h"
 #include "ElasticRadiative/radiative.h"
+#include "ElasticRadiative/generatortree.h"
 #include "DM_QED.h"
 #include <cstdlib>
 
@@ -124,7 +125,8 @@ public:
 
 class generateElasticRadiative : public eventGenerator {
 private:
-  GeneratorRadiative* gen;
+  GeneratorRadiative *gen;
+  GeneratorEvent *ge;
 public:
   virtual ~generateElasticRadiative() { ; }
   generateElasticRadiative(reaction *r, simDetectorBase *Sime, simDetectorBase *Sim1,
@@ -138,10 +140,21 @@ public:
     dphie      = calc_dphie();
     Ex         = rundb->excitation;
     Gamma = 1;
+    //intialize cooker generator MCGenRadiative.cpp
     gen = new GeneratorRadiative(0,0);
+    gen->setDeltaECut(false,0);
+    gen->setSoftFraction(0.5);
+    gen->setPushPhoton(false);
+    gen->addPointProtonFFCalc(true);
+    gen->addKellyFFCalc(true);
+    gen->Initialize();
+    ge = new GeneratorEvent();
+
   };
   
   double generateEvent(double helicity);
+
+  //same as generateBremsstrahlung
   double integrationVolume() { return 4 * sime->getDphi() * dcte; }
 };
 

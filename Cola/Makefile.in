@@ -76,7 +76,7 @@ man : 		man1 man1/Lumi++.1 man1/Simul++.1 man1/Cola++.1
 Cola++ :	Cola.o $(ANAOBJ) $(NTOBJ) $(AUXOBJ) @ROOTOBJ@ Aqua_$(OUT).o \
 		$(LIBDETECT)  $(LIBSIMREADER) $(LIBSIMUL) $(LIBCH) \
 		$(LIBMODEL) $(LIB4VEC) $(LIBHMVIEW) \
-		$(LIBHMBOOK)  $(LIBTMA) $(LIBAQUA_READER)
+		$(LIBHMBOOK)  $(LIBTMA) $(LIBAQUA_READER) $(LIBELASTICRADIATIVE)
 		$(reportaction)
 		@ $(CXX) $(LDFLAGS) $^ -o $@ $(WX_LIBS) $(MOTIFLIBS) \
 		$(LIBS) $(PGLIBS) $(NTPLIBS) $(ROOT_LIBS) $(LDREADER) -lm

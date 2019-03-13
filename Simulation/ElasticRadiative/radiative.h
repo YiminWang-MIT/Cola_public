@@ -15,7 +15,9 @@ class GeneratorRadiative:public GeneratorBase
 {
  private:
   double cosThetaMin,cosThetaDelta,thetaMin,thetaMax; // Lepton angle range
+  double theta; //lepton angle
   double phiRange; 
+  double phi;//lepton phi
   double phaseweight;
   void recalcWeight();
   double mP,me,alpha,muP,cmSqMeVSq,alphaCubedOver64PiSq,qSqDipole;
@@ -163,6 +165,11 @@ class GeneratorRadiative:public GeneratorBase
   double test_born(double thetaE); // returns d\sigma / d\Omega_e in units of cm^s / sr
   void test4();
   void test5();
+
+  inline void setElectronTheta(double thetaE){theta=thetaE; return;}
+  inline void setElectronPhi(double phiE){phi=phiE; return;}
+  inline void setBeamEnergy(double beamE){beamEnergy=beamE; return;}
+  
 };
 
 #endif
