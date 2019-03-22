@@ -4,6 +4,7 @@
 // Main part of Cola Simulation program "Simul++"
 //
 
+#define YWDEBUG 0
 #define _POSIX_C_SOURCE 2
 #define _DEFAULT_SOURCE    1
 
@@ -735,6 +736,7 @@ Simul::Simul()
 int
 Simul::chck(Particle &vf, double x[]) 
 {
+ 
 #ifdef __ColaMIT__
   if (Reaction->getA()==&vf) {
     if (!sim[0]->check(vf, x, target, &online.oopsA.target, NULL)) return 0;
@@ -837,6 +839,9 @@ extern double PhiGammaHardCMS;
 int
 Simul::eventloop()
 {
+#if YWDEBUG
+  std::cout<< events << " Start"<< std::endl;
+#endif
   // update status line
   static unsigned int last = 0;
   if (++events > last + 4999) { 
@@ -1047,6 +1052,7 @@ Simul::eventloop()
   //  std::cout << "weight (integration Volume): " 
   //	    << online.sim.Volume << std::endl;
 
+
   VertexQ2 = 0;
   ThetaGammaHardCMS=0;
   PhiGammaHardCMS=0;  
@@ -1067,11 +1073,28 @@ Simul::eventloop()
   out->packEventData(&online.sim.Gamma,  1);
   out->packEventData(&online.sim.scale,  1);
 
+#if YWDEBUG
+  std::cout << __LINE__ << std::endl;
+#endif
   if (!weight)                                      return 0;  
+#if YWDEBUG
+  std::cout << __LINE__ << std::endl;
+  Reaction->electronOut.print(""); std::cout<< std::endl;
+  std::cout << targetpos_hall[0] << " " << targetpos_hall[1] << " " << targetpos_hall[2] << std::endl;
+#endif
   if (!chck(Reaction->electronOut, targetpos_hall)) return 0;
+#if YWDEBUG
+  std::cout << __LINE__ << std::endl;
+#endif
   //  std::cout<<"Electron accepted!\n";
   if (!chck(Reaction->Out1,        targetpos_hall)) return 0;    
+#if YWDEBUG
+  std::cout << __LINE__ << std::endl;
+#endif
   if (!chck(Reaction->Out2,        targetpos_hall)) return 0;    
+#if YWDEBUG
+  std::cout << __LINE__ << std::endl;
+#endif
   //  cout <<"D1: "<< Reaction->Decay1<<endl;
   // cout <<"D1: "<<* Reaction->getA()<<endl;
   if (!chck(Reaction->Decay1,      targetpos_hall)) return 0;    
@@ -1353,6 +1376,9 @@ Simul::eventloop()
   // write ntuple event
   if (ntuple) nt->fill_ntuple();
   helicity = -helicity;
+#if YWDEBUG
+  std::cout<< events << " End"<< std::endl;
+#endif
   return 0;
 }
 

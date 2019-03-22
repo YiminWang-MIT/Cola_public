@@ -10,10 +10,13 @@
 #include <iomanip>
 #include <fstream>
 
+#define YWDEBUG 0
+
 GeneratorRadiative::GeneratorRadiative(int skip,unsigned long int seed):GeneratorBase(5,skip,seed)
 {
   mP = getMass("proton");
   me = getMass("e-");
+  
   alpha = 7.2973525698E-3;
   muP = 2.7928456;
   alphaCubedOver64PiSq = alpha * alpha * alpha / (64* M_PI * M_PI);
@@ -180,6 +183,9 @@ void GeneratorRadiative::Initialize()
   // Initial momenta 
   p1.SetXYZM(0,0,TMath::Sqrt(beamEnergy*beamEnergy-me*me),me);
   p2.SetXYZM(0.,0.,0.,mP);
+#if YWDEBUG
+  p1.Print();
+#endif
   //E1 = beamEnergy;
 
   // Functions to be integrated over the "elastic" region
@@ -231,6 +237,7 @@ void GeneratorRadiative::Initialize()
   ROOT::Math::IntegratorMultiDimOptions sample_opts = i_sample->Options();
   sample_opts.SetNCalls(100000); // Increase for precomputing values
   i_sample->SetOptions(sample_opts);
+ 
 
   // Create the interpolators
   const int vpolInterPoints = 7186;
@@ -280,7 +287,7 @@ void GeneratorRadiative::Initialize()
   }
 
   // Vacuum polarization -- From Fedor Ignatov's calculation, as used in ESEPP
-  FILE *fvpol = fopen(Form("%s/.darklight/shared/generators/vpol.dat", getenv("COOKERHOME")),"r"); // Opening the file "vpol.dat"
+  FILE *fvpol = fopen("/usr/local/src/Cola/Simulation/ElasticRadiative/vpol.dat", "r"); // Opening the file "vpol.dat"
   if (fvpol == NULL) { std::cerr << "Can't open file \"vpol.dat\"!" << std::endl; }
   int np_vpol = 0;
   char str_vpol[128];
@@ -293,7 +300,7 @@ void GeneratorRadiative::Initialize()
     fgets(str_vpol, 128, fvpol);
     if (feof(fvpol) || strlen(str_vpol) == 0) break; // The end or empty string
 
-    if (str_vpol[0] != '/')
+    if (str_vpol[0] != '/') //leave comments
     {
       sscanf(str_vpol, "%lf %lf", &s[np_vpol], &rep[np_vpol]);
       rep[np_vpol] *= 2.;
@@ -301,14 +308,13 @@ void GeneratorRadiative::Initialize()
       np_vpol++;
     }
   }
+
   if (np_vpol!=vpolInterPoints)
     std::cerr << "Something went wrong reading \"vpol.dat\"! " << std::endl;
 
   fclose(fvpol); // Closing the file "vpol.dat"
   inter_vpol->SetData(np_vpol, s, rep); // Interpolating
 
-
-  // Integrate over the deltaE and photon angle sampling distributions
   int sampleInterPoints;
   bool usePreComp = ((int)(beamEnergy+0.5)==2010&&cosThetaMin<0.999&&(cosThetaMin+cosThetaDelta)>-0.5&&k_cut>0.9999&&k_cut<1.0001&&softFraction>0.499&&softFraction<0.501&&!useDeltaECut);
   if (usePreComp)
@@ -331,9 +337,9 @@ void GeneratorRadiative::Initialize()
   {
     FILE *intdata = NULL;
     if (beamCharge==1)
-      intdata = fopen(Form("%s/.darklight/shared/generators/sampleintegral_pos.dat", getenv("COOKERHOME")),"r");
+      intdata = fopen("/usr/local/src/Cola/Simulation/ElasticRadiative/sampleintegral_pos.dat", "r");
     else if (beamCharge==-1)
-      intdata = fopen(Form("%s/.darklight/shared/generators/sampleintegral_ele.dat", getenv("COOKERHOME")),"r");
+      intdata = fopen("/usr/local/src/Cola/Simulation/ElasticRadiative/sampleintegral_ele.dat", "r");
     else
       std::cerr << "beamCharge is set to " << beamCharge << ". We don't recognize this." << std::endl;
 
@@ -401,7 +407,7 @@ void GeneratorRadiative::Initialize()
   inter_sample->SetData(sampleInterPoints, x_sample, y_sample); // Sampling distribution
 
   // Interpolate Jan's form factor fits (from global cross section and polarized data)
-  FILE *ffdata = fopen(Form("%s/.darklight/shared/generators/ff_splinefits.dat", getenv("COOKERHOME")),"r");
+  FILE *ffdata = fopen("/usr/local/src/Cola/Simulation/ElasticRadiative/ff_splinefits.dat", "r");
   if (ffdata == NULL) { std::cout << "Can't open file \"ff_splinefits.dat\"!" << std::endl; }
 
   inter_splineGE = new ROOT::Math::Interpolator(1000, ROOT::Math::Interpolation::kCSPLINE);
@@ -598,7 +604,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
 				 + photonDirFcn(cosThetaEK,E3)));
 
   // Construct four-vectors
-  p1 = ev->lepton_prescatter.momentum;
+  p1 = ev->lepton_prescatter.momentum*1000;//convert to MeV
   p2.SetXYZM(0.,0.,0.,mP);
   p3.SetXYZM(mom3*sin(theta)*cos(phi),mom3*sin(theta)*sin(phi),mom3*cosTheta,me);
   kMod.SetXYZT(sin(thetaK)*cos(phiK),sin(thetaK)*sin(phiK),cosThetaK,1.);
@@ -639,10 +645,10 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   bremMatrixElement(lep_Jan,mix_Jan,had_Jan, 1, 1);
   double matElement_Jan = lep_Jan+mix_Jan+had_Jan;
   // Jan FF is the default weight
-  ev->weight = phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * calcElasticCorr(el);
+  //ev->weight = phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * calcElasticCorr(el);
+  ev->weight = phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * 1e6 * matElement_Jan * jacobian * calcElasticCorr(el);
   ev->weight.set_extra("method1_Jan_soft", phaseweight * weightDeltaE * weightSoftFrac * kweight * momk * softFactor * bornCrossSection(el, 1, 1) * jacobian * calcElasticCorr(el));
 
-  return ev->weight.get_default();
 
   /*
   // GE: Upper error
@@ -798,11 +804,11 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   // Create and pushback the Generator Particles
   GeneratorParticle e,p;
   e.particle=ev->lepton_prescatter.particle;
-  e.momentum = p3;
+  e.momentum = p3*0.001;//convert back to GeV
   ev->particles.push_back(e);
 
   p.particle="proton";
-  p.momentum = p4;
+  p.momentum = p4*0.001;//convert back to GeV
   ev->particles.push_back(p);
 
   if (pushPhoton){
@@ -812,10 +818,22 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
     ev->particles.push_back(kParticle);
   }
   
+#if YWDEBUG
+  std::cout << __LINE__ << std::endl;
+#endif
+  return ev->weight.get_default();
+  
 }
 
 void GeneratorRadiative::bremMatrixElement(double &lep, double &mix, double &had, int FFTypeE, int FFTypeM)
 {
+#if YWDEBUG
+  p1.Print();
+  p2.Print();
+  p3.Print();
+  p4.Print();
+  k.Print();
+#endif
   // We'll need slash matrices
   FourMat p1Slash = pGamma->slash(p1);
   FourMat p2Slash = pGamma->slash(p2);

@@ -379,7 +379,7 @@ double generateElasticRadiative::generateEvent(double helicity)
   //set up basic information
   gen->setElectronTheta(theta);
   gen->setElectronPhi(phi);
-  gen->setBeamEnergy(E0);
+  gen->setBeamEnergy(E0*1000);//convert to MeV
   ge->lepton_prescatter.particle="e-";
   ge->lepton_prescatter.momentum = TLorentzVector(Reaction->electronIn.energy(), 0, 0, Reaction->electronIn.abs()); 
   ge->particles.clear();//clean up the particles
@@ -391,7 +391,12 @@ double generateElasticRadiative::generateEvent(double helicity)
   double weight=ge->weight.get_default();
   Reaction->electronOut.initPolar(ge->particles[0].momentum.E(), ge->particles[0].momentum.P(), ge->particles[0].momentum.Theta(), ge->particles[0].momentum.Phi());
   Reaction->Out1.initPolar(ge->particles[1].momentum.E(), ge->particles[1].momentum.P(), ge->particles[1].momentum.Theta(), ge->particles[1].momentum.Phi());
-  
+
+  /*
+  std::cout << Reaction->electronOut.energy() << std::endl;
+  std::cout << Reaction->electronOut.theta() << std::endl;
+  std::cout << weight << std::endl;
+  */
   return weight;
 }
 

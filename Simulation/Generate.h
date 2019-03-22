@@ -141,12 +141,16 @@ public:
     Ex         = rundb->excitation;
     Gamma = 1;
     //intialize cooker generator MCGenRadiative.cpp
+    double E0 = Reaction->electronIn.energy();
     gen = new GeneratorRadiative(0,0);
+    gen->setThetaRange(10,100);
+    gen->setPhiRange(20.);
     gen->setDeltaECut(false,0);
     gen->setSoftFraction(0.5);
     gen->setPushPhoton(false);
     gen->addPointProtonFFCalc(true);
     gen->addKellyFFCalc(true);
+    gen->setBeamEnergy(E0*1000);//convert to MeV
     gen->Initialize();
     ge = new GeneratorEvent();
 
