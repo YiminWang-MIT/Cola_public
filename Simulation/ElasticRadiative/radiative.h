@@ -16,7 +16,7 @@ class GeneratorRadiative:public GeneratorBase
  private:
   double cosThetaMin,cosThetaDelta,thetaMin,thetaMax; // Lepton angle range
   double theta; //lepton angle
-  double phiRange; 
+  double phiMin, phiDelta;
   double phi;//lepton phi
   double phaseweight;
   void recalcWeight();
@@ -146,7 +146,7 @@ class GeneratorRadiative:public GeneratorBase
 
   // User functions
   void setThetaRange(double thetamin,double thetamax); //in degrees
-  void setPhiRange(double phirange);  // in degrees, phi range will be  0+-range and 180+-range.
+  void setPhiRange(double phi0, double dphi);  // in degrees, phi range will be  0+-range and 180+-range.
   void setDeltaECut(bool use, double cut);
   void setSoftFraction(double frac);
   void setPushPhoton(bool push);

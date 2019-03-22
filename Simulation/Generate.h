@@ -144,7 +144,7 @@ public:
     double E0 = Reaction->electronIn.energy();
     gen = new GeneratorRadiative(0,0);
     gen->setThetaRange(10,100);
-    gen->setPhiRange(20.);
+    gen->setPhiRange(0,10);
     gen->setDeltaECut(false,0);
     gen->setSoftFraction(0.5);
     gen->setPushPhoton(false);

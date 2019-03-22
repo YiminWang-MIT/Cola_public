@@ -40,9 +40,10 @@ void GeneratorRadiative::setThetaRange(double thetamin,double thetamax)
   recalcWeight();
 }
 
-void GeneratorRadiative::setPhiRange(double range)
+void GeneratorRadiative::setPhiRange(double phi0, double dphi)
 {
-  phiRange=range*M_PI/180.;
+  phiMin=phi0;
+  phiDelta=dphi;
   recalcWeight();
 }
 
@@ -81,7 +82,7 @@ void GeneratorRadiative::addKellyFFCalc(bool b)
 
 void GeneratorRadiative::recalcWeight()
 {
-  phaseweight=-phiRange*4*cosThetaDelta; //This is the part of 4Pi 
+  phaseweight=-phiDelta*4*cosThetaDelta; //This is the part of 4Pi 
 }
 
 double GeneratorRadiative::calcElasticCorr(const ElasticKinematics &e)
@@ -472,7 +473,7 @@ void GeneratorRadiative::Initialize()
 
 int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
 {
-  double cosTheta=cos(theta);
+  //double cosTheta=cos(theta);
   /****************************************************************
   A quick note about the weight:
   There are the following factors that need to be included in order of their inclusion
@@ -486,48 +487,28 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
       - Proper Jacobian between photon energy and delta E for the lepton
   ****************************************************************/
 
-  //std::cout << "New event\n";
+  std::cout << "New event\n" << std::endl;
   //std::cout << "\tBeam charge is: " << beamCharge << "\n";
 
   //build theta:
-  /*
-  double cosTheta, theta;
-  switch (thetaDistribution)
-    {
-    case 1: // Rutherford
-      {
+  
+  double cosTheta;
 	double cosThetaMax = cosThetaMin+cosThetaDelta;
 	cosTheta = (-cosThetaDelta*qrndNumbers[0] + cosThetaMax*(1.-cosThetaMin))/(1.-cosThetaMin-qrndNumbers[0]*cosThetaDelta);
-	phaseweight = -4*phiRange*cosThetaDelta*(1.-cosTheta)*(1.-cosTheta) / (1.-cosThetaMin)/(1.-cosThetaMax);
-    theta=acos(cosTheta);
-	break;
-      }
-    case 2: // Flat in theta
-      {
-        theta=thetaMin+(thetaMax-thetaMin)*qrndNumbers[0];
-        cosTheta = cos(theta);
-        phaseweight = 4*phiRange*(thetaMax-thetaMin)*sin(theta);
-
-        break;
-      }
-    default : // 0 i.e. Flat in cosTheta
-      {
-	cosTheta = cosThetaMin+cosThetaDelta*qrndNumbers[0];
-    theta=acos(cosTheta);
-	break;
-      }
-    }
+	phaseweight = -4*phiDelta*cosThetaDelta*(1.-cosTheta)*(1.-cosTheta) / (1.-cosThetaMin)/(1.-cosThetaMax);
+  theta=acos(cosTheta);
 
   //build phi
   double r=qrndNumbers[1];
+  /*
   double side=0;
   if (r>=0.5)
     {
       side=M_PI;
       r-=0.5;
-    }
-  double phi=side+phiRange*4*(r-0.25);
-*/
+    }*/
+  phi=phiMin+phiDelta;
+
   //Took phi and theta from outside
   // Generate elastic kinematic variables
   ElasticKinematics el(beamEnergy, theta);
@@ -555,7 +536,8 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
       weightDeltaE *= pow(maxDeltaE/(el.E3()-me),t);
     }
   double deltaE;
-  double r = qrndNumbers[2];
+  //double r = qrndNumbers[2];
+  r = qrndNumbers[2];
   if (r<softFraction)
     {
       r = (r/softFraction);

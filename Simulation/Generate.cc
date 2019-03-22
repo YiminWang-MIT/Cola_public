@@ -368,17 +368,19 @@ double generateElasticRadiative::generateEvent(double helicity)
 {
   //std::cerr << "generateElastic" << std::endl;
   double E0 = Reaction->electronIn.energy();
-  generateLabAngles(&Reaction->electronOut,1,sime->getAngle(), sime->getOop(), 
-		    dcte,sime->getDphi());
+  //generateLabAngles(&Reaction->electronOut,1,sime->getAngle(), sime->getOop(), 
+	//	    dcte,sime->getDphi());
   
-  double theta = Reaction->electronOut.theta();
-  double phi   = Reaction->electronOut.phi();
+  //double theta = Reaction->electronOut.theta();
+  //double phi   = Reaction->electronOut.phi();
   //enough calculation at this moment, need to hand the information to cooker
   //generator
   
   //set up basic information
-  gen->setElectronTheta(theta);
-  gen->setElectronPhi(phi);
+  //gen->setElectronTheta(theta);
+  //gen->setElectronPhi(phi);
+  gen->setThetaRange(sime->getAngle()-dcte, sime->getAngle()+dcte*2);
+  gen->setPhiRange(sime->getOop()-sime->getDphi(), sime->getOop()+2*sime->getDphi());
   gen->setBeamEnergy(E0*1000);//convert to MeV
   ge->lepton_prescatter.particle="e-";
   ge->lepton_prescatter.momentum = TLorentzVector(Reaction->electronIn.energy(), 0, 0, Reaction->electronIn.abs()); 

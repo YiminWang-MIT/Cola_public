@@ -13,7 +13,7 @@ include	../Makefile.inc
 EXP	= abcn
 CXXFLAGS= $(DEFS) $(OPTS) $(WARN) -fno-strict-aliasing $(ROOT_CFLAGS)
 LDFLAGS	= $(OPTS) $(GSLLIBS) $(ROOT_LIBS) $(ROOT_SUPLIBS) -lMathMore
-CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(incdir) -I.. $(GSLINCL) -I$(ROOT_LIBS)
+CPPFLAGS= -I$(srcdir) -I$(topdir) -I$(incdir) -I.. $(GSLINCL) $(ROOT_CFLAGS)
 
 libobjs	= CK_RungeKutta.o Colli.o Dipol.o FringeFall.o Generate.o \
 	  GridInterpolation.o Matrix3D.o Multipol.o deForestCC1.o \
