@@ -386,7 +386,7 @@ double generateElasticRadiative::generateEvent(double helicity)
   gen->setBeamEnergy(E0*1000);//convert to MeV
 
   ge->lepton_prescatter.particle="e-";
-  ge->lepton_prescatter.momentum = TLorentzVector(Reaction->electronIn.energy(), Reaction->electronIn[1], Reaction->electronIn[2], Reaction->electronIn[3]); 
+  ge->lepton_prescatter.momentum = TLorentzVector(Reaction->electronIn[1], Reaction->electronIn[2], Reaction->electronIn[3], Reaction->electronIn[0]); 
   
   //simulate this event
   gen->generate(ge);
