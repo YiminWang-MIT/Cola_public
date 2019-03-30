@@ -556,8 +556,10 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   //build photon direction
   double cosThetaK, thetaK, phiK, cosThetaEK, thetaEK, phiEK; // only two of these are independent
   // decide if we favor the incoming or outgoing lepton
+  /*
   qrndNumbers[3] = 0;
   qrndNumbers[4] = 0;
+  */
   if (qrndNumbers[3] > 0.5)
     {
       // incoming lepton!
@@ -597,6 +599,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
 
   // Lastly, apply the cross-section
   // Note, the kinematic factor and the jacobian are the two places where we will neglect electron mass.
+  // kinFactor need to be adjusted from pure elastic
   double kinFactor = E3 * alphaCubedOver64PiSq / (mP * beamEnergy * fabs(mP + beamEnergy*(1.-cosTheta) - momk*(1.-cosThetaEK)));
   double jacobian = jacKDeltaE(cosThetaK, cosThetaEK, el.E3(), E3);
 
