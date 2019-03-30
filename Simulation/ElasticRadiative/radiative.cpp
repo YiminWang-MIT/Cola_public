@@ -10,7 +10,7 @@
 #include <iomanip>
 #include <fstream>
 
-#define YWDEBUG 0
+#define YWDEBUG 1
 
 GeneratorRadiative::GeneratorRadiative(int skip,unsigned long int seed):GeneratorBase(5,skip,seed)
 {
@@ -20,7 +20,8 @@ GeneratorRadiative::GeneratorRadiative(int skip,unsigned long int seed):Generato
   alpha = 7.2973525698E-3;
   muP = 2.7928456;
   alphaCubedOver64PiSq = alpha * alpha * alpha / (64* M_PI * M_PI);
-  cmSqMeVSq = 3.8937966E-22;
+  //cmSqMeVSq = 3.8937966E-22;
+  MeVSq=1e-6; //convert to GeV^2
   qSqDipole = 710000.; // MeV^2
   usePointProtonFF = false;
   useKellyFF = false;
@@ -33,8 +34,8 @@ GeneratorRadiative::GeneratorRadiative(int skip,unsigned long int seed):Generato
 
 void GeneratorRadiative::setThetaRange(double thetamin,double thetamax)
 {
-  thetaMin=thetamin*M_PI/180.;
-  thetaMax=thetamax*M_PI/180.;
+  thetaMin=thetamin;//*M_PI/180.;
+  thetaMax=thetamax;//*M_PI/180.;
   cosThetaMin=cos(thetaMin);
   cosThetaDelta=cos(thetaMax)-cosThetaMin;
   recalcWeight();
@@ -184,9 +185,6 @@ void GeneratorRadiative::Initialize()
   // Initial momenta 
   p1.SetXYZM(0,0,TMath::Sqrt(beamEnergy*beamEnergy-me*me),me);
   p2.SetXYZM(0.,0.,0.,mP);
-#if YWDEBUG
-  p1.Print();
-#endif
   //E1 = beamEnergy;
 
   // Functions to be integrated over the "elastic" region
@@ -273,6 +271,7 @@ void GeneratorRadiative::Initialize()
     double E4 = p4.E();
 
     x_cosTheta[i] = cosTheta;
+    //std::cout << cosTheta << std::endl;
 
     // Bremsstrahlung correction from the lepton term
     y_brem_ee[i] = -2.*alpha*(d_p1_p1()-2.*d_p1_p3()+d_p3_p3(E3));
@@ -473,7 +472,6 @@ void GeneratorRadiative::Initialize()
 
 int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
 {
-  //double cosTheta=cos(theta);
   /****************************************************************
   A quick note about the weight:
   There are the following factors that need to be included in order of their inclusion
@@ -487,27 +485,27 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
       - Proper Jacobian between photon energy and delta E for the lepton
   ****************************************************************/
 
-  std::cout << "New event\n" << std::endl;
+  //std::cout << "New event\n" << std::endl;
   //std::cout << "\tBeam charge is: " << beamCharge << "\n";
 
+  /*
   //build theta:
-  
+  for (int i=0; i<4; i++) qrndNumbers[i]=this->getRandom();
   double cosTheta;
 	double cosThetaMax = cosThetaMin+cosThetaDelta;
-	cosTheta = (-cosThetaDelta*qrndNumbers[0] + cosThetaMax*(1.-cosThetaMin))/(1.-cosThetaMin-qrndNumbers[0]*cosThetaDelta);
-	phaseweight = -4*phiDelta*cosThetaDelta*(1.-cosTheta)*(1.-cosTheta) / (1.-cosThetaMin)/(1.-cosThetaMax);
+  
+  cosTheta = cosThetaMin+qrndNumbers[0]*cosThetaDelta;
+	//cosTheta = (-cosThetaDelta*qrndNumbers[0] + cosThetaMax*(1.-cosThetaMin))/(1.-cosThetaMin-qrndNumbers[0]*cosThetaDelta);
+	//phaseweight = -4*phiDelta*cosThetaDelta*(1.-cosTheta)*(1.-cosTheta) / (1.-cosThetaMin)/(1.-cosThetaMax);
   theta=acos(cosTheta);
-
+  */
+  //theta=thetaMin+qrndNumbers[0]*(thetaMax-thetaMin);
   //build phi
+
+
+  //take theta and phi from Generator.cc
   double r=qrndNumbers[1];
-  /*
-  double side=0;
-  if (r>=0.5)
-    {
-      side=M_PI;
-      r-=0.5;
-    }*/
-  phi=phiMin+phiDelta;
+  double cosTheta=cos(theta);
 
   //Took phi and theta from outside
   // Generate elastic kinematic variables
@@ -525,6 +523,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   double cExp = alpha/M_PI*(el.E4()*log(el.x())/el.p4() - 1.);
   double cWeight = pow(4*pow(beamEnergy,2)/(mP*mP), cExp);
 
+
   //build deltaE
   // Calculate t (5.16 in Jan's thesis)
   double weightDeltaE = (aWeight*bWeight*cWeight);
@@ -536,7 +535,6 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
       weightDeltaE *= pow(maxDeltaE/(el.E3()-me),t);
     }
   double deltaE;
-  //double r = qrndNumbers[2];
   r = qrndNumbers[2];
   if (r<softFraction)
     {
@@ -553,10 +551,13 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   // Include the weight
   double weightSoftFrac = 1./(softFraction*t + (1.-softFraction)*beamEnergy*(beamEnergy-maxDeltaE)*pow(deltaE/maxDeltaE,1.-t)
 			      /((beamEnergy-deltaE)*(beamEnergy-deltaE)));
+
   
   //build photon direction
   double cosThetaK, thetaK, phiK, cosThetaEK, thetaEK, phiEK; // only two of these are independent
   // decide if we favor the incoming or outgoing lepton
+  qrndNumbers[3] = 0;
+  qrndNumbers[4] = 0;
   if (qrndNumbers[3] > 0.5)
     {
       // incoming lepton!
@@ -627,8 +628,24 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   bremMatrixElement(lep_Jan,mix_Jan,had_Jan, 1, 1);
   double matElement_Jan = lep_Jan+mix_Jan+had_Jan;
   // Jan FF is the default weight
+  // Remove kinFactor(take care outside), change cmSqMeVsq to MeVSq convertion
+  ev->weight = weightDeltaE * weightSoftFrac * MeVSq * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
+#ifdef YWDEBUG
+  if (ev->weight.get_default()>100){
+    std::cout << "Elastic lepton energy: " << el.E3() << std::endl;
+    std::cout << "Delta E: " << deltaE << std::endl;
+    std::cout << "Lepton energy after radiatiion: " << E3 << std::endl;
+    std::cout << ev->weight.get_default() << std::endl;
+    //std::cout << weightDeltaE << std::endl; // stable around 1
+    std::cout << weightSoftFrac << std::endl;
+    std::cout << kweight << std::endl;
+    std::cout << matElement_Jan << "\t" << matElement_dipole << std::endl;
+    //std::cout << jacobian << std::endl; // stable around 1
+    //std::cout << calcElasticCorr(el) << std::endl; // stable around 1
+    std::cout << std::endl;
+  }
+#endif
   //ev->weight = phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * calcElasticCorr(el);
-  ev->weight = phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * 1e6 * matElement_Jan * jacobian * calcElasticCorr(el);
   ev->weight.set_extra("method1_Jan_soft", phaseweight * weightDeltaE * weightSoftFrac * kweight * momk * softFactor * bornCrossSection(el, 1, 1) * jacobian * calcElasticCorr(el));
 
 
@@ -781,9 +798,11 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   ev->weight.set_extra("method3_soft", weight3_soft);
   ev->weight.set_extra("method3_Born", weight3_Born);
   */
+
+
   // ***************************************************************** 
-  
   // Create and pushback the Generator Particles
+  // ***************************************************************** 
   GeneratorParticle e,p;
   e.particle=ev->lepton_prescatter.particle;
   e.momentum = p3*0.001;//convert back to GeV
@@ -800,9 +819,6 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
     ev->particles.push_back(kParticle);
   }
   
-#if YWDEBUG
-  std::cout << __LINE__ << std::endl;
-#endif
   return ev->weight.get_default();
   
 }
@@ -810,11 +826,13 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
 void GeneratorRadiative::bremMatrixElement(double &lep, double &mix, double &had, int FFTypeE, int FFTypeM)
 {
 #if YWDEBUG
+  std::cout << std::endl;
   p1.Print();
   p2.Print();
   p3.Print();
   p4.Print();
   k.Print();
+  std::cout << std::endl;
 #endif
   // We'll need slash matrices
   FourMat p1Slash = pGamma->slash(p1);

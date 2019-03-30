@@ -20,7 +20,7 @@ class GeneratorRadiative:public GeneratorBase
   double phi;//lepton phi
   double phaseweight;
   void recalcWeight();
-  double mP,me,alpha,muP,cmSqMeVSq,alphaCubedOver64PiSq,qSqDipole;
+  double mP,me,alpha,muP,cmSqMeVSq,alphaCubedOver64PiSq,qSqDipole,MeVSq;
 
   // Cuts accessible to the user
   bool useDeltaECut;

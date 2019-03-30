@@ -54,21 +54,19 @@ void GeneratorBase::useQuasiRandom(bool uqr)
 
 void GeneratorBase::generateSameEvent(bool doSame)
 {
-  if (doSame)
-    {
-      if (!alwaysSameEvent)
-	{
-	  updatedNums = new double[nHaltonDim];
-	  // Let's pick some random numbers for qrndNumbers
-	  for( int i=0;i<(nHaltonDim);i++)
-	    qrndNumbers[i]=gsl_rng_uniform(random);
-	}
+  if (doSame) {
+    if (!alwaysSameEvent) {
+      updatedNums = new double[nHaltonDim];
+      // Let's pick some random numbers for qrndNumbers
+      for( int i=0;i<(nHaltonDim);i++){
+        qrndNumbers[i]=gsl_rng_uniform(random);
+        std::cout << qrndNumbers[i] << std::endl;
+      }
     }
-  else if (alwaysSameEvent)
-    {
+  } else if (alwaysSameEvent) {
       delete[] updatedNums;
       updatedNums = qrndNumbers;
-    }
+  }
   alwaysSameEvent = doSame;
 }
 

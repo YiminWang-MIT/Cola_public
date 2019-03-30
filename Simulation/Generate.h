@@ -143,8 +143,12 @@ public:
     //intialize cooker generator MCGenRadiative.cpp
     double E0 = Reaction->electronIn.energy();
     gen = new GeneratorRadiative(0,0);
-    gen->setThetaRange(10,100);
-    gen->setPhiRange(0,10);
+    //gen->setThetaRange(sime->getAngle()/M_PI*180.0, (sime->getAngle()+dcte)/M_PI*180.0);
+    //gen->setPhiRange(sime->getOop()/M_PI*180.0, (sime->getOop()+sime->getDphi())/M_PI*180.0);
+    gen->setThetaRange(sime->getAngle(), sime->getAngle()+dcte);
+    gen->setPhiRange(sime->getOop(), sime->getOop()+sime->getDphi());
+    //gen->setThetaRange(10,100);
+    //gen->setPhiRange(0,20);
     gen->setDeltaECut(false,0);
     gen->setSoftFraction(0.5);
     gen->setPushPhoton(false);
