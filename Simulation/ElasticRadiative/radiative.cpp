@@ -10,7 +10,7 @@
 #include <iomanip>
 #include <fstream>
 
-#define YWDEBUG 1
+#define YWDEBUG 0
 
 GeneratorRadiative::GeneratorRadiative(int skip,unsigned long int seed):GeneratorBase(5,skip,seed)
 {
@@ -21,7 +21,7 @@ GeneratorRadiative::GeneratorRadiative(int skip,unsigned long int seed):Generato
   muP = 2.7928456;
   alphaCubedOver64PiSq = alpha * alpha * alpha / (64* M_PI * M_PI);
   //cmSqMeVSq = 3.8937966E-22;
-  MeVSq=1e-6; //convert to GeV^2
+  cmSqMeVSq = 3.8937966E-22*1e30;//to microBarn
   qSqDipole = 710000.; // MeV^2
   usePointProtonFF = false;
   useKellyFF = false;
@@ -631,9 +631,8 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   bremMatrixElement(lep_Jan,mix_Jan,had_Jan, 1, 1);
   double matElement_Jan = lep_Jan+mix_Jan+had_Jan;
   // Jan FF is the default weight
-  // Remove kinFactor(take care outside), change cmSqMeVsq to MeVSq convertion
-  ev->weight = weightDeltaE * weightSoftFrac * MeVSq * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
-#ifdef YWDEBUG
+  ev->weight = kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
+#if YWDEBUG
   if (ev->weight.get_default()>100){
     std::cout << "Elastic lepton energy: " << el.E3() << std::endl;
     std::cout << "Delta E: " << deltaE << std::endl;

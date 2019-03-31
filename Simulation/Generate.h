@@ -150,7 +150,7 @@ public:
     //gen->setThetaRange(10,100);
     //gen->setPhiRange(0,20);
     gen->setDeltaECut(false,0);
-    gen->setSoftFraction(1);
+    gen->setSoftFraction(0.5);
     gen->setPushPhoton(false);
     gen->addPointProtonFFCalc(true);
     gen->addKellyFFCalc(true);

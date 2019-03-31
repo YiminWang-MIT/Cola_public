@@ -1045,6 +1045,9 @@ Simul::eventloop()
 							 generatep);    
     weight = generator->generateElectron(setq2, generateW, 
 					 rundb.sim.q2_range,generatep);
+    //Will fix the kinFactor in the radiative generator
+    if (ModelType == ElasticRadiative)
+      weight=1;
     //    std::cout << "weight (generateElectron): " << weight << endl; 
   }
   if (!weight) return 0;
