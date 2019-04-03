@@ -18,6 +18,8 @@
 //test
 #include "HMBook/hmbook.h"
 
+#define OLDGEN 0
+
 extern SobolSequence sobol;
 double T1nrsimul;
 double T1nrmaxsimul;
@@ -48,6 +50,7 @@ int find_c(const double&, const double&,
 
 int zcomp(const double&, const double&);
 
+const int protonContrib = getenv("PROTONCONTRIBUTION") != NULL;
 
 // ============================================================================
 
@@ -412,6 +415,8 @@ inline double securePow(double x, double y) {
 }
 
 //#############################################################################
+
+#if OLDGEN 
 double 
 generateBremsstrahlung::generateEvent(double helicity)
 {
@@ -580,6 +585,266 @@ generateBremsstrahlung::generateEvent(double helicity)
       //cout <<"Error:"<< weight<<" "<<w2<<endl;//" "<<w3<<endl;
     }
   return we*dPhotonNorm;
+}
+#endif
+
+////////////
+//Jan's old generator
+////////////
+double protonVertexCorrection(double Ein, double Eout, double Eproton,double pproton,double x,double rho2)
+{
+  // JCB: this is the maximon tjon version. marc says: it is better!
+   double (*s)(double) = Spence;  
+
+
+   double eta=Ein/Eout;
+   double lx=log(x);
+   double delta1=s(1-eta/x)-s(1-1.0/(eta*x));
+   double delta2=1+Eproton/pproton*(-0.5*lx*lx-lx*log(rho2/(m_proton*m_proton))+lx-s(1-1.0/(x*x))+2*s(-1.0/x)+M_PI*M_PI/6);
+
+   return alpha/M_PI*(2*delta1+delta2);
+
+
+  // mo tsai code
+//   // 33musec on a Pentium III with 500MHz for this function!
+
+//   const double Z = 1;
+//   double (*s)(double) = Spence;  
+//   double e1=Ein/m_proton, e3= Eout/m_proton, e4=Eproton/m_proton, 
+//     c1=2*e3*e4-e1, c2=2*e1*e4-e3, eta = e1/e3;
+//   double beta4 = sqrt(1 - 1/e4/e4);
+//   double bb = sqrt((1  + beta4) / (1  - beta4));
+//   double ee = sqrt((e4 -     1) / (e4 +     1));
+
+//   double vertexZ =
+//     -6*log(eta)*log(eta) +
+//     (s((e3-1)/e1) - s((1-e3)/c1) + s(2*e3*(1-e3)/c1) 
+//      - log(fabs(c1/(e1*(1-2*e3))))*log(2*e3) ) -
+//     (s(1-e4/e3) - s((e4-e3)/c2) + s(2*e1*(e4-e3)/c2) 
+//      - log(fabs(c2/(e3*(1-2*e1))))*log(2*e1) ) -
+//     (s(1-1/e1)-s(1/e1-1)+s(2-2*e1)+log(fabs(2*e1-2))*log(2*e1))+
+//     (s(1-1/e3)-s(1/e3-1)+s(2-2*e3)+log(fabs(2*e3-2))*log(2*e3));
+  
+//   double vertexZ2 =
+//     - log(e4) - log(eta/e1)*(2*log(bb)/beta4-2)
+//     + (log(bb)*log((e4+1)/2)-s(-ee*bb)+ s(ee/bb)-s(ee)+s(-ee))/beta4;
+
+// //   double internZ  = -4*log(eta)                         * log(k/E1);
+// //   double internZ2 = -(log((1+beta4)/(1-beta4))/beta4-2) * log(k/E1);
+
+// //   cout.form("Vertex Z  = %.10g\n", -alpha/M_PI * vertexZ);
+// //   cout.form("       Z² = %.10g\n", -alpha/M_PI * vertexZ2);
+// //   cout.form("Intern Z  = %.10g\n", -alpha/M_PI * internZ);
+// //   cout.form("       Z² = %.10g\n", -alpha/M_PI * internZ2);
+// //   cout.form("Sum    Z  = %.10g\n", -alpha/M_PI * (internZ  + vertexZ));
+// //   cout.form("       Z² = %.10g\n", -alpha/M_PI * (internZ2 + vertexZ2));
+
+//   cout <<  - alpha / M_PI * (Z * vertexZ + Z * Z * vertexZ2)<<" \t"<< - alpha / M_PI * Z * vertexZ<<"\t"<< - alpha / M_PI * Z *Z* vertexZ2<<endl;
+ 
+//  return - alpha / M_PI * (Z * vertexZ + Z * Z * vertexZ2);
+}
+
+
+int dummda=0;
+double 
+generateBremsstrahlung::generateEvent(double helicity)
+{
+  double E0 = Reaction->electronIn.energy();
+  FourVector In = FourVector(E0,0,0,Reaction->electronIn.momentum());
+  // Set the electronOut FourVector with momentum = 1
+  generateLabAngles(&Reaction->electronOut,1,sime->getAngle(), sime->getOop(), 
+		    dcte,sime->getDphi());
+  
+  double theta = Reaction->electronOut.theta();
+  double phi   = Reaction->electronOut.phi();
+
+
+  double ct    = cos(theta), st = sin(theta);
+  // energy of the outgoing electron in elastic scattering
+  
+  double Ep    = (-(E0 + m_proton)*(m_e_sqr+E0*m_proton)
+		  + (m_e_sqr-E0*E0)*ct*sqrt(m_proton*m_proton-m_e_sqr*st*st))/
+    ((E0*E0-m_e_sqr)*ct*ct-(E0+m_proton)*(E0+m_proton));
+  
+  // Set the electronOut FourVector
+  Reaction->electronOut.initPolar(Ep, sqrt(Ep*Ep-m_e_sqr), theta, phi);
+  // Out1 is the excited proton
+  Reaction->Out1 = In - Reaction->electronOut 
+    + *Reaction->getTarget();
+  
+  double Eproton = Reaction->Out1.energy();  
+  double q2 = (In-Reaction->electronOut).square();
+  //  double beta4 = Reaction->Out1.momentum()/Eproton;
+
+  double eta=E0/Ep;
+
+  double Epp= E0+m_proton-Ep;
+  double pp=sqrt(Epp*Epp-m_proton*m_proton);
+
+  double rho=sqrt(4*m_proton*m_proton-q2);
+  double x=(rho+sqrt(-q2))/(2*m_proton);  x=x*x;
+
+  double tproton1 = alpha/M_PI*4*log(eta);
+
+  double tproton2 = alpha/M_PI*2*(Epp/pp*log(x)-1);
+  
+  double telectron=alpha/M_PI*(2*(log(fabs(q2)/m_e_sqr)-1));
+  double t =telectron+ (protonContrib?tproton1+tproton2:0);
+  //  cout <<E0<<"\t"<<Ep<<"\t"<<t<<"\t"<<telectron<<"\t"<<tproton1<<"\t"<<tproton2<<endl;
+//   cout <<"Q2, m_proton, x: "<<-q2<<" "<<m_proton<<" "<<x<<endl;
+  class Momentum P_Spin;
+  class FourVector photon;
+  
+  double EBH,k;
+  double dPhotonNorm;
+
+  FourVector eoutsave = Reaction->electronOut;
+
+//   HIST *ida,*idb,*idc,*idd;
+
+//   ida=HMBook1("Ohne weight dE","dE",""    ,"GeV","",2000,-1,1);
+//   idb=HMBook1("Ohne weight dEs","dEs",""   ,"GeV","",2000,-1,1);
+//   idc=HMBook1("Mit weight dE","",""   ,"Gev","",2000,-1,1);
+//   idd=HMBook1("mit weight dEs","","","GeV","",2000,-1,1);
+
+
+//   cout <<"E:"<<E0<<" E':"<<Ep<<" t:"<<t<<endl;
+
+//   dummda++;
+//   if (dummda!=1) return 0;
+
+//   #define iterations 100000
+//   for (int i=0;i<iterations;i++)
+//     {
+//       if ((i % (iterations/100))==0) std::cout <<i<<" "<<i*100.0/iterations<<"%"<<endl;
+
+
+
+  double random = halton[2]();
+
+  dPhotonNorm = 1.0;
+  if ((BHmin != 0) && (BHmax != 0)) {
+    double min =  pow(BHmin/Ep,t);
+    double max =  pow(BHmax/Ep,t);
+    random = min + random*(max - min);
+    dPhotonNorm = (max - min);
+  }
+  double cutoff = securePow(RadCutOff,t);
+  if (random<cutoff) return 0;
+  
+
+  // Energy loss because internal radiative corrections
+  k = Ep *securePow(random, 1/t);
+  //  k=0.0405;
+
+  double rk=k;
+  if (k<1e-10)  k=1e-10;
+  
+  //  k=1e-10;
+  Reaction->electronOut -= k;
+ double k2 = Ep - Reaction->electronOut.energy(); // to minimize roundoff error
+ 
+ if( k2==0 && k2<k) return 0;
+ // if( k2==0) continue;
+
+  k=k2;
+  double weight = 1;
+
+  theta= Reaction->electronOut.getP()* Reaction->electronIn.getP();
+  theta/=Reaction->electronOut.getP().abs()* Reaction->electronIn.getP().abs();
+  theta=acos(theta);
+
+   FourVector q = In - Reaction->electronOut;
+  
+   NucleonFormfactor *FF = new DipoleFit();  
+
+   generateBetheHeitlerPeak BH(In, Reaction->electronOut);
+
+   P_Spin=Momentum();
+
+   bool lowerlimit;
+   EBH=k;
+
+   photon = BH.generate(weight,&lowerlimit,&EBH,&helicity,&P_Spin);
+
+
+//   double w2=1/(t+t2)*k/EBH;//*securePow(k,-2*t2);
+//   cout <<k<<"\t"<<EBH<<"\t"<<k/EBH<<endl;
+//   FourVector ph_ein=photon.rotate(In);
+//   double v=rk;
+
+//   //  double w3=exp(alpha/M_PI*(-0.5*pow(log(E0/Ep),2)+0.5*log(fabs(q*q)/m_e_sqr)-M_PI*M_PI/3.0+Spence(pow(cos(theta/2),2))));
+
+
+  
+//  double k= atan2(photon[1],photon[3])*180/M_PI;
+
+
+//  double v=k*eta;
+
+  //  weight*=Ep/FF->CrossSection(E0, theta); // um es eins zu machen!
+
+  
+   //dsigma/domega
+
+   // 1/eta : m2, k/EBH: m, rest ohne
+   double korr=k/EBH;//k/EBH;//(k/EBH)*(eta*k/EBH);//1/eta;//k/EBH;//(k/EBH)*(eta*k/EBH);
+   
+   //   cout<<"kEBH "<<k<<" "<<eta<<" "<<k/EBH<<" "<<korr<<endl;
+   //   weight=FF->CrossSection(E0,theta);
+  // weight*=pow(eta,telectron/2)/t*korr; // /
+  //  weight=pow(eta,telectron/2)*FF->CrossSection(E0, theta); //t*korr; // /
+  //
+  //  I think I should to something like this -- Yimin
+   weight*=pow(eta,telectron/2)*FF->CrossSection(E0, theta)*t*korr;
+
+   if (protonContrib) weight*=pow(4*E0*E0/(-q2*x),tproton1/2)*pow(2*E0/m_proton,tproton2);
+
+
+//    HMFill(ida,k,0,weight/eta);
+//    HMFill(idb,k,0,weight*k/EBH);
+
+//    HMFill(idc,k,0,weight*photon.energy()/EBH*t);
+//   HMFill(idd,k,0,1 );
+    
+//  }
+//   HMWriteAll("test.his");
+//   exit(-1);
+//   return -1;
+
+  if (weight<0){
+    invbh++;
+    if (invbh %100 ==0)   printf("Warning, Invalid BH.generate %i\n",invbh);
+  return 0; // invalid event, very rare case 
+  }
+  
+
+  // Out1 is now the final proton
+  Reaction->Out1 = In + *Reaction->getTarget()-Reaction->electronOut - photon;
+  // Set the proton Spin
+  //  P_Spin.rot_theta(  Reaction->Out1.theta());
+  //  P_Spin.rot_phi(    Reaction->Out1.phi());
+  
+  Reaction->Out1 = Reaction->Out1.setSpin(P_Spin);
+
+
+
+  if (protonContrib) {
+    double pVC=protonVertexCorrection(E0,Ep,Eproton,pp,x,rho*rho);
+//        std::cout <<E0<<"\t"<<Ep<<"\t"<<Eproton<<"\t"<<pVC<<"\n";
+//        if (exp(pVC)>1.1) cout <<"pVC: "<<pVC<<endl;
+    weight *= exp(pVC);
+  }
+  //  double we=weight;
+  if (!(weight>=0))
+    {
+      weight=0;
+      cout <<"Error:"<< weight<<endl;//" "<<w2<<endl;//" "<<w3<<endl;
+    }
+  //return FF->CrossSection(E0, theta);
+  //  Reaction->electronOut=eoutsave;
+
+  return weight*dPhotonNorm;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1337,8 +1602,6 @@ double DMBosonCrossSection(const FourVector &e_in,  const FourVector &e_out,
   double s = CM.square();
   return c*(s-m_proton*m_proton)/s*e_out.momentum()/e_in.momentum()*M_square/4;
 }
-
-const int protonContrib = getenv("PROTONCONTRIBUTION") != NULL;
 
 double generateBetheHeitlerPeak::BetheHeitlerCrossSection(FourVector in,
  							  FourVector out,
