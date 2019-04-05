@@ -596,7 +596,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   kMod.SetXYZT(sin(thetaK)*cos(phiK),sin(thetaK)*sin(phiK),cosThetaK,1.);
   double momk = photonMom(cosTheta, cosThetaK, cosThetaEK, mom3, E3);
   k = kMod * momk;
-  std::cout << t << "\t" << k.E() << "\t" << deltaE << "\t" << weightSoftFrac << std::endl;
+  //std::cout << t << "\t" << k.E() << "\t" << deltaE << "\t" << weightSoftFrac << std::endl;
   p4 = p1 + p2 - p3 - k;
 
   // Lastly, apply the cross-section

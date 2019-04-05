@@ -684,13 +684,13 @@ generateBremsstrahlung::generateEvent(double helicity)
   double rho=sqrt(4*m_proton*m_proton-q2);
   double x=(rho+sqrt(-q2))/(2*m_proton);  x=x*x;
 
-  double tproton1 = alpha/M_PI*4*log(eta);
+  double tproton1 = alpha/M_PI*4*log(eta); // eqn 5.14
 
-  double tproton2 = alpha/M_PI*2*(Epp/pp*log(x)-1);
+  double tproton2 = alpha/M_PI*2*(Epp/pp*log(x)-1); // eqn 5.15
   
-  double telectron=alpha/M_PI*(2*(log(fabs(q2)/m_e_sqr)-1));
+  double telectron=alpha/M_PI*(2*(log(fabs(q2)/m_e_sqr)-1)); //eqn 5.9
   double t =telectron+ (protonContrib?tproton1+tproton2:0);
-  //  cout <<E0<<"\t"<<Ep<<"\t"<<t<<"\t"<<telectron<<"\t"<<tproton1<<"\t"<<tproton2<<endl;
+  //cout <<E0<<"\t"<<Ep<<"\t"<<t<<"\t"<<telectron<<"\t"<<tproton1<<"\t"<<tproton2<<endl;
 //   cout <<"Q2, m_proton, x: "<<-q2<<" "<<m_proton<<" "<<x<<endl;
   class Momentum P_Spin;
   class FourVector photon;
@@ -719,7 +719,7 @@ generateBremsstrahlung::generateEvent(double helicity)
 //       if ((i % (iterations/100))==0) std::cout <<i<<" "<<i*100.0/iterations<<"%"<<endl;
 
 
-
+  //generating events with good distribution
   double random = halton[2]();
 
   dPhotonNorm = 1.0;
@@ -735,6 +735,7 @@ generateBremsstrahlung::generateEvent(double helicity)
 
   // Energy loss because internal radiative corrections
   k = Ep *securePow(random, 1/t);
+  //std::cout << Ep << '\t' << random << '\t' << 1/t << '\t' << k << std::endl;
   //  k=0.0405;
 
   double rk=k;
@@ -791,12 +792,13 @@ generateBremsstrahlung::generateEvent(double helicity)
    double korr=k/EBH;//k/EBH;//(k/EBH)*(eta*k/EBH);//1/eta;//k/EBH;//(k/EBH)*(eta*k/EBH);
    
    //   cout<<"kEBH "<<k<<" "<<eta<<" "<<k/EBH<<" "<<korr<<endl;
+   //
+   //
    //   weight=FF->CrossSection(E0,theta);
-  // weight*=pow(eta,telectron/2)/t*korr; // /
+   //   No need for FF->CrossSection for this version
+   //   Is is included in previous step BH.generate->ElasticCrossSection->gNN
+   weight*=pow(eta,telectron/2)/t*korr; // /
   //  weight=pow(eta,telectron/2)*FF->CrossSection(E0, theta); //t*korr; // /
-  //
-  //  I think I should to something like this -- Yimin
-   weight*=pow(eta,telectron/2)*FF->CrossSection(E0, theta)*t*korr;
 
    if (protonContrib) weight*=pow(4*E0*E0/(-q2*x),tproton1/2)*pow(2*E0/m_proton,tproton2);
 
@@ -1249,9 +1251,6 @@ Tensor gNN(const FourVector& q, int mu)
       ff= new DipoleFit();
     }
   }
-
-  
-  
   
   double Q2 = -q.square();
   double v  = Q2 / (4*m_p_sqr);
@@ -1648,7 +1647,6 @@ generateBetheHeitlerPeak::generate(double &weight,bool *lowerlimit, double *EBH,
 
   weight=1;
   weight = ElasticCrossSection(in, out, photon ,*helicity, protonContrib? 0:1, 0, P_Spin,NULL,NULL,EBH,kp);
-
 
   // 0 means to add proton contributions
 
