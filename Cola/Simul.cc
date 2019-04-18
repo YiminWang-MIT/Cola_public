@@ -857,13 +857,13 @@ Simul::eventloop()
       int bins = (id->ny ? id->nx*id->ny: id->nx);
       if (!id->error) id->error = new FLOAT[bins];
       for(int i=0; i < bins; i++) {
-	id->data[i]    /= simNormalize;
+        id->data[i]    /= simNormalize;
       }
       if (id->datasqr)
-	for(int i=0; i < bins; i++) {
-	  id->datasqr[i] /= simNormalize;
-	  id->error[i]   = sqrt(id->datasqr[i]-pow(id->data[i],2))*errorNorm;
-	}
+        for(int i=0; i < bins; i++) {
+          id->datasqr[i] /= simNormalize;
+          id->error[i]   = sqrt(id->datasqr[i]-pow(id->data[i],2))*errorNorm;
+        }
       free(id->datasqr); id->datasqr = NULL;
       free(id->nbin);    id->nbin    = NULL;
       HMSetScale(id,1.0);
@@ -1033,6 +1033,8 @@ Simul::eventloop()
   online.sim.Volume = 1;
   online.sim.scale = 1;
 
+  //std::cout << "Model type =" << ModelType << endl; 
+
   if (ModelType != TwoBodyPWIA   && ModelType != TwoBodyHe3 &&
       ModelType != ThreeBodyPWIA && ModelType != ThreeBodyHe3 &&
       ModelType != TripleLab && ModelType != TripleLabPP && 
@@ -1048,17 +1050,16 @@ Simul::eventloop()
     //Will fix the kinFactor in the radiative generator
     if (ModelType == ElasticRadiative || ModelType == ElasticProton)
       weight=1;
-      //std::cout << "weight (generateElectron): " << weight << endl; 
   }
   if (!weight) return 0;
   online.sim.Volume *=generator->integrationVolume();
-  //  std::cout << "weight (integration Volume): " 
+  // std::cout << "weight (integration Volume): " 
   //	    << online.sim.Volume << std::endl;
-
 
   VertexQ2 = 0;
   ThetaGammaHardCMS=0;
   PhiGammaHardCMS=0;  
+  //std::cout<<"Event\t" << events << std::endl;
   weight *= generator->generateEvent(helicity) * online.sim.Volume;
 
   online.sim.Gamma = generator->getGamma();
@@ -1076,34 +1077,15 @@ Simul::eventloop()
   out->packEventData(&online.sim.Gamma,  1);
   out->packEventData(&online.sim.scale,  1);
 
-#if YWDEBUG
-  std::cout << __LINE__ << std::endl;
-#endif
+  //std::cout << "Packed weight: " << weight << endl; 
+
   if (!weight)                                      return 0;  
-#if YWDEBUG
-  std::cout << __LINE__ << std::endl;
-  Reaction->electronOut.print(""); std::cout<< std::endl;
-  std::cout << targetpos_hall[0] << " " << targetpos_hall[1] << " " << targetpos_hall[2] << std::endl;
-#endif
   if (!chck(Reaction->electronOut, targetpos_hall)) return 0;
-#if YWDEBUG
-  std::cout << __LINE__ << std::endl;
-#endif
-  //  std::cout<<"Electron accepted!\n";
+  //std::cout<<"Electron accepted!\n";
   if (!chck(Reaction->Out1,        targetpos_hall)) return 0;    
-#if YWDEBUG
-  std::cout << __LINE__ << std::endl;
-#endif
   if (!chck(Reaction->Out2,        targetpos_hall)) return 0;    
-#if YWDEBUG
-  std::cout << __LINE__ << std::endl;
-#endif
-  //  cout <<"D1: "<< Reaction->Decay1<<endl;
-  // cout <<"D1: "<<* Reaction->getA()<<endl;
   if (!chck(Reaction->Decay1,      targetpos_hall)) return 0;    
   if (!chck(Reaction->Decay2,      targetpos_hall)) return 0;
-  //  cout << "Th Phi dp: " << online.kaos.target.th*180/3.14  << " " 
-  //       << online.kaos.target.ph*180/3.14  << " " << online.kaos.target.dp << endl;
   if (He3HACK::mode==2){
     He3HACK::listfile.write((char *) He3HACK::buf,sizeof (float)*16);
     if (He3HACK::listfile.bad())
@@ -1218,9 +1200,11 @@ Simul::eventloop()
   double theta_e = Reaction->electronOut.theta(); 
   double Eprime  = Reaction->electronOut.momentum(); 
   
+  //std::cout << rundb.sim.GeneratorFlag <<std::endl;
   if (ergloss) { 
     if (rundb.sim.GeneratorFlag!=2 && 
-	rundb.sim.GeneratorFlag!=3){ //generateElasticDeuteron uses its own radiation correction for these flags
+    rundb.sim.GeneratorFlag!=3 && ModelType!=ElasticRadiative){ //generateElasticDeuteron uses its own radiation correction for these flags
+      //Radiative Generator take care of this part by itself
       double vertex = vertexCorrection(q2, E0, Eprime, theta_e); //bss PARAMETERS ARE THE NOT CORRECTED EBEAM, .... ehemals FIXME
       weight *= vertex; //bss: vertex was static before... is 'vertex' a constant for all events?!?! -> removed static, now evaluated for each event individually ehemals FIXME
     }
@@ -1367,7 +1351,7 @@ Simul::eventloop()
 #endif
 
   if (ModelType == DMQEDBackground) weight *= generator->crosssectionOfThisEvent();
-  if (!setjmp(env))
+  if (!setjmp(env)){
     evaluate_expressions(sim[0]->getParticle(), sim[1]->getParticle(),
 			 sim[2]->getParticle(), sim[3]->getParticle(),
 			 sim[4]->getParticle(), sim[5]->getParticle(),
@@ -1375,13 +1359,12 @@ Simul::eventloop()
 			 sim[8]->getParticle(), sim[9]->getParticle(),
 			 sim[10]->getParticle(),
 			 Reaction->electronIn, weight);
+  }
 
   // write ntuple event
   if (ntuple) nt->fill_ntuple();
   helicity = -helicity;
-#if YWDEBUG
-  std::cout<< events << " End"<< std::endl;
-#endif
+  //std::cout<< "Final weight: " << weight << std::endl;
   return 0;
 }
 

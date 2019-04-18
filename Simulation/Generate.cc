@@ -395,7 +395,9 @@ double generateElasticRadiative::generateEvent(double helicity)
   gen->generate(ge);
 
   //pull back information from cooker generator
-  double weight=ge->weight.get_default();
+  double weight=ge->weight.get_extra("method1_dipole");
+  //std::cout << ge->particles[0].particle << std::endl;
+  //std::cout << ge->particles[0].momentum.E() << std::endl;
   Reaction->electronOut.initPolar(ge->particles[0].momentum.E(), ge->particles[0].momentum.P(), ge->particles[0].momentum.Theta(), ge->particles[0].momentum.Phi());
   Reaction->Out1.initPolar(ge->particles[1].momentum.E(), ge->particles[1].momentum.P(), ge->particles[1].momentum.Theta(), ge->particles[1].momentum.Phi());
 
@@ -602,7 +604,7 @@ double protonVertexCorrection(double Ein, double Eout, double Eproton,double ppr
    double delta1=s(1-eta/x)-s(1-1.0/(eta*x));
    double delta2=1+Eproton/pproton*(-0.5*lx*lx-lx*log(rho2/(m_proton*m_proton))+lx-s(1-1.0/(x*x))+2*s(-1.0/x)+M_PI*M_PI/6);
 
-   return alpha/M_PI*(2*delta1+delta2);
+   return alpha/M_PI*(2*delta1+delta2);//missing the first term
 
 
   // mo tsai code
@@ -690,6 +692,7 @@ generateBremsstrahlung::generateEvent(double helicity)
   
   double telectron=alpha/M_PI*(2*(log(fabs(q2)/m_e_sqr)-1)); //eqn 5.9
   double t =telectron+ (protonContrib?tproton1+tproton2:0);
+
   //cout <<E0<<"\t"<<Ep<<"\t"<<t<<"\t"<<telectron<<"\t"<<tproton1<<"\t"<<tproton2<<endl;
 //   cout <<"Q2, m_proton, x: "<<-q2<<" "<<m_proton<<" "<<x<<endl;
   class Momentum P_Spin;
@@ -734,6 +737,7 @@ generateBremsstrahlung::generateEvent(double helicity)
   
 
   // Energy loss because internal radiative corrections
+  // always soft corrections, ignore e mass?
   k = Ep *securePow(random, 1/t);
   //std::cout << Ep << '\t' << random << '\t' << 1/t << '\t' << k << std::endl;
   //  k=0.0405;
@@ -790,18 +794,22 @@ generateBremsstrahlung::generateEvent(double helicity)
 
    // 1/eta : m2, k/EBH: m, rest ohne
    double korr=k/EBH;//k/EBH;//(k/EBH)*(eta*k/EBH);//1/eta;//k/EBH;//(k/EBH)*(eta*k/EBH);
+   //0.97ish
    
    //   cout<<"kEBH "<<k<<" "<<eta<<" "<<k/EBH<<" "<<korr<<endl;
+   //std::cout << "korr = k/EBH = " << korr << std::endl; 
    //
    //
    //   weight=FF->CrossSection(E0,theta);
    //   No need for FF->CrossSection for this version
    //   Is is included in previous step BH.generate->ElasticCrossSection->gNN
+   //
    weight*=pow(eta,telectron/2)/t*korr; // /
+   
   //  weight=pow(eta,telectron/2)*FF->CrossSection(E0, theta); //t*korr; // /
 
-   if (protonContrib) weight*=pow(4*E0*E0/(-q2*x),tproton1/2)*pow(2*E0/m_proton,tproton2);
-
+   if (protonContrib) 
+     weight*=pow(4*E0*E0/(-q2*x),tproton1/2)*pow(2*E0/m_proton,tproton2);
 
 //    HMFill(ida,k,0,weight/eta);
 //    HMFill(idb,k,0,weight*k/EBH);
@@ -835,6 +843,7 @@ generateBremsstrahlung::generateEvent(double helicity)
     double pVC=protonVertexCorrection(E0,Ep,Eproton,pp,x,rho*rho);
 //        std::cout <<E0<<"\t"<<Ep<<"\t"<<Eproton<<"\t"<<pVC<<"\n";
 //        if (exp(pVC)>1.1) cout <<"pVC: "<<pVC<<endl;
+    //std::cout << pVC << '\t' << exp(pVC) << std::endl;
     weight *= exp(pVC);
   }
   //  double we=weight;
@@ -1526,6 +1535,7 @@ double ElasticCrossSection(const FourVector &e_in,
 
   //BH+B CrossSection
   if (b==0) return mubarn_GeV_srsqr * M_square/2*jacobian;
+
   //GP Effects on CrossSection
   else{
     ChPT_VCS VCS;
@@ -1621,9 +1631,9 @@ generateBetheHeitlerPeak::generateBetheHeitlerPeak(FourVector ein,
 						   FourVector eout) {
   in = ein;
   out = eout;
-  a1 = ein .energy()/ein .momentum();
-  a2 = eout.energy()/eout.momentum();
-  norm1 = -4-2*a1*log((a1-1)/(a1+1));
+  a1 = ein .energy()/ein .momentum(); //y+1
+  a2 = eout.energy()/eout.momentum(); //y+1
+  norm1 = -4-2*a1*log((a1-1)/(a1+1)); // -4 -2a log(2/y+1)
   norm2 = -4-2*a2*log((a2-1)/(a2+1));
 }
 
@@ -1645,7 +1655,6 @@ generateBetheHeitlerPeak::generate(double &weight,bool *lowerlimit, double *EBH,
   *EBH=k;
   *lowerlimit=false;
 
-  weight=1;
   weight = ElasticCrossSection(in, out, photon ,*helicity, protonContrib? 0:1, 0, P_Spin,NULL,NULL,EBH,kp);
 
   // 0 means to add proton contributions
@@ -1655,7 +1664,7 @@ generateBetheHeitlerPeak::generate(double &weight,bool *lowerlimit, double *EBH,
    fweight += f((Momentum)in  * (Momentum) photon/in.momentum())/2;
    a = a2; Norm = norm2;
    fweight += f((Momentum)out * (Momentum) photon/out.momentum())/2;
-   weight *= 2 * M_PI / fweight;
+   weight *= 2 * M_PI / fweight; //=4pi/ (f(in,k)+f(out,k)) is equivalent to kweight in Olympis
    return photon*k; //photon is normed to 1; the multiplication with k gives it the wanted value
 }
 

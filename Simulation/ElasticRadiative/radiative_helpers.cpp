@@ -18,6 +18,12 @@ ElasticKinematics::ElasticKinematics(double initLeptonE, double leptonTheta)
   p3_ = p1*(cos(theta_)*(E1_*mP + me*me) + (E1_+mP)*sqrt(mP*mP-pow(me*sin(theta_),2.)))
     / (pow(p1*sin(theta_),2.) + me*me + 2.*mP*E1_ + mP*mP);
   E3_ = sqrt(p3_*p3_ + me*me);
+
+  //mainz kinematics
+  //E3_= (-(E1_ + mP)*(me*me+E1_*mP)
+  //  + (me*me-E1_*E1_)*cos(theta_)*sqrt(mP*mP-pow(me*sin(theta_),2)))/
+  // ((E1_*E1_-me*me)*cos(theta_)*cos(theta_)-(E1_+mP)*(E1_+mP));
+  p3_ = sqrt(E3_*E3_ - me*me);
   Q2_ = 2.*(E1_*E3_ - p1*p3_*cos(theta_) - me*me);
   E4_ = E1_ + mP - E3_;
   p4_ = sqrt(E4_*E4_ - mP*mP);

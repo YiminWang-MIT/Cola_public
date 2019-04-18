@@ -50,7 +50,7 @@ extern "C" double kmaid_(int *ichan, double *QP2, double *W, double *TH,
 			  double *STT, double *STLP);
 // Definition for:      SUBROUTINE K_MAID(ICHAN,QP2,W,TH,ST,SL,STL,STT,STLP)
 
-static const double alpha =  1/137.035989561; // fine-structure constant 
+static const double alpha =  1.0/137.035989561; // fine-structure constant 
 static const double mubarn = 389.37966;       // (h_bar c)^2 in  GeV^2 * mubarn
 static const double e = sqrt(alpha * 4 * M_PI); // e in sqrt(h_bar*c)
 

@@ -20,8 +20,8 @@ GeneratorRadiative::GeneratorRadiative(int skip,unsigned long int seed):Generato
   alpha = 7.2973525698E-3;
   muP = 2.7928456;
   alphaCubedOver64PiSq = alpha * alpha * alpha / (64* M_PI * M_PI);
-  //cmSqMeVSq = 3.8937966E-22;
-  cmSqMeVSq = 3.8937966E-22*1e30;//to microBarn
+  //cmSqMeVSq = 3.8937966E-22;//hbar^2 c^2 MeV^-2
+  cmSqMeVSq = 3.8937966E-22*1e30;//to microBarn 
   //cmSqMeVSq = 1/3.8937966E-22/1e30*1e2;//to microBarn
   qSqDipole = 710000.; // MeV^2
   usePointProtonFF = false;
@@ -524,7 +524,6 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   double cExp = alpha/M_PI*(el.E4()*log(el.x())/el.p4() - 1.);
   double cWeight = pow(4*pow(beamEnergy,2)/(mP*mP), cExp);
 
-
   //build deltaE
   // Calculate t (5.16 in Jan's thesis)
   double weightDeltaE = (aWeight*bWeight*cWeight);
@@ -552,6 +551,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   // Include the weight
   double weightSoftFrac = 1./(softFraction*t + (1.-softFraction)*beamEnergy*(beamEnergy-maxDeltaE)*pow(deltaE/maxDeltaE,1.-t)
 			      /((beamEnergy-deltaE)*(beamEnergy-deltaE)));
+  //at the limit for softFraction==1, weightSoftFrac=1/t
 
   
   //build photon direction
@@ -587,7 +587,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
     }
   // Now produce the correct weight
   double kweight = (2 / (photonDirFcn(cosThetaK,beamEnergy)
-				 + photonDirFcn(cosThetaEK,E3)));
+				 + photonDirFcn(cosThetaEK,E3))); //jan's code generate.c line 1161
 
   // Construct four-vectors
   p1 = ev->lepton_prescatter.momentum*1000;//convert to MeV
@@ -601,7 +601,9 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
 
   // Lastly, apply the cross-section
   // Note, the kinematic factor and the jacobian are the two places where we will neglect electron mass.
+  //
   // kinFactor need to be adjusted from pure elastic
+  // Axel thesis eqn A.49
   double kinFactor = E3 * alphaCubedOver64PiSq / (mP * beamEnergy * fabs(mP + beamEnergy*(1.-cosTheta) - momk*(1.-cosThetaEK)));
   double jacobian = jacKDeltaE(cosThetaK, cosThetaEK, el.E3(), E3);
 
@@ -613,7 +615,10 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   double lep_dipole, mix_dipole, had_dipole;
   bremMatrixElement(lep_dipole,mix_dipole,had_dipole, 0, 0);
   double matElement_dipole = lep_dipole+mix_dipole+had_dipole;
-  ev->weight.set_extra("method1_dipole", phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_dipole * kinFactor * jacobian * calcElasticCorr(el));
+  ev->weight.set_extra("method1_dipole", weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_dipole * kinFactor * jacobian * calcElasticCorr(el));
+  double returnweight = weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_dipole * kinFactor * jacobian * calcElasticCorr(el);
+
+  //std::cout << returnweight << std::endl;
 
   // Calculate soft bremsstrahlung cross section
   TLorentzVector p3el, p4el; // Elastic 4-vectors
@@ -634,19 +639,23 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   double matElement_Jan = lep_Jan+mix_Jan+had_Jan;
   // Jan FF is the default weight
   ev->weight = kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
-  //ev->weight = 1; //1e-6 /4 * weightDeltaE * weightSoftFrac * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
+  double splineweight = kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
+  //std::cout << splineweight << std::endl;
+  //ev->weight = weightDeltaE * weightSoftFrac * kweight * calcElasticCorr(el);
 #if YWDEBUG
-  if (ev->weight.get_default()>100){
+  if (ev->weight.get_default()){
     std::cout << "Elastic lepton energy: " << el.E3() << std::endl;
     std::cout << "Delta E: " << deltaE << std::endl;
     std::cout << "Lepton energy after radiatiion: " << E3 << std::endl;
     std::cout << ev->weight.get_default() << std::endl;
-    //std::cout << weightDeltaE << std::endl; // stable around 1
+    std::cout << kinFactor << std::endl;
+    std::cout << weightDeltaE << std::endl; // stable around 1
     std::cout << weightSoftFrac << std::endl;
     std::cout << kweight << std::endl;
     std::cout << matElement_Jan << "\t" << matElement_dipole << std::endl;
-    //std::cout << jacobian << std::endl; // stable around 1
-    //std::cout << calcElasticCorr(el) << std::endl; // stable around 1
+    std::cout << jacobian << std::endl; // stable around 1
+    // Maximon and Tjon coefficient
+    std::cout << calcElasticCorr(el) << std::endl; // stable around 1
     std::cout << std::endl;
   }
 #endif
@@ -824,20 +833,20 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
     ev->particles.push_back(kParticle);
   }
   
-  return ev->weight.get_default();
+  return returnweight;
   
 }
 
 void GeneratorRadiative::bremMatrixElement(double &lep, double &mix, double &had, int FFTypeE, int FFTypeM)
 {
 #if YWDEBUG
-  std::cout << std::endl;
-  p1.Print();
-  p2.Print();
-  p3.Print();
-  p4.Print();
-  k.Print();
-  std::cout << std::endl;
+ // std::cout << std::endl;
+ // p1.Print();
+ // p2.Print();
+ // p3.Print();
+ // p4.Print();
+ // k.Print();
+ // std::cout << std::endl;
 #endif
   // We'll need slash matrices
   FourMat p1Slash = pGamma->slash(p1);
@@ -967,7 +976,8 @@ double GeneratorRadiative::photonMom(double cosThetaE, double cosThetaK, double 
   return (me*me + mP*(beamEnergy - E3) - (beamEnergy*E3 - mom1*mom3*cosThetaE)) /
     (mP + beamEnergy - mom1*cosThetaK - E3 + mom3*cosThetaEK);
 }
-
+ 
+//Axel thesis appendix A
 double GeneratorRadiative::jacKDeltaE(double cosThetaK, double cosThetaEK, double Eel, double E3)
 {
   return fabs((mP + beamEnergy * (1.-cosThetaK) - Eel * (1.-cosThetaEK))/((mP + beamEnergy * (1.-cosThetaK) - E3 * (1.-cosThetaEK))));
