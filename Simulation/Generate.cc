@@ -395,7 +395,8 @@ double generateElasticRadiative::generateEvent(double helicity)
   gen->generate(ge);
 
   //pull back information from cooker generator
-  double weight=ge->weight.get_extra("method1_dipole");
+  //double weight=ge->weight.get_extra("method1_dipole");
+  double weight=ge->weight.get_default();
   //std::cout << ge->particles[0].particle << std::endl;
   //std::cout << ge->particles[0].momentum.E() << std::endl;
   Reaction->electronOut.initPolar(ge->particles[0].momentum.E(), ge->particles[0].momentum.P(), ge->particles[0].momentum.Theta(), ge->particles[0].momentum.Phi());

@@ -20,6 +20,7 @@
 
 #include "fpu.h"
 
+#include <iostream>
 // Dirty hack for focus correction circumvention for spline fit
 #undef DIRTYHACK_FORFIT
 #ifdef DIRTYHACK_FORFIT
@@ -1790,6 +1791,7 @@ Cola::eventloop()
   online.A.vertex.x=online.B.vertex.x=online.C.vertex.x = rundb.beam.offset.x;
   online.A.vertex.y=online.B.vertex.y=online.C.vertex.y = rundb.beam.offset.y;
   online.Vertex.x = online.Vertex.y = online.Vertex.z = 0; 
+
 
   if (resultA) {
     if (!strcmp(rundb.use_wobbler_adc, "B") 

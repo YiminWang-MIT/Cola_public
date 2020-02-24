@@ -153,11 +153,11 @@ Expression:
     HMWriteAscii(fp, $3);
     fclose(fp);
   }
-  /*  ifs($1,"WRITEASCIITUPLE") {   das geht nicht, ist nicht eindeutig
-  //  FILE *fp = fopen($2,"w");
-  //  HMWriteAsciiTuple(fp, $3);
+  ifs($1,"WRITEASCIITUPLE") {  // das geht nicht, ist nicht eindeutig
+    FILE *fp = fopen($2,"w");
+    HMWriteAsciiTuple(fp, $3);
     fclose(fp);
-    } */
+  }
 }
 | COMMAND numExpr {
   ifs($1,"DELETE")    HMDelete      (findnr(*$2));

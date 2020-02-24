@@ -99,7 +99,7 @@ char *func[] = {
   "SMOOTH",    "XAXIS",     "YAXIS",   "HTITLE",
   "INCLUDEPS", "APPEND",  "WRITEONE",  "TEXT",      "LINE",    "RECTANGLE",
   "CONVOLUTE", "DECONVOLUTE", "FILLERROR", "CLEARERROR", "VARIANCE", 
-  "WRITEASCII", "q"
+  "WRITEASCII", "WRITEASCIITUPLE",  "q"
 };
 
 int yylex ()
@@ -281,6 +281,7 @@ void readfile(char *filename)
   while (HMReadFilename(fp,filename)) addhist(i++, HMLast);
   if (!strcmp(filename,"-"))
     pclose(fp);
+  pclose(fp);
 }
 
 void appendfile(char *filename)
