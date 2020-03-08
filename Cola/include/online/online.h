@@ -45,6 +45,7 @@ struct scinti       {
 						      right_corr;} Energy;
   /** Hit pattern                        */ short pattern; 
   /** Number of paddles hit              */ int hits;
+  /** Number of paddles dummy hit (E>0)  */ int dummy_hits;
   /** Number of paddle used for timing   */ short paddle;
   /** Delay of paddle used for timing    */ double scint;
   /** bss 2013-12-30 software ped subtr  */ double AdcPedCorr_left[15];

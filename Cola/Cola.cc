@@ -1152,6 +1152,10 @@ Cola::eventloop()
   out->packEventData(&online.IntegratedLuminosity, 1);
   out->packEventData(&online.RunTime, 1);
 
+  //std::cout << "Time" << std::endl;
+  //std::cout << online.datataking << std::endl;
+  //std::cout << online.datataking2 << std::endl;
+
   Particle A_Out = P_proton;
   Particle B_Out = P_electron;
   Particle C_Out = P_electron;
@@ -1341,6 +1345,15 @@ Cola::eventloop()
     assignitem(actime_1, spekA.coinc.a_c_time_1);
     assignitem(actime_2, spekA.coinc.a_c_time_2);
     assignitem(actime_3, spekA.coinc.a_c_time_3);
+    /*
+    std::cout << "Spec A trigger" << std::endl;
+    std::cout << spekA.coinc.a_b_time_1 << std::endl;
+    std::cout << spekA.coinc.a_b_time_2 << std::endl;
+    std::cout << spekA.coinc.a_b_time_3 << std::endl;
+    std::cout << spekA.coinc.a_c_time_1 << std::endl;
+    std::cout << spekA.coinc.a_c_time_2 << std::endl;
+    std::cout << spekA.coinc.a_c_time_3 << std::endl;
+    */
   }
 
   if (atree->itemOK(&spekB.det.sync_info)) {
@@ -1348,6 +1361,10 @@ Cola::eventloop()
     if (atree->itemOK(&spekB.det.trigger.info)) BlaserOK=spekB.det.trigger.info&1;
     // for pulsedBeam-SpecBSingles:
     assignitem(btime_1, spekB.det.trigger.scint_top_time);
+    /*
+    std::cout << "Spec B trigger" << std::endl;
+    std::cout << spekB.det.trigger.scint_top_time << std::endl;
+    */
   }
 
   if (atree->itemOK(&spekC.det.sync_info)) {
@@ -2273,6 +2290,12 @@ Cola::eventloop()
     out->packEventData(&online.C.singlecorr,1);
   }
 
+  /*
+  std::cout << "TDC" << std::endl;
+  std::cout << online.A.single_tdc << std::endl;
+  std::cout << online.B.single_tdc << std::endl;
+  std::cout << online.C.single_tdc << std::endl;
+  */
   //////////////////////////////////////////////////////////////////////////// 
   // Flash ADC
   //////////////////////////////////////////////////////////////////////////// 
@@ -2499,6 +2522,8 @@ int work (wxApp *app)
     frame->file_menu->Append(REWIND,  "&Rewind Input Data File");
     firstInit++;
   }
+
+  //std::cout << "Event" << std::endl;
   return kernel->eventloop();
 }
 
@@ -2675,6 +2700,8 @@ int main(int argc, char *argv[])
     HMLaunchViewWork(1, argv, (void(*)(wxApp*)) work);
   } else {
     while(kernel->eventloop() != 1);
+      //std::cout << "Event" << std::endl;
+
   }
 
   return 0;

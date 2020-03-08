@@ -78,6 +78,7 @@ int scintillator_2014(AquaTree  *atree,
 
   int pattern = 0, i;
   int counter = 0;
+  int dummy_counter = 0;
 
   onl.ToF.paddle      = onl.dE.paddle = -1;
   onl.ToF.scint       = onl.dE.scint  = 0;
@@ -98,23 +99,30 @@ int scintillator_2014(AquaTree  *atree,
       onl.ToF.AdcPedCorr_left[i] = onl.ToF.AdcPedCorr_right[i] = 0.;
       onl.ToF.AdcScaled_left[i] = onl.ToF.AdcScaled_right[i] = 0.;
 
+      double temp_Ped=0;
+
       //bss 2013-12-30 the hardware pedestal subtraction has a minimum ADC value above pedestal, 
       //i.e. ADC > 5 ? ADC : 0; emulate this in case hardware subtraction is replaced by software subtr.
       double PedCorr = ToFpad[i].left.energy + rund.scint.ToF_corr_left_offset[i];
+      //std::cout << i << "\t" << PedCorr << "\t";
+      temp_Ped+=PedCorr;
       if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
-	onl.ToF.AdcPedCorr_left[i] = PedCorr;
-	onl.ToF.AdcScaled_left[i] = PedCorr * rund.scint.ToF_corr_left_scale[i];
+        onl.ToF.AdcPedCorr_left[i] = PedCorr;
+        onl.ToF.AdcScaled_left[i] = PedCorr * rund.scint.ToF_corr_left_scale[i];
       }
       PedCorr = ToFpad[i].right.energy + rund.scint.ToF_corr_right_offset[i];
+      //std::cout << PedCorr << std::endl;
+      temp_Ped+=PedCorr;
       if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
-	onl.ToF.AdcPedCorr_right[i] = PedCorr;
-	onl.ToF.AdcScaled_right[i] = PedCorr * rund.scint.ToF_corr_right_scale[i];
+        onl.ToF.AdcPedCorr_right[i] = PedCorr;
+        onl.ToF.AdcScaled_right[i] = PedCorr * rund.scint.ToF_corr_right_scale[i];
       }
       out->packEventData(&onl.ToF.AdcPedCorr_left[i], 1); 
       out->packEventData(&onl.ToF.AdcScaled_left[i], 1); 
       out->packEventData(&onl.ToF.AdcPedCorr_right[i], 1); 
       out->packEventData(&onl.ToF.AdcScaled_right[i], 1); 
       
+      if (temp_Ped>0) dummy_counter+=1;
 
       double thisenergy = onl.ToF.AdcScaled_left[i] * onl.ToF.AdcScaled_right[i]; //should usually have isolated peak at zero
       if (thisenergy>0) { //implicitly fulfilled: ADC+Offset>=minADC for both left and right
@@ -140,6 +148,8 @@ int scintillator_2014(AquaTree  *atree,
   
   onl.ToF.hits = counter;
   out->packEventData(&onl.ToF.hits, 1);
+  onl.ToF.dummy_hits = dummy_counter;
+  out->packEventData(&onl.ToF.dummy_hits, 1);
   onl.ToF.pattern = pattern;
   out->packEventData(&onl.ToF.pattern, 1);
 
