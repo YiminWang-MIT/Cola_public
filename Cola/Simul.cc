@@ -920,10 +920,16 @@ Simul::eventloop()
   // vertex coordinates in target system
   double targetpos_tar[3] = {0,0,0};
   double sobol2[3] = {sobol(), sobol(), sobol()};
+  double norm_vertex[5] = {norm(), norm(), norm(), norm(), norm()};
 
-  if (!target->Generate_Vertex(sobol2, targetpos_tar, rundb.sim.wobx, 
-			       rundb.sim.woby, ModelType)) return 0;
   //std::cout << targetpos_tar[0] << " "  << targetpos_tar[1] << " "  << targetpos_tar[2] << "\n" ;
+  if (ModelType == ElasticRadiative){
+      if (!target->Generate_Vertex(norm_vertex, targetpos_tar, rundb.sim.wobx, 
+                 rundb.sim.woby, ModelType)) return 0;
+  } else {
+    if (!target->Generate_Vertex(sobol2, targetpos_tar, rundb.sim.wobx, 
+               rundb.sim.woby, ModelType)) return 0;
+  }
 
   //save target position and helicity
   if (TriplePolNS::mode==3) {

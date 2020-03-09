@@ -388,6 +388,22 @@ public:
 	      double snowthck, double snowdns);
 };
 
+class gasjet: public target {
+private:
+  static double totallength, totalheight, totalwidth;
+public:
+  gasjet() { Length = totallength; cout << "Gasjet length = " << totallength << endl;}
+  virtual ~gasjet() { ; }
+  
+  double getLength_in_Target(double x, double y, double z, 
+			     double theta, double phi);
+  int Generate_Vertex(double random[], double x[], double wob_x, double wob_y, modeltype ModelType);
+  int setPara(double length, double angle,
+	      double density, double wallthck,
+	      double snowthck, double snowdns);
+};
+
+
 class stripe_stack : public solidstate {
   int Generate_Vertex(double random[], double x[], double wob_x, double wob_y, modeltype ModelType) {
     x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x;

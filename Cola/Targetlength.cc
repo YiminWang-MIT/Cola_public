@@ -118,6 +118,12 @@ double windowlesstube::totallength      =    0;         // see below !
 double windowlesstube::totalwidth       =   7.500000; //cell radius [mm]
 double windowlesstube::totalheight      =   10.000000;
 
+// Gas jet Target
+
+double gasjet::totallength      =   25; 
+double gasjet::totalwidth       =   0.113; 
+double gasjet::totalheight      =   0.376;
+
 // Waterfall-Target
 
 double H2O::totallength      =    0;                // see below !
@@ -2570,6 +2576,73 @@ double solidstate::getangle ( )
 }
 
 int 
+gasjet::setPara(double len, double, double density, double, double, double)
+{
+  TargetMat->setDensity(density); // [g/cm**3]
+  //totallength = len; // [mm]
+  //Length = totallength; //historically left over from Length = totallength / cos(angle_tar), where angle_tar flew out..
+  //cout << "density " << density << " g/cm**3\n";
+  //cout << "length=" << totallength <<" mm\n";
+  //cout << "target length=" << totallength/10. *density <<" g/cm**2\n";
+  return 1;
+}
+
+int 
+gasjet::Generate_Vertex(double random[], double x[], double /*wob_x*/, double /*wob_y*/, modeltype ModelType)
+{
+    //cout << "gas jet generate vertex" << endl;
+    //x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x;
+    //x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y;
+    //x[2] = getLength() * (random[2] - .5); //homogeneous
+    //x[2] = getLength() * (random[2] < 0.5 ? sqrt(random[2]/2)-.5 : (0.5-sqrt((1-random[2])/2))); //triangular shape
+
+    x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x + random[3] * gasjet::totalwidth;
+    x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y + random[4] * gasjet::totalheight;
+    x[2] = gasjet::totallength * (random[2]); //homogeneous
+    /*
+    
+    cout << gasjet::totalwidth << endl;
+    cout << gasjet::totalheight << endl;
+    cout << gasjet::totallength << endl;
+
+    cout << random[0] << endl;
+    cout << random[1] << endl;
+    cout << random[2] << endl;
+
+    cout << x[0] << endl;
+    cout << x[1] << endl;
+    cout << x[2] << endl;
+    */
+    //if (fabs(x[2]) > totallength / 2.) 
+    //      return 0; // not inside target  
+  return 1; 
+}
+
+double 
+gasjet::getLength_in_Target(double x, double y, double z, double theta, double phi)
+{
+  //this is not yet so good... improve when needed... assumes a flat foil target, which is wrong here, most of the time result would be cell diameter...7.5mm at the time -> set it to zero as long as not needed (very thin gas target..)
+  return 0;
+  double result;
+  double inv_dx[3] = {sin(theta) * cos(phi),          
+		      sin(theta) * sin(phi),
+		      cos(theta)};
+
+  if (fabs(inv_dx[1]) == 1.) return -1;               // straight up or down
+
+  double zbar = Length / 2. - z;
+  if (theta > M_PI/2) zbar = Length / 2. + z;
+
+  double length = zbar / fabs(cos(theta));
+  if (length > totalwidth)
+    result = totalwidth;
+  else
+    result = fabs(length);
+  cout << "length " << result << "\n";
+  return result;  
+}
+
+int 
 windowlesstube::setPara(double len, double, double density, double, double, double)
 {
   TargetMat->setDensity(density); // [g/cm**3]
@@ -3683,11 +3756,16 @@ SetTargetFromRunDB(const reaction * Reaction)
     if (!strcmp(rundb.target, "CalibWater"    )) Target = new calib_water;
     if (!strcmp(rundb.target, "He3pol"        )) Target = new helium_pol;
     if (!strcmp(rundb.target, "He3pol07"      )) Target = new he_pol_07;
+    if (!strcmp(rundb.target, "gasjet"      )) Target = new gasjet;
   }
+
+  cout << "Target: " << rundb.target << endl;
+
   if (!Target) {
     std::cerr << "No Target defined in 'run.db', using default 'Target=\"Cryo\"'\n";
     Target=new cryo_ewald; 
   }  
+
   
   if (*Reaction->getTarget() == P_H1)       Target->setTargetMat(LH2); 
   if (*Reaction->getTarget() == P_H2)       Target->setTargetMat(LD2);
@@ -3708,8 +3786,12 @@ SetTargetFromRunDB(const reaction * Reaction)
       (!strcmp(rundb.target, "CalibWater"))) Target->setTargetMat(Water);
   if ((*Reaction->getTarget() == P_H1) &&   
       (!strcmp(rundb.target, "Solidstate")))
-    { Target->setTargetMat(CH2);
-      std::cerr<<"Debug: CH2 Material selected\n";
+    { 
+      if (!strcmp(rundb.target, "gasjet")) Target ->setTargetMat(H2);
+      else {
+        Target->setTargetMat(CH2);
+        std::cerr<<"Debug: CH2 Material selected\n";
+      }
     } 
   
   //--- Entries for the two foil target for ISR2014 (Simulation of empty cell)
@@ -3731,6 +3813,9 @@ SetTargetFromRunDB(const reaction * Reaction)
 
   }
 
+  cout << "Reaction target: " << Reaction->getTarget()->getName() << endl;
+  cout << "Properties:" << endl;
+  Target->getTargetMat()->print();
 
   if (!strcmp(rundb.target, "Cryo.Wall")) Target->setTargetMat(LH2);
   if (!strcmp(rundb.target, "Cryo.Empty")) Target->setTargetMat(Vacuum);
