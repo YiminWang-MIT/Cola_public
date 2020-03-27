@@ -4,6 +4,8 @@
 // Main Part of Cindy Online Analysis 
 //
 
+#define YWdebug 0
+
 #define _POSIX_C_SOURCE 2
 
 #include "config.h"                // created by configure
@@ -288,6 +290,8 @@ Cola::readInputFiles(int dorewind)
   rundb.Target.length = rundb.Target.angle = rundb.Target.density = 
     rundb.Target.wallthickness = rundb.Target.snowthickness =
     rundb.Target.snowdensity = 0; 
+
+  rundb.Target.size_length = rundb.Target.size_width = rundb.Target.size_height = 0;
   rundb.Target.snowparam = 0;
   rundb.Target.offset.x = 0;
   rundb.Target.offset.y = 0;
@@ -1810,6 +1814,14 @@ Cola::eventloop()
   online.Vertex.x = online.Vertex.y = online.Vertex.z = 0; 
 
 
+#if YWdebug == 1
+  std::cout << "Initial" << std::endl;
+  std::cout << online.A.vertex.x << '\t' << online.A.vertex.y << '\t' << online.A.vertex.z << std::endl;
+  std::cout << online.B.vertex.x << '\t' << online.B.vertex.y << '\t' << online.B.vertex.z << std::endl;
+  std::cout << online.Vertex.x << '\t' << online.Vertex.y << '\t' << online.Vertex.z << std::endl;
+#endif
+
+
   if (resultA) {
     if (!strcmp(rundb.use_wobbler_adc, "B") 
      && atree->itemOK(&spekB.beam.position) ) {
@@ -1915,6 +1927,14 @@ Cola::eventloop()
     }
   }
 
+#if YWdebug == 1
+  std::cout << "After focus" << std::endl;
+  std::cout << online.A.vertex.x << '\t' << online.A.vertex.y << '\t' << online.A.vertex.z << std::endl;
+  std::cout << online.B.vertex.x << '\t' << online.B.vertex.y << '\t' << online.B.vertex.z << std::endl;
+  std::cout << online.Vertex.x << '\t' << online.Vertex.y << '\t' << online.Vertex.z << std::endl;
+#endif
+
+
   if (!strcmp(rundb.use_wobbler_adc, "enforceWobbler")) {
     //added bss: used for random pulser data, where usually no resultX is valid
     if (atree->itemOK(&spekA.beam.position) ) {
@@ -1934,6 +1954,13 @@ Cola::eventloop()
     }
   }
   
+#if YWdebug == 1
+  std::cout << "Wobbler" << std::endl;
+  std::cout << online.A.vertex.x << '\t' << online.A.vertex.y << '\t' << online.A.vertex.z << std::endl;
+  std::cout << online.B.vertex.x << '\t' << online.B.vertex.y << '\t' << online.B.vertex.z << std::endl;
+  std::cout << online.Vertex.x << '\t' << online.Vertex.y << '\t' << online.Vertex.z << std::endl;
+#endif
+
   // default: automatic determination, B if available, otherwise A or finally C
   if (strcmp(rundb.use_vertex, "A") && strcmp(rundb.use_vertex, "B") && 
       strcmp(rundb.use_vertex, "C") ) {
@@ -1964,6 +1991,13 @@ Cola::eventloop()
       out->packEventData(&online.Vertex.x, 3);
     }
   }
+#if YWdebug == 1
+  std::cout << "Final" << std::endl;
+  std::cout << online.A.vertex.x << '\t' << online.A.vertex.y << '\t' << online.A.vertex.z << std::endl;
+  std::cout << online.B.vertex.x << '\t' << online.B.vertex.y << '\t' << online.B.vertex.z << std::endl;
+  std::cout << online.Vertex.x << '\t' << online.Vertex.y << '\t' << online.Vertex.z << std::endl;
+  std::cout << std::endl;
+#endif
 
   //    if (!resultA && !strcmp(rundb.use_vertex, "A") && 
   //  			  resultB && atree->itemOK(&spekB.beam.position)) {
@@ -2141,6 +2175,8 @@ Cola::eventloop()
     out->packEventData(&online.B.ScintCorr,1);
     out->packEventData(&online.B.Extended,1);
     out->packEventData(&online.B.ScintDist,1);
+
+    //cout << online.B.TimeAtTarget << endl;
   }
   
   if (online.C.trigger) {

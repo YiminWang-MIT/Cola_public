@@ -119,10 +119,9 @@ double windowlesstube::totalwidth       =   7.500000; //cell radius [mm]
 double windowlesstube::totalheight      =   10.000000;
 
 // Gas jet Target
+// Nothing here, gas jet target parameters are not static
+// so that they can be modified during run time.
 
-double gasjet::totallength      =   25; 
-double gasjet::totalwidth       =   0.113; 
-double gasjet::totalheight      =   0.376;
 
 // Waterfall-Target
 
@@ -3756,7 +3755,8 @@ SetTargetFromRunDB(const reaction * Reaction)
     if (!strcmp(rundb.target, "CalibWater"    )) Target = new calib_water;
     if (!strcmp(rundb.target, "He3pol"        )) Target = new helium_pol;
     if (!strcmp(rundb.target, "He3pol07"      )) Target = new he_pol_07;
-    if (!strcmp(rundb.target, "gasjet"      )) Target = new gasjet;
+    if (!strcmp(rundb.target, "gasjet"      ))
+      Target = new gasjet(rundb.Target.size_length, rundb.Target.size_height, rundb.Target.size_width);
   }
 
   cout << "Target: " << rundb.target << endl;
@@ -3787,11 +3787,11 @@ SetTargetFromRunDB(const reaction * Reaction)
   if ((*Reaction->getTarget() == P_H1) &&   
       (!strcmp(rundb.target, "Solidstate")))
     { 
-      if (!strcmp(rundb.target, "gasjet")) Target ->setTargetMat(H2);
-      else {
+      //if (!strcmp(rundb.target, "gasjet")) Target ->setTargetMat(H2);
+      //else {
         Target->setTargetMat(CH2);
         std::cerr<<"Debug: CH2 Material selected\n";
-      }
+      //}
     } 
   
   //--- Entries for the two foil target for ISR2014 (Simulation of empty cell)

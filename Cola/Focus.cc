@@ -8,6 +8,8 @@
 // Wobbler and long target corrections
 //
 
+#define YWdebug 0
+
 #define _DEFAULT_SOURCE 1
 #define _XOPEN_SOURCE 1
 #include <stdio.h>
@@ -61,12 +63,18 @@ WobblerB::WobblerB(double oHB, double factorHB, double oVB, double factorVB)
 double
 WobblerB::horB(unsigned short position)
 {
+#if YWdebug
+  std::cout << "horB\t" << (position >> 8 & 0xff) << '\t' << factHB << '\t' << offsHB << std::endl;
+#endif
   return factHB * (offsHB + (position >> 8 & 0xff));
 }
 
 double
 WobblerB::vertB(unsigned short position)
 {
+#if YWdebug
+  std::cout << "vertB\t" << (position & 0xff) << '\t' << factVB << '\t' << offsVB << std::endl;
+#endif
   return factVB * (offsVB + (position & 0xff));
 }
 

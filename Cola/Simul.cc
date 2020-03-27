@@ -4,7 +4,7 @@
 // Main part of Cola Simulation program "Simul++"
 //
 
-#define YWDEBUG 0
+#define YWdebug 0
 #define _POSIX_C_SOURCE 2
 #define _DEFAULT_SOURCE    1
 
@@ -423,6 +423,7 @@ Simul::Simul()
 			       &online.A.Eloss_corr, &online.A.Eloss_sim,
 			       0.110, 0.08, 0.10*1.2, rundb.A.oopangle * rad);
   */
+
   sim[0] = new simSpectrometer(this->out, - rundb.A.angle * rad, 
 			       rundb.A.angularResolution  / 1000,
 			       rundb.A.angularResolution2 / 1000,
@@ -931,6 +932,13 @@ Simul::eventloop()
                rundb.sim.woby, ModelType)) return 0;
   }
 
+#if YWdebug == 1
+
+  cout << targetpos_tar[0] << endl;
+  cout << targetpos_tar[1] << endl;
+  cout << targetpos_tar[2] << endl;
+#endif
+
   //save target position and helicity
   if (TriplePolNS::mode==3) {
     TriplePolNS::buf[0] = targetpos_tar[0];
@@ -968,6 +976,13 @@ Simul::eventloop()
 			      targetpos_tar[1] + rundb.Target.offset_sim.y,
 			      targetpos_tar[2] + rundb.Target.offset_sim.z};
 
+#if YWdebug == 1
+
+  cout << targetpos_hall[0] << endl;
+  cout << targetpos_hall[1] << endl;
+  cout << targetpos_hall[2] << endl;
+  cout << endl;
+#endif
   // beam and target offsets are relative to hall system
   // ---- ????? Why again. Because of that all particles have wrong elos corrections!
 

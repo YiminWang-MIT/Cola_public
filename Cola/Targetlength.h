@@ -390,9 +390,10 @@ public:
 
 class gasjet: public target {
 private:
-  static double totallength, totalheight, totalwidth;
+  double totallength, totalheight, totalwidth;
 public:
   gasjet() { Length = totallength; cout << "Gasjet length = " << totallength << endl;}
+  gasjet(double length, double height, double width): totallength{length}, totalheight{height}, totalwidth{width} {};
   virtual ~gasjet() { ; }
   
   double getLength_in_Target(double x, double y, double z, 

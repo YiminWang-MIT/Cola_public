@@ -5,7 +5,7 @@
 Chamber::Chamber(char * filename)
 {
  
-  //  std::cout <<"Chamber filename is"<<filename<<std::endl;
+  //std::cout <<"Chamber filename is"<<filename<<std::endl;
   std::ifstream file(filename, std::ios::in |std::ios::binary);
   if (!file) 
     {
