@@ -398,6 +398,18 @@ void GeneratorRadiative::Initialize()
       y_sample[i] = i_sample->Integral(intstart, intend);
     }
   }
+  /*
+  std::cout << thetaMax << "\t" << thetaMin << "\t" << std::endl;
+  for (int i = 0; i < sampleInterPoints; i++){
+    std::cout << x_cosTheta[i] << "\t";
+  }
+  std::cout << std::endl;
+
+  for (int i = 0; i < sampleInterPoints; i++){
+    std::cout << x_sample[i] << "\t";
+  }
+  std::cout << std::endl;
+  */
 
   // Interpolate:
   inter_brem_ee->SetData(InterpolPoints, x_cosTheta, y_brem_ee); // Lepton term

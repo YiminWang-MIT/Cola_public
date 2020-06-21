@@ -441,20 +441,41 @@ Simul::Simul()
   // Spectrometer B
   if (rundb.B.left) rundb.B.angle  = -rundb.B.angle;
 
+  // Here the angles are target coordinates
+  // Bdphi -> theta ; Bdtheta -> phi
   double Bdphi   = 0.025;
   double Bdtheta = 0.080;
   double Bpacc   = 7.5;
   double Bdp     = 0.075 * 1.2;
 
+  //std::cout << "Default Bdphi = " << Bdphi << "\t" << "Bdtheta = " << Bdtheta <<std::endl;
 
   if (!strncmp(rundb.B.collimator, "(", 1)) {
+    //Format for the collimator name
+    //           (%.1f+%.1f)x(%.1f+%.1f)
+    //locations:  0    1      2    3
+    int loc1=0, loc2=0, loc3=0;
+    for (int i = 0; (rundb.B.collimator[i]!='s') & (i<50); i++){
+      if (rundb.B.collimator[i]=='+'){
+        if (loc1!=0){
+          loc3=i+1;
+          break;
+        } else loc1=i+1;
+      }
+
+      if (rundb.B.collimator[i]=='x')
+        loc2=i+2;
+    }
+
+    //std::cout << loc1 << '\t' << loc2 << '\t' << loc3 << std::endl;
 
     double horiL = atof(rundb.B.collimator+1);
-    double horiR = atof(rundb.B.collimator+5);
-    double vertT = atof(rundb.B.collimator+11);
-    double vertB = atof(rundb.B.collimator+15);
+    double horiR = atof(rundb.B.collimator+loc1);
+    double vertT = atof(rundb.B.collimator+loc2);
+    double vertB = atof(rundb.B.collimator+loc3);
     Bdphi   = (horiL>horiR?horiL:horiR)/1000.0 + 0.005; 
     Bdtheta = (vertT>vertB?vertT:vertB)/1000.0 + 0.005;
+    //std::cout << "Bdphi = " << Bdphi << "\t" << "Bdtheta = " << Bdtheta <<std::endl;
   }
 
   if (!strncmp(rundb.B.collimator, "HES", 1)) {
@@ -497,6 +518,7 @@ Simul::Simul()
 			       Bdphi, Bdtheta, Bdp,
 			       - rundb.B.oopangle * rad,
 			       decay,rundb.B.simChamber);
+
   // Spectrometer C
   sim[2] = new simSpectrometer(this->out, rundb.C.angle * rad, 
 			       rundb.C.angularResolution  / 1000,
