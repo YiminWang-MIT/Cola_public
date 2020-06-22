@@ -37,8 +37,17 @@ void GeneratorRadiative::setThetaRange(double thetamin,double thetamax)
 {
   thetaMin=thetamin;//*M_PI/180.;
   thetaMax=thetamax;//*M_PI/180.;
-  cosThetaMin=cos(thetaMin);
-  cosThetaDelta=cos(thetaMax)-cosThetaMin;
+  //cosThetaMin is cos(ThetaMin)
+  //It should give the highest cosTheta value, assuming theta being positive
+  //If both theta's are negative
+  //cosThetaMin should be cos(ThetaMax) instead
+  if ((thetamin>0) & (thetamax>0)) {
+    cosThetaMin=cos(thetaMin);
+    cosThetaDelta=cos(thetaMax)-cosThetaMin;
+  } else {
+    cosThetaMin=cos(thetaMax);
+    cosThetaDelta=cos(thetaMin)-cosThetaMin;
+  }
   recalcWeight();
 }
 
@@ -258,6 +267,8 @@ void GeneratorRadiative::Initialize()
   for (int i = 0; i < InterpolPoints; i++)
   {
     // Theta angle for the lepton:
+    // Start at upper limit in angle, smallest value in theta, thus cos(ThetaMin) not (cosTheta)min
+    // If theta is negative, then this will cause a problem
     double cosTheta = cosThetaMin + cosThetaDelta - i*cosThetaDelta/(InterpolPoints - 1);
     double theta = acos(cosTheta);
 
@@ -398,6 +409,7 @@ void GeneratorRadiative::Initialize()
       y_sample[i] = i_sample->Integral(intstart, intend);
     }
   }
+  
   /*
   std::cout << thetaMax << "\t" << thetaMin << "\t" << std::endl;
   for (int i = 0; i < sampleInterPoints; i++){
