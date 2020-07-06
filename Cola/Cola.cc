@@ -47,7 +47,7 @@ struct hbookmem {
 char *ntvarn[MAX_NT_VAR];  // Scalar name related to ntvar
 char *ntdes[MAX_NT_VAR];    // NTvariable name
 char *ntbck[MAX_NT_VAR];    // Block name for each ntvar
-char *nttitle;     // Ntuple Title
+char *nttitle;     // Ntuple Title 
 int  ntiden, ntnvar;
 
 #define dv (-4711)             // That's the default value for "not valid"
@@ -1086,6 +1086,7 @@ Cola::readInputFiles(int dorewind)
 int 
 Cola::eventloop()
 {  
+  //std::cout << "Event " << events << std::endl;
   struct MpsDataA& spekA = abcn.a;
   struct MpsDataB& spekB = abcn.b;
   struct MpsDataC& spekC = abcn.c;
@@ -1329,6 +1330,7 @@ Cola::eventloop()
   online.A.vdcOK = online.B.vdcOK = online.C.vdcOK = 0; 
   online.A.trigger = online.B.trigger = online.C.trigger = online.D.trigger 
     = online.kaos.trigger = 0;
+  online.A.p4_recon = online.B.p4_recon = online.C.p4_recon = 0;
   online.A.TimeAtTarget = online.B.TimeAtTarget = online.C.TimeAtTarget 
     = online.kaos.TimeAtTarget = 0;
 
@@ -1397,10 +1399,17 @@ Cola::eventloop()
   /////////////////////////////////////////////////////////////////////////////
   online.ndet.trigger = (abcn.n.sync_info & 0x8000);
   
+  //std::cout << events << std::endl;
+  //std::cout << online.A.trigger << '\t' << online.B.trigger << '\t' << online.C.trigger << std::endl;
+  //std::cout << online.A.p4_recon << '\t' << online.B.p4_recon << '\t' << online.C.p4_recon << std::endl;
 
   out->packEventData(&online.A.trigger, 1);
   out->packEventData(&online.B.trigger, 1);
   out->packEventData(&online.C.trigger, 1);
+  out->packEventData(&online.A.p4_recon, 1);
+  out->packEventData(&online.B.p4_recon, 1);
+  out->packEventData(&online.C.p4_recon, 1);
+  /////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////
   // Detector components
   /////////////////////////////////////////////////////////////////////////////
@@ -2048,6 +2057,7 @@ Cola::eventloop()
   } 
 
   if (resultA && fabs(resultA->dp)<100) {
+    online.A.p4_recon = 1;
     lasttriggerA = 0;
     A_Out = particle(A_Out.getMass(), qsddaMomentum * (1 + resultA->dp/100),
 		     -qsddaAngle, -resultA->ph/1000, resultA->th/1000);
@@ -2123,6 +2133,7 @@ Cola::eventloop()
   }
   
   if (resultB && fabs(resultB->dp)<100) {
+    online.B.p4_recon = 1;
     lasttriggerB = 0;
 
     B_Out = particle(B_Out.getMass(), 
