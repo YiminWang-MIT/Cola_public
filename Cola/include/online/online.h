@@ -140,6 +140,7 @@ struct Spectrometer {
     spectrometer relativ to hall system */ struct vertex vertex;
   /** trigger information != 0 for hits */ int trigger;
   /** momentum 4 vector reconstructed   */ int p4_recon;
+  /** Target coordinate reasonable      */ int target_coor_ok;
   /** Hit position x in scintillator    */ double x_scint;
   /** Hit position y in scintillator    */ double y_scint;
   /** Number of paddle from pattern     */ int Index_pattern;

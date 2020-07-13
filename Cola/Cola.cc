@@ -1331,6 +1331,7 @@ Cola::eventloop()
   online.A.trigger = online.B.trigger = online.C.trigger = online.D.trigger 
     = online.kaos.trigger = 0;
   online.A.p4_recon = online.B.p4_recon = online.C.p4_recon = 0;
+  online.A.target_coor_ok = online.B.target_coor_ok = online.C.target_coor_ok = 0;
   online.A.TimeAtTarget = online.B.TimeAtTarget = online.C.TimeAtTarget 
     = online.kaos.TimeAtTarget = 0;
 
@@ -1409,6 +1410,9 @@ Cola::eventloop()
   out->packEventData(&online.A.p4_recon, 1);
   out->packEventData(&online.B.p4_recon, 1);
   out->packEventData(&online.C.p4_recon, 1);
+  out->packEventData(&online.A.target_coor_ok, 1);
+  out->packEventData(&online.B.target_coor_ok, 1);
+  out->packEventData(&online.C.target_coor_ok, 1);
   /////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////
   // Detector components
@@ -1496,6 +1500,7 @@ Cola::eventloop()
     if (online.A.vdcOK && vdcA->handle(xA, tA, yA, pA)) 
       if (fabs(xA) < 3000 && fabs(yA) < 1000)  {
 	// only run tma if coordinates are reasonable
+  online.A.p4_recon=1;
 	resultA = tmaA->run(xA, tA, yA, pA);      
 	targetFillHisto(&online.A.target, resultA, out);
 	online.A.len = resultA->len;
@@ -1513,6 +1518,7 @@ Cola::eventloop()
     if (online.B.vdcOK && vdcB->handle(xB, tB, yB, pB)) 
       if (fabs(xB) < 3000 && fabs(yB) < 1000) {
       // only run tma if coordinates are reasonable
+      online.B.p4_recon=1;
       resultB = tmaB->run(xB, tB, yB, pB);
       targetFillHisto(&online.B.target, resultB, out);
       online.B.len = resultB->len;
@@ -2057,7 +2063,7 @@ Cola::eventloop()
   } 
 
   if (resultA && fabs(resultA->dp)<100) {
-    online.A.p4_recon = 1;
+    online.A.target_coor_ok = 1;
     lasttriggerA = 0;
     A_Out = particle(A_Out.getMass(), qsddaMomentum * (1 + resultA->dp/100),
 		     -qsddaAngle, -resultA->ph/1000, resultA->th/1000);
@@ -2133,7 +2139,7 @@ Cola::eventloop()
   }
   
   if (resultB && fabs(resultB->dp)<100) {
-    online.B.p4_recon = 1;
+    online.B.target_coor_ok = 1;
     lasttriggerB = 0;
 
     B_Out = particle(B_Out.getMass(), 
