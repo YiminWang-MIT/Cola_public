@@ -32,6 +32,7 @@ protected:
   HIST *pos;
   HIST *bad;
   HIST *good;
+  HIST *tvw;
 public:
   vdcHIST(AquaTree *atree, VdcPlane *vdcplane, struct vdc *onlptr);
   virtual ~vdcHIST();

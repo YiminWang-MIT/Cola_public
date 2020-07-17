@@ -57,6 +57,8 @@ vdcHIST::vdcHIST(AquaTree *atree, VdcPlane *vdcplane, struct vdc *onlptr)
   cell  = HMFind(title);
   sprintf(title, "Spec. %c/%s-layer/Width of Cell", spec, pstr);
   pos   = HMFind(title);
+  sprintf(title, "Spec. %c/%s-layer/Time vs Wire", spec, pstr);
+  tvw = HMFind(title);
 }  
 
 vdcHIST::~vdcHIST()
@@ -110,6 +112,7 @@ int vdcHIST::handle(int npaddle)
       // Good wires
       HMFill(good, wire_ptr[num], 0, 1);
       HMFill(drift, time_ptr[num], 0, 1);
+      HMFill(tvw, wire_ptr[num], time_ptr[num], 1);
       if (paddle[npaddle])
 	HMFill(paddle[npaddle], time_ptr[num], 0, 1);
     }
