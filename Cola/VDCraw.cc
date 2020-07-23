@@ -61,6 +61,8 @@ vdcHIST::vdcHIST(AquaTree *atree, VdcPlane *vdcplane, struct vdc *onlptr)
   tvw = HMFind(title);
   sprintf(title, "Spec. %c/%s-layer/Minimal Drift Time", spec, pstr);
   minDriftTime = HMFind(title);
+  sprintf(title, "Spec. %c/%s-layer/MDT vs Nr", spec, pstr);
+  mDT_Nwire= HMFind(title);
 }  
 
 vdcHIST::~vdcHIST()
@@ -107,12 +109,13 @@ int vdcHIST::handle(int npaddle)
   out->packEventData(&onl->raw_wire[0],    8);
 
   double minimalDriftTime=50000;
-
+  int totalWire = 0;
   while (num-- > 0) { 
     if (num >= plane->GoodWires())
       // Bad wires
       HMFill(bad, wire_ptr[num], 0, 1);
     else {
+      totalWire++;
       // Good wires
       HMFill(good, wire_ptr[num], 0, 1);
       HMFill(drift, time_ptr[num], 0, 1);
@@ -125,6 +128,7 @@ int vdcHIST::handle(int npaddle)
     HMFill(wire,  wire_ptr[num], 0, 1);
   }
   HMFill(minDriftTime, minimalDriftTime, 0, 1);
+  HMFill(mDT_Nwire, minimalDriftTime, totalWire, 1);
   
   const float *path = plane->DriftPath();
   const float *corr = plane->DriftCorrection();
