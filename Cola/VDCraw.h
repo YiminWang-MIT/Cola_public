@@ -33,6 +33,7 @@ protected:
   HIST *bad;
   HIST *good;
   HIST *tvw;
+  HIST *minDriftTime;
 public:
   vdcHIST(AquaTree *atree, VdcPlane *vdcplane, struct vdc *onlptr);
   virtual ~vdcHIST();
