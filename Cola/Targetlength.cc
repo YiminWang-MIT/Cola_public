@@ -2577,7 +2577,7 @@ double solidstate::getangle ( )
 int 
 gasjet::setPara(double len, double, double density, double, double, double)
 {
-  TargetMat->setDensity(density); // [g/cm**3]
+  //TargetMat->setDensity(density); // [g/cm**3]
   //totallength = len; // [mm]
   //Length = totallength; //historically left over from Length = totallength / cos(angle_tar), where angle_tar flew out..
   //cout << "density " << density << " g/cm**3\n";
@@ -2589,6 +2589,7 @@ gasjet::setPara(double len, double, double density, double, double, double)
 int 
 gasjet::Generate_Vertex(double random[], double x[], double /*wob_x*/, double /*wob_y*/, modeltype ModelType)
 {
+  //returns targetpos_tar 
   x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x + random[3] * gasjet::totalwidth;
   x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y + random[4] * gasjet::totalheight;
   x[2] = gasjet::totallength * (random[2]); //homogeneous
@@ -2616,10 +2617,7 @@ gasjet::GaussianCDF(double x)
 double 
 gasjet::getLength_in_Target(double x, double y, double z, double theta, double phi)
 {
-  //x -= rundb.Target.offset_sim.x; //bss: this function is called from deep inside of simDetectorBase or so, it gets targetpos_hall coords!!! here we wanna have targetpos_tar coords for ELOSS in target!
-  //y -= rundb.Target.offset_sim.y; 
-  //z -= rundb.Target.offset_sim.z; 
-
+  // x,y,z are targetpos_tar
 
   // The actual length is an integration of the target density
   // The target has 2D Gaussian distribution in x-z plane with the same variable stored in totallength
@@ -2651,24 +2649,27 @@ gasjet::getLength_in_Target(double x, double y, double z, double theta, double p
 
 void gasjet::EnergyLossSim(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to the end of the cell
 {
-  x -= rundb.Target.offset_sim.x; //bss: this function is called from deep inside of simDetectorBase or so, it gets targetpos_hall coords!!! here we wanna have targetpos_tar coords for ELOSS in target!
-  y -= rundb.Target.offset_sim.y; 
-  z -= rundb.Target.offset_sim.z; 
+  // x,y,z are targetpos_tar
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
 
-  //double old_momentum;
-  // calcultate the loss in the order the electron is going through the materials of the cell, it could be, that if the particle vertex is in the ice that only SnowPath2 is greater than 0
+  double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
+  std::cout << "Energy loss = " << deltaE << std::endl;
+  P += deltaE;
 
-  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi()) / 10;
-
+  return;
 }
   
 void gasjet::EnergyLossSimBeam(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
 {
-  double old_momentum;
-  // calcultate the loss in the order the electron is going through the materials of the cell, it could be, that if the particle vertex is in the ice that only SnowPath2 is greater than 0
+  // x,y,z are targetpos_tar
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
 
-  double pathlength = getLength_in_Target(x, y, z, M_PI, 0.) / 10;
-  //LandauLoss ( P, FrozenAir, SnowPath1, halton[17], halton[18] );	  
+  double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
+  P += deltaE;
+
+  std::cout << "Energy loss = " << deltaE << std::endl;
+
+  return;
 }
 
 int 
@@ -3786,7 +3787,7 @@ SetTargetFromRunDB(const reaction * Reaction)
     if (!strcmp(rundb.target, "He3pol"        )) Target = new helium_pol;
     if (!strcmp(rundb.target, "He3pol07"      )) Target = new he_pol_07;
     if (!strcmp(rundb.target, "gasjet"      ))
-      Target = new gasjet(rundb.Target.size_length, rundb.Target.size_height, rundb.Target.size_width);
+      Target = new gasjet(rundb.Target.size_length, rundb.Target.size_height, rundb.Target.size_width, rundb.Target.flow);
   }
 
   cout << "Target: " << rundb.target << endl;
@@ -3796,8 +3797,10 @@ SetTargetFromRunDB(const reaction * Reaction)
     Target=new cryo_ewald; 
   }  
 
+  if (*Reaction->getTarget() == P_H1)
+    if (strcmp(rundb.target, "gasjet"))
+      Target->setTargetMat(LH2); 
   
-  if (*Reaction->getTarget() == P_H1)       Target->setTargetMat(LH2); 
   if (*Reaction->getTarget() == P_H2)       Target->setTargetMat(LD2);
   if (*Reaction->getTarget() == P_He3)      Target->setTargetMat(He3);
   if (*Reaction->getTarget() == P_He4)      Target->setTargetMat(He4);

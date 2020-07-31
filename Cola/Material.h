@@ -115,6 +115,10 @@ class Compound : public Material
 ///
 extern  Material * H1;
 ///
+extern  Material * H2HighFlow;
+///
+extern  Material * H2LowFlow;
+///
 extern  Material * LH2;
 ///
 extern  Material * LD2;
