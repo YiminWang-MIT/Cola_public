@@ -391,6 +391,7 @@ public:
 class gasjet: public target {
 private:
   double totallength, totalheight, totalwidth;
+  double GaussianCDF(double x);
 public:
   gasjet() { Length = totallength; cout << "Gasjet length = " << totallength << endl;}
   gasjet(double length, double height, double width): totallength{length}, totalheight{height}, totalwidth{width} {};
@@ -402,6 +403,10 @@ public:
   int setPara(double length, double angle,
 	      double density, double wallthck,
 	      double snowthck, double snowdns);
+  virtual void EnergyLossSim(Particle& P, double x, double y, double z,
+      int steps, modeltype ModelType);
+  virtual void EnergyLossSimBeam(Particle& P,double x, double y, double z,
+      int steps, modeltype ModelType);
 };
 
 

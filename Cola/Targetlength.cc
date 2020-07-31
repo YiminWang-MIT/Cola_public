@@ -2589,56 +2589,86 @@ gasjet::setPara(double len, double, double density, double, double, double)
 int 
 gasjet::Generate_Vertex(double random[], double x[], double /*wob_x*/, double /*wob_y*/, modeltype ModelType)
 {
-    //cout << "gas jet generate vertex" << endl;
-    //x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x;
-    //x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y;
-    //x[2] = getLength() * (random[2] - .5); //homogeneous
-    //x[2] = getLength() * (random[2] < 0.5 ? sqrt(random[2]/2)-.5 : (0.5-sqrt((1-random[2])/2))); //triangular shape
+  x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x + random[3] * gasjet::totalwidth;
+  x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y + random[4] * gasjet::totalheight;
+  x[2] = gasjet::totallength * (random[2]); //homogeneous
 
-    x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x + random[3] * gasjet::totalwidth;
-    x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y + random[4] * gasjet::totalheight;
-    x[2] = gasjet::totallength * (random[2]); //homogeneous
-    /*
-    
-    cout << gasjet::totalwidth << endl;
-    cout << gasjet::totalheight << endl;
-    cout << gasjet::totallength << endl;
-
-    cout << random[0] << endl;
-    cout << random[1] << endl;
-    cout << random[2] << endl;
-
-    cout << x[0] << endl;
-    cout << x[1] << endl;
-    cout << x[2] << endl;
-    */
-    //if (fabs(x[2]) > totallength / 2.) 
-    //      return 0; // not inside target  
   return 1; 
+}
+
+double 
+gasjet::GaussianCDF(double x)
+{
+  // http://people.math.sfu.ca/~cbm/aands/page_932.htm
+  // Fomula 26.2.17
+  double tempx = x;
+  x = abs(x);
+  double b1=0.319381530, b2=-0.356563782, b3=1.781477937, b4=-1.821255978, b5=1.330274429;
+  double phix = 1/sqrt(2*M_PI)*exp(-0.5*x*x);
+  double t=1./(1+0.2316419*x);
+  double cdfx = phix*(b1*t+b2*t*t+b3*pow(t,3)+b4*pow(t,4)+b5*pow(t,5));
+  if (tempx>0)
+    return 1-cdfx;
+  else
+    return cdfx;
 }
 
 double 
 gasjet::getLength_in_Target(double x, double y, double z, double theta, double phi)
 {
-  //this is not yet so good... improve when needed... assumes a flat foil target, which is wrong here, most of the time result would be cell diameter...7.5mm at the time -> set it to zero as long as not needed (very thin gas target..)
-  return 0;
-  double result;
-  double inv_dx[3] = {sin(theta) * cos(phi),          
-		      sin(theta) * sin(phi),
-		      cos(theta)};
+  //x -= rundb.Target.offset_sim.x; //bss: this function is called from deep inside of simDetectorBase or so, it gets targetpos_hall coords!!! here we wanna have targetpos_tar coords for ELOSS in target!
+  //y -= rundb.Target.offset_sim.y; 
+  //z -= rundb.Target.offset_sim.z; 
 
-  if (fabs(inv_dx[1]) == 1.) return -1;               // straight up or down
 
-  double zbar = Length / 2. - z;
-  if (theta > M_PI/2) zbar = Length / 2. + z;
+  // The actual length is an integration of the target density
+  // The target has 2D Gaussian distribution in x-z plane with the same variable stored in totallength
+  // The target thickness is invariant in y direction
+  //
+  // Absolute distance in x-z plane
+  double distance_to_center, depth_in_target;
+  //circle in x-z plane, y does not change thickness
+  if (theta==0){ //incoming
+    // actuall z and x if phi=0
+    distance_to_center = x;
+    depth_in_target = z;
+  }
+  else{ // outgoing
+    double direction_x=sin(theta), direction_z=cos(theta);
+    distance_to_center = -direction_x*z + direction_z*x;
+    depth_in_target = direction_x*x+direction_z*z;
+  }
 
-  double length = zbar / fabs(cos(theta));
-  if (length > totalwidth)
-    result = totalwidth;
-  else
-    result = fabs(length);
-  cout << "length " << result << "\n";
-  return result;  
+  //normalized to std
+  distance_to_center/=gasjet::totallength;
+  depth_in_target=depth_in_target/gasjet::totallength;
+
+  double thickness = exp(-pow(distance_to_center,2)/2) * gasjet::GaussianCDF(-depth_in_target);//from here to +inf = from -inf to here
+
+  //thickness adjustion from y
+  return thickness/abs(cos(phi));
+}
+
+void gasjet::EnergyLossSim(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to the end of the cell
+{
+  x -= rundb.Target.offset_sim.x; //bss: this function is called from deep inside of simDetectorBase or so, it gets targetpos_hall coords!!! here we wanna have targetpos_tar coords for ELOSS in target!
+  y -= rundb.Target.offset_sim.y; 
+  z -= rundb.Target.offset_sim.z; 
+
+  //double old_momentum;
+  // calcultate the loss in the order the electron is going through the materials of the cell, it could be, that if the particle vertex is in the ice that only SnowPath2 is greater than 0
+
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi()) / 10;
+
+}
+  
+void gasjet::EnergyLossSimBeam(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
+{
+  double old_momentum;
+  // calcultate the loss in the order the electron is going through the materials of the cell, it could be, that if the particle vertex is in the ice that only SnowPath2 is greater than 0
+
+  double pathlength = getLength_in_Target(x, y, z, M_PI, 0.) / 10;
+  //LandauLoss ( P, FrozenAir, SnowPath1, halton[17], halton[18] );	  
 }
 
 int 
