@@ -2649,11 +2649,16 @@ gasjet::getLength_in_Target(double x, double y, double z, double theta, double p
 
 void gasjet::EnergyLossSim(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to the end of the cell
 {
-  // x,y,z are targetpos_tar
+  // x,y,z are targetpos_hall, different from EnergyLossSimBeam
+  x -= rundb.Target.offset_sim.x; 
+  y -= rundb.Target.offset_sim.y; 
+  z -= rundb.Target.offset_sim.z; 
+
   double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
 
   double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
-  std::cout << "Energy loss = " << deltaE << std::endl;
+  std::cout << "Out Energy" << P << std::endl;
+  std::cout << "Out Energy loss = " << deltaE*1e6 << "keV" << std::endl;
   P += deltaE;
 
   return;
@@ -2667,7 +2672,8 @@ void gasjet::EnergyLossSimBeam(Particle& P, double x, double y, double z, int st
   double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
   P += deltaE;
 
-  std::cout << "Energy loss = " << deltaE << std::endl;
+  std::cout << "In Energy" << P << std::endl;
+  std::cout << "Beam in Energy loss = " << deltaE*1e6 << "keV" << std::endl;
 
   return;
 }

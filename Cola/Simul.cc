@@ -1060,7 +1060,7 @@ Simul::eventloop()
   
   Reaction->electronIn.setMomentum(0, 0, BeamMomentum);
   if (ergloss) {
-    target->EnergyLossSimBeam(Reaction->electronIn, targetpos_tar[0], targetpos_tar[1], targetpos_tar[2], steps_beam, ModelType);//ehemals FIXME
+    target->EnergyLossSimBeam(Reaction->electronIn, targetpos_tar[0], targetpos_tar[1], targetpos_tar[2], steps_beam, ModelType);
 
 #ifdef __ColaMIT__
     online.beam.Eloss_sim = (BeamEnergy - Reaction->electronIn.energy());
