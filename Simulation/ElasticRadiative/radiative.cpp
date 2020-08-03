@@ -298,8 +298,10 @@ void GeneratorRadiative::Initialize()
       (alpha/M_PI)*(3.*TMath::Log(el.Q2()/(me*me))/2. - 2.);
   }
 
+  char* path="/home/maxwellwym/source/A1Cola/Simulation/ElasticRadiative/";
+
   // Vacuum polarization -- From Fedor Ignatov's calculation, as used in ESEPP
-  FILE *fvpol = fopen("/usr/local/src/Cola/Simulation/ElasticRadiative/vpol.dat", "r"); // Opening the file "vpol.dat"
+  FILE *fvpol = fopen(strcat(path,"vpol.dat"), "r"); // Opening the file "vpol.dat"
   if (fvpol == NULL) { std::cerr << "Can't open file \"vpol.dat\"!" << std::endl; }
   int np_vpol = 0;
   char str_vpol[128];
@@ -349,9 +351,9 @@ void GeneratorRadiative::Initialize()
   {
     FILE *intdata = NULL;
     if (beamCharge==1)
-      intdata = fopen("/usr/local/src/Cola/Simulation/ElasticRadiative/sampleintegral_pos.dat", "r");
+      intdata = fopen(strcat(path,"sampleintegral_pos.dat"), "r");
     else if (beamCharge==-1)
-      intdata = fopen("/usr/local/src/Cola/Simulation/ElasticRadiative/sampleintegral_ele.dat", "r");
+      intdata = fopen(strcat(path,"sampleintegral_ele.dat"), "r");
     else
       std::cerr << "beamCharge is set to " << beamCharge << ". We don't recognize this." << std::endl;
 
@@ -432,7 +434,7 @@ void GeneratorRadiative::Initialize()
   inter_sample->SetData(sampleInterPoints, x_sample, y_sample); // Sampling distribution
 
   // Interpolate Jan's form factor fits (from global cross section and polarized data)
-  FILE *ffdata = fopen("/usr/local/src/Cola/Simulation/ElasticRadiative/ff_splinefits.dat", "r");
+  FILE *ffdata = fopen(strcat(path,"ff_splinefits.dat"), "r");
   if (ffdata == NULL) { std::cout << "Can't open file \"ff_splinefits.dat\"!" << std::endl; }
 
   inter_splineGE = new ROOT::Math::Interpolator(1000, ROOT::Math::Interpolation::kCSPLINE);
