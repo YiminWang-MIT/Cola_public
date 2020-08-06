@@ -1058,9 +1058,13 @@ Simul::eventloop()
 
   // energyloss of incoming electron
   
+  double norm_multiplescattering[2] = {norm(), norm()};
   Reaction->electronIn.setMomentum(0, 0, BeamMomentum);
   if (ergloss) {
     target->EnergyLossSimBeam(Reaction->electronIn, targetpos_tar[0], targetpos_tar[1], targetpos_tar[2], steps_beam, ModelType);
+    if (ModelType == ElasticRadiative) {
+      target->MultipleScattering(Reaction->electronIn, norm_multiplescattering, targetpos_tar[0], targetpos_tar[1], targetpos_tar[2], steps_beam, ModelType);
+    }
 
 #ifdef __ColaMIT__
     online.beam.Eloss_sim = (BeamEnergy - Reaction->electronIn.energy());

@@ -657,10 +657,10 @@ Element *E_H1        = new Element( 1,   1.01,  0.0838 / 1000, -9.5835, 0.14092,
 Material *H1 = E_H1; 
 
 /* Gas Jet target high/low flow */
-Element *E_H1_HF        = new Element( 1,   1.01,  2.23e-5 , -9.5835, 0.14092, 5.7273, 1.8639, 3.2718);
+Element *E_H1_HF        = new Element( 1,   1.01,  2.23e-6 , -9.5835, 0.14092, 5.7273, 1.8639, 3.2718);
 Material *H2HighFlow = E_H1_HF; 
 
-Element *E_H1_LF       = new Element( 1,   1.01,  2.23e-5/1200*50, -9.5835, 0.14092, 5.7273, 1.8639, 3.2718);
+Element *E_H1_LF       = new Element( 1,   1.01,  2.23e-6/1200*50, -9.5835, 0.14092, 5.7273, 1.8639, 3.2718);
 Material *H2LowFlow = E_H1_LF; 
 
 // old density for liquid hydrogen of 0.0708 g/cm3 is valid

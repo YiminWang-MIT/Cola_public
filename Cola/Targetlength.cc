@@ -12,6 +12,7 @@
 #include "Targetlength.h"
 #include "rundatabase.h"
 #include "Radiation.h"
+#include "FourVector/FourVector.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -2678,6 +2679,28 @@ void gasjet::EnergyLossSimBeam(Particle& P, double x, double y, double z, int st
   return;
 }
 
+void gasjet::MultipleScattering(Particle& P, double random[], double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
+{
+  std::cout << "In Momentum" << P << std::endl;
+  // x,y,z are targetpos_tar
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
+
+  double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
+
+  double theta0 = 13.6/P.energy()*sqrt(pathlength/gasjet::TargetMat->DC_x0)*(1+0.088*log(pathlength/gasjet::TargetMat->DC_x0));
+
+  double newtheta = P.theta()+theta0*random[0];
+  double newphi = P.phi()+theta0*random[1];
+
+  FourVector newDirection = Polar(P.energy(), P.momentum(), newtheta, newphi);
+
+  P = P.rotateTo(newDirection);
+
+  std::cout << "Momentum after multiple scattering = " << P << std::endl;
+
+  return;
+}
+
 int 
 windowlesstube::setPara(double len, double, double density, double, double, double)
 {
@@ -3741,6 +3764,12 @@ target::EnergyLossCorrKaos(Particle& P)
   P -= Mylar->dEdx(P, Kaos_Entrance_Window_thickness/10);
   P -= Air->dEdx(P, Air_between_Scat_Kaos_thickness/10);
   P -= Mylar->dEdx(P, Scat_Exit_Window_thickness/10);
+}
+
+void 
+target::MultipleScattering(Particle& P,double random[], double x, double y, double z, int steps, modeltype ModelType)
+{
+  return;
 }
 
 double target::getRadius ( int model )
