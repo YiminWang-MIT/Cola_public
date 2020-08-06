@@ -17,6 +17,7 @@
 #include "Cola/Luminosity.h"
 #include "spinTransfer.h"            // spin transfer target -> focal plane
 #include "simSpecEventSim.h"
+#include <iostream>
 
 extern int ergloss;
 extern modeltype ModelType;
@@ -148,15 +149,9 @@ int simSpecEventSim::check(Particle vf, double x[3],
 
   particle = vf;
 
-  static PseudoRandom psrandom;
-  static normal norm(&psrandom, &psrandom);
-
   if (ergloss) {
     EnergyBefore = vf.energy();
     target->EnergyLossSim(particle, x[0], x[1], x[2], steps, ModelType);
-    double norm_multiplescattering[2] = {norm(), norm()};
-    if (ModelType == ElasticRadiative) 
-      target->MultipleScattering(particle, norm_multiplescattering, x[0], x[1], x[2], steps, ModelType);
     if (!vacuum) target->EnergyLossSimChamber(particle); 
     if (onlElossSim) *onlElossSim = (EnergyBefore - particle.energy());
   }

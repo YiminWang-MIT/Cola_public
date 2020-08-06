@@ -94,6 +94,8 @@ public:
     void EnergyLossSimSpec(Particle& P, double phi, double theta, double y,
 			   double& Eloss_dE, double& Energy_before_dE, 
 			   double & Eloss_dE_Ref);
+    virtual void MultipleScatteringBeam(Particle& P, double random[], double x, double y, double z,
+      int steps, modeltype ModelType);
     virtual void MultipleScattering(Particle& P, double random[], double x, double y, double z,
       int steps, modeltype ModelType);
 
@@ -408,6 +410,8 @@ public:
   virtual void EnergyLossSim(Particle& P, double x, double y, double z,
       int steps, modeltype ModelType);
   virtual void EnergyLossSimBeam(Particle& P, double x, double y, double z,
+      int steps, modeltype ModelType);
+  virtual void MultipleScatteringBeam(Particle& P, double random[], double x, double y, double z,
       int steps, modeltype ModelType);
   virtual void MultipleScattering(Particle& P, double random[], double x, double y, double z,
       int steps, modeltype ModelType);

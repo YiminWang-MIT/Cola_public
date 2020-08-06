@@ -187,6 +187,9 @@ int simSpectrometer::check(Particle vf, double x[3],
   
   particle = vf;
 
+  static PseudoRandom psrandom;
+  static normal norm(&psrandom, &psrandom);
+
   if (idecay) { // particle decay (*** new ***)
     
     // rotate from LAB to SPEC coordinate system
@@ -296,6 +299,10 @@ int simSpectrometer::check(Particle vf, double x[3],
       target->EnergyLossSim(particle, x[0], x[1], x[2], steps, ModelType);
       if (!vacuum) target->EnergyLossSimChamber(particle); 
       if (onlElossSim) *onlElossSim = (EnergyBefore - particle.energy());
+
+      double norm_multiplescattering[2] = {norm(), norm()};
+      if (ModelType == ElasticRadiative) 
+        target->MultipleScattering(particle, norm_multiplescattering, x[0], x[1], x[2], steps, ModelType);
     }
     if (!collimator->accepted(x, vf, angle, oop, refmomentum)) return 0; 
     

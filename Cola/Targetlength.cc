@@ -2658,8 +2658,8 @@ void gasjet::EnergyLossSim(Particle& P, double x, double y, double z, int steps,
   double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
 
   double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
-  std::cout << "Out Energy" << P << std::endl;
-  std::cout << "Out Energy loss = " << deltaE*1e6 << "keV" << std::endl;
+  //std::cout << "Out Energy" << P << std::endl;
+  //std::cout << "Out Energy loss = " << deltaE*1e6 << "keV" << std::endl;
   P += deltaE;
 
   return;
@@ -2673,30 +2673,63 @@ void gasjet::EnergyLossSimBeam(Particle& P, double x, double y, double z, int st
   double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
   P += deltaE;
 
-  std::cout << "In Energy" << P << std::endl;
-  std::cout << "Beam in Energy loss = " << deltaE*1e6 << "keV" << std::endl;
+  //std::cout << "In Energy" << P << std::endl;
+  //std::cout << "Beam in Energy loss = " << deltaE*1e6 << "keV" << std::endl;
+
+  return;
+}
+
+void gasjet::MultipleScatteringBeam(Particle& P, double random[], double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
+{
+  //std::cout << "Momentum Beam" << P << std::endl;
+  // x,y,z are targetpos_tar
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
+
+  double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
+
+  // \beta=1
+  // Need to use denisty corrected radiation length
+  double radiation_length = gasjet::TargetMat->RadiationLength/gasjet::TargetMat->Density;
+  double theta0 = 13.6e-3/P.momentum()*sqrt(pathlength/radiation_length)*(1+0.088*log(pathlength/radiation_length));
+
+  //very small angle, should be fine
+  P.rot_theta(theta0*random[0]);
+  P.rot_phi(theta0*random[1]);
+
+  //std::cout << "Beam Momentum after multiple scattering = " << P << std::endl;
 
   return;
 }
 
 void gasjet::MultipleScattering(Particle& P, double random[], double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
 {
-  std::cout << "In Momentum" << P << std::endl;
-  // x,y,z are targetpos_tar
+  //std::cout << "In Momentum" << P << std::endl;
+  //std::cout << std::scientific;
+  // x,y,z are targetpos_hall, different from EnergyLossSimBeam
+  x -= rundb.Target.offset_sim.x; 
+  y -= rundb.Target.offset_sim.y; 
+  z -= rundb.Target.offset_sim.z; 
   double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
 
   double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
 
-  double theta0 = 13.6/P.energy()*sqrt(pathlength/gasjet::TargetMat->DC_x0)*(1+0.088*log(pathlength/gasjet::TargetMat->DC_x0));
+  // \beta=1
+  // Need to use denisty corrected radiation length
+  double radiation_length = gasjet::TargetMat->RadiationLength/gasjet::TargetMat->Density;
+  double theta0 = 13.6e-3/P.momentum()*sqrt(pathlength/radiation_length)*(1+0.088*log(pathlength/radiation_length));
 
-  double newtheta = P.theta()+theta0*random[0];
-  double newphi = P.phi()+theta0*random[1];
+  //std::cout << theta0 << std::endl;
+  //std::cout << P.theta() << std::endl;
+  //std::cout << P.phi() << std::endl;
 
-  FourVector newDirection = Polar(P.energy(), P.momentum(), newtheta, newphi);
+  //very small angle, should be fine
+  P.rot_theta(theta0*random[0]);
+  P.rot_phi(theta0*random[1]);
 
-  P = P.rotateTo(newDirection);
+  //std::cout << "Momentum after multiple scattering = " << P << std::endl;
 
-  std::cout << "Momentum after multiple scattering = " << P << std::endl;
+  //std::cout << P.theta() << std::endl;
+  //std::cout << P.phi() << std::endl;
 
   return;
 }
@@ -3768,6 +3801,12 @@ target::EnergyLossCorrKaos(Particle& P)
 
 void 
 target::MultipleScattering(Particle& P,double random[], double x, double y, double z, int steps, modeltype ModelType)
+{
+  return;
+}
+
+void 
+target::MultipleScatteringBeam(Particle& P,double random[], double x, double y, double z, int steps, modeltype ModelType)
 {
   return;
 }

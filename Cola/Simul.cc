@@ -1063,7 +1063,7 @@ Simul::eventloop()
   if (ergloss) {
     target->EnergyLossSimBeam(Reaction->electronIn, targetpos_tar[0], targetpos_tar[1], targetpos_tar[2], steps_beam, ModelType);
     if (ModelType == ElasticRadiative) {
-      target->MultipleScattering(Reaction->electronIn, norm_multiplescattering, targetpos_tar[0], targetpos_tar[1], targetpos_tar[2], steps_beam, ModelType);
+      target->MultipleScatteringBeam(Reaction->electronIn, norm_multiplescattering, targetpos_tar[0], targetpos_tar[1], targetpos_tar[2], steps_beam, ModelType);
     }
 
 #ifdef __ColaMIT__
