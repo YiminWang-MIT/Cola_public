@@ -130,6 +130,8 @@ int vdcHIST::handle(int npaddle)
   HMFill(minDriftTime, minimalDriftTime, 0, 1);
   HMFill(mDT_Nwire, minimalDriftTime, totalWire, 1);
   
+  onl->mdt = minimalDriftTime;
+  out->packEventData(&onl->mdt,    1);
   const float *path = plane->DriftPath();
   const float *corr = plane->DriftCorrection();
 
