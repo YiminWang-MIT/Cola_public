@@ -12,6 +12,7 @@
 #include "Targetlength.h"
 #include "rundatabase.h"
 #include "Radiation.h"
+#include "FourVector/FourVector.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -2577,7 +2578,7 @@ double solidstate::getangle ( )
 int 
 gasjet::setPara(double len, double, double density, double, double, double)
 {
-  TargetMat->setDensity(density); // [g/cm**3]
+  //TargetMat->setDensity(density); // [g/cm**3]
   //totallength = len; // [mm]
   //Length = totallength; //historically left over from Length = totallength / cos(angle_tar), where angle_tar flew out..
   //cout << "density " << density << " g/cm**3\n";
@@ -2589,56 +2590,148 @@ gasjet::setPara(double len, double, double density, double, double, double)
 int 
 gasjet::Generate_Vertex(double random[], double x[], double /*wob_x*/, double /*wob_y*/, modeltype ModelType)
 {
-    //cout << "gas jet generate vertex" << endl;
-    //x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x;
-    //x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y;
-    //x[2] = getLength() * (random[2] - .5); //homogeneous
-    //x[2] = getLength() * (random[2] < 0.5 ? sqrt(random[2]/2)-.5 : (0.5-sqrt((1-random[2])/2))); //triangular shape
+  //returns targetpos_tar 
+  x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x + random[3] * gasjet::totalwidth;
+  x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y + random[4] * gasjet::totalheight;
+  x[2] = gasjet::totallength * (random[2]); //homogeneous
 
-    x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x + random[3] * gasjet::totalwidth;
-    x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y + random[4] * gasjet::totalheight;
-    x[2] = gasjet::totallength * (random[2]); //homogeneous
-    /*
-    
-    cout << gasjet::totalwidth << endl;
-    cout << gasjet::totalheight << endl;
-    cout << gasjet::totallength << endl;
-
-    cout << random[0] << endl;
-    cout << random[1] << endl;
-    cout << random[2] << endl;
-
-    cout << x[0] << endl;
-    cout << x[1] << endl;
-    cout << x[2] << endl;
-    */
-    //if (fabs(x[2]) > totallength / 2.) 
-    //      return 0; // not inside target  
   return 1; 
+}
+
+double 
+gasjet::GaussianCDF(double x)
+{
+  // http://people.math.sfu.ca/~cbm/aands/page_932.htm
+  // Fomula 26.2.17
+  double tempx = x;
+  x = abs(x);
+  double b1=0.319381530, b2=-0.356563782, b3=1.781477937, b4=-1.821255978, b5=1.330274429;
+  double phix = 1/sqrt(2*M_PI)*exp(-0.5*x*x);
+  double t=1./(1+0.2316419*x);
+  double cdfx = phix*(b1*t+b2*t*t+b3*pow(t,3)+b4*pow(t,4)+b5*pow(t,5));
+  if (tempx>0)
+    return 1-cdfx;
+  else
+    return cdfx;
 }
 
 double 
 gasjet::getLength_in_Target(double x, double y, double z, double theta, double phi)
 {
-  //this is not yet so good... improve when needed... assumes a flat foil target, which is wrong here, most of the time result would be cell diameter...7.5mm at the time -> set it to zero as long as not needed (very thin gas target..)
-  return 0;
-  double result;
-  double inv_dx[3] = {sin(theta) * cos(phi),          
-		      sin(theta) * sin(phi),
-		      cos(theta)};
+  // x,y,z are targetpos_tar
 
-  if (fabs(inv_dx[1]) == 1.) return -1;               // straight up or down
+  // The actual length is an integration of the target density
+  // The target has 2D Gaussian distribution in x-z plane with the same variable stored in totallength
+  // The target thickness is invariant in y direction
+  //
+  // Absolute distance in x-z plane
+  double distance_to_center, depth_in_target;
+  //circle in x-z plane, y does not change thickness
+  if (theta==0){ //incoming
+    // actuall z and x if phi=0
+    distance_to_center = x;
+    depth_in_target = z;
+  }
+  else{ // outgoing
+    double direction_x=sin(theta), direction_z=cos(theta);
+    distance_to_center = -direction_x*z + direction_z*x;
+    depth_in_target = direction_x*x+direction_z*z;
+  }
 
-  double zbar = Length / 2. - z;
-  if (theta > M_PI/2) zbar = Length / 2. + z;
+  //normalized to std
+  distance_to_center/=gasjet::totallength;
+  depth_in_target=depth_in_target/gasjet::totallength;
 
-  double length = zbar / fabs(cos(theta));
-  if (length > totalwidth)
-    result = totalwidth;
-  else
-    result = fabs(length);
-  cout << "length " << result << "\n";
-  return result;  
+  double thickness = exp(-pow(distance_to_center,2)/2) * gasjet::GaussianCDF(-depth_in_target);//from here to +inf = from -inf to here
+
+  //thickness adjustion from y
+  return thickness/abs(cos(phi));
+}
+
+void gasjet::EnergyLossSim(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to the end of the cell
+{
+  // x,y,z are targetpos_hall, different from EnergyLossSimBeam
+  x -= rundb.Target.offset_sim.x; 
+  y -= rundb.Target.offset_sim.y; 
+  z -= rundb.Target.offset_sim.z; 
+
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
+
+  double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
+  //std::cout << "Out Energy" << P << std::endl;
+  //std::cout << "Out Energy loss = " << deltaE*1e6 << "keV" << std::endl;
+  P += deltaE;
+
+  return;
+}
+  
+void gasjet::EnergyLossSimBeam(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
+{
+  // x,y,z are targetpos_tar
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
+
+  double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
+  P += deltaE;
+
+  //std::cout << "In Energy" << P << std::endl;
+  //std::cout << "Beam in Energy loss = " << deltaE*1e6 << "keV" << std::endl;
+
+  return;
+}
+
+void gasjet::MultipleScatteringBeam(Particle& P, double random[], double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
+{
+  //std::cout << "Momentum Beam" << P << std::endl;
+  // x,y,z are targetpos_tar
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
+
+  double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
+
+  // \beta=1
+  // Need to use denisty corrected radiation length
+  double radiation_length = gasjet::TargetMat->RadiationLength/gasjet::TargetMat->Density;
+  double theta0 = 13.6e-3/P.momentum()*sqrt(pathlength/radiation_length)*(1+0.088*log(pathlength/radiation_length));
+
+  //very small angle, should be fine
+  P.rot_theta(theta0*random[0]);
+  P.rot_phi(theta0*random[1]);
+
+  //std::cout << "Beam Momentum after multiple scattering = " << P << std::endl;
+
+  return;
+}
+
+void gasjet::MultipleScattering(Particle& P, double random[], double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
+{
+  //std::cout << "In Momentum" << P << std::endl;
+  //std::cout << std::scientific;
+  // x,y,z are targetpos_hall, different from EnergyLossSimBeam
+  x -= rundb.Target.offset_sim.x; 
+  y -= rundb.Target.offset_sim.y; 
+  z -= rundb.Target.offset_sim.z; 
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
+
+  double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
+
+  // \beta=1
+  // Need to use denisty corrected radiation length
+  double radiation_length = gasjet::TargetMat->RadiationLength/gasjet::TargetMat->Density;
+  double theta0 = 13.6e-3/P.momentum()*sqrt(pathlength/radiation_length)*(1+0.088*log(pathlength/radiation_length));
+
+  //std::cout << theta0 << std::endl;
+  //std::cout << P.theta() << std::endl;
+  //std::cout << P.phi() << std::endl;
+
+  //very small angle, should be fine
+  P.rot_theta(theta0*random[0]);
+  P.rot_phi(theta0*random[1]);
+
+  //std::cout << "Momentum after multiple scattering = " << P << std::endl;
+
+  //std::cout << P.theta() << std::endl;
+  //std::cout << P.phi() << std::endl;
+
+  return;
 }
 
 int 
@@ -3706,6 +3799,18 @@ target::EnergyLossCorrKaos(Particle& P)
   P -= Mylar->dEdx(P, Scat_Exit_Window_thickness/10);
 }
 
+void 
+target::MultipleScattering(Particle& P,double random[], double x, double y, double z, int steps, modeltype ModelType)
+{
+  return;
+}
+
+void 
+target::MultipleScatteringBeam(Particle& P,double random[], double x, double y, double z, int steps, modeltype ModelType)
+{
+  return;
+}
+
 double target::getRadius ( int model )
  {
    return Length / 2;
@@ -3756,7 +3861,7 @@ SetTargetFromRunDB(const reaction * Reaction)
     if (!strcmp(rundb.target, "He3pol"        )) Target = new helium_pol;
     if (!strcmp(rundb.target, "He3pol07"      )) Target = new he_pol_07;
     if (!strcmp(rundb.target, "gasjet"      ))
-      Target = new gasjet(rundb.Target.size_length, rundb.Target.size_height, rundb.Target.size_width);
+      Target = new gasjet(rundb.Target.size_length, rundb.Target.size_height, rundb.Target.size_width, rundb.Target.flow);
   }
 
   cout << "Target: " << rundb.target << endl;
@@ -3766,8 +3871,10 @@ SetTargetFromRunDB(const reaction * Reaction)
     Target=new cryo_ewald; 
   }  
 
+  if (*Reaction->getTarget() == P_H1)
+    if (strcmp(rundb.target, "gasjet"))
+      Target->setTargetMat(LH2); 
   
-  if (*Reaction->getTarget() == P_H1)       Target->setTargetMat(LH2); 
   if (*Reaction->getTarget() == P_H2)       Target->setTargetMat(LD2);
   if (*Reaction->getTarget() == P_He3)      Target->setTargetMat(He3);
   if (*Reaction->getTarget() == P_He4)      Target->setTargetMat(He4);

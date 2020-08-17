@@ -94,6 +94,10 @@ public:
     void EnergyLossSimSpec(Particle& P, double phi, double theta, double y,
 			   double& Eloss_dE, double& Energy_before_dE, 
 			   double & Eloss_dE_Ref);
+    virtual void MultipleScatteringBeam(Particle& P, double random[], double x, double y, double z,
+      int steps, modeltype ModelType);
+    virtual void MultipleScattering(Particle& P, double random[], double x, double y, double z,
+      int steps, modeltype ModelType);
 
 //
 // Funktions to get the analysis right
@@ -391,9 +395,10 @@ public:
 class gasjet: public target {
 private:
   double totallength, totalheight, totalwidth;
+  double GaussianCDF(double x);
 public:
   gasjet() { Length = totallength; cout << "Gasjet length = " << totallength << endl;}
-  gasjet(double length, double height, double width): totallength{length}, totalheight{height}, totalwidth{width} {};
+  gasjet(double length, double height, double width, double flow): totallength{length}, totalheight{height}, totalwidth{width} {if (flow>0.5) TargetMat=H2HighFlow; else TargetMat=H2LowFlow;};
   virtual ~gasjet() { ; }
   
   double getLength_in_Target(double x, double y, double z, 
@@ -402,6 +407,14 @@ public:
   int setPara(double length, double angle,
 	      double density, double wallthck,
 	      double snowthck, double snowdns);
+  virtual void EnergyLossSim(Particle& P, double x, double y, double z,
+      int steps, modeltype ModelType);
+  virtual void EnergyLossSimBeam(Particle& P, double x, double y, double z,
+      int steps, modeltype ModelType);
+  virtual void MultipleScatteringBeam(Particle& P, double random[], double x, double y, double z,
+      int steps, modeltype ModelType);
+  virtual void MultipleScattering(Particle& P, double random[], double x, double y, double z,
+      int steps, modeltype ModelType);
 };
 
 

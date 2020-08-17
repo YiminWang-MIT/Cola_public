@@ -120,6 +120,7 @@ struct TARGET {
   /** Target length in [mg/cm*2] (Solidstate/Waterfall) or [mm] (helium,cryo_ewald) */ 
   double length;
   /** extended target size **/ double size_length; double size_width; double size_height;
+  /** High/Low flow for gas jet target **/ double flow;
   /** Target angle in [degrees] */       double angle;
   /** Target density in [g/cm**3] */     double density;
   /** Target wall thickness in [mm] */   double wallthickness;
@@ -730,6 +731,7 @@ struct rundatabasetranslationlist {
   { 1, "Target.size_length", 	"Target.size_length", 	&rundb.Target.size_length},
   { 1, "Target.size_width", 	"Target.size_width", 	&rundb.Target.size_width},
   { 1, "Target.size_height", 	"Target.size_height", 	&rundb.Target.size_height},
+  { 1, "Target.flow", 	"Target.flow", 	&rundb.Target.flow},
 
   { 1, "Target.WallThickness",	"Target.WallThickness", &rundb.Target.wallthickness},
   { 1, "Target.WallThickness",	"Target.WallThickness", &rundb.Target.wallthickness},

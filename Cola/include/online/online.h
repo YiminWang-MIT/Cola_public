@@ -67,6 +67,8 @@ struct vdc          {
   /** reconstructed position             */ double x; 
   /** reconstructed slope                */ double slope;
   /** \TEX{$\chi^2$} of straight line fit*/ double chi_sqr; 
+  /** minimal drift time */ double mdt; 
+  /** number of wires*/ double nw; 
 };
 
 /** Focal plane coordinates for a wire chamber packet */

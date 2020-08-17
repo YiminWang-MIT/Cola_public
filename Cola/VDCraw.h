@@ -35,6 +35,7 @@ protected:
   HIST *tvw;
   HIST *minDriftTime;
   HIST *mDT_Nwire;
+  HIST *Nwire;
 public:
   vdcHIST(AquaTree *atree, VdcPlane *vdcplane, struct vdc *onlptr);
   virtual ~vdcHIST();

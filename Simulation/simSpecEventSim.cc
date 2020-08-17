@@ -17,6 +17,7 @@
 #include "Cola/Luminosity.h"
 #include "spinTransfer.h"            // spin transfer target -> focal plane
 #include "simSpecEventSim.h"
+#include <iostream>
 
 extern int ergloss;
 extern modeltype ModelType;
