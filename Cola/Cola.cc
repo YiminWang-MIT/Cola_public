@@ -1160,6 +1160,12 @@ Cola::eventloop()
   //std::cout << "Time" << std::endl;
   //std::cout << online.datataking << std::endl;
   //std::cout << online.datataking2 << std::endl;
+  //very dirty hack, only works with abcn starts -- Yimin Wang
+  online.B.vdcStatus = online.A.vdcStatus = 0;
+  online.B.vdcStatus = ((AquaNodeShort*) atree->find("abcn.b.det.vdc.status",1))->scalar();
+  out->packEventData(&online.B.vdcStatus, 1);
+  online.A.vdcStatus = ((AquaNodeShort*) atree->find("abcn.a.det.vdc.status",1))->scalar();
+  out->packEventData(&online.A.vdcStatus, 1);
 
   Particle A_Out = P_proton;
   Particle B_Out = P_electron;
