@@ -33,8 +33,10 @@ protected:
   HIST *bad;
   HIST *good;
   HIST *tvw;
-  HIST *minDriftTime;
-  HIST *mDT_Nwire;
+  HIST *minDT;
+  HIST *maxDT;
+  HIST *minDT_Nwire;
+  HIST *maxDT_Nwire;
   HIST *Nwire;
 public:
   vdcHIST(AquaTree *atree, VdcPlane *vdcplane, struct vdc *onlptr);
