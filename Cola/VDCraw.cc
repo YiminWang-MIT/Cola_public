@@ -60,9 +60,13 @@ vdcHIST::vdcHIST(AquaTree *atree, VdcPlane *vdcplane, struct vdc *onlptr)
   sprintf(title, "Spec. %c/%s-layer/Time vs Wire", spec, pstr);
   tvw = HMFind(title);
   sprintf(title, "Spec. %c/%s-layer/Minimal Drift Time", spec, pstr);
-  minDriftTime = HMFind(title);
-  sprintf(title, "Spec. %c/%s-layer/MDT vs Nr", spec, pstr);
-  mDT_Nwire= HMFind(title);
+  minDT= HMFind(title);
+  sprintf(title, "Spec. %c/%s-layer/Maximal Drift Time", spec, pstr);
+  maxDT= HMFind(title);
+  sprintf(title, "Spec. %c/%s-layer/MinDT vs Nr", spec, pstr);
+  minDT_Nwire= HMFind(title);
+  sprintf(title, "Spec. %c/%s-layer/MaxDT vs Nr", spec, pstr);
+  maxDT_Nwire= HMFind(title);
   sprintf(title, "Spec. %c/%s-layer/Number of wires", spec, pstr);
   Nwire= HMFind(title);
 }  
@@ -111,6 +115,7 @@ int vdcHIST::handle(int npaddle)
   out->packEventData(&onl->raw_wire[0],    8);
 
   double minimalDriftTime=1023;
+  double maximalDriftTime=0;
   int totalWire = 0;
   while (num-- > 0) { 
     if (num >= plane->GoodWires())
@@ -122,6 +127,7 @@ int vdcHIST::handle(int npaddle)
       HMFill(good, wire_ptr[num], 0, 1);
       HMFill(drift, time_ptr[num], 0, 1);
       if (time_ptr[num]<minimalDriftTime) minimalDriftTime=time_ptr[num];
+      if (time_ptr[num]>minimalDriftTime) maximalDriftTime=time_ptr[num];
       HMFill(tvw, wire_ptr[num], time_ptr[num], 1);
       if (paddle[npaddle])
 	HMFill(paddle[npaddle], time_ptr[num], 0, 1);
@@ -129,12 +135,16 @@ int vdcHIST::handle(int npaddle)
     // All wires
     HMFill(wire,  wire_ptr[num], 0, 1);
   }
-  HMFill(minDriftTime, minimalDriftTime, 0, 1);
-  HMFill(mDT_Nwire, minimalDriftTime, totalWire, 1);
+  HMFill(maxDT, maximalDriftTime, 0, 1);
+  HMFill(maxDT_Nwire, maximalDriftTime, totalWire, 1);
+  HMFill(minDT, minimalDriftTime, 0, 1);
+  HMFill(minDT_Nwire, minimalDriftTime, totalWire, 1);
   HMFill(Nwire, totalWire, 0, 1);
   
-  onl->mdt = minimalDriftTime;
-  out->packEventData(&onl->mdt, 1);
+  onl->mindt = minimalDriftTime;
+  onl->maxdt = maximalDriftTime;
+  out->packEventData(&onl->mindt, 1);
+  out->packEventData(&onl->maxdt, 1);
   out->packEventData(&onl->nw, 1);
   const float *path = plane->DriftPath();
   const float *corr = plane->DriftCorrection();
