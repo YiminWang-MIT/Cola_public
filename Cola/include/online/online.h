@@ -138,6 +138,7 @@ struct Spectrometer {
   /** vertical driftchamber x2          */ struct vdc x2;
   /** vertical driftchamber s2          */ struct vdc s2;
   /** Flag for reconstruction status    */ int vdcOK;
+  /** VDC status                        */ short vdcStatus;
   /** Cerenkov detektor                 */ struct cerenkov    Cerenkov;
   /** vertex reconstructed by THIS 
     spectrometer relativ to hall system */ struct vertex vertex;
