@@ -2033,12 +2033,18 @@ Cola::eventloop()
   /////////////////////////////////////////////////////////////////////////////
 
   if (!strcmp(rundb.focus_corr, "yes")) {
-    if (resultA) 
+    if (resultA) {
       focus->focuscorrA(online.Vertex.x, online.Vertex.y, resultA);
-    if (resultB) 
+      targetFillHisto(&online.A.target, resultA, out);
+    }
+    if (resultB) {
       focus->focuscorrB(online.Vertex.x, online.Vertex.y, resultB);
-    if (resultC) 
+      targetFillHisto(&online.B.target, resultB, out);
+    }
+    if (resultC) {
       focus->focuscorrC(online.Vertex.x, online.Vertex.y, resultC);
+      targetFillHisto(&online.C.target, resultC, out);
+    }
     //    if (resultD) 
     //      focus->focuscorrD(online.Vertex.x, online.Vertex.y, resultD);
     //    if (resultK) 

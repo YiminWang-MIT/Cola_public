@@ -2591,8 +2591,11 @@ int
 gasjet::Generate_Vertex(double random[], double x[], double /*wob_x*/, double /*wob_y*/, modeltype ModelType)
 {
   //returns targetpos_tar 
+  //
+  //std::cout << gasjet::totallength << '\t' << gasjet::totalheight << '\t' << gasjet::totalwidth<< '\t' << std::endl;
   x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x + random[3] * gasjet::totalwidth;
   x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y + random[4] * gasjet::totalheight;
+
   x[2] = gasjet::totallength * (random[2]); //homogeneous
 
   return 1; 
