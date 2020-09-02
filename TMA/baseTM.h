@@ -11,7 +11,9 @@
 #define __baseTM_h__
 
 ///Define the structure containing the results.
-struct TargetCo  { float dp, th, y0, ph, len; };
+struct TargetCo  { 
+  float dp, th, y0, ph, len; 
+};
 
 
 /** Basic TMA class.

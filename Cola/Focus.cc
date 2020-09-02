@@ -184,6 +184,58 @@ ExtendedTarget::corrC(double x0, struct TargetCo *resultC)
   resultC->th -= FAKTOR_THETA_C * x0;
 }
 
+void
+ExtendedTarget::antiCorrA(double hor, double vert, struct TargetCo *resultA)
+{
+  double y0  = resultA->y0*10.0;
+  double ph0 = 0.001*resultA->ph;
+  double th0 = 0.001*resultA->th;
+  zR_A = -(y0 * cosA + hor) * cos(ph0) / sin(-angleA + ph0);
+
+  // assuming tan(th0) = th0
+  // error 1*10^-3
+  double theta = (th0*1000 + FAKTOR_THETA_A * vert)/(1000+FAKTOR_THETA_A * zR_A);
+  xR_A = vert - zR_A * tan(theta);
+
+  resultA->dp -= FAKTOR_DELTA_A * xR_A;
+  resultA->th = theta/0.001;
+}
+
+void
+ExtendedTarget::antiCorrB(double hor, double vert, struct TargetCo *resultB)
+{
+  double y0  = resultB->y0*10.0;
+  double ph0 = 0.001*resultB->ph;
+  double th0 = 0.001*resultB->th;
+  zR_B = -(y0 * cosB + hor) * cos(ph0) / sin(-angleB + ph0);
+
+  // assuming tan(th0) = th0 for th0 in rad
+  // error 1*10^-3
+  // theta in rad here
+  //
+  double theta = (th0*1000 + FAKTOR_THETA_B * vert)/(1000+FAKTOR_THETA_B * zR_B);
+  xR_B = vert - zR_B * tan(theta);
+
+  resultB->dp -= FAKTOR_DELTA_B * xR_B;
+  resultB->th = theta/0.001;
+}
+
+void
+ExtendedTarget::antiCorrC(double hor, double vert, struct TargetCo *resultC)
+{
+  double y0  = resultC->y0*10.0;
+  double ph0 = 0.001*resultC->ph;
+  double th0 = 0.001*resultC->th;
+  zR_C = -(y0 * cosC + hor) * cos(ph0) / sin(-angleC + ph0);
+
+  // assuming tan(th0) = th0
+  // error 1*10^-3
+  double theta = (th0*1000 + FAKTOR_THETA_C * vert)/(1000+FAKTOR_THETA_C * zR_C);
+  xR_C = vert - zR_C * tan(theta);
+
+  resultC->dp -= FAKTOR_DELTA_C * xR_C;
+  resultC->th = theta/0.001;
+}
 
 //presently not in use:
 double
@@ -295,10 +347,22 @@ Focus::focuscorrA(double horiz, double verti, struct TargetCo *resultA)
 }
 
 void
+Focus::focusanticorrA(double horiz, double verti, struct TargetCo *resultA)
+{
+  antiCorrA(horiz, verti, resultA);
+}
+
+void
 Focus::focuscorrB(double horiz, double verti, struct TargetCo *resultB)
 {
   focusR_B(horiz, verti, resultB);
   corrB(xR_B,resultB);
+}
+
+void
+Focus::focusanticorrB(double horiz, double verti, struct TargetCo *resultB)
+{
+  antiCorrB(horiz, verti, resultB);
 }
 
 void
@@ -308,6 +372,11 @@ Focus::focuscorrC(double horiz, double verti, struct TargetCo *resultC)
   corrC(xR_C,resultC);
 }
 
+void
+Focus::focusanticorrC(double horiz, double verti, struct TargetCo *resultC)
+{
+  antiCorrC(horiz, verti, resultC);
+}
 
 
 //presently not in use:

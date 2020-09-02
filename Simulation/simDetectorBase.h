@@ -49,7 +49,9 @@ public:
   virtual int resolution(struct TargetCoord *tc) = 0;
   virtual int check(Particle vf, double targetpos[3],
 		    class target *, struct TargetCoord *tc,
-		    struct simFocalCoord *fc, modeltype ModelType) = 0;
+		    struct simFocalCoord *fc, class Focus *focus, modeltype ModelType)
+  { std::cerr<< "check not implemented! This just doesn't happen!"<<std::endl;
+    return 0;};
   virtual double checkwithtrace(Particle vf, double targetpos[3],
 				class target *, struct Spectrometer *onlS, modeltype ModelType) 
   { std::cerr<< "checkwithtrace not implemented! This just doesn't happen!"<<std::endl;

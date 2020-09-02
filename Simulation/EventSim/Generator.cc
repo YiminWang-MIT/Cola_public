@@ -159,7 +159,7 @@ GenState * Generator::Generate()
   rea->electronIn.setMomentum(0, 0, BeamMomentum);
   //  tgt->EnergyLossSimBeam(rea->electronIn, myState.TargetCoords[0],myState.TargetCoords[1],myState.TargetCoords[2],1); //1=steps_beam
 
-  myState.trigger[SPEKA]=(0!=simA->check(rea->electronOut,myState.TargetCoords,tgt,&myState.tc[SPEKA], NULL, ModelType));
+  myState.trigger[SPEKA]=(0!=simA->check(rea->electronOut,myState.TargetCoords,tgt,&myState.tc[SPEKA], NULL, NULL, ModelType));
   rea->electronIn.setMomentum(0, 0, BeamMomentum);
   // double E0 = rea->electronIn.energy();
   // double q2      = (rea->electronIn - rea->electronOut).square();
