@@ -208,6 +208,7 @@ Simul::Simul()
   rundb.si.simAcceptScale = 1.0;
   for (int ii=0;ii<8;ii++) rundb.si.simResolution[ii] = 0.0;
 #endif
+  rundb.focus_corr = "no";
   
   rundb.Target.externalRadiation = 15; // is interpreted as bitmask integer
   //rundb.Target.internalRadiation =  1;
@@ -581,6 +582,21 @@ Simul::Simul()
 			0.5 // relative momentum acceptance (p/ref)
 			);
 
+  if (focus) delete focus;
+  focus = NULL;
+  if (!strcmp(rundb.focus_corr, "yes")) 
+    focus = new Focus(rundb.A.wobbler.x0, rundb.A.wobbler.dx / rundb.Ebeam,
+                rundb.A.wobbler.y0, rundb.A.wobbler.dy / rundb.Ebeam, 
+                      rundb.B.wobbler.x0, rundb.B.wobbler.dx / rundb.Ebeam,
+                rundb.B.wobbler.y0, rundb.B.wobbler.dy / rundb.Ebeam, 
+                      rundb.C.wobbler.x0, rundb.C.wobbler.dx / rundb.Ebeam,
+                rundb.C.wobbler.y0, rundb.C.wobbler.dy / rundb.Ebeam, 
+          rundb.A.angle * 0.017453293, 
+          rundb.B.angle * 0.017453293, 
+          rundb.C.angle * 0.017453293,
+          rundb.B.oopangle * 0.017453293);
+
+  // Initialize vdcA:
 #endif
   sim[11] = NULL;
 
@@ -757,28 +773,28 @@ Simul::Simul()
 }
 
 int
-Simul::chck(Particle &vf, double x[]) 
+Simul::chck(Particle &vf, double x[], Focus *focus) 
 {
  
 #ifdef __ColaMIT__
   if (Reaction->getA()==&vf) {
-    if (!sim[0]->check(vf, x, target, &online.oopsA.target, NULL)) return 0;
+    if (!sim[0]->check(vf, x, target, &online.oopsA.target, NULL, NULL)) return 0;
     online.oopsA.trigger=1; out->packEventData(&online.oopsA.trigger,1);
   }
   if (Reaction->getB()==&vf) {
-    if (!sim[1]->check(vf, x, target, &online.oopsB.target, NULL)) return 0;
+    if (!sim[1]->check(vf, x, target, &online.oopsB.target, NULL, NULL)) return 0;
     online.oopsB.trigger=1; out->packEventData(&online.oopsB.trigger,1);
   }
   if (Reaction->getC()==&vf) {
-    if (!sim[2]->check(vf, x, target, &online.oopsC.target, NULL)) return 0;
+    if (!sim[2]->check(vf, x, target, &online.oopsC.target, NULL, NULL)) return 0;
     online.oopsC.trigger=1; out->packEventData(&online.oopsC.trigger,1);
   }
   if (Reaction->getD()==&vf) {
-    if (!sim[3]->check(vf, x, target, &online.oopsD.target, NULL)) return 0;
+    if (!sim[3]->check(vf, x, target, &online.oopsD.target, NULL, NULL)) return 0;
     online.oopsD.trigger=1; out->packEventData(&online.oopsD.trigger,1);
   }
   if (Reaction->getO()==&vf) {
-    if (!sim[4]->check(vf, x, target, &online.ohips.target, NULL)) return 0;
+    if (!sim[4]->check(vf, x, target, &online.ohips.target, NULL, NULL)) return 0;
     online.ohips.trigger=1; out->packEventData(&online.ohips.trigger,1);
   }
 #else
@@ -786,47 +802,47 @@ Simul::chck(Particle &vf, double x[])
   // if (Reaction->getA()) cout << "Check A : " << *Reaction->getA() << "=" << vf << endl;
   if (Reaction->getA()==&vf) {
     
-    if (0==sim[0]->check(vf, x, target, &online.A.target, &online.A.simfp, ModelType)) 
+    if (0==sim[0]->check(vf, x, target, &online.A.target, &online.A.simfp, focus, ModelType)) 
        return 0;
     online.A.trigger=1; out->packEventData(&online.A.trigger,1); return 1;
   }
   //  if (Reaction->getB()) // cout << "Check B : " << *Reaction->getB() << "=" << vf << endl;
   if (Reaction->getB()==&vf) {
-    if (!sim[1]->check(vf, x, target, &online.B.target, &online.B.simfp, ModelType)) 
+    if (!sim[1]->check(vf, x, target, &online.B.target, &online.B.simfp, focus, ModelType)) 
       return 0;
     online.B.trigger=1; out->packEventData(&online.B.trigger,1); return 1;
   }
   //  if (Reaction->getC()) cout << "Check C : " << *Reaction->getC() << "=" << vf << endl;
   if (Reaction->getC()==&vf) {
-    if (!sim[2]->check(vf, x, target, &online.C.target, &online.C.simfp, ModelType)) 
+    if (!sim[2]->check(vf, x, target, &online.C.target, &online.C.simfp, focus, ModelType)) 
       return 0;
     online.C.trigger=1; out->packEventData(&online.C.trigger,1); return 1;
   }
   //  if (Reaction->getD()) cout << "Checke D : " << *Reaction->getD() << "=" << vf << endl;
   if (Reaction->getD()==&vf) {
-    if (!sim[3]->check(vf, x, target, &online.D.target, NULL, ModelType)) return 0;
+    if (!sim[3]->check(vf, x, target, &online.D.target, NULL, NULL, ModelType)) return 0;
     online.D.trigger=1; out->packEventData(&online.D.trigger,1); return 1;
   }
   //  if (Reaction->getNPOL()) cout << "Chekce NPOL : " << *Reaction->getNPOL() << "=" << vf << endl;
   if (Reaction->getNPOL()==&vf) 
-    return sim[7]->check(vf, x, target, NULL, NULL, ModelType);
+    return sim[7]->check(vf, x, target, NULL, NULL, NULL, ModelType);
   //  if (Reaction->getNDET()) cout << "Checke NDET : " << *Reaction->getNDET() << "=" << vf << endl;
   if (Reaction->getNDET()==&vf) 
-    return sim[8]->check(vf, x, target, NULL, &online.N.simfp, ModelType); 
+    return sim[8]->check(vf, x, target, NULL, &online.N.simfp, NULL, ModelType); 
   //  if (Reaction->getSI()) cout << "Checke SI : " << *Reaction->getSI() << "=" << vf << endl;
   if (Reaction->getSI()==&vf){ 
       online.si.EnergyParticle=vf.energy(); out->packEventData(&online.si.EnergyParticle,1);
       online.si.MomentumParticle=vf.momentum(); out->packEventData(&online.si.MomentumParticle,1);
       online.si.ThetaParticle=vf.theta(); out->packEventData(&online.si.ThetaParticle,1);
       online.si.PhiParticle=vf.phi(); out->packEventData(&online.si.PhiParticle,1);
-      if(!sim[9]->check(vf, x, target, NULL, NULL, ModelType)) return 0;
+      if(!sim[9]->check(vf, x, target, NULL, NULL, NULL, ModelType)) return 0;
       online.si.OK=1; out->packEventData(&online.si.OK,1); return 1;
   }
   
   //      cout << "Check of Kaos acceptance" << endl;
   if (Reaction->getKAOS()==&vf)
     {
-      return sim[10]->check(vf, x, target, &online.kaos.target, NULL, ModelType);
+      return sim[10]->check(vf, x, target, &online.kaos.target, NULL, NULL, ModelType);
     }
 #endif
 
@@ -1127,12 +1143,13 @@ Simul::eventloop()
   //std::cout << "Packed weight: " << weight << endl; 
 
   if (!weight)                                      return 0;  
-  if (!chck(Reaction->electronOut, targetpos_hall)) return 0;
+  if (!chck(Reaction->electronOut, targetpos_hall, focus)) return 0;
   //std::cout<<"Electron accepted!\n";
-  if (!chck(Reaction->Out1,        targetpos_hall)) return 0;    
-  if (!chck(Reaction->Out2,        targetpos_hall)) return 0;    
-  if (!chck(Reaction->Decay1,      targetpos_hall)) return 0;    
-  if (!chck(Reaction->Decay2,      targetpos_hall)) return 0;
+  if (!chck(Reaction->Out1,        targetpos_hall, focus)) return 0;    
+  if (!chck(Reaction->Out2,        targetpos_hall, focus)) return 0;    
+  if (!chck(Reaction->Decay1,      targetpos_hall, focus)) return 0;    
+  if (!chck(Reaction->Decay2,      targetpos_hall, focus)) return 0;
+  //std::cout << online.B.target.dp << " " << online.B.target.th << std::endl;
   if (He3HACK::mode==2){
     He3HACK::listfile.write((char *) He3HACK::buf,sizeof (float)*16);
     if (He3HACK::listfile.bad())
@@ -1412,6 +1429,7 @@ Simul::eventloop()
   if (ntuple) nt->fill_ntuple();
   helicity = -helicity;
   //std::cout<< "Final weight: " << weight << std::endl;
+  //std::cout << online.B.target.dp << " " << online.B.target.th << std::endl;
   return 0;
 }
 

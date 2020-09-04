@@ -56,9 +56,9 @@ AUXOBJ	=       Luminosity.o Masses.o Material.o Parsermain.o QuasiRandom.o \
 		Radiation.o ReactionParser.lex.o ReactionParser.parse.o \
 		Reactions.o ReadRundb.o SQL.o Targetlength.o evaluate.o \
 		VDCraw.o display.o ppol.o ConeTest.o MWPCK.o TOFK.o KaosK.o \
-		KaosMatrixManager.o PCAManager.o
+		KaosMatrixManager.o PCAManager.o Focus.o
 
-ANAOBJ	=	Cerenkov.o Focus.o SCINTraw.o \
+ANAOBJ	=	Cerenkov.o SCINTraw.o \
 		hdcPacket.o hdcPlane.o ndet.o npol.o
 
 NTOBJ	=	ColaNtuple.o

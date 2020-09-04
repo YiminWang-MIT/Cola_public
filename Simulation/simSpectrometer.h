@@ -8,6 +8,7 @@
 #include "DSpectrometer.h"
 #include "simChamber.h" 
 #include "Model/Model.h"
+#include "Cola/Focus.h"
 
 class simSpectrometer : public simDetectorBase {
 protected:
@@ -46,7 +47,7 @@ public:
   virtual int resolution(struct TargetCoord *tc);
   virtual int check(Particle vf, double targetpos[3],
 		    class target *, struct TargetCoord *tc,
-		    struct simFocalCoord *fc, modeltype ModelType);
+		    struct simFocalCoord *fc, class Focus *focus, modeltype ModelType);
 };
 
 #endif /* __simSpectrometer_h__ */

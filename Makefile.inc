@@ -8,39 +8,39 @@
 # global makefile
 #
 
-topdir		= @srcdir@
+topdir		= .
 
 SHELL		= /bin/sh
-CC		= @CC@
-CPP		= @CPP@
-GNUCPP		= @GNUCPP@
-CXX		= @CXX@
-F77		= @F77@
-FC		= @FC@
-INSTALL		= @INSTALL@
-INSTALL_PROGRAM	= @INSTALL_PROGRAM@
-INSTALL_DATA	= @INSTALL_DATA@
-RANLIB		= @RANLIB@
+CC		= gcc
+CPP		= gcc -E
+GNUCPP		= gcc -E -P -x c
+CXX		= g++
+F77		= f77
+FC		= gfortran
+INSTALL		= /usr/bin/install -c
+INSTALL_PROGRAM	= ${INSTALL}
+INSTALL_DATA	= ${INSTALL} -m 644
+RANLIB		= ranlib
 
-AQUACONFIG	= @AQUACONFIG@
-BISONXX		= @BISONXX@
-BISONFLAGS	= @BISONFLAGS@
+AQUACONFIG	= /usr/local/a1/bin/AquaConfig
+BISONXX		= ../Bison/Bison++
+BISONFLAGS	= -S $(srcdir)/../Bison/bison.cc -H $(srcdir)/../Bison/bison.h
 CINDY		= ../Cindy/Cindy++
-FLEXXX		= @FLEXXX@
-FLEXFLAGS	= @FLEXFLAGS@
-FIND		= @FIND@
-GZIP		= @GZIP@
-YACC		= @YACC@
+FLEXXX		= ../Flex/Flex++
+FLEXFLAGS	= -S$(srcdir)/../Flex/flexskel.cc -H$(srcdir)/../Flex/flexskel.h
+FIND		= find
+GZIP		= gzip
+YACC		= bison -y
 
-DEFS		= @DEFS@
-OPTS		= @OPTS@
-LIBS		= @LIBS@
-WARN		= @WARN@
-ISSHARED	= @ISSHARED@
-ISSTATIC	= @ISSTATIC@
+DEFS		= -DHAVE_CONFIG_H
+OPTS		=  -O2 -g
+LIBS		= -lnsl 
+WARN		= -Wall -Wno-write-strings
+ISSHARED	= 1
+ISSTATIC	= 0
 
-prefix		= @prefix@
-exec_prefix	= @exec_prefix@
+prefix		= /usr/local/a1
+exec_prefix	= /usr/local/a1
 binprefix	=
 manprefix	=
 
@@ -54,37 +54,36 @@ manext		= 1
 sharedir	= $(prefix)/share
 exampledir	= $(sharedir)/examples
 
-PGLIBS		= @PG_LIBS@
-PGINCL		= @PG_INCL@
+PGLIBS		= 
+PGINCL		= -I/usr/include/postgresql -I/usr/include
 
-GSLLIBS		= @GSL_LIBS@
-GSLINCL		= @GSL_INCL@
+GSLLIBS		= -L/usr/lib/x86_64-linux-gnu -lgsl -lgslcblas -lm
+GSLINCL		= -I/usr/include
 
-ARCH		= @host@
-CERNLIB         = @CERNLIB@
-ROOTLIB		= @ROOTLIB@
-ROOT_CFLAGS	= @ROOT_CFLAGS@
-ROOT_LIBS	= @ROOT_LIBS@
-ROOT_SUPLIBS	= @ROOT_SUPLIBS@
+ARCH		= x86_64-unknown-linux-gnu
+CERNLIB         = /usr/lib/x86_64-linux-gnu
+ROOTLIB		= 1
+ROOT_CFLAGS	= -pthread -m64 -I/usr/include/root
+ROOT_LIBS	= -L/usr/lib/x86_64-linux-gnu -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -pthread -lm -ldl -rdynamic
 
-FFLAGS		= @FFLAGS@
-FLIBS		= @FLIBS@
-FCFLAGS		= @FCFLAGS@
+FFLAGS		= -g -O2 -ffixed-line-length-none
+FLIBS		= -lf2c -lgfortran
+FCFLAGS		= -g -O2
 
-X_CFLAGS	= @X_CFLAGS@
-X_LIBS		= @X_LIBS@
-MOTIFLIBS	= $(X_LIBS) @LIBMOTIF@
+X_CFLAGS	= 
+X_LIBS		= 
+MOTIFLIBS	= $(X_LIBS) -lXm -lXpm -lXext -lXmu -lXt -lX11 -lSM -lICE
 
 FPIC		= -fPIC
 PICDIR		= pic
-SHARED_EXT	= @SHARED_EXT@
+SHARED_EXT	= so
 SHARED_LIB	= $(patsubst %.a,%.$(SHARED_EXT),$(library))
-SHFLAGS		= @SHFLAGS@
+SHFLAGS		= -Wl,-soname,$(basename $(shlib))
 BUILD_LIBS	= $(library)
 
 ifeq ($(ISSHARED),1)
 BUILD_LIBS     += $(shlib)
-LDSHARE		= @LDSHARE@
+LDSHARE		= -Xlinker --disable-new-dtags -Xlinker -rpath -Xlinker $(libdir)
 LIB4VEC		= ../FourVector/lib4vec.$(SHARED_EXT)
 LIBAQUA		= $(libdir)/libaqua.$(SHARED_EXT)
 LIBCH		= ../Chamber/libch++.$(SHARED_EXT)
@@ -105,12 +104,12 @@ LIBHMVIEW	= ../HMBook/libhmview.a
 LIBMODEL	= ../Model/libmodel.a
 LIBSIMUL	= ../Simulation/libsimul.a
 LIBSIMREADER    = ../Simulation/EventSim/libeventsimreader.a
-LIBELASTICRADIATIVE = ../Simulation/ElasticRadiative/libElasticRadiative.a
+LIBELASTICRADIATIVE= ../Simulation/ElasticRadiative/libElasticRadiative.a
 LIBDETECT	= ../Detector/libdetector.a
 LIBAQUA_SETUP	= $(libdir)/libaqua.$(SHARED_EXT) \
 		  $(libdir)/libsetup.$(SHARED_EXT)
 LIBAQUA_READER	= $(LIBAQUA_SETUP) $(libdir)/libreader.$(SHARED_EXT)
-LDREADER	= @LDSHARE@ -ldl
+LDREADER	= -Xlinker --disable-new-dtags -Xlinker -rpath -Xlinker $(libdir) -ldl
 LIBTMA		= ../TMA/libtma.a
 
 define link_shlib
@@ -130,17 +129,17 @@ endef
 
 LIBGCC	       := $(shell $(CC) --print-libgcc-file-name)
 
-WX_CFLAGS	= -I@WXINC@/base -I@WXINC@/x $(X_CFLAGS)
+WX_CFLAGS	= -I/usr/local/wxwin/include/base -I/usr/local/wxwin/include/x $(X_CFLAGS)
 ifeq ($(ISSHARED),1)
-WX_LIBS		= -L@WXLIB@ -lwx_motif
+WX_LIBS		= -L/usr/local/wxwin/lib -lwx_motif
 else
-WX_LIBS		= @WXLIB@/libwx_motif.a
+WX_LIBS		= /usr/local/wxwin/lib/libwx_motif.a
 endif
 
-DOCXX		= @DOCXX@
+DOCXX		= /usr/local/src/Cola/Doc/doc++
 DOCXXSTY	= docxx.sty
-DVIPS		= @DVIPS@
-LATEX		= @LATEX@ -interaction batchmode
+DVIPS		= /usr/bin/dvips
+LATEX		= /usr/bin/latex -interaction batchmode
 htmldir		= html
 texdir		= tex
 

@@ -129,12 +129,16 @@ public:
 		 double oopangB=0.0);
   ///
   double y(struct TargetCo *resultA, struct TargetCo *resultB);
-  ///
+  /// corr for Cola
+  /// antiCorr for Simul
   void corrA(double x0, struct TargetCo *resultA);
+  void antiCorrA(double hor, double vert, struct TargetCo *resultA);
   ///
   void corrB(double x0, struct TargetCo *resultB);
+  void antiCorrB(double hor, double vert, struct TargetCo *resultB);
   ///
   void corrC(double x0, struct TargetCo *resultC);
+  void antiCorrC(double hor, double vert, struct TargetCo *resultC);
   ///
 };
 
@@ -177,6 +181,13 @@ public:
   void focuscorrB(double horiz, double verti, struct TargetCo *resultB);
   /// correction of delta and theta of SpecC
   void focuscorrC(double horiz, double verti, struct TargetCo *resultC);
+
+  /// correction of delta and theta of SpecA
+  void focusanticorrA(double horiz, double verti, struct TargetCo *resultA);
+  /// correction of delta and theta of SpecB
+  void focusanticorrB(double horiz, double verti, struct TargetCo *resultB);
+  /// correction of delta and theta of SpecC
+  void focusanticorrC(double horiz, double verti, struct TargetCo *resultC);
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include "HMBook/hmbook.h"         // HMBook Histogram library
 #include "Aqua/AquaTree.h"
 #include "Cola/ColaNtuple.h"
+#include "Cola/Focus.h"
 
 const double refmomA = 660 / 630.0;
 const double refmomB = 1; 
@@ -19,6 +20,8 @@ private:
   //bss out 2016-02-17  luminosity            *Luminosity;
   struct online         online;
   struct abcn           abcn;
+
+  class Focus            *focus;
   
   static double         events;
   double                accepted;
@@ -38,7 +41,7 @@ private:
   HIST                  *crossSection;
   class eventGenerator  *generator;
   class CosGenerator    *cosGen;
-  int                   chck(Particle &vf, double x[]);
+  int                   chck(Particle &vf, double x[], class Focus *focus);
 protected:
   char			*run_db; 
 public:

@@ -178,7 +178,7 @@ int simSpectrometer::energyLossCorrection(target *target, double x[3])
   
 int simSpectrometer::check(Particle vf, double x[3],
 			   target *target, struct TargetCoord *tc,
-			   struct simFocalCoord *fc, modeltype ModelType)
+			   struct simFocalCoord *fc, Focus *focus, modeltype ModelType)
 {
   double EnergyBefore = 0;
   
@@ -325,7 +325,24 @@ int simSpectrometer::check(Particle vf, double x[3],
   tc->y0 = (- x[0] * cos(angle) + x[2] * sin(angle))/10.0; // result is in [cm]
   // this is only an approximation (i.e. ph==0) to initialize the variable
   // proper vertex coordinate y0 has to go here...
+  if (focus){
+    TargetCo result = {tc->dp, tc->th, tc->y0, tc->ph, tc->len};
+    //std::cout << tc->dp << " " << tc->th << " " << tc->y0 << " " << tc->ph << std::endl;
+    //std::cout << result.dp << " " << result.th << " " << result.y0 << " " << result.ph << std::endl;
+    focus->focusanticorrB(x[0], x[1], &result);
+
+    tc->dp = result.dp;
+    tc->th = result.th;
+    tc->y0 = result.y0;
+    tc->ph = result.ph;
+    tc->len = result.len;
+    //std::cout << tc->dp << " " << tc->th << " " << tc->y0 << " " << tc->ph << std::endl;
+    //std::cout << result.dp << " " << result.th << " " << result.y0 << " " << result.ph << std::endl;
+    //focus->focuscorrB(x[0], x[1], &result);
+    //std::cout << result.dp << " " << result.th << " " << result.y0 << " " << result.ph << std::endl;
+  }
   
+  //std::cout << tc->dp << " " << tc->th << " " << tc->y0 << " " << tc->ph << std::endl;
   atree->packEventData(&(tc->th), 1);
   atree->packEventData(&(tc->ph), 1);
   atree->packEventData(&(tc->dp), 1);
