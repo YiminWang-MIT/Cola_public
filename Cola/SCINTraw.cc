@@ -85,14 +85,15 @@ int scintillator_2014(AquaTree  *atree,
   onl.ToF.Energy.left = onl.ToF.Energy.right = 0;
   onl.dE.Energy.left  = onl.dE.Energy.right = 0;
 
-  double maxenergy = 0;
   if (!onl.trigger)  return 0;
 
   ///////////////////////
   // ToF A, B and C
   ///////////////////////
 
+  double maxenergy = 0;
   int number = 1;
+  int max_index = -1;
   for (i=0; i<num_ToFpad; i++) {
     if (atree->itemOK(&ToFpad[i].left.energy) && atree->itemOK(&ToFpad[i].right.energy)) {
       
@@ -132,6 +133,7 @@ int scintillator_2014(AquaTree  *atree,
  
       if (thisenergy>maxenergy) { 
 	maxenergy = thisenergy;
+  max_index = i;
 	onl.ToF.Energy.left       = onl.ToF.AdcPedCorr_left[i]; //ped corrected, for walk correction
 	onl.ToF.Energy.left_corr  = onl.ToF.AdcScaled_left[i];  //scaled, for particle ID
 	onl.ToF.Energy.right       = onl.ToF.AdcPedCorr_right[i]; //ped corrected, for walk correction
@@ -152,6 +154,8 @@ int scintillator_2014(AquaTree  *atree,
   out->packEventData(&onl.ToF.dummy_hits, 1);
   onl.ToF.pattern = pattern;
   out->packEventData(&onl.ToF.pattern, 1);
+  onl.ToF.max_paddle= max_index;
+  out->packEventData(&onl.ToF.max_paddle, 1);
 
 
   ///////////////////////
@@ -161,6 +165,7 @@ int scintillator_2014(AquaTree  *atree,
   number = 1;
   maxenergy = 0;
   counter = 0;
+  max_index=-1;
 
   ///////////////////////
   // dE A and C
@@ -197,6 +202,7 @@ int scintillator_2014(AquaTree  *atree,
 
 
 	if  (thisenergy>maxenergy) {
+    max_index = i;
 	  maxenergy = thisenergy;
 	  onl.dE.Energy.left       = onl.dE.AdcPedCorr_left[i]; //ped corrected, for walk correction
 	  onl.dE.Energy.left_corr  = onl.dE.AdcScaled_left[i];  //scaled, for particle ID
@@ -219,6 +225,7 @@ int scintillator_2014(AquaTree  *atree,
   ///////////////////////
 
   } else { // Special case for dE layer of Spectrometer B ! That's odd.
+
     for (i=0; i<num_dEpad; i++)  {
       if (atree->itemOK(&dE_B[i].energy))  {
 	onl.dE.AdcPedCorr_left[i] = onl.dE.AdcPedCorr_right[i] = 0.;
@@ -244,6 +251,7 @@ int scintillator_2014(AquaTree  *atree,
 
 	if  (thisenergy>maxenergy) {
 	  maxenergy = thisenergy;
+    max_index = i;
 	  //has only one PMT for each scintillator, two values are assigned here since in some .col files you find uncool things like
 	  //Scalar spc(dE.Energy)    = sqrt(spec.dE.Energy.left*spec.dE.Energy.right)
 
@@ -265,6 +273,8 @@ int scintillator_2014(AquaTree  *atree,
   out->packEventData(&onl.dE.hits, 1);
   onl.dE.pattern = pattern;
   out->packEventData(&onl.dE.pattern, 1);
+  onl.dE.max_paddle= max_index;
+  out->packEventData(&onl.dE.max_paddle, 1);
  
   if ( atree->itemOK(de_tof_time) && 
        out->itemOK(&onl.dE.paddle) && 
@@ -286,7 +296,8 @@ int scintillator_2014(AquaTree  *atree,
       out->packEventData(&onl.dE_ToF,     1);
     }
     out->packEventData(&onl.raw_dE_ToF, 1);
-  }
+  } 
+  
   
   return pattern;
 }
