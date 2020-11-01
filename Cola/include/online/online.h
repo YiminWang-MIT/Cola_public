@@ -48,6 +48,7 @@ struct scinti       {
   /** Number of paddles dummy hit (E>0)  */ int dummy_hits;
   /** Number of paddle used for timing   */ short paddle;
   /** Delay of paddle used for timing    */ double scint;
+  /** Paddle with maximum energy         */ short max_paddle;
   /** bss 2013-12-30 software ped subtr  */ double AdcPedCorr_left[15];
   /** bss 2013-12-30 software ped subtr  */ double AdcPedCorr_right[15];
   /** bss 2013-12-30 finally scaled      */ double AdcScaled_left[15];
