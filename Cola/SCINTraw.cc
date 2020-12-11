@@ -172,6 +172,8 @@ int scintillator_2014(AquaTree  *atree,
   ///////////////////////
 
   if (!dE_B) {
+    dummy_counter = 0;
+    double temp_Ped=0;
     for (i=0; i<num_dEpad; i++)  {
       if (atree->itemOK(&dEpad[i].left.energy) && atree->itemOK(&dEpad[i].right.energy)) {
 	onl.dE.AdcPedCorr_left[i] = onl.dE.AdcPedCorr_right[i] = 0.;
@@ -179,6 +181,7 @@ int scintillator_2014(AquaTree  *atree,
 
 
 	double PedCorr = dEpad[i].left.energy + rund.scint.dE_corr_left_offset[i];
+  temp_Ped+=PedCorr;
 	if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
 	  onl.dE.AdcPedCorr_left[i] = PedCorr;
 	  onl.dE.AdcScaled_left[i] = PedCorr * rund.scint.dE_corr_left_scale[i];
@@ -192,6 +195,7 @@ int scintillator_2014(AquaTree  *atree,
 	out->packEventData(&onl.dE.AdcScaled_left[i], 1); 
 	out->packEventData(&onl.dE.AdcPedCorr_right[i], 1); 
 	out->packEventData(&onl.dE.AdcScaled_right[i], 1); 
+  if (temp_Ped>0) dummy_counter+=1;
 	
 
 	double thisenergy = onl.dE.AdcScaled_left[i] * onl.dE.AdcScaled_right[i]; //should usually have isolated peak at zero
@@ -225,6 +229,8 @@ int scintillator_2014(AquaTree  *atree,
   ///////////////////////
 
   } else { // Special case for dE layer of Spectrometer B ! That's odd.
+    dummy_counter = 0;
+    double temp_Ped=0;
 
     for (i=0; i<num_dEpad; i++)  {
       if (atree->itemOK(&dE_B[i].energy))  {
@@ -233,6 +239,7 @@ int scintillator_2014(AquaTree  *atree,
 
 	//using "right"- values only
 	double PedCorr = dE_B[i].energy + rund.scint.dE_corr_right_offset[i];
+  temp_Ped+=PedCorr;
 	if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
 	  onl.dE.AdcPedCorr_right[i] = PedCorr;
 	  onl.dE.AdcScaled_right[i] = PedCorr * rund.scint.dE_corr_right_scale[i];
@@ -240,6 +247,7 @@ int scintillator_2014(AquaTree  *atree,
 	out->packEventData(&onl.dE.AdcPedCorr_right[i], 1); 
 	out->packEventData(&onl.dE.AdcScaled_right[i], 1); 
 
+  if (temp_Ped>0) dummy_counter+=1;
 
 	double thisenergy = onl.dE.AdcScaled_right[i];
 	if (thisenergy>0) { //implicitly fulfilled: ADC+Offset>=minADC
@@ -275,6 +283,8 @@ int scintillator_2014(AquaTree  *atree,
   out->packEventData(&onl.dE.pattern, 1);
   onl.dE.max_paddle= max_index;
   out->packEventData(&onl.dE.max_paddle, 1);
+  onl.dE.dummy_hits = dummy_counter;
+  out->packEventData(&onl.dE.dummy_hits, 1);
  
   if ( atree->itemOK(de_tof_time) && 
        out->itemOK(&onl.dE.paddle) && 
