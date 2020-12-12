@@ -45,7 +45,8 @@ struct scinti       {
 						      right_corr;} Energy;
   /** Hit pattern                        */ short pattern; 
   /** Number of paddles hit              */ short hits;
-  /** Number of paddles dummy hit (E>0)  */ short dummy_hits;
+  /** Number dummy hit (Ecorr>0)         */ short dummy_hits;
+  /** Number of paddles raw hit (E>0)    */ short raw_hits;
   /** Number of paddle used for timing   */ short paddle;
   /** Delay of paddle used for timing    */ double scint;
   /** Paddle with maximum energy         */ short max_paddle;
