@@ -76,9 +76,10 @@ int scintillator_2014(AquaTree  *atree,
   //bssdel:  
   //  std::cerr << "Creating spek" << SpecName << std::endl;
 
-  int pattern = 0, i;
-  int counter = 0;
-  int dummy_counter = 0;
+  short pattern = 0, i;
+  short counter = 0;
+  short dummy_counter = 0;
+  short raw_counter = 0;
 
   onl.ToF.paddle      = onl.dE.paddle = -1;
   onl.ToF.scint       = onl.dE.scint  = 0;
@@ -100,20 +101,20 @@ int scintillator_2014(AquaTree  *atree,
       onl.ToF.AdcPedCorr_left[i] = onl.ToF.AdcPedCorr_right[i] = 0.;
       onl.ToF.AdcScaled_left[i] = onl.ToF.AdcScaled_right[i] = 0.;
 
-      double temp_Ped=0;
 
       //bss 2013-12-30 the hardware pedestal subtraction has a minimum ADC value above pedestal, 
       //i.e. ADC > 5 ? ADC : 0; emulate this in case hardware subtraction is replaced by software subtr.
       double PedCorr = ToFpad[i].left.energy + rund.scint.ToF_corr_left_offset[i];
-      //std::cout << i << "\t" << PedCorr << "\t";
-      temp_Ped+=PedCorr;
+      if (PedCorr>0) dummy_counter+=1;
+      if (ToFpad[i].left.energy>0) raw_counter+=1;
       if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
         onl.ToF.AdcPedCorr_left[i] = PedCorr;
         onl.ToF.AdcScaled_left[i] = PedCorr * rund.scint.ToF_corr_left_scale[i];
       }
       PedCorr = ToFpad[i].right.energy + rund.scint.ToF_corr_right_offset[i];
-      //std::cout << PedCorr << std::endl;
-      temp_Ped+=PedCorr;
+      if (PedCorr>0) dummy_counter+=1;
+      if (ToFpad[i].right.energy>0) raw_counter+=1;
+
       if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
         onl.ToF.AdcPedCorr_right[i] = PedCorr;
         onl.ToF.AdcScaled_right[i] = PedCorr * rund.scint.ToF_corr_right_scale[i];
@@ -123,7 +124,6 @@ int scintillator_2014(AquaTree  *atree,
       out->packEventData(&onl.ToF.AdcPedCorr_right[i], 1); 
       out->packEventData(&onl.ToF.AdcScaled_right[i], 1); 
       
-      if (temp_Ped>0) dummy_counter+=1;
 
       double thisenergy = onl.ToF.AdcScaled_left[i] * onl.ToF.AdcScaled_right[i]; //should usually have isolated peak at zero
       if (thisenergy>0) { //implicitly fulfilled: ADC+Offset>=minADC for both left and right
@@ -152,6 +152,8 @@ int scintillator_2014(AquaTree  *atree,
   out->packEventData(&onl.ToF.hits, 1);
   onl.ToF.dummy_hits = dummy_counter;
   out->packEventData(&onl.ToF.dummy_hits, 1);
+  onl.ToF.raw_hits = raw_counter;
+  out->packEventData(&onl.ToF.raw_hits, 1);
   onl.ToF.pattern = pattern;
   out->packEventData(&onl.ToF.pattern, 1);
   onl.ToF.max_paddle= max_index;
@@ -166,14 +168,14 @@ int scintillator_2014(AquaTree  *atree,
   maxenergy = 0;
   counter = 0;
   max_index=-1;
+  dummy_counter = 0;
+  raw_counter = 0;
 
   ///////////////////////
   // dE A and C
   ///////////////////////
 
   if (!dE_B) {
-    dummy_counter = 0;
-    double temp_Ped=0;
     for (i=0; i<num_dEpad; i++)  {
       if (atree->itemOK(&dEpad[i].left.energy) && atree->itemOK(&dEpad[i].right.energy)) {
 	onl.dE.AdcPedCorr_left[i] = onl.dE.AdcPedCorr_right[i] = 0.;
@@ -181,12 +183,15 @@ int scintillator_2014(AquaTree  *atree,
 
 
 	double PedCorr = dEpad[i].left.energy + rund.scint.dE_corr_left_offset[i];
-  temp_Ped+=PedCorr;
+  if (PedCorr>0) dummy_counter+=1;
+	if (dEpad[i].left.energy>0) raw_counter+=1; 
 	if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
 	  onl.dE.AdcPedCorr_left[i] = PedCorr;
 	  onl.dE.AdcScaled_left[i] = PedCorr * rund.scint.dE_corr_left_scale[i];
 	}
 	PedCorr = dEpad[i].right.energy + rund.scint.dE_corr_right_offset[i];
+  if (PedCorr>0) dummy_counter+=1;
+	if (dEpad[i].right.energy>0) raw_counter+=1; 
 	if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
 	  onl.dE.AdcPedCorr_right[i] = PedCorr;
 	  onl.dE.AdcScaled_right[i] = PedCorr * rund.scint.dE_corr_right_scale[i];
@@ -195,7 +200,6 @@ int scintillator_2014(AquaTree  *atree,
 	out->packEventData(&onl.dE.AdcScaled_left[i], 1); 
 	out->packEventData(&onl.dE.AdcPedCorr_right[i], 1); 
 	out->packEventData(&onl.dE.AdcScaled_right[i], 1); 
-  if (temp_Ped>0) dummy_counter+=1;
 	
 
 	double thisenergy = onl.dE.AdcScaled_left[i] * onl.dE.AdcScaled_right[i]; //should usually have isolated peak at zero
@@ -229,8 +233,6 @@ int scintillator_2014(AquaTree  *atree,
   ///////////////////////
 
   } else { // Special case for dE layer of Spectrometer B ! That's odd.
-    dummy_counter = 0;
-    double temp_Ped=0;
 
     for (i=0; i<num_dEpad; i++)  {
       if (atree->itemOK(&dE_B[i].energy))  {
@@ -239,7 +241,8 @@ int scintillator_2014(AquaTree  *atree,
 
 	//using "right"- values only
 	double PedCorr = dE_B[i].energy + rund.scint.dE_corr_right_offset[i];
-  temp_Ped+=PedCorr;
+  if (PedCorr>0) dummy_counter+=1;
+	if (dE_B[i].energy>0) raw_counter+=1;
 	if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
 	  onl.dE.AdcPedCorr_right[i] = PedCorr;
 	  onl.dE.AdcScaled_right[i] = PedCorr * rund.scint.dE_corr_right_scale[i];
@@ -247,7 +250,6 @@ int scintillator_2014(AquaTree  *atree,
 	out->packEventData(&onl.dE.AdcPedCorr_right[i], 1); 
 	out->packEventData(&onl.dE.AdcScaled_right[i], 1); 
 
-  if (temp_Ped>0) dummy_counter+=1;
 
 	double thisenergy = onl.dE.AdcScaled_right[i];
 	if (thisenergy>0) { //implicitly fulfilled: ADC+Offset>=minADC
@@ -285,6 +287,8 @@ int scintillator_2014(AquaTree  *atree,
   out->packEventData(&onl.dE.max_paddle, 1);
   onl.dE.dummy_hits = dummy_counter;
   out->packEventData(&onl.dE.dummy_hits, 1);
+  onl.dE.raw_hits = raw_counter;
+  out->packEventData(&onl.dE.raw_hits, 1);
  
   if ( atree->itemOK(de_tof_time) && 
        out->itemOK(&onl.dE.paddle) && 
