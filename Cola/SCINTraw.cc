@@ -162,7 +162,7 @@ int scintillator_2014(AquaTree  *atree,
   onl.ToF.max_paddle= max_index;
   out->packEventData(&onl.ToF.max_paddle, 1);
   onl.ToF.total_raw_energy = totalenergy;
-  out->packEventData(&onl.ToF.total_raw_energy, 1);
+  out->packEventData(&onl.ToF.total_raw_energy, 4);
 
 
   ///////////////////////
@@ -299,7 +299,7 @@ int scintillator_2014(AquaTree  *atree,
   onl.dE.raw_hits = raw_counter;
   out->packEventData(&onl.dE.raw_hits, 1);
   onl.dE.total_raw_energy = totalenergy;
-  out->packEventData(&onl.dE.total_raw_energy, 1);
+  out->packEventData(&onl.dE.total_raw_energy, 4);
  
   if ( atree->itemOK(de_tof_time) && 
        out->itemOK(&onl.dE.paddle) && 
