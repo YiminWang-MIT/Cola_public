@@ -102,6 +102,8 @@ int scintillator_2014(AquaTree  *atree,
       onl.ToF.AdcPedCorr_left[i] = onl.ToF.AdcPedCorr_right[i] = 0.;
       onl.ToF.AdcScaled_left[i] = onl.ToF.AdcScaled_right[i] = 0.;
 
+      onl.ToF.AdcRaw_left[i] = ToFpad[i].left.energy;
+      onl.ToF.AdcRaw_right[i] = ToFpad[i].right.energy;
 
       //bss 2013-12-30 the hardware pedestal subtraction has a minimum ADC value above pedestal, 
       //i.e. ADC > 5 ? ADC : 0; emulate this in case hardware subtraction is replaced by software subtr.
@@ -122,8 +124,10 @@ int scintillator_2014(AquaTree  *atree,
         onl.ToF.AdcPedCorr_right[i] = PedCorr;
         onl.ToF.AdcScaled_right[i] = PedCorr * rund.scint.ToF_corr_right_scale[i];
       }
+      out->packEventData(&onl.ToF.AdcRaw_left[i], 1); 
       out->packEventData(&onl.ToF.AdcPedCorr_left[i], 1); 
       out->packEventData(&onl.ToF.AdcScaled_left[i], 1); 
+      out->packEventData(&onl.ToF.AdcRaw_right[i], 1); 
       out->packEventData(&onl.ToF.AdcPedCorr_right[i], 1); 
       out->packEventData(&onl.ToF.AdcScaled_right[i], 1); 
       
@@ -187,6 +191,8 @@ int scintillator_2014(AquaTree  *atree,
 	onl.dE.AdcPedCorr_left[i] = onl.dE.AdcPedCorr_right[i] = 0.;
 	onl.dE.AdcScaled_left[i] = onl.dE.AdcScaled_right[i] = 0.;
 
+      onl.dE.AdcRaw_left[i] = dEpad[i].left.energy;
+      onl.dE.AdcRaw_right[i] = dEpad[i].right.energy;
 
 	double PedCorr = dEpad[i].left.energy + rund.scint.dE_corr_left_offset[i];
   if (PedCorr>0) dummy_counter+=1;
@@ -204,8 +210,10 @@ int scintillator_2014(AquaTree  *atree,
 	  onl.dE.AdcPedCorr_right[i] = PedCorr;
 	  onl.dE.AdcScaled_right[i] = PedCorr * rund.scint.dE_corr_right_scale[i];
 	}
+  out->packEventData(&onl.dE.AdcRaw_left[i], 1); 
 	out->packEventData(&onl.dE.AdcPedCorr_left[i], 1); 
 	out->packEventData(&onl.dE.AdcScaled_left[i], 1); 
+  out->packEventData(&onl.dE.AdcRaw_right[i], 1); 
 	out->packEventData(&onl.dE.AdcPedCorr_right[i], 1); 
 	out->packEventData(&onl.dE.AdcScaled_right[i], 1); 
 	
@@ -247,6 +255,9 @@ int scintillator_2014(AquaTree  *atree,
 	onl.dE.AdcPedCorr_left[i] = onl.dE.AdcPedCorr_right[i] = 0.;
 	onl.dE.AdcScaled_left[i] = onl.dE.AdcScaled_right[i] = 0.;
 
+      onl.dE.AdcRaw_left[i] = 0;
+      onl.dE.AdcRaw_right[i] = dE_B[i].energy;
+
 	//using "right"- values only
 	double PedCorr = dE_B[i].energy + rund.scint.dE_corr_right_offset[i];
   if (PedCorr>0) dummy_counter+=1;
@@ -258,6 +269,8 @@ int scintillator_2014(AquaTree  *atree,
 	}
 	out->packEventData(&onl.dE.AdcPedCorr_right[i], 1); 
 	out->packEventData(&onl.dE.AdcScaled_right[i], 1); 
+  out->packEventData(&onl.dE.AdcRaw_left[i], 1); 
+  out->packEventData(&onl.dE.AdcRaw_right[i], 1); 
 
 
 	double thisenergy = onl.dE.AdcScaled_right[i];
