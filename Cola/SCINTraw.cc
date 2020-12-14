@@ -95,7 +95,9 @@ int scintillator_2014(AquaTree  *atree,
   double maxenergy = 0;
   int number = 1;
   int max_index = -1;
-  short totalenergy=0;
+  short total_raw_energy=0;
+  short total_dummy_energy=0;
+
   for (i=0; i<num_ToFpad; i++) {
     if (atree->itemOK(&ToFpad[i].left.energy) && atree->itemOK(&ToFpad[i].right.energy)) {
       
@@ -110,19 +112,21 @@ int scintillator_2014(AquaTree  *atree,
       double PedCorr = ToFpad[i].left.energy + rund.scint.ToF_corr_left_offset[i];
       if (PedCorr>0) dummy_counter+=1;
       if (ToFpad[i].left.energy>0) raw_counter+=1;
-      totalenergy+=ToFpad[i].left.energy;
+      total_raw_energy+=ToFpad[i].left.energy;
       if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
         onl.ToF.AdcPedCorr_left[i] = PedCorr;
         onl.ToF.AdcScaled_left[i] = PedCorr * rund.scint.ToF_corr_left_scale[i];
+        total_dummy_energy+=ToFpad[i].left.energy + rund.scint.ToF_corr_left_offset[i];
       }
       PedCorr = ToFpad[i].right.energy + rund.scint.ToF_corr_right_offset[i];
       if (PedCorr>0) dummy_counter+=1;
       if (ToFpad[i].right.energy>0) raw_counter+=1;
-      totalenergy+=ToFpad[i].right.energy;
+      total_raw_energy+=ToFpad[i].right.energy;
 
       if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
         onl.ToF.AdcPedCorr_right[i] = PedCorr;
         onl.ToF.AdcScaled_right[i] = PedCorr * rund.scint.ToF_corr_right_scale[i];
+        total_dummy_energy+=ToFpad[i].right.energy + rund.scint.ToF_corr_right_offset[i];
       }
       out->packEventData(&onl.ToF.AdcRaw_left[i], 1); 
       out->packEventData(&onl.ToF.AdcPedCorr_left[i], 1); 
@@ -165,8 +169,10 @@ int scintillator_2014(AquaTree  *atree,
   out->packEventData(&onl.ToF.pattern, 1);
   onl.ToF.max_paddle= max_index;
   out->packEventData(&onl.ToF.max_paddle, 1);
-  onl.ToF.total_raw_energy = totalenergy;
+  onl.ToF.total_raw_energy = total_raw_energy;
   out->packEventData(&onl.ToF.total_raw_energy, 1);
+  onl.ToF.total_dummy_energy = total_dummy_energy;
+  out->packEventData(&onl.ToF.total_dummy_energy, 1);
 
 
   ///////////////////////
@@ -179,7 +185,8 @@ int scintillator_2014(AquaTree  *atree,
   max_index=-1;
   dummy_counter = 0;
   raw_counter = 0;
-  totalenergy=0;
+  total_raw_energy=0;
+  total_dummy_energy=0;
 
   ///////////////////////
   // dE A and C
@@ -197,18 +204,20 @@ int scintillator_2014(AquaTree  *atree,
 	double PedCorr = dEpad[i].left.energy + rund.scint.dE_corr_left_offset[i];
   if (PedCorr>0) dummy_counter+=1;
 	if (dEpad[i].left.energy>0) raw_counter+=1; 
-	totalenergy+=dEpad[i].left.energy;
+	total_raw_energy+=dEpad[i].left.energy;
 	if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
 	  onl.dE.AdcPedCorr_left[i] = PedCorr;
 	  onl.dE.AdcScaled_left[i] = PedCorr * rund.scint.dE_corr_left_scale[i];
+    total_dummy_energy+=dEpad[i].left.energy + rund.scint.dE_corr_left_offset[i];
 	}
 	PedCorr = dEpad[i].right.energy + rund.scint.dE_corr_right_offset[i];
   if (PedCorr>0) dummy_counter+=1;
 	if (dEpad[i].right.energy>0) raw_counter+=1; 
-	totalenergy+=dEpad[i].right.energy;
+	total_raw_energy+=dEpad[i].right.energy;
 	if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
 	  onl.dE.AdcPedCorr_right[i] = PedCorr;
 	  onl.dE.AdcScaled_right[i] = PedCorr * rund.scint.dE_corr_right_scale[i];
+    total_dummy_energy+=dEpad[i].right.energy + rund.scint.dE_corr_right_offset[i];
 	}
   out->packEventData(&onl.dE.AdcRaw_left[i], 1); 
 	out->packEventData(&onl.dE.AdcPedCorr_left[i], 1); 
@@ -262,10 +271,11 @@ int scintillator_2014(AquaTree  *atree,
 	double PedCorr = dE_B[i].energy + rund.scint.dE_corr_right_offset[i];
   if (PedCorr>0) dummy_counter+=1;
 	if (dE_B[i].energy>0) raw_counter+=1;
-	totalenergy+=dE_B[i].energy;
+	total_raw_energy+=dE_B[i].energy;
 	if ( PedCorr >= rund.scint.MinAdcOverThresholdValue) {
 	  onl.dE.AdcPedCorr_right[i] = PedCorr;
 	  onl.dE.AdcScaled_right[i] = PedCorr * rund.scint.dE_corr_right_scale[i];
+    total_dummy_energy+= dE_B[i].energy + rund.scint.dE_corr_right_offset[i];
 	}
 	out->packEventData(&onl.dE.AdcPedCorr_right[i], 1); 
 	out->packEventData(&onl.dE.AdcScaled_right[i], 1); 
@@ -311,8 +321,10 @@ int scintillator_2014(AquaTree  *atree,
   out->packEventData(&onl.dE.dummy_hits, 1);
   onl.dE.raw_hits = raw_counter;
   out->packEventData(&onl.dE.raw_hits, 1);
-  onl.dE.total_raw_energy = totalenergy;
+  onl.dE.total_raw_energy = total_raw_energy;
   out->packEventData(&onl.dE.total_raw_energy, 1);
+  onl.dE.total_dummy_energy = total_dummy_energy;
+  out->packEventData(&onl.dE.total_dummy_energy, 1);
  
   if ( atree->itemOK(de_tof_time) && 
        out->itemOK(&onl.dE.paddle) && 

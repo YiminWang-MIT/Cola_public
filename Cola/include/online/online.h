@@ -51,6 +51,7 @@ struct scinti       {
   /** Delay of paddle used for timing    */ double scint;
   /** Paddle with maximum energy         */ short max_paddle;
   /** Total raw energy                   */ short total_raw_energy;
+  /** Total raw energy                   */ short total_dummy_energy;
   /** RAW value left                     */ double AdcRaw_left[15];
   /** RAW value right                    */ double AdcRaw_right[15];
   /** bss 2013-12-30 software ped subtr  */ double AdcPedCorr_left[15];
