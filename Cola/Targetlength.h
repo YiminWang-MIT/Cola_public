@@ -398,7 +398,7 @@ private:
   double GaussianCDF(double x);
 public:
   gasjet() { Length = totallength; cout << "Gasjet length = " << totallength << endl;}
-  gasjet(double length, double height, double width, double flow): totallength{length}, totalheight{height}, totalwidth{width} {if (flow>0.5) TargetMat=H2HighFlow; else TargetMat=H2LowFlow;};
+  gasjet(double length, double height, double width, double flow): totallength{length}, totalheight{height}, totalwidth{width} {if (flow>0.5) TargetMat=H2HighFlow; else TargetMat=H2LowFlow; cout << "Gasjet length = " << totallength << endl;};
   virtual ~gasjet() { ; }
   
   double getLength_in_Target(double x, double y, double z, 

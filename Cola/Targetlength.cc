@@ -2597,6 +2597,7 @@ gasjet::Generate_Vertex(double random[], double x[], double /*wob_x*/, double /*
   x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y + random[4] * gasjet::totalheight;
 
   x[2] = gasjet::totallength * (random[2]); //homogeneous
+  //std::cout << x[0] << ' ' << x[1]<< ' ' << x[2] << std::endl;
 
   return 1; 
 }

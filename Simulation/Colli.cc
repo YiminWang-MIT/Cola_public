@@ -472,11 +472,9 @@ Collimator *ColliBList[] = {
   new Bcolli(0.020, 0.020), new Bcolli(0.018, 0.020), 
   new Bcolli(0.020, 0.015), new Bcolli(0.018, 0.015), 
 
-  new Bcolli(0.0196, 0.0204, 0.071, 0.069),
-  new Bcolli(0.019, 0.021, 0.072, 0.068),
+  new Bcolli(0.0195, 0.0205, 0.072, 0.068),
   new Bcolli(0.0201, 0.0199, 0.0701, 0.0699),
   new Bcolli(0.020, 0.020, 0.070, 0.070),
-  new Bcolli(0.00676, 0.00414, 0.00597, 0.00596),
   new Bcolli(0.1, 0.1, 0.25, 0.25), // GSI collider
   new HES, // HES spectrometer at JLAB Hall C (P.A.)
   new allColli, new inPlaneColli, NULL
