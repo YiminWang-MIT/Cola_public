@@ -962,7 +962,7 @@ Simul::eventloop()
   double norm_vertex[5] = {norm(), norm(), norm(), norm(), norm()};
 
   //std::cout << targetpos_tar[0] << " "  << targetpos_tar[1] << " "  << targetpos_tar[2] << "\n" ;
-  if (ModelType == ElasticRadiative){
+  if ((ModelType == ElasticRadiative) || (ModelType == ElasticProton) || (ModelType == ElasticDipole)){
       if (!target->Generate_Vertex(norm_vertex, targetpos_tar, rundb.sim.wobx, 
                  rundb.sim.woby, ModelType)) return 0;
   } else {
