@@ -2738,6 +2738,30 @@ void gasjet::MultipleScattering(Particle& P, double random[], double x, double y
   return;
 }
 
+void gasjet::EnergyLossCorr(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss correction
+{
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
+
+  double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
+
+  P-=deltaE;
+
+  return;
+}
+
+void gasjet::EnergyLossCorrBeam(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss correction for beam
+{
+  double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
+
+  double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
+
+  P-=deltaE;
+
+  return;
+}
+
+
+
 int 
 windowlesstube::setPara(double len, double, double density, double, double, double)
 {

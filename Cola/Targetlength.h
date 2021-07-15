@@ -407,6 +407,10 @@ public:
   int setPara(double length, double angle,
 	      double density, double wallthck,
 	      double snowthck, double snowdns);
+  virtual void EnergyLossCorr(Particle& P, double x, double y, double z,
+      int steps, modeltype ModelType);
+  virtual void EnergyLossCorrBeam(Particle& P, double x, double y, double z,
+      int steps, modeltype ModelType);
   virtual void EnergyLossSim(Particle& P, double x, double y, double z,
       int steps, modeltype ModelType);
   virtual void EnergyLossSimBeam(Particle& P, double x, double y, double z,
