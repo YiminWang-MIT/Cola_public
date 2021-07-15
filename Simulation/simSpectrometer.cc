@@ -325,6 +325,7 @@ int simSpectrometer::check(Particle vf, double x[3],
   tc->y0 = (- x[0] * cos(angle) + x[2] * sin(angle))/10.0; // result is in [cm]
   // this is only an approximation (i.e. ph==0) to initialize the variable
   // proper vertex coordinate y0 has to go here...
+  /*
   if (focus){
     TargetCo result = {tc->dp, tc->th, tc->y0, tc->ph, tc->len};
     //std::cout << tc->dp << " " << tc->th << " " << tc->y0 << " " << tc->ph << std::endl;
@@ -340,7 +341,7 @@ int simSpectrometer::check(Particle vf, double x[3],
     //std::cout << result.dp << " " << result.th << " " << result.y0 << " " << result.ph << std::endl;
     //focus->focuscorrB(x[0], x[1], &result);
     //std::cout << result.dp << " " << result.th << " " << result.y0 << " " << result.ph << std::endl;
-  }
+  }*/
   
   //std::cout << tc->dp << " " << tc->th << " " << tc->y0 << " " << tc->ph << std::endl;
   atree->packEventData(&(tc->th), 1);

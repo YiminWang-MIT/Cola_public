@@ -646,8 +646,8 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   double lep_dipole, mix_dipole, had_dipole;
   bremMatrixElement(lep_dipole,mix_dipole,had_dipole, 0, 0);
   double matElement_dipole = lep_dipole+mix_dipole+had_dipole;
-  ev->weight.set_extra("method1_dipole", weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_dipole * kinFactor * jacobian * calcElasticCorr(el));
-  double returnweight = weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_dipole * kinFactor * jacobian * calcElasticCorr(el);
+  ev->weight.set_extra("method1_dipole", kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_dipole * jacobian * calcElasticCorr(el));
+  double dipole_weight = kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_dipole * jacobian * calcElasticCorr(el);
 
   //std::cout << returnweight << std::endl;
 
@@ -663,14 +663,13 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
 
   ev->weight.set_extra("method1_dipole_soft", phaseweight * weightDeltaE * weightSoftFrac * kweight * momk * softFactor * bornCrossSection(el, 0, 0) * jacobian * calcElasticCorr(el));
 
-
   // Set Jan FF weight
   double lep_Jan, mix_Jan, had_Jan;
   bremMatrixElement(lep_Jan,mix_Jan,had_Jan, 1, 1);
   double matElement_Jan = lep_Jan+mix_Jan+had_Jan;
   // Jan FF is the default weight
   ev->weight = kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
-  double splineweight = kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
+  double spline_weight = kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
   //std::cout << splineweight << std::endl;
   //ev->weight = weightDeltaE * weightSoftFrac * kweight * calcElasticCorr(el);
 #if YWDEBUG
@@ -864,7 +863,7 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
     ev->particles.push_back(kParticle);
   }
   
-  return returnweight;
+  return spline_weight;
   
 }
 

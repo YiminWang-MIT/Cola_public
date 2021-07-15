@@ -51,7 +51,8 @@ const double PSTIME_C  = 1024.0;
 const double PS_RATE   = 5000.0;
 
 // define maximal number of Events without Chamber
-const int MAXLOSSVDC = 50;
+//const int MAXLOSSVDC = 50;
+const int MAXLOSSVDC = 10000;
 
 int
 luminosity::clear()

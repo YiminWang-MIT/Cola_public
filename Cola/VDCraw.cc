@@ -143,6 +143,7 @@ int vdcHIST::handle(int npaddle)
   
   onl->mindt = minimalDriftTime;
   onl->maxdt = maximalDriftTime;
+  onl->nw = totalWire;
   out->packEventData(&onl->mindt, 1);
   out->packEventData(&onl->maxdt, 1);
   out->packEventData(&onl->nw, 1);

@@ -307,6 +307,7 @@ Focus::z_by_B(double horiz, double verti, struct TargetCo *resultB)
   double ph0 = 0.001*resultB->ph;
   // Old line, equivalent for oopB==0!
   //  return -y0 * cos(ph0) / sin(-angleB+ph0) - horiz / tan (-angleB+ph0);
+  //
 
   return 
     -((horiz*cos(-angleB) + y0 - (horiz*cos(oopB)*sin(-angleB) 

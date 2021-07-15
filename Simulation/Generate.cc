@@ -394,9 +394,15 @@ double generateElasticRadiative::generateEvent(double helicity)
   //simulate this event
   gen->generate(ge);
 
+  double weight=0;
+
   //pull back information from cooker generator
-  //double weight=ge->weight.get_extra("method1_dipole");
-  double weight=ge->weight.get_default();
+  if (getenv("SPLINEFIT") && atoi(getenv("SPLINEFIT"))==1){
+    std::cout<<"Olympis generator: Using Bernauer spline fit!"<<endl;
+    weight=ge->weight.get_default();
+  } else{
+    weight=ge->weight.get_extra("method1_dipole");
+  }
   //std::cout << ge->particles[0].particle << std::endl;
   //std::cout << ge->particles[0].momentum.E() << std::endl;
   Reaction->electronOut.initPolar(ge->particles[0].momentum.E(), ge->particles[0].momentum.P(), ge->particles[0].momentum.Theta(), ge->particles[0].momentum.Phi());
@@ -1836,8 +1842,8 @@ generateElasticProton::generateEvent(double helicity)
   FourVector Photon = Reaction->electronIn - Reaction->electronOut;
   Reaction->Out1 = Photon + *Reaction->getTarget();
   
-  static const NucleonFormfactor *FF = new MergellFit();
-  //static const NucleonFormfactor *FF = new DipoleFit();
+  //static const NucleonFormfactor *FF = new MergellFit();
+  static const NucleonFormfactor *FF = new DipoleFit();
   double q2 = Photon * Photon;
   double GE = FF->G_E(q2);
   double GM = FF->G_M(q2);

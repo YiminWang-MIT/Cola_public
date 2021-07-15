@@ -1252,6 +1252,28 @@ Simul::eventloop()
 #endif
   }    
   
+  if (!strcmp(rundb.target, "gasjet")) { //changed by Yimin Wang 01/04/2020 for gasjet target
+    // outgoing electron x-z
+    double tempx = Reaction->electronOut[1];
+    double tempz = Reaction->electronOut[3];
+
+    // compensate for vertex z
+    //std::cout << tempx << ' ' << tempz << std::endl;
+
+    double deltax = online.Vertex.x - rundb.beam.offset.x;
+
+    online.Vertex.z -=deltax/tempx*tempz;
+    online.A.vertex.z -=deltax/tempx*tempz;
+    online.B.vertex.z -=deltax/tempx*tempz;
+    online.C.vertex.z -=deltax/tempx*tempz;
+    out->packEventData(&online.Vertex.z, 1);
+    out->packEventData(&online.A.vertex.z, 1);
+    out->packEventData(&online.B.vertex.z, 1);
+    out->packEventData(&online.C.vertex.z, 1);
+
+  }
+
+  
   // changed by P. Achenbach 15.04.2015
   // I do not understand why electron momentum was set again to BeamMomentum
   // after target->EnergyLossSimBeam() has already been called.

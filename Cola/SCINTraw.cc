@@ -144,7 +144,7 @@ int scintillator_2014(AquaTree  *atree,
  
       if (thisenergy>maxenergy) { 
 	maxenergy = thisenergy;
-  max_index = i;
+  max_index = i+1;
 	onl.ToF.Energy.left       = onl.ToF.AdcPedCorr_left[i]; //ped corrected, for walk correction
 	onl.ToF.Energy.left_corr  = onl.ToF.AdcScaled_left[i];  //scaled, for particle ID
 	onl.ToF.Energy.right       = onl.ToF.AdcPedCorr_right[i]; //ped corrected, for walk correction
@@ -235,7 +235,7 @@ int scintillator_2014(AquaTree  *atree,
 
 
 	if  (thisenergy>maxenergy) {
-    max_index = i;
+    max_index = i+1;
 	  maxenergy = thisenergy;
 	  onl.dE.Energy.left       = onl.dE.AdcPedCorr_left[i]; //ped corrected, for walk correction
 	  onl.dE.Energy.left_corr  = onl.dE.AdcScaled_left[i];  //scaled, for particle ID
@@ -293,7 +293,7 @@ int scintillator_2014(AquaTree  *atree,
 
 	if  (thisenergy>maxenergy) {
 	  maxenergy = thisenergy;
-    max_index = i;
+    max_index = i+1;
 	  //has only one PMT for each scintillator, two values are assigned here since in some .col files you find uncool things like
 	  //Scalar spc(dE.Energy)    = sqrt(spec.dE.Energy.left*spec.dE.Energy.right)
 
