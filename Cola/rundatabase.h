@@ -119,7 +119,7 @@ struct TARGET {
   /** Target position offsets in [mm] for simulation */ struct OFFSET offset_sim;
   /** Target length in [mg/cm*2] (Solidstate/Waterfall) or [mm] (helium,cryo_ewald) */ 
   double length;
-  /** extended target size **/ double size_length; double size_width; double size_height;
+  /** extended target size **/ double totallength, totallength2; double lengthratio;
   /** High/Low flow for gas jet target **/ double flow;
   /** Target angle in [degrees] */       double angle;
   /** Target density in [g/cm**3] */     double density;
@@ -728,9 +728,9 @@ struct rundatabasetranslationlist {
   { 1, "Target.Angle",		"Target.Angle",		&rundb.Target.angle},
   { 1, "Target.Density", 	"Target.Density", 	&rundb.Target.density},
 
-  { 1, "Target.size_length", 	"Target.size_length", 	&rundb.Target.size_length},
-  { 1, "Target.size_width", 	"Target.size_width", 	&rundb.Target.size_width},
-  { 1, "Target.size_height", 	"Target.size_height", 	&rundb.Target.size_height},
+  { 1, "Target.totallength", 	"Target.totallength", 	&rundb.Target.totallength},
+  { 1, "Target.totallength2", 	"Target.totallength2", 	&rundb.Target.totallength2},
+  { 1, "Target.lengthratio", 	"Target.lengthratio", 	&rundb.Target.lengthratio},
   { 1, "Target.flow", 	"Target.flow", 	&rundb.Target.flow},
 
   { 1, "Target.WallThickness",	"Target.WallThickness", &rundb.Target.wallthickness},

@@ -271,8 +271,8 @@ luminosity::handle(void *data)
       a_foerster_sum += (spekA.beam.foerster & 0x3fff);
       
       // !!!!!!!!!!!!!! Trick um leeren Scaler auf B zu umgehen !!!!!!!!!!!!!
-      b_foerster += (spekA.beam.foerster & 0x3fff);
-      b_foerster_sum += (spekA.beam.foerster & 0x3fff);
+      //b_foerster += (spekA.beam.foerster & 0x3fff);
+      //b_foerster_sum += (spekA.beam.foerster & 0x3fff);
     }
   } // !K
 
@@ -283,8 +283,8 @@ luminosity::handle(void *data)
     b_realtime += (spekB.run.realtime  & 0x3fff);
     b_runtime  += (spekB.run.runtime   & 0x3fff);
     // !!!!!!!!!!!!!! Trick um leeren Scaler auf B zu umgehen !!!!!!!!!!!!!
-    //    b_foerster += (spekB.beam.foerster & 0x3fff);
-    //    b_foerster_sum += (spekB.beam.foerster & 0x3fff);
+    b_foerster += (spekB.beam.foerster & 0x3fff);
+    b_foerster_sum += (spekB.beam.foerster & 0x3fff);
   }
 
 

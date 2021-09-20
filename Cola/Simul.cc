@@ -959,11 +959,11 @@ Simul::eventloop()
   // vertex coordinates in target system
   double targetpos_tar[3] = {0,0,0};
   double sobol2[3] = {sobol(), sobol(), sobol()};
-  double norm_vertex[5] = {norm(), norm(), norm(), norm(), norm()};
+  double ran_gasjet[5] = {norm(), norm(), norm(), sobol()};
 
   //std::cout << targetpos_tar[0] << " "  << targetpos_tar[1] << " "  << targetpos_tar[2] << "\n" ;
   if ((ModelType == ElasticRadiative) || (ModelType == ElasticProton) || (ModelType == ElasticDipole)){
-      if (!target->Generate_Vertex(norm_vertex, targetpos_tar, rundb.sim.wobx, 
+      if (!target->Generate_Vertex(ran_gasjet, targetpos_tar, rundb.sim.wobx, 
                  rundb.sim.woby, ModelType)) return 0;
   } else {
     if (!target->Generate_Vertex(sobol2, targetpos_tar, rundb.sim.wobx, 
@@ -1078,9 +1078,9 @@ Simul::eventloop()
   Reaction->electronIn.setMomentum(0, 0, BeamMomentum);
   if (ergloss) {
     target->EnergyLossSimBeam(Reaction->electronIn, targetpos_tar[0], targetpos_tar[1], targetpos_tar[2], steps_beam, ModelType);
-    if (ModelType == ElasticRadiative) {
-      target->MultipleScatteringBeam(Reaction->electronIn, norm_multiplescattering, targetpos_tar[0], targetpos_tar[1], targetpos_tar[2], steps_beam, ModelType);
-    }
+    //if (ModelType == ElasticRadiative) {
+    //  target->MultipleScatteringBeam(Reaction->electronIn, norm_multiplescattering, targetpos_tar[0], targetpos_tar[1], targetpos_tar[2], steps_beam, ModelType);
+    //}
 
 #ifdef __ColaMIT__
     online.beam.Eloss_sim = (BeamEnergy - Reaction->electronIn.energy());
@@ -1149,7 +1149,7 @@ Simul::eventloop()
   if (!chck(Reaction->Out2,        targetpos_hall, focus)) return 0;    
   if (!chck(Reaction->Decay1,      targetpos_hall, focus)) return 0;    
   if (!chck(Reaction->Decay2,      targetpos_hall, focus)) return 0;
-  //std::cout << online.B.target.dp << " " << online.B.target.th << std::endl;
+  //std::cout << "dp = " << online.B.target.dp << "\tth =  " << online.B.target.th << std::endl;
   if (He3HACK::mode==2){
     He3HACK::listfile.write((char *) He3HACK::buf,sizeof (float)*16);
     if (He3HACK::listfile.bad())
@@ -1215,6 +1215,7 @@ Simul::eventloop()
 #endif
     
     double dz = (psrandom()<rundb.Target.vertexratio ? rundb.Target.vertexresolution2 * norm() : rundb.Target.vertexresolution * norm());
+    dz/=sin(rundb.B.angle*rad);//To add dependence on the spectrometer angle. Y. Wang 09/07/2021
 
     targetpos_hall[2] += dz;
     // changed by P. Achenbach  15.04.2015

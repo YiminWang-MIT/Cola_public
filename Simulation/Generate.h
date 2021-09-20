@@ -68,6 +68,8 @@ protected:
 
   void   generateLabAngles(Particle *P, double p, double theta0, double phi0, 
 			 double dcostheta, double dphi);
+  void   generateLabAnglesWide(Particle *P, double p, double theta0, double phi0, 
+			 double dcostheta, double dphi);
   double calc_elasticEprime(double E0, double theta, double M); //energy of elastically scattered electron, exact
   double eout_p_Q2_Phi(double setq2, double dpcms, double dq2);
   double eout_W_Q2_Phi(double setq2, double dW,    double dq2);

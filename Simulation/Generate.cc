@@ -65,6 +65,17 @@ eventGenerator::generateLabAngles (Particle *P, double p, double theta0,
   P->rot_theta(theta0 - M_PI/2);
 }  
 
+void 
+eventGenerator::generateLabAnglesWide (Particle *P, double p, double theta0, 
+				   double phi0, double dcostheta, double dphi)
+{
+  double costheta = (2*sobol()-1) * dcostheta;
+  double phi      = 2*(2*sobol()-1) * dphi;
+  P->initPolar(energy(P->getMass(),p),  p,   acos(costheta),  phi);
+  if (phi0!=0) P->rot_phi(phi0);
+  P->rot_theta(theta0 - M_PI/2);
+}
+
 double 
 eventGenerator::calc_elasticEprime(double E0, double theta, double M) //E0 beam energy [GeV], theta scattering angle[rad], M target mass[GeV/c2]
 {//more precise than approx with m_e<<1: Eprime = E0*M/(M+E0*(1.0-cos(theta)))
@@ -371,7 +382,7 @@ double generateElasticRadiative::generateEvent(double helicity)
 {
   //std::cerr << "generateElastic" << std::endl;
   double E0 = Reaction->electronIn.energy();
-  generateLabAngles(&Reaction->electronOut,1,sime->getAngle(), sime->getOop(), 
+  generateLabAnglesWide(&Reaction->electronOut,1,sime->getAngle(), sime->getOop(), 
 		    dcte,sime->getDphi());
   
   double theta = Reaction->electronOut.theta();
@@ -398,10 +409,14 @@ double generateElasticRadiative::generateEvent(double helicity)
 
   //pull back information from cooker generator
   if (getenv("SPLINEFIT") && atoi(getenv("SPLINEFIT"))==1){
-    std::cout<<"Olympis generator: Using Bernauer spline fit!"<<endl;
-    weight=ge->weight.get_default();
+    //weight=ge->weight.get_default();
+    weight = ge->weight.get_extra("method1_vpolFull");
+    //weight = ge->weight.get_extra("method1_vpolLep");
   } else{
-    weight=ge->weight.get_extra("method1_dipole");
+    //weight=ge->weight.get_extra("method1_dipole");
+    weight = ge->weight.get_extra("method1_vpolFull_dipole");
+    //weight = ge->weight.get_extra("method1_vpolLep_dipole");
+    //other available weights
   }
   //std::cout << ge->particles[0].particle << std::endl;
   //std::cout << ge->particles[0].momentum.E() << std::endl;
@@ -745,7 +760,7 @@ generateBremsstrahlung::generateEvent(double helicity)
 
   // Energy loss because internal radiative corrections
   // always soft corrections, ignore e mass?
-  k = Ep *securePow(random, 1/t);
+  k = Ep *securePow(random, 1.0/t);
   //std::cout << Ep << '\t' << random << '\t' << 1/t << '\t' << k << std::endl;
   //  k=0.0405;
 

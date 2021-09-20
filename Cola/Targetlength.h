@@ -394,11 +394,11 @@ public:
 
 class gasjet: public target {
 private:
-  double totallength, totalheight, totalwidth;
+  double totallength, totallength2, lengthratio;
   double GaussianCDF(double x);
 public:
-  gasjet() { Length = totallength; cout << "Gasjet length = " << totallength << endl;}
-  gasjet(double length, double height, double width, double flow): totallength{length}, totalheight{height}, totalwidth{width} {if (flow>0.5) TargetMat=H2HighFlow; else TargetMat=H2LowFlow; cout << "Gasjet length = " << totallength << endl;};
+  gasjet() { cout << "Gasjet length = " << totallength << "\tlength2 = " << totallength2 << "\tratio = " << lengthratio<< endl;}
+  gasjet(double length, double length2, double ratio, double flow): totallength{length}, totallength2{length2}, lengthratio{ratio} {if (flow>0.5) TargetMat=H2HighFlow; else TargetMat=H2LowFlow;  cout << "Gasjet length = " << totallength << "\tlength2 = " << totallength2 << "\tratio = " << lengthratio<< endl;}
   virtual ~gasjet() { ; }
   
   double getLength_in_Target(double x, double y, double z, 

@@ -559,7 +559,8 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   // Calculate t (5.16 in Jan's thesis)
   double weightDeltaE = (aWeight*bWeight*cWeight);
   double t = 2.*(aExp + bExp + cExp);
-  double maxDeltaE = el.E3() - me; // it can't lose more energy than its own mass.
+  //double maxDeltaE = el.E3() - me; // it can't lose more energy than its own mass.
+  double maxDeltaE = el.E3();
   if ((useDeltaECut)&&(deltaECut < (el.E3()-me)))
     {
       maxDeltaE = deltaECut;
@@ -649,8 +650,6 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   ev->weight.set_extra("method1_dipole", kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_dipole * jacobian * calcElasticCorr(el));
   double dipole_weight = kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_dipole * jacobian * calcElasticCorr(el);
 
-  //std::cout << returnweight << std::endl;
-
   // Calculate soft bremsstrahlung cross section
   TLorentzVector p3el, p4el; // Elastic 4-vectors
   p3el.SetXYZM(el.p3()*sin(theta)*cos(phi),el.p3()*sin(theta)*sin(phi),el.p3()*cosTheta,me);
@@ -671,7 +670,16 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   ev->weight = kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
   double spline_weight = kinFactor * weightDeltaE * weightSoftFrac * cmSqMeVSq * kweight * matElement_Jan * jacobian * calcElasticCorr(el);
   //std::cout << splineweight << std::endl;
-  //ev->weight = weightDeltaE * weightSoftFrac * kweight * calcElasticCorr(el);
+
+  // Vacuum polarization weights
+  double corr_wo_vpol = calcElasticCorr(el)/exp((2.*alpha/M_PI)*(-5./9. + TMath::Log(el.Q2()/(me*me))/3.));
+  double factor_vpolLep = corr_wo_vpol/pow(1.-(getVpolLep(el.Q2(), me) + getVpolLep(el.Q2(), 105.658) + getVpolLep(el.Q2(), 1776.82))/2.,2);
+  double factor_vpolFull = corr_wo_vpol/pow(1.-(inter_vpol->Eval(el.Q2()))/2.,2);
+  ev->weight.set_extra("method1_vpolLep", weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * factor_vpolLep);
+  ev->weight.set_extra("method1_vpolFull", weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * factor_vpolFull);
+  ev->weight.set_extra("method1_vpolLep_dipole", weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_dipole * kinFactor * jacobian * factor_vpolLep);
+  ev->weight.set_extra("method1_vpolFull_dipole", weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_dipole * kinFactor * jacobian * factor_vpolFull);
+
 #if YWDEBUG
   if (ev->weight.get_default()){
     std::cout << "Elastic lepton energy: " << el.E3() << std::endl;
@@ -766,12 +774,6 @@ int GeneratorRadiative::generateEvent(GeneratorEvent *ev)
   ev->weight.set_extra("method1_meisYen", phaseweight * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian
 		       * calcElasticCorrMeisYen(el) * meisYenWeight * pow(maxDeltaE,t) * pow(el.E3()-me,-meisYenT) * pow(deltaE,meisYenT-t));
 
-  // Vacuum polarization weights
-  double corr_wo_vpol = calcElasticCorr(el)/exp((2.*alpha/M_PI)*(-5./9. + TMath::Log(el.Q2()/(me*me))/3.));
-  double factor_vpolLep = corr_wo_vpol/pow(1.-(getVpolLep(el.Q2(), me) + getVpolLep(el.Q2(), 105.658) + getVpolLep(el.Q2(), 1776.82))/2.,2);
-  double factor_vpolFull = corr_wo_vpol/pow(1.-(inter_vpol->Eval(el.Q2()))/2.,2);
-  ev->weight.set_extra("method1_vpolLep", phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * factor_vpolLep);
-  ev->weight.set_extra("method1_vpolFull", phaseweight * weightDeltaE * weightSoftFrac * kweight * cmSqMeVSq * matElement_Jan * kinFactor * jacobian * factor_vpolFull);
   */
 
   // ** Non-exponentiated weight calculations **

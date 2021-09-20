@@ -2590,14 +2590,16 @@ gasjet::setPara(double len, double, double density, double, double, double)
 int 
 gasjet::Generate_Vertex(double random[], double x[], double /*wob_x*/, double /*wob_y*/, modeltype ModelType)
 {
+  //std::cout << random[0] << ' ' << random[1]<< ' ' << random[2] << ' ' << random[3] <<  std::endl;
   //returns targetpos_tar 
-  //
-  //std::cout << gasjet::totallength << '\t' << gasjet::totalheight << '\t' << gasjet::totalwidth<< '\t' << std::endl;
-  x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x + random[3] * gasjet::totalwidth;
-  x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y + random[4] * gasjet::totalheight;
+  x[0] = rundb.sim.wobx * cos(random[0] * M_PI) + rundb.beam.offset.x - rundb.Target.offset_sim.x;
+  x[1] = rundb.sim.woby * cos(random[1] * M_PI) + rundb.beam.offset.y - rundb.Target.offset_sim.y;
 
-  x[2] = gasjet::totallength * (random[2]); //homogeneous
-  //std::cout << x[0] << ' ' << x[1]<< ' ' << x[2] << std::endl;
+  if (random[3]>gasjet::lengthratio) // central cluster
+    x[2] = gasjet::totallength * (random[2]); 
+  else // gas in the chamebr
+    x[2] = gasjet::totallength2 * (random[2]); 
+  //std::cout << x[0] << ' ' << x[1]<< ' ' << x[2] << ' ' << x[3] <<  std::endl;
 
   return 1; 
 }
@@ -2654,6 +2656,7 @@ gasjet::getLength_in_Target(double x, double y, double z, double theta, double p
 
 void gasjet::EnergyLossSim(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to the end of the cell
 {
+  return;
   // x,y,z are targetpos_hall, different from EnergyLossSimBeam
   x -= rundb.Target.offset_sim.x; 
   y -= rundb.Target.offset_sim.y; 
@@ -2671,6 +2674,7 @@ void gasjet::EnergyLossSim(Particle& P, double x, double y, double z, int steps,
   
 void gasjet::EnergyLossSimBeam(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
 {
+  return;
   // x,y,z are targetpos_tar
   double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
 
@@ -2685,6 +2689,7 @@ void gasjet::EnergyLossSimBeam(Particle& P, double x, double y, double z, int st
 
 void gasjet::MultipleScatteringBeam(Particle& P, double random[], double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
 {
+  return;
   //std::cout << "Momentum Beam" << P << std::endl;
   // x,y,z are targetpos_tar
   double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
@@ -2707,6 +2712,7 @@ void gasjet::MultipleScatteringBeam(Particle& P, double random[], double x, doub
 
 void gasjet::MultipleScattering(Particle& P, double random[], double x, double y, double z, int steps, modeltype Modeltype)// energy loss simulation for the simulation from the vertex point to beam entrance point of the cell
 {
+  return;
   //std::cout << "In Momentum" << P << std::endl;
   //std::cout << std::scientific;
   // x,y,z are targetpos_hall, different from EnergyLossSimBeam
@@ -2740,6 +2746,7 @@ void gasjet::MultipleScattering(Particle& P, double random[], double x, double y
 
 void gasjet::EnergyLossCorr(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss correction
 {
+  return;
   double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
 
   double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
@@ -2751,6 +2758,7 @@ void gasjet::EnergyLossCorr(Particle& P, double x, double y, double z, int steps
 
 void gasjet::EnergyLossCorrBeam(Particle& P, double x, double y, double z, int steps, modeltype Modeltype)// energy loss correction for beam
 {
+  return;
   double pathlength = getLength_in_Target(x, y, z, P.theta(), P.phi());
 
   double deltaE = gasjet::TargetMat->dEdx(P, pathlength);
@@ -3889,7 +3897,7 @@ SetTargetFromRunDB(const reaction * Reaction)
     if (!strcmp(rundb.target, "He3pol"        )) Target = new helium_pol;
     if (!strcmp(rundb.target, "He3pol07"      )) Target = new he_pol_07;
     if (!strcmp(rundb.target, "gasjet"      ))
-      Target = new gasjet(rundb.Target.size_length, rundb.Target.size_height, rundb.Target.size_width, rundb.Target.flow);
+      Target = new gasjet(rundb.Target.totallength, rundb.Target.totallength2, rundb.Target.lengthratio, rundb.Target.flow);
   }
 
   cout << "Target: " << rundb.target << endl;

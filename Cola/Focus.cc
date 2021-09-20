@@ -13,6 +13,7 @@
 #define _DEFAULT_SOURCE 1
 #define _XOPEN_SOURCE 1
 #include <stdio.h>
+#include <iostream>
 #include <math.h>
 #include "Focus.h"
 #include "rundatabase.h"
@@ -24,8 +25,11 @@
 // deltaT=(th|x)/(th|th) (mm!)
 const double FAKTOR_DELTA_A = -0.532 / 56.5;
 const double FAKTOR_THETA_A = -0.992 / -1.88;
+//const double FAKTOR_DELTA_B = -0.853 / 82.2;
+//const double FAKTOR_THETA_B = -0.316/-1.17;
 const double FAKTOR_DELTA_B = -0.853 / 82.2;
 const double FAKTOR_THETA_B = -0.316/-1.17;
+
 const double FAKTOR_DELTA_C = -0.526 / 44.1;
 const double FAKTOR_THETA_C = -1.270 / -1.90;
 
@@ -173,6 +177,7 @@ ExtendedTarget::corrA(double x0, struct TargetCo *resultA)
 void
 ExtendedTarget::corrB(double x0, struct TargetCo *resultB)
 {
+  //std::cout << "x0 = " << x0 << "\tdp corr = " << +FAKTOR_DELTA_B * x0 << std::endl;
   resultB->dp += FAKTOR_DELTA_B * x0;
   resultB->th -= FAKTOR_THETA_B * x0;
 }

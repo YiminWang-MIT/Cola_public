@@ -180,6 +180,7 @@ int simSpectrometer::check(Particle vf, double x[3],
 			   target *target, struct TargetCoord *tc,
 			   struct simFocalCoord *fc, Focus *focus, modeltype ModelType)
 {
+    
   double EnergyBefore = 0;
   
   // handle particle decay: first decide for spectrometer according
@@ -310,6 +311,7 @@ int simSpectrometer::check(Particle vf, double x[3],
  
     if (fabs(particle.specDelta(momentum)) > acceptance) return 0;  
   }
+
     
   // vertical spectrometers
   tc->th = particle.specTheta(angle);
@@ -343,7 +345,6 @@ int simSpectrometer::check(Particle vf, double x[3],
     //std::cout << result.dp << " " << result.th << " " << result.y0 << " " << result.ph << std::endl;
   }*/
   
-  //std::cout << tc->dp << " " << tc->th << " " << tc->y0 << " " << tc->ph << std::endl;
   atree->packEventData(&(tc->th), 1);
   atree->packEventData(&(tc->ph), 1);
   atree->packEventData(&(tc->dp), 1);

@@ -291,7 +291,7 @@ Cola::readInputFiles(int dorewind)
     rundb.Target.wallthickness = rundb.Target.snowthickness =
     rundb.Target.snowdensity = 0; 
 
-  rundb.Target.size_length = rundb.Target.size_width = rundb.Target.size_height = 0;
+  rundb.Target.totallength = rundb.Target.totallength2 = rundb.Target.lengthratio= 0;
   rundb.Target.snowparam = 0;
   rundb.Target.offset.x = 0;
   rundb.Target.offset.y = 0;
@@ -2015,7 +2015,6 @@ Cola::eventloop()
 #if YWdebug == 1
   std::cout << "Final" << std::endl;
   std::cout << online.A.vertex.x << '\t' << online.A.vertex.y << '\t' << online.A.vertex.z << std::endl;
-  std::cout << online.B.vertex.x << '\t' << online.B.vertex.y << '\t' << online.B.vertex.z << std::endl;
   std::cout << online.Vertex.x << '\t' << online.Vertex.y << '\t' << online.Vertex.z << std::endl;
   std::cout << std::endl;
 #endif
@@ -2031,6 +2030,13 @@ Cola::eventloop()
   /////////////////////////////////////////////////////////////////////////////
   // Apply the Focus Correction of delta and theta
   /////////////////////////////////////////////////////////////////////////////
+
+  /*
+  if (resultB) {
+    std::cout << online.B.vertex.x << '\t' << online.B.vertex.y << '\t' << online.B.vertex.z << std::endl;
+    std::cout << "Old dp = " << resultB->dp << "\tOld th" << resultB->th << std::endl;
+  }
+  */
 
   if (!strcmp(rundb.focus_corr, "yes")) {
     if (resultA) {
@@ -2075,6 +2081,7 @@ Cola::eventloop()
   } 
 
   if (resultA && fabs(resultA->dp)<100) {
+
     online.A.target_coor_ok = 1;
     lasttriggerA = 0;
     A_Out = particle(A_Out.getMass(), qsddaMomentum * (1 + resultA->dp/100),
